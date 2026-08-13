@@ -1,0 +1,78 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### Local secrets and environment ###
+.env
+.env.*
+!.env.example
+src/main/resources/application.yaml
+src/main/resources/application.yml
+src/main/resources/application-local.yaml
+src/main/resources/application-local.yml
+src/main/resources/application-secret.yaml
+src/main/resources/application-secret.yml
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+
+### Python algorithm workspace ###
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+### Java / Maven ###
+*.class
+*.log
+logs/
+hs_err_pid*
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Operating system ###
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+### Temporary files ###
+*.tmp
+*.temp
+*.bak
+*.swp
+~$*

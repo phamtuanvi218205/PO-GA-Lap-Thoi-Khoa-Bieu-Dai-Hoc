@@ -1,26 +1,35 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Thesis documents and generated presentation artifacts
+/Docs/
+/.tmp/
+/*.pptx
+/*.pptx.inspect.ndjson
+/~$*
 
-### Local secrets and environment ###
+# Local secrets and environment files
 .env
 .env.*
 !.env.example
-src/main/resources/application.yaml
-src/main/resources/application.yml
-src/main/resources/application-local.yaml
-src/main/resources/application-local.yml
-src/main/resources/application-secret.yaml
-src/main/resources/application-secret.yml
+**/src/main/resources/application.yaml
+**/src/main/resources/application.yml
+**/src/main/resources/application-local.yaml
+**/src/main/resources/application-local.yml
+**/src/main/resources/application-secret.yaml
+**/src/main/resources/application-secret.yml
 *.jks
 *.p12
 *.pfx
 *.pem
 *.key
 
-### Python algorithm workspace ###
+# Java and Maven outputs
+target/
+*.class
+*.log
+logs/
+hs_err_pid*
+**/.mvn/wrapper/maven-wrapper.jar
+
+# Python outputs and virtual environments
 __pycache__/
 *.py[cod]
 .venv/
@@ -31,46 +40,30 @@ venv/
 .coverage
 htmlcov/
 
-### Java / Maven ###
-*.class
-*.log
-logs/
-hs_err_pid*
-
-### STS ###
-.apt_generated
+# IDE files
+.idea/
+.vscode/
+.apt_generated/
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
+.sts4-cache/
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+build/
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-### Operating system ###
+# Operating-system and temporary files
 .DS_Store
 Thumbs.db
 Desktop.ini
-
-### Temporary files ###
 *.tmp
 *.temp
 *.bak
