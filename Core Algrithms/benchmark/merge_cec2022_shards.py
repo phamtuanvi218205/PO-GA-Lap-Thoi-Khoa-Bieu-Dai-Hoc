@@ -1,4 +1,9 @@
-"""Hop cac shard seed CEC 2022 va tao artifact ket qua day du."""
+"""Hợp các shard seed CEC 2022 thành một bộ kết quả chính thức.
+
+Các shard được phép chạy độc lập để rút ngắn thời gian, nhưng mỗi shard phải có
+cùng cấu hình và tập seed không giao nhau. Script kiểm tra tính đầy đủ trước khi
+tạo lại thống kê, hạng, kiểm định và biểu đồ từ dữ liệu đã hợp nhất.
+"""
 
 from __future__ import annotations
 
@@ -29,6 +34,8 @@ from run_benchmark import _write_or_validate_config, get_profile
 
 
 def parse_arguments() -> argparse.Namespace:
+    """Đọc danh sách thư mục shard đầu vào và thư mục kết quả đầu ra."""
+
     parser = argparse.ArgumentParser(description="Hop cac shard CEC 2022.")
     parser.add_argument("--inputs", type=Path, nargs="+", required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -36,6 +43,8 @@ def parse_arguments() -> argparse.Namespace:
 
 
 def _config_without_seeds(path: Path) -> tuple[dict[str, object], set[int]]:
+    """Tách tập seed khỏi cấu hình để so sánh phần giao thức giữa các shard."""
+
     with path.open("r", encoding="utf-8") as file:
         config = json.load(file)
     seeds = {int(seed) for seed in config.pop("seeds")}
@@ -43,6 +52,8 @@ def _config_without_seeds(path: Path) -> tuple[dict[str, object], set[int]]:
 
 
 def _validate_finite(rows: list[dict[str, object]], fields: tuple[str, ...]) -> None:
+    """Từ chối NaN và vô cực trước khi thống kê hoặc vẽ biểu đồ."""
+
     for row in rows:
         for field in fields:
             if not math.isfinite(float(row[field])):
@@ -50,6 +61,8 @@ def _validate_finite(rows: list[dict[str, object]], fields: tuple[str, ...]) -> 
 
 
 def main() -> None:
+    """Kiểm tra, hợp nhất và tái tạo toàn bộ artifact của CEC 2022."""
+
     arguments = parse_arguments()
     official_config = get_profile("cec2022")
     expected_seeds = set(official_config.seeds)
@@ -63,6 +76,8 @@ def main() -> None:
         for seed in expected_seeds
     }
 
+    # ``reference_config`` bỏ trường seeds nên chỉ phản ánh giao thức và các
+    # tham số phải giống nhau giữa mọi shard.
     reference_config = None
     all_seeds: set[int] = set()
     raw_by_key: dict[tuple[str, str, int], dict[str, object]] = {}
@@ -89,6 +104,8 @@ def main() -> None:
             _read_csv(input_directory / "convergence.csv")
         )
 
+    # Không tạo kết quả "full" nếu thiếu seed, thừa seed hoặc thiếu bất kỳ bộ
+    # ba function–algorithm–seed nào.
     if all_seeds != expected_seeds:
         raise ValueError(
             f"Tap seed shard khong du. Co={sorted(all_seeds)}, "
@@ -99,6 +116,7 @@ def main() -> None:
         extra = set(raw_by_key).difference(expected_keys)
         raise ValueError(f"Run key khong du: missing={len(missing)}, extra={len(extra)}")
 
+    # Sắp xếp xác định giúp file hợp nhất ổn định giữa các lần chạy.
     raw_rows = sorted(
         raw_by_key.values(),
         key=lambda row: (
@@ -140,6 +158,8 @@ def main() -> None:
     plot_rank_heatmap(rank_rows, output_directory)
     plot_runtime(raw_rows, output_directory)
 
+    # Runtime từ các shard chạy song song chịu ảnh hưởng tranh chấp CPU; ghi rõ
+    # hạn chế này để tránh diễn giải như phép đo tuần tự độc lập.
     metadata = {
         "execution": "parallel independent seed shards",
         "inputs": [str(path) for path in arguments.inputs],

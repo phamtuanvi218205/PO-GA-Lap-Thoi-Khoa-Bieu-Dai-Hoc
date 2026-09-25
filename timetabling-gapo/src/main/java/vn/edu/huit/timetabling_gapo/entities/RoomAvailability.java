@@ -1,45 +1,38 @@
 package vn.edu.huit.timetabling_gapo.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import vn.edu.huit.timetabling_gapo.enums.AvailabilityScopeType;
 import vn.edu.huit.timetabling_gapo.enums.AvailabilityType;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "RoomAvailability")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class RoomAvailability {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "room_availability_id")
-    private Integer roomAvailabilityId;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "room_code", nullable = false)
-    private Room room;
+    @Column(name = "availability_id")
+    private Long availabilityId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "term_code", nullable = false)
     private AcademicTerm academicTerm;
 
-    @Column(name = "day_of_week", nullable = false)
-    private Integer dayOfWeek;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "room_location_id", nullable = false)
+    private Room room;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "scope_type", nullable = false, length = 20)
+    private AvailabilityScopeType scopeType;
+
+    @Column(name = "calendar_date")
+    private LocalDate calendarDate;
+
+    @Column(name = "iso_weekday")
+    private Integer isoWeekday;
 
     @Column(name = "start_period", nullable = false)
     private Integer startPeriod;
@@ -51,6 +44,6 @@ public class RoomAvailability {
     @Column(name = "availability_type", nullable = false, length = 20)
     private AvailabilityType availabilityType;
 
-    @Column(name = "preference_weight", nullable = false)
-    private Integer preferenceWeight;
+    @Column(name = "note", length = 255)
+    private String note;
 }

@@ -1,4 +1,9 @@
-"""Chay nhieu lan benchmark, luu CSV va tinh thong ke."""
+"""Điều phối nhiều lần chạy, lưu checkpoint và tổng hợp thống kê.
+
+Mỗi bộ ba ``(function, algorithm, seed)`` là một lần chạy độc lập. Module bảo
+đảm ba thuật toán nhận cùng quần thể khởi tạo cho cùng function/seed, đo cùng
+ngân sách FE và lưu đủ dữ liệu để tiếp tục nếu tiến trình bị gián đoạn.
+"""
 
 from __future__ import annotations
 
@@ -43,6 +48,12 @@ CONVERGENCE_FIELDS = (
 
 @dataclass(frozen=True)
 class ExperimentConfig:
+    """Cấu hình quy mô dùng chung cho một profile benchmark.
+
+    ``seeds`` biểu diễn các lần chạy độc lập. Cấu hình không chứa danh sách hàm
+    vì suite được runner lựa chọn riêng theo tên profile.
+    """
+
     profile_name: str
     dimensions: int
     population_size: int
@@ -67,16 +78,22 @@ def create_initial_population(
 
 
 def _algorithm_seed(run_seed: int, algorithm_index: int) -> int:
+    """Tạo seed riêng, xác định và tái lập được cho từng thuật toán."""
+
     # Tao random stream rieng nhung lap lai duoc cho tung thuat toan.
     seed_sequence = np.random.SeedSequence([run_seed, algorithm_index, 2026])
     return int(seed_sequence.generate_state(1, dtype=np.uint32)[0])
 
 
 def _run_key(row: dict[str, object]) -> tuple[str, str, int]:
+    """Tạo khóa duy nhất function–algorithm–seed cho checkpoint và merge."""
+
     return str(row["function"]), str(row["algorithm"]), int(row["seed"])
 
 
 def _read_csv(path: Path) -> list[dict[str, object]]:
+    """Đọc CSV UTF-8 có BOM; file chưa tồn tại hoặc rỗng được xem là chưa có dữ liệu."""
+
     if not path.exists() or path.stat().st_size == 0:
         return []
     with path.open("r", newline="", encoding="utf-8-sig") as file:
@@ -88,6 +105,8 @@ def _append_csv(
     rows: list[dict[str, object]],
     fieldnames: tuple[str, ...],
 ) -> None:
+    """Ghi nối tiếp các dòng và chỉ tạo header khi file còn rỗng."""
+
     if not rows:
         return
     write_header = not path.exists() or path.stat().st_size == 0
@@ -127,6 +146,13 @@ def run_experiment(
     config: ExperimentConfig,
     output_directory: Path,
 ) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    """Chạy mọi tổ hợp function, seed và algorithm trong cấu hình.
+
+    Hàm hỗ trợ resume bằng ``raw_results.csv``: một run chỉ được xem là hoàn
+    tất khi dòng raw tương ứng đã được ghi. Kết quả trả về gồm dữ liệu cuối mỗi
+    run và lịch sử hội tụ đã lấy mẫu để phục vụ thống kê và vẽ biểu đồ.
+    """
+
     output_directory.mkdir(parents=True, exist_ok=True)
     raw_path = output_directory / "raw_results.csv"
     convergence_path = output_directory / "convergence.csv"
@@ -166,6 +192,8 @@ def run_experiment(
 
     for function in functions:
         for seed in config.seeds:
+            # Cùng function và seed tạo đúng một quần thể gốc; mỗi thuật toán
+            # nhận bản sao để so sánh không bị lệch điểm xuất phát.
             initial_population = create_initial_population(
                 function,
                 config.dimensions,
@@ -191,6 +219,8 @@ def run_experiment(
                 )
                 runtime_seconds = time.perf_counter() - started_at
                 signed_error = result.best_value - function.optimum_value
+                # Một giá trị thấp hơn optimum đã biết thường báo hiệu adapter,
+                # dữ liệu CEC hoặc phép tính đang sai; không được âm thầm ép 0.
                 allowed_roundoff = OPTIMUM_TOLERANCE * max(
                     1.0, abs(function.optimum_value)
                 )
@@ -262,6 +292,8 @@ def write_csv(
     rows: list[dict[str, object]],
     fieldnames: tuple[str, ...] | None = None,
 ) -> None:
+    """Ghi lại toàn bộ CSV theo thứ tự field xác định, thay thế file cũ."""
+
     if fieldnames is None:
         if not rows:
             return
@@ -275,6 +307,8 @@ def write_csv(
 def summarize_results(
     raw_rows: list[dict[str, object]], output_directory: Path
 ) -> list[dict[str, object]]:
+    """Tổng hợp sai số và runtime qua các seed cho từng function/algorithm."""
+
     summary_rows: list[dict[str, object]] = []
     functions = sorted(
         {str(row["function"]) for row in raw_rows}, key=function_sort_key
@@ -318,6 +352,13 @@ def summarize_results(
 def calculate_ranks_and_tests(
     raw_rows: list[dict[str, object]], output_directory: Path
 ) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    """Xếp hạng theo median và thực hiện các kiểm định thống kê không tham số.
+
+    Với mỗi hàm, thuật toán có median error thấp nhất nhận hạng 1. Friedman kiểm
+    tra khác biệt tổng thể giữa ba thuật toán; Wilcoxon so sánh từng cặp và Holm
+    điều chỉnh p-value để hạn chế sai lầm khi thực hiện nhiều phép kiểm định.
+    """
+
     functions = sorted(
         {str(row["function"]) for row in raw_rows}, key=function_sort_key
     )

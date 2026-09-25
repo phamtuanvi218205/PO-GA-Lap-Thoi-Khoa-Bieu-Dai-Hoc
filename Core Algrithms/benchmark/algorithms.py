@@ -1,7 +1,9 @@
-"""Ba thuat toan toi uu lien tuc dung trong benchmark.
+"""Cài đặt GA, PO V2 và GA–PO cho thí nghiệm tối ưu số học.
 
-Muc dich cua file nay la so sanh co che tim kiem tren cac ham so hoc.
-File khong ma hoa, giai ma hoac xu ly rang buoc thoi khoa bieu.
+Mỗi thuật toán nhận cùng một quần thể vector số thực, một hàm mục tiêu và một
+ngân sách đánh giá hàm mục tiêu (FE). Giá trị fitness càng nhỏ càng tốt. Module
+này chỉ so sánh cơ chế tìm kiếm; nó không dùng encoder, decoder hay ràng buộc
+của bài toán thời khóa biểu.
 """
 
 from __future__ import annotations
@@ -18,6 +20,13 @@ ObjectiveFunction = Callable[[np.ndarray], np.ndarray]
 
 @dataclass
 class OptimizationResult:
+    """Kết quả chuẩn hóa được trả về bởi mọi thuật toán.
+
+    ``best_position`` và ``best_value`` là nghiệm tốt nhất từng gặp. Hai danh
+    sách ``history_*`` lưu đường hội tụ theo FE để ba thuật toán có thể vẽ và
+    so sánh trên cùng trục ngân sách.
+    """
+
     algorithm: str
     best_position: np.ndarray
     best_value: float
@@ -27,6 +36,8 @@ class OptimizationResult:
 
 
 def _evaluate(objective: ObjectiveFunction, population: np.ndarray) -> np.ndarray:
+    """Đánh giá cả quần thể và kiểm tra hàm mục tiêu trả đúng một giá trị/cá thể."""
+
     values = np.asarray(objective(population), dtype=float)
     if values.shape != (len(population),):
         raise ValueError("Ham muc tieu phai tra ve mot fitness cho moi ca the.")
@@ -36,11 +47,20 @@ def _evaluate(objective: ObjectiveFunction, population: np.ndarray) -> np.ndarra
 def _best_from_population(
     population: np.ndarray, fitness: np.ndarray
 ) -> tuple[np.ndarray, float]:
+    """Trích cá thể có fitness nhỏ nhất và sao chép vị trí để tránh alias."""
+
     best_index = int(np.argmin(fitness))
     return population[best_index].copy(), float(fitness[best_index])
 
 
 def _validate_budget(population_size: int, max_evaluations: int) -> int:
+    """Đổi ngân sách FE thành số vòng lặp chung cho cả ba thuật toán.
+
+    Quần thể ban đầu tiêu tốn ``population_size`` FE. Mỗi vòng tiếp theo đánh
+    giá đúng một quần thể con cùng kích thước, vì vậy phần FE còn lại phải chia
+    hết cho kích thước quần thể.
+    """
+
     if max_evaluations < population_size:
         raise ValueError("max_evaluations phai it nhat bang population_size.")
     remaining = max_evaluations - population_size
@@ -147,6 +167,8 @@ def _create_ga_children(
     upper_bound: float,
     rng: np.random.Generator,
 ) -> np.ndarray:
+    """Sinh đúng số cá thể con bằng tournament, SBX và đột biến polynomial."""
+
     dimensions = population.shape[1]
     parents = _tournament_selection(
         population=population,
@@ -275,6 +297,13 @@ def _create_po_children(
     upper_bound: float,
     rng: np.random.Generator,
 ) -> np.ndarray:
+    """Áp dụng PO V2 độc lập cho nhóm cá thể được giao trong thuật toán lai.
+
+    ``source_indices`` giữ chỉ số gốc vì hành vi giao tiếp của PO sử dụng thứ
+    tự cá thể trong công thức. ``alpha`` và ``theta`` được sinh một lần cho
+    toàn bộ vòng lặp, sau đó mỗi cá thể tự bốc một trong bốn hành vi.
+    """
+
     alpha = rng.random() / 5.0
     theta = rng.random() * math.pi
     children = np.empty_like(source_population)
@@ -309,7 +338,12 @@ def run_ga(
     max_evaluations: int,
     seed: int,
 ) -> OptimizationResult:
-    """Chay real-coded GA voi tournament, SBX va polynomial mutation."""
+    """Chạy GA mã hóa số thực với tournament, SBX và đột biến polynomial.
+
+    Mỗi vòng sinh một quần thể con kích thước N, đánh giá N lần và dùng elitism
+    để không làm mất nghiệm tốt nhất toàn cục. Vì vậy lịch sử best là đơn điệu
+    không tăng trong bài toán tối thiểu hóa.
+    """
 
     population = np.asarray(initial_population, dtype=float).copy()
     population_size = len(population)
@@ -368,7 +402,13 @@ def run_po(
     max_evaluations: int,
     seed: int,
 ) -> OptimizationResult:
-    """Chay PO V2 theo dung thu tu cap nhat trong ma MATLAB cua tac gia."""
+    """Chạy PO V2 theo thứ tự cập nhật của mã MATLAB tham chiếu.
+
+    Quần thể khởi tạo được sắp xếp theo fitness. Trong mỗi vòng, từng cá thể
+    chọn ngẫu nhiên một trong bốn hành vi và được đánh giá ngay. Nếu cá thể mới
+    tốt hơn, ``best_position`` được cập nhật tức thời để các cá thể phía sau
+    trong cùng vòng có thể sử dụng nghiệm tốt nhất mới.
+    """
 
     population = np.asarray(initial_population, dtype=float).copy()
     population_size = len(population)
@@ -444,7 +484,12 @@ def run_hybrid(
     seed: int,
     ga_ratio: float = 0.5,
 ) -> OptimizationResult:
-    """Chay pipeline lai: chia A/B, tao A'/B', hop cha va con, giu N tot nhat."""
+    """Chạy pipeline lai GA–PO trên cùng một quần thể.
+
+    Mỗi vòng xáo trộn rồi chia quần thể thành nhóm A cho GA và nhóm B cho PO.
+    Hai nhóm sinh A' và B'; sau đó hợp ``P(t) ∪ A' ∪ B'``, giữ lại N cá thể có
+    fitness nhỏ nhất và xáo trộn để chuẩn bị cho vòng tiếp theo.
+    """
 
     population = np.asarray(initial_population, dtype=float).copy()
     population_size = len(population)
@@ -525,6 +570,7 @@ def run_hybrid(
 
 
 ALGORITHMS = {
+    # Thứ tự này được dùng nhất quán trong runner, thống kê và biểu đồ.
     "GA": run_ga,
     "PO V2": run_po,
     "GA-PO": run_hybrid,

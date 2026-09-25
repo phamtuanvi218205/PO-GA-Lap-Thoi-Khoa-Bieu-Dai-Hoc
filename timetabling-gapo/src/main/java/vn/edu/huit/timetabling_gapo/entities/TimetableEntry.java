@@ -1,34 +1,21 @@
 package vn.edu.huit.timetabling_gapo.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import vn.edu.huit.timetabling_gapo.enums.LocationType;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(
         name = "TimetableEntry",
         uniqueConstraints = @UniqueConstraint(
-                name = "UQ_TimetableEntry_Run_Event",
-                columnNames = {"run_id", "event_id"}
+                name = "UQ_TimetableEntry_Run_Session",
+                columnNames = {"run_id", "class_session_id"}
         )
 )
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class TimetableEntry {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "timetable_entry_id")
@@ -39,22 +26,27 @@ public class TimetableEntry {
     private OptimizationRun optimizationRun;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "event_id", nullable = false)
-    private TeachingEvent teachingEvent;
+    @JoinColumn(name = "class_session_id", nullable = false)
+    private ClassSession classSession;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "room_code", nullable = false)
-    private Room room;
+    @JoinColumn(name = "term_code", nullable = false)
+    private AcademicTerm academicTerm;
 
-    @Column(name = "day_of_week", nullable = false)
-    private Integer dayOfWeek;
+    @Column(name = "teaching_date", nullable = false)
+    private LocalDate teachingDate;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "location_id", nullable = false)
+    private TeachingLocation teachingLocation;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "location_type", nullable = false, length = 20)
+    private LocationType locationType;
 
     @Column(name = "start_period", nullable = false)
     private Integer startPeriod;
 
     @Column(name = "end_period", nullable = false)
     private Integer endPeriod;
-
-    @Column(name = "is_locked", nullable = false)
-    private Boolean locked;
 }

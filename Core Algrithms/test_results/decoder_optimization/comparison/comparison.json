@@ -1,0 +1,39 @@
+{
+  "description": "Paired local timing on synthetic decoder cases; not HUIT or GA–PO",
+  "compared_trials": 320,
+  "identical_non_timing_results": true,
+  "scaling": [
+    {
+      "sessions": 4,
+      "trials": 10,
+      "successes": 10,
+      "before_median_ms": 0.37224999999999997,
+      "after_median_ms": 0.39195,
+      "median_speedup_ratio": 0.9497384870519198
+    },
+    {
+      "sessions": 12,
+      "trials": 10,
+      "successes": 10,
+      "before_median_ms": 5.0473,
+      "after_median_ms": 2.00745,
+      "median_speedup_ratio": 2.5142842910159655
+    },
+    {
+      "sessions": 24,
+      "trials": 10,
+      "successes": 10,
+      "before_median_ms": 30.7128,
+      "after_median_ms": 6.25985,
+      "median_speedup_ratio": 4.906315646541051
+    },
+    {
+      "sessions": 60,
+      "trials": 10,
+      "successes": 10,
+      "before_median_ms": 379.49905,
+      "after_median_ms": 30.7979,
+      "median_speedup_ratio": 12.322237879855445
+    }
+  ]
+}

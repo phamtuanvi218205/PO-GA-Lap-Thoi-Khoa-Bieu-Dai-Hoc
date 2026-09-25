@@ -1,13 +1,11 @@
 package vn.edu.huit.timetabling_gapo.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import vn.edu.huit.timetabling_gapo.entities.AcademicTerm;
+import vn.edu.huit.timetabling_gapo.enums.AcademicTermStatus;
 
-import java.util.Optional;
+import java.util.List;
 
-@Repository
 public interface AcademicTermRepository extends JpaRepository<AcademicTerm, String> {
-
-    Optional<AcademicTerm> findFirstByActiveTrue();
+    List<AcademicTerm> findByStatusOrderByStartDateDesc(AcademicTermStatus status);
 }

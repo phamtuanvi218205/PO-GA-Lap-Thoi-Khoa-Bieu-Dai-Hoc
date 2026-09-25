@@ -1,13 +1,10 @@
 package vn.edu.huit.timetabling_gapo.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import vn.edu.huit.timetabling_gapo.entities.OptimizationRun;
 
 import java.util.List;
 
-@Repository
 public interface OptimizationRunRepository extends JpaRepository<OptimizationRun, Long> {
-
-    List<OptimizationRun> findByAcademicTermTermCodeOrderByCreatedAtDesc(String termCode);
+    List<OptimizationRun> findByPlanningScenarioAcademicTermTermCodeOrderByStartedAtDesc(String termCode);
 }

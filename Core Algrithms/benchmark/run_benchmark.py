@@ -1,8 +1,11 @@
-"""Diem chay chinh cua bo benchmark.
+"""Điểm chạy chính của bộ benchmark GA, PO V2 và GA–PO.
 
-Vi du:
-    python run_benchmark.py --profile smoke
-    python run_benchmark.py --profile standard
+Runner chọn profile, nạp bộ hàm, gọi bộ điều phối thí nghiệm, tính thống kê và
+tạo bốn biểu đồ. Cấu hình giao thức được lưu cùng kết quả để tránh trộn dữ liệu
+từ những phiên bản thuật toán khác nhau.
+
+Ví dụ:
+    python run_benchmark.py --profile cec2022_pilot
     python run_benchmark.py --profile cec2022
 """
 
@@ -14,7 +17,7 @@ from dataclasses import asdict, replace
 from datetime import datetime
 from pathlib import Path
 
-from benchmark_functions import get_cec2022_suite, get_classical_suite
+from benchmark_functions import get_cec2022_suite
 from experiment import (
     ExperimentConfig,
     calculate_ranks_and_tests,
@@ -30,7 +33,9 @@ from plotting import (
 
 
 BENCHMARK_PROTOCOL = {
-    "version": "cec2022-official-native-v1-2026-09-14",
+    # Ghi dấu vết các quyết định có thể ảnh hưởng kết quả nhưng không nằm trực
+    # tiếp trong ExperimentConfig. Nội dung này được lưu trong config.json.
+    "version": "cec2022-only-official-native-v2-2026-09-24",
     "objective": "minimize max(f_best - f_optimum, 0)",
     "optimum_guard": "reject best below f_optimum beyond 1e-10 relative tolerance",
     "boundary_control": "clip",
@@ -63,25 +68,7 @@ BENCHMARK_PROTOCOL = {
 
 
 def get_profile(profile_name: str) -> ExperimentConfig:
-    """Dinh nghia ro quy mo cua tung muc chay."""
-
-    if profile_name == "smoke":
-        return ExperimentConfig(
-            profile_name="smoke",
-            dimensions=10,
-            population_size=30,
-            max_evaluations=3_000,
-            seeds=(1, 2, 3),
-        )
-
-    if profile_name == "standard":
-        return ExperimentConfig(
-            profile_name="standard",
-            dimensions=20,
-            population_size=30,
-            max_evaluations=30_000,
-            seeds=tuple(range(1, 11)),
-        )
+    """Ánh xạ tên profile sang số chiều, quần thể, FE và tập seed."""
 
     if profile_name == "cec2022_pilot":
         # Pilot chi kiem tra ky thuat va uoc luong runtime. Khong dung de
@@ -109,17 +96,16 @@ def get_profile(profile_name: str) -> ExperimentConfig:
 
 
 def parse_arguments() -> argparse.Namespace:
+    """Đọc profile, thư mục đầu ra và khoảng seed tùy chọn từ dòng lệnh."""
+
     parser = argparse.ArgumentParser(
         description="So sanh GA, PO V2 va GA-PO bang cung ngan sach FE."
     )
     parser.add_argument(
         "--profile",
-        choices=("smoke", "standard", "cec2022_pilot", "cec2022"),
-        default="smoke",
-        help=(
-            "smoke: kiem tra nhanh; standard: 9 ham co ban; "
-            "cec2022_pilot: pilot ky thuat; cec2022: full."
-        ),
+        choices=("cec2022_pilot", "cec2022"),
+        default="cec2022_pilot",
+        help="cec2022_pilot: kiểm tra kỹ thuật; cec2022: thực nghiệm đầy đủ.",
     )
     parser.add_argument(
         "--output",
@@ -147,7 +133,7 @@ def restrict_seed_range(
     seed_start: int | None,
     seed_end: int | None,
 ) -> ExperimentConfig:
-    """Tao config shard ma khong thay doi cac tham so benchmark khac."""
+    """Tạo cấu hình shard seed mà không đổi các tham số benchmark khác."""
 
     if (seed_start is None) != (seed_end is None):
         raise ValueError("Phai truyen dong thoi --seed-start va --seed-end.")
@@ -167,7 +153,7 @@ def restrict_seed_range(
 def _write_or_validate_config(
     config_path: Path, config: ExperimentConfig
 ) -> None:
-    """Khong cho resume nham ket qua cua mot cau hinh khac."""
+    """Ghi cấu hình mới hoặc từ chối resume nếu cấu hình hiện có khác biệt."""
 
     expected = asdict(config)
     expected["seeds"] = list(config.seeds)
@@ -189,6 +175,8 @@ def _write_or_validate_config(
 
 
 def main() -> None:
+    """Thực thi toàn bộ pipeline benchmark và in đường dẫn kết quả."""
+
     arguments = parse_arguments()
     config = restrict_seed_range(
         get_profile(arguments.profile),
@@ -196,11 +184,8 @@ def main() -> None:
         arguments.seed_end,
     )
 
-    if arguments.profile in ("cec2022_pilot", "cec2022"):
-        functions = get_cec2022_suite(config.dimensions)
-    else:
-        classical_suite = get_classical_suite()
-        functions = classical_suite[:3] if arguments.profile == "smoke" else classical_suite
+    # Cả pilot và thực nghiệm chính đều dùng cùng 12 hàm CEC 2022 chính thức.
+    functions = get_cec2022_suite(config.dimensions)
 
     script_directory = Path(__file__).resolve().parent
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -221,6 +206,7 @@ def main() -> None:
     print(f"Thu muc ket qua  : {output_directory}")
     print("=" * 72)
 
+    # Thứ tự xử lý: chạy/resume → thống kê mô tả → hạng/kiểm định → biểu đồ.
     raw_rows, convergence_rows = run_experiment(
         functions, config, output_directory
     )
