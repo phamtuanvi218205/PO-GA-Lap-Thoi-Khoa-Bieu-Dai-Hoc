@@ -166,10 +166,10 @@ class EncoderFixture(unittest.TestCase):
             101, "TTNT01_ONLINE", 1, TeachingPlanStatus.APPROVED, False
         )
         self.physical_session = ClassSession(
-            0, 1000, 100, 1, 1, 3, LocationType.PHYSICAL_ROOM
+            0, 1000, 100, 1, 1, 1, 3, LocationType.PHYSICAL_ROOM
         )
         self.online_session = ClassSession(
-            1, 1001, 101, 1, 1, 3, LocationType.ONLINE
+            1, 1001, 101, 1, 1, 1, 3, LocationType.ONLINE
         )
         self.scenario = PlanningScenario(
             scenario_id=1,

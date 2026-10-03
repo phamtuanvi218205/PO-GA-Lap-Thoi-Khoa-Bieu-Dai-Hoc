@@ -345,6 +345,7 @@ CREATE TABLE ClassSession
     class_session_id BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     teaching_plan_id BIGINT      NOT NULL,
     session_number   INT         NOT NULL,
+    stability_group_no INT       NOT NULL,
     term_code        VARCHAR(20) NOT NULL,
     week_number      INT         NOT NULL,
     duration_periods TINYINT     NOT NULL,
@@ -362,6 +363,7 @@ CREATE TABLE ClassSession
     CONSTRAINT UQ_ClassSession_Id_LocationType
         UNIQUE (class_session_id, required_location_type),
     CONSTRAINT CK_ClassSession_Number CHECK (session_number >= 1),
+    CONSTRAINT CK_ClassSession_StabilityGroup CHECK (stability_group_no >= 1),
     CONSTRAINT CK_ClassSession_Duration CHECK (duration_periods BETWEEN 1 AND 16),
     CONSTRAINT CK_ClassSession_LocationType
         CHECK (required_location_type IN ('PHYSICAL_ROOM', 'ONLINE'))
@@ -499,7 +501,14 @@ CREATE TABLE ConstraintSetting
     CONSTRAINT CK_ConstraintSetting_Weight
         CHECK (weight IS NULL OR weight >= 0),
     CONSTRAINT CK_ConstraintSetting_HardTier
-        CHECK (constraint_kind <> 'HARD' OR priority_tier = 1)
+        CHECK (constraint_kind <> 'HARD' OR priority_tier = 1),
+    CONSTRAINT CK_ConstraintSetting_WeightUsage
+        CHECK
+        (
+            (constraint_kind = 'HARD' AND weight IS NULL)
+            OR
+            (constraint_kind = 'SOFT' AND weight IS NOT NULL AND weight > 0)
+        )
 );
 
 CREATE TABLE OptimizationRun
@@ -513,8 +522,10 @@ CREATE TABLE OptimizationRun
     algorithm_version   VARCHAR(50)  NOT NULL,
     status              VARCHAR(20)  NOT NULL DEFAULT 'PENDING',
     hard_violation_count INT         NULL,
+    time_stability_score DECIMAL(18,6) NULL,
     general_quality_score DECIMAL(18,6) NULL,
     lecturer_preference_score DECIMAL(18,6) NULL,
+    fitness_breakdown_json NVARCHAR(MAX) NULL,
     snapshot_json       NVARCHAR(MAX) NOT NULL,
     gene_option_mapping_json NVARCHAR(MAX) NOT NULL,
     started_at          DATETIME2    NULL,
@@ -530,6 +541,14 @@ CREATE TABLE OptimizationRun
         CHECK (status IN ('PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED')),
     CONSTRAINT CK_OptimizationRun_HardViolations
         CHECK (hard_violation_count IS NULL OR hard_violation_count >= 0),
+    CONSTRAINT CK_OptimizationRun_TimeScore
+        CHECK (time_stability_score IS NULL OR time_stability_score >= 0),
+    CONSTRAINT CK_OptimizationRun_GeneralScore
+        CHECK (general_quality_score IS NULL OR general_quality_score >= 0),
+    CONSTRAINT CK_OptimizationRun_LecturerScore
+        CHECK (lecturer_preference_score IS NULL OR lecturer_preference_score >= 0),
+    CONSTRAINT CK_OptimizationRun_BreakdownJson
+        CHECK (fitness_breakdown_json IS NULL OR ISJSON(fitness_breakdown_json) = 1),
     CONSTRAINT CK_OptimizationRun_SnapshotJson CHECK (ISJSON(snapshot_json) = 1),
     CONSTRAINT CK_OptimizationRun_MappingJson CHECK (ISJSON(gene_option_mapping_json) = 1)
 );
@@ -774,9 +793,9 @@ DECLARE @n INT = 1;
 WHILE @n <= 15
 BEGIN
     INSERT INTO ClassSession
-        (teaching_plan_id, session_number, term_code, week_number,
+        (teaching_plan_id, session_number, stability_group_no, term_code, week_number,
          duration_periods, required_location_type)
-    VALUES (@standardPlan, @n, '2026_HK1', @n, 3, 'PHYSICAL_ROOM');
+    VALUES (@standardPlan, @n, 1, '2026_HK1', @n, 3, 'PHYSICAL_ROOM');
     SET @n += 1;
 END;
 
@@ -784,11 +803,11 @@ SET @n = 1;
 WHILE @n <= 10
 BEGIN
     INSERT INTO ClassSession
-        (teaching_plan_id, session_number, term_code, week_number,
+        (teaching_plan_id, session_number, stability_group_no, term_code, week_number,
          duration_periods, required_location_type)
     VALUES
     (
-        @acceleratedPlan, @n, '2026_HK1', @n,
+        @acceleratedPlan, @n, 1, '2026_HK1', @n,
         CASE WHEN @n <= 5 THEN 3 ELSE 6 END,
         'PHYSICAL_ROOM'
     );
@@ -799,9 +818,9 @@ SET @n = 1;
 WHILE @n <= 6
 BEGIN
     INSERT INTO ClassSession
-        (teaching_plan_id, session_number, term_code, week_number,
+        (teaching_plan_id, session_number, stability_group_no, term_code, week_number,
          duration_periods, required_location_type)
-    VALUES (@practicePlan, @n, '2026_HK1', @n, 5, 'PHYSICAL_ROOM');
+    VALUES (@practicePlan, @n, 1, '2026_HK1', @n, 5, 'PHYSICAL_ROOM');
     SET @n += 1;
 END;
 
@@ -809,9 +828,9 @@ SET @n = 1;
 WHILE @n <= 15
 BEGIN
     INSERT INTO ClassSession
-        (teaching_plan_id, session_number, term_code, week_number,
+        (teaching_plan_id, session_number, stability_group_no, term_code, week_number,
          duration_periods, required_location_type)
-    VALUES (@onlinePlan, @n, '2026_HK1', @n, 3, 'ONLINE');
+    VALUES (@onlinePlan, @n, 1, '2026_HK1', @n, 3, 'ONLINE');
     SET @n += 1;
 END;
 GO
@@ -862,7 +881,8 @@ FROM TeachingPart p
 JOIN TeachingPlan pl ON pl.teaching_part_id = p.teaching_part_id
 WHERE pl.plan_code IN ('KTDL01_STANDARD', 'LTWEB01_STANDARD', 'TTNT01_ONLINE');
 
--- Final soft weights are intentionally NULL until Gate F is approved.
+-- Gate F uses three lexicographic soft tiers. Weights only combine components
+-- inside one tier; they never allow a lower tier to compensate for a higher one.
 INSERT INTO ConstraintSetting
     (constraint_code, constraint_name, constraint_kind, priority_tier, weight, note)
 VALUES
@@ -878,12 +898,20 @@ VALUES
  N'Không dùng capacity như điều kiện cứng'),
 ('HARD_TRAVEL_TIME', N'Đủ thời gian di chuyển giữa các cơ sở', 'HARD', 1, NULL,
  N'Chỉ áp dụng khi phạm vi có nhiều cơ sở và đã cấu hình thời gian'),
-('SOFT_GENERAL_QUALITY', N'Chất lượng chung của lịch', 'SOFT', 2, NULL,
- N'Công thức và trọng số chi tiết sẽ chốt tại Gate F'),
-('SOFT_CAPACITY', N'Mức thiếu sức chứa phòng vật lý', 'SOFT', 2, NULL,
+('SOFT_TIME_WEEKDAY_STABILITY', N'Ổn định thứ học giữa các tuần', 'SOFT', 1, 0.5000,
+ N'Thành phần thứ nhất của Q_time'),
+('SOFT_TIME_START_PERIOD_STABILITY', N'Ổn định tiết bắt đầu giữa các tuần', 'SOFT', 1, 0.5000,
+ N'Thành phần thứ hai của Q_time'),
+('SOFT_CAPACITY', N'Mức thiếu sức chứa phòng vật lý', 'SOFT', 2, 0.4500,
  N'Bỏ qua khi expected_enrollment hoặc capacity là NULL; không áp dụng ONLINE'),
-('SOFT_LECTURER_PREFERENCE', N'Mong muốn thời gian của giảng viên', 'SOFT', 3, NULL,
- N'Không được lấn át chất lượng chung; công thức chi tiết chốt tại Gate F');
+('SOFT_LECTURER_GAP', N'Khoảng trống trong ngày của giảng viên', 'SOFT', 2, 0.3000,
+ N'Không tính trước buổi đầu, sau buổi cuối hoặc ngày không dạy'),
+('SOFT_ROOM_DISCOURAGED', N'Hạn chế dùng phòng trong khoảng DISCOURAGED', 'SOFT', 2, 0.1500,
+ N'Tính theo tỷ lệ tiết vật lý chồng lên khoảng DISCOURAGED'),
+('SOFT_ROOM_STABILITY', N'Ổn định phòng giữa các tuần', 'SOFT', 2, 0.1000,
+ N'Đổi phòng chỉ là thành phần nhẹ của Q_general'),
+('SOFT_LECTURER_PREFERENCE', N'Mong muốn thời gian của giảng viên', 'SOFT', 3, 1.0000,
+ N'Q_lecturer đứng sau Q_time và Q_general');
 GO
 
 /* One manually constructed sample result for query/UI development.
@@ -894,11 +922,13 @@ DECLARE @scenarioId BIGINT =
 INSERT INTO OptimizationRun
     (scenario_id, algorithm_name, population_size, max_fitness_evaluations,
      random_seed, algorithm_version, status, hard_violation_count,
-     general_quality_score, lecturer_preference_score,
+     time_stability_score, general_quality_score, lecturer_preference_score,
+     fitness_breakdown_json,
      snapshot_json, gene_option_mapping_json, started_at, finished_at)
 VALUES
 (@scenarioId, 'GA_PO', 30, 10000, 20260917, 'sample-manual-1', 'COMPLETED', 0,
- NULL, NULL,
+ NULL, NULL, NULL,
+ N'{"status":"NOT_EVALUATED","reason":"manual sample for query and UI development"}',
  N'{"purpose":"sample database output; not an optimizer benchmark"}',
  N'{"mapping":"generated from selected scenario sessions"}',
  SYSDATETIME(), SYSDATETIME());

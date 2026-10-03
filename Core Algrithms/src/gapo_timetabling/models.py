@@ -7,6 +7,7 @@ vấn database và không chứa logic của GA, PO, decoder, repair hoặc fitn
 from dataclasses import dataclass
 from datetime import date, time
 from enum import Enum
+from math import isfinite
 
 
 # ---------------------------------------------------------------------------
@@ -401,12 +402,15 @@ class ClassSession:
 
     ``session_index`` là vị trí gene tương ứng trong vector nghiệm. Buổi đã
     biết tuần, thời lượng và plan nguồn nhưng chưa biết vị trí lịch cuối cùng.
+    Các buổi cùng plan và cùng ``stability_group_no`` tạo thành một chuỗi cần
+    ưu tiên giữ ổn định thứ và tiết bắt đầu giữa các tuần.
     """
 
     session_index: int
     class_session_id: int
     teaching_plan_id: int
     session_number: int
+    stability_group_no: int
     week_number: int
     duration_periods: int
     required_location_type: LocationType
@@ -418,6 +422,8 @@ class ClassSession:
             raise ValueError("session_index không được âm.")
         if self.session_number < 1 or self.week_number < 1:
             raise ValueError("Số thứ tự buổi và số tuần phải bắt đầu từ 1.")
+        if self.stability_group_no < 1:
+            raise ValueError("stability_group_no phải bắt đầu từ 1.")
         if not 1 <= self.duration_periods <= 16:
             raise ValueError("Thời lượng buổi phải nằm trong khoảng 1..16.")
 
@@ -509,12 +515,156 @@ class ConstraintSetting:
     enabled: bool
 
     def __post_init__(self) -> None:
-        """Giới hạn tầng ưu tiên và ngăn trọng số âm."""
+        """Kiểm tra tầng ưu tiên và cách dùng trọng số theo loại tiêu chí."""
 
         if not 1 <= self.priority_tier <= 3:
             raise ValueError("priority_tier phải nằm trong khoảng 1..3.")
-        if self.weight is not None and self.weight < 0:
-            raise ValueError("Trọng số không được âm.")
+
+        if self.constraint_type == ConstraintType.HARD:
+            if self.priority_tier != 1:
+                raise ValueError("Ràng buộc HARD phải dùng priority_tier bằng 1.")
+            if self.weight is not None:
+                raise ValueError("Ràng buộc HARD không dùng trọng số fitness.")
+            return
+
+        if self.weight is None or not isfinite(self.weight) or self.weight <= 0:
+            raise ValueError("Tiêu chí SOFT phải có trọng số hữu hạn lớn hơn 0.")
+
+
+@dataclass(frozen=True, slots=True)
+class LecturerPreferenceBreakdown:
+    """Chi tiết phần phạt mong muốn của một giảng viên.
+
+    Cấu trúc này giúp kết quả fitness giải thích được giảng viên nào bị bỏ lỡ
+    khoảng ``PREFERRED`` hoặc bị xếp chồng lên khoảng ``DISCOURAGED``.
+    """
+
+    lecturer_index: int
+    evaluated_session_count: int
+    missed_preferred_penalty: float
+    discouraged_overlap_penalty: float
+
+    def __post_init__(self) -> None:
+        """Ngăn chỉ số, số lượng và các thành phần phạt không hợp lệ."""
+
+        if self.lecturer_index < 0:
+            raise ValueError("lecturer_index trong breakdown không được âm.")
+        if self.evaluated_session_count < 0:
+            raise ValueError("Số session đã đánh giá không được âm.")
+        penalties = (
+            self.missed_preferred_penalty,
+            self.discouraged_overlap_penalty,
+        )
+        if any(not isfinite(value) or value < 0 for value in penalties):
+            raise ValueError("Các thành phần phạt giảng viên phải hữu hạn và không âm.")
+
+
+@dataclass(frozen=True, slots=True)
+class TimeStabilityException:
+    """Một buổi được miễn phạt ``Q_time`` vì mẫu chuẩn không còn khả thi.
+
+    Chi tiết này được giữ trong breakdown để kết quả không chỉ báo số ngoại lệ
+    mà còn truy nguyên được buổi nào được miễn và lý do tại sao.
+    """
+
+    session_index: int
+    standard_iso_weekday: int
+    standard_start_period: int
+    reason: str
+
+    def __post_init__(self) -> None:
+        """Kiểm tra khóa session, mẫu thời gian chuẩn và nội dung giải thích."""
+
+        if self.session_index < 0:
+            raise ValueError("session_index của ngoại lệ không được âm.")
+        if not 1 <= self.standard_iso_weekday <= 7:
+            raise ValueError("Thứ ISO chuẩn phải nằm trong khoảng 1..7.")
+        if not 1 <= self.standard_start_period <= 16:
+            raise ValueError("Tiết bắt đầu chuẩn phải nằm trong khoảng 1..16.")
+        if not self.reason.strip():
+            raise ValueError("Ngoại lệ ổn định thời gian phải có lý do.")
+
+
+@dataclass(frozen=True, slots=True)
+class FitnessBreakdown:
+    """Các số liệu giải thích ba tầng fitness của một lịch hợp lệ.
+
+    Các bộ đếm giữ lại dữ liệu thô của độ ổn định. Bốn component là giá trị
+    đã chuẩn hóa dùng để ghép ``Q_general``. Chi tiết giảng viên được giữ
+    riêng để không biến một score tổng thành kết quả không thể truy nguyên.
+    """
+
+    weekday_change_count: int
+    start_period_change_count: int
+    room_change_count: int
+    valid_time_exception_count: int
+    comparable_time_session_count: int
+    comparable_physical_session_count: int
+    capacity_component: float
+    gap_component: float
+    room_discouraged_component: float
+    room_stability_component: float
+    lecturer_breakdown: tuple[LecturerPreferenceBreakdown, ...]
+    time_exceptions: tuple[TimeStabilityException, ...] = ()
+
+    def __post_init__(self) -> None:
+        """Kiểm tra các bộ đếm và component trước khi lưu kết quả."""
+
+        counts = (
+            self.weekday_change_count,
+            self.start_period_change_count,
+            self.room_change_count,
+            self.valid_time_exception_count,
+            self.comparable_time_session_count,
+            self.comparable_physical_session_count,
+        )
+        if any(value < 0 for value in counts):
+            raise ValueError("Các bộ đếm trong fitness breakdown không được âm.")
+
+        components = (
+            self.capacity_component,
+            self.gap_component,
+            self.room_discouraged_component,
+            self.room_stability_component,
+        )
+        if any(not isfinite(value) or value < 0 for value in components):
+            raise ValueError("Các component fitness phải hữu hạn và không âm.")
+
+        if self.valid_time_exception_count != len(self.time_exceptions):
+            raise ValueError(
+                "Số ngoại lệ thời gian phải khớp danh sách chi tiết ngoại lệ."
+            )
+
+
+@dataclass(frozen=True, slots=True)
+class FitnessResult:
+    """Kết quả đánh giá dùng để so sánh lexicographic giữa các lịch hợp lệ."""
+
+    time_stability_score: float
+    general_quality_score: float
+    lecturer_preference_score: float
+    breakdown: FitnessBreakdown
+
+    def __post_init__(self) -> None:
+        """Ba score phải hữu hạn và không âm; điểm nhỏ hơn là tốt hơn."""
+
+        scores = (
+            self.time_stability_score,
+            self.general_quality_score,
+            self.lecturer_preference_score,
+        )
+        if any(not isfinite(value) or value < 0 for value in scores):
+            raise ValueError("Các fitness score phải hữu hạn và không âm.")
+
+    @property
+    def fitness_key(self) -> tuple[float, float, float]:
+        """Khóa so sánh giữ đúng thứ tự Q_time → Q_general → Q_lecturer."""
+
+        return (
+            self.time_stability_score,
+            self.general_quality_score,
+            self.lecturer_preference_score,
+        )
 
 
 @dataclass(frozen=True, slots=True)

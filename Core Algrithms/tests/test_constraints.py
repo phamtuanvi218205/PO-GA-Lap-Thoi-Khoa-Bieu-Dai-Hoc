@@ -154,10 +154,10 @@ class ConstraintFixture(unittest.TestCase):
             for index in range(4)
         )
         self.sessions = (
-            ClassSession(0, 1000, 100, 1, 1, 3, LocationType.PHYSICAL_ROOM),
-            ClassSession(1, 1001, 101, 1, 1, 3, LocationType.PHYSICAL_ROOM),
-            ClassSession(2, 1002, 102, 1, 1, 3, LocationType.PHYSICAL_ROOM),
-            ClassSession(3, 1003, 103, 1, 1, 3, LocationType.ONLINE),
+            ClassSession(0, 1000, 100, 1, 1, 1, 3, LocationType.PHYSICAL_ROOM),
+            ClassSession(1, 1001, 101, 1, 1, 1, 3, LocationType.PHYSICAL_ROOM),
+            ClassSession(2, 1002, 102, 1, 1, 1, 3, LocationType.PHYSICAL_ROOM),
+            ClassSession(3, 1003, 103, 1, 1, 1, 3, LocationType.ONLINE),
         )
         self.scenario = PlanningScenario(
             scenario_id=1,

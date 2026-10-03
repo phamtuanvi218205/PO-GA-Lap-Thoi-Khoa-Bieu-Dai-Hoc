@@ -15,7 +15,10 @@ from gapo_timetabling.models import (
     Course,
     CourseSection,
     DateStatus,
+    FitnessBreakdown,
+    FitnessResult,
     Lecturer,
+    LecturerPreferenceBreakdown,
     LocationType,
     OnlineLocation,
     PartType,
@@ -33,6 +36,7 @@ from gapo_timetabling.models import (
     TeachingPlan,
     TeachingPlanStatus,
     TermWeek,
+    TimeStabilityException,
     TimePeriod,
 )
 
@@ -149,9 +153,9 @@ class TestModels(unittest.TestCase):
 
         # Ba session dưới đây chính là ba gene của một cá thể.
         self.sessions = (
-            ClassSession(0, 1000, 100, 1, 1, 3, LocationType.PHYSICAL_ROOM),
-            ClassSession(1, 1001, 100, 2, 2, 3, LocationType.PHYSICAL_ROOM),
-            ClassSession(2, 1002, 101, 1, 1, 3, LocationType.ONLINE),
+            ClassSession(0, 1000, 100, 1, 1, 1, 3, LocationType.PHYSICAL_ROOM),
+            ClassSession(1, 1001, 100, 2, 1, 2, 3, LocationType.PHYSICAL_ROOM),
+            ClassSession(2, 1002, 101, 1, 1, 1, 3, LocationType.ONLINE),
         )
         self.scenario = PlanningScenario(
             scenario_id=1,
@@ -186,7 +190,7 @@ class TestModels(unittest.TestCase):
                 constraint_code="SOFT_CAPACITY",
                 constraint_type=ConstraintType.SOFT,
                 priority_tier=2,
-                weight=None,
+                weight=0.45,
                 enabled=True,
             ),
         )
@@ -237,6 +241,142 @@ class TestModels(unittest.TestCase):
     def test_each_session_belongs_to_one_specific_week(self) -> None:
         self.assertEqual(self.sessions[0].week_number, 1)
         self.assertEqual(self.sessions[1].week_number, 2)
+
+    def test_sessions_in_same_series_share_stability_group(self) -> None:
+        """Các buổi tương ứng qua nhiều tuần dùng chung một nhóm ổn định."""
+
+        self.assertEqual(self.sessions[0].teaching_plan_id, 100)
+        self.assertEqual(self.sessions[1].teaching_plan_id, 100)
+        self.assertEqual(self.sessions[0].stability_group_no, 1)
+        self.assertEqual(self.sessions[1].stability_group_no, 1)
+
+    def test_stability_group_number_must_start_from_one(self) -> None:
+        """Số nhóm bằng 0 hoặc âm không biểu diễn một chuỗi buổi hợp lệ."""
+
+        with self.assertRaisesRegex(
+            ValueError,
+            "stability_group_no phải bắt đầu từ 1",
+        ):
+            replace(self.sessions[0], stability_group_no=0)
+
+    def test_constraint_settings_follow_gate_f_tiers(self) -> None:
+        """Soft tier 1, 2 và 3 biểu diễn đúng thứ tự Gate F."""
+
+        time_setting = ConstraintSetting(
+            constraint_code="SOFT_TIME_WEEKDAY_STABILITY",
+            constraint_type=ConstraintType.SOFT,
+            priority_tier=1,
+            weight=0.5,
+            enabled=True,
+        )
+        general_setting = ConstraintSetting(
+            constraint_code="SOFT_CAPACITY",
+            constraint_type=ConstraintType.SOFT,
+            priority_tier=2,
+            weight=0.45,
+            enabled=True,
+        )
+        lecturer_setting = ConstraintSetting(
+            constraint_code="SOFT_LECTURER_PREFERENCE",
+            constraint_type=ConstraintType.SOFT,
+            priority_tier=3,
+            weight=1.0,
+            enabled=True,
+        )
+
+        self.assertEqual(time_setting.priority_tier, 1)
+        self.assertEqual(general_setting.priority_tier, 2)
+        self.assertEqual(lecturer_setting.priority_tier, 3)
+
+    def test_soft_constraint_requires_positive_weight(self) -> None:
+        """Tiêu chí mềm không được để trống trọng số sau khi Gate F đã chốt."""
+
+        with self.assertRaisesRegex(ValueError, "SOFT phải có trọng số"):
+            ConstraintSetting(
+                constraint_code="SOFT_CAPACITY",
+                constraint_type=ConstraintType.SOFT,
+                priority_tier=2,
+                weight=None,
+                enabled=True,
+            )
+
+    def test_hard_constraint_does_not_use_fitness_weight(self) -> None:
+        """Ràng buộc cứng được Validator xử lý trước và không đi vào fitness."""
+
+        with self.assertRaisesRegex(ValueError, "HARD không dùng trọng số"):
+            ConstraintSetting(
+                constraint_code="HARD_ROOM_OVERLAP",
+                constraint_type=ConstraintType.HARD,
+                priority_tier=1,
+                weight=1.0,
+                enabled=True,
+            )
+
+    def test_fitness_result_exposes_lexicographic_key_and_breakdown(self) -> None:
+        """Kết quả giữ ba score riêng và đủ dữ liệu giải thích tối thiểu."""
+
+        lecturer_detail = LecturerPreferenceBreakdown(
+            lecturer_index=0,
+            evaluated_session_count=2,
+            missed_preferred_penalty=0.25,
+            discouraged_overlap_penalty=0.0,
+        )
+        time_exception = TimeStabilityException(
+            session_index=1,
+            standard_iso_weekday=2,
+            standard_start_period=1,
+            reason="Ngày học chuẩn không còn option sau bộ lọc cứng.",
+        )
+        breakdown = FitnessBreakdown(
+            weekday_change_count=1,
+            start_period_change_count=0,
+            room_change_count=1,
+            valid_time_exception_count=1,
+            comparable_time_session_count=2,
+            comparable_physical_session_count=2,
+            capacity_component=0.2,
+            gap_component=0.1,
+            room_discouraged_component=0.0,
+            room_stability_component=0.5,
+            lecturer_breakdown=(lecturer_detail,),
+            time_exceptions=(time_exception,),
+        )
+        result = FitnessResult(
+            time_stability_score=0.25,
+            general_quality_score=0.17,
+            lecturer_preference_score=0.125,
+            breakdown=breakdown,
+        )
+
+        self.assertEqual(result.fitness_key, (0.25, 0.17, 0.125))
+        self.assertEqual(result.breakdown.weekday_change_count, 1)
+        self.assertEqual(result.breakdown.lecturer_breakdown, (lecturer_detail,))
+        self.assertEqual(result.breakdown.time_exceptions, (time_exception,))
+
+    def test_fitness_result_rejects_negative_score(self) -> None:
+        """Score âm không phải kết quả hợp lệ của các công thức Gate F."""
+
+        breakdown = FitnessBreakdown(
+            weekday_change_count=0,
+            start_period_change_count=0,
+            room_change_count=0,
+            valid_time_exception_count=0,
+            comparable_time_session_count=0,
+            comparable_physical_session_count=0,
+            capacity_component=0.0,
+            gap_component=0.0,
+            room_discouraged_component=0.0,
+            room_stability_component=0.0,
+            lecturer_breakdown=(),
+        )
+
+        with self.assertRaisesRegex(ValueError, "score phải hữu hạn và không âm"):
+            FitnessResult(
+                time_stability_score=-0.1,
+                general_quality_score=0.0,
+                lecturer_preference_score=0.0,
+                breakdown=breakdown,
+            )
 
     def test_teaching_date_inside_declared_week_is_allowed(self) -> None:
         self.assertEqual(self.problem.teaching_dates, self.teaching_dates)
@@ -340,8 +480,8 @@ class TestModels(unittest.TestCase):
 
     def test_lecture_session_with_six_periods_is_allowed(self) -> None:
         six_period_sessions = (
-            ClassSession(0, 1000, 100, 1, 1, 6, LocationType.PHYSICAL_ROOM),
-            ClassSession(1, 1002, 101, 1, 1, 3, LocationType.ONLINE),
+            ClassSession(0, 1000, 100, 1, 1, 1, 6, LocationType.PHYSICAL_ROOM),
+            ClassSession(1, 1002, 101, 1, 1, 1, 3, LocationType.ONLINE),
         )
 
         problem = self._build_problem(six_period_sessions)
@@ -351,8 +491,8 @@ class TestModels(unittest.TestCase):
     def test_lecture_session_with_five_periods_is_rejected(self) -> None:
         five_period_part = replace(self.lecture_part, total_periods=5)
         five_period_sessions = (
-            ClassSession(0, 1000, 100, 1, 1, 5, LocationType.PHYSICAL_ROOM),
-            ClassSession(1, 1002, 101, 1, 1, 3, LocationType.ONLINE),
+            ClassSession(0, 1000, 100, 1, 1, 1, 5, LocationType.PHYSICAL_ROOM),
+            ClassSession(1, 1002, 101, 1, 1, 1, 3, LocationType.ONLINE),
         )
 
         with self.assertRaisesRegex(ValueError, "không được phép"):
@@ -368,8 +508,8 @@ class TestModels(unittest.TestCase):
             total_periods=5,
         )
         practice_sessions = (
-            ClassSession(0, 1000, 100, 1, 1, 5, LocationType.PHYSICAL_ROOM),
-            ClassSession(1, 1002, 101, 1, 1, 3, LocationType.ONLINE),
+            ClassSession(0, 1000, 100, 1, 1, 1, 5, LocationType.PHYSICAL_ROOM),
+            ClassSession(1, 1002, 101, 1, 1, 1, 3, LocationType.ONLINE),
         )
 
         problem = self._build_problem(
@@ -385,8 +525,8 @@ class TestModels(unittest.TestCase):
             part_type=PartType.PRACTICE,
         )
         practice_sessions = (
-            ClassSession(0, 1000, 100, 1, 1, 6, LocationType.PHYSICAL_ROOM),
-            ClassSession(1, 1002, 101, 1, 1, 3, LocationType.ONLINE),
+            ClassSession(0, 1000, 100, 1, 1, 1, 6, LocationType.PHYSICAL_ROOM),
+            ClassSession(1, 1002, 101, 1, 1, 1, 3, LocationType.ONLINE),
         )
 
         problem = self._build_problem(
@@ -419,8 +559,8 @@ class TestModels(unittest.TestCase):
             total_periods=5,
         )
         practice_sessions = (
-            ClassSession(0, 1000, 100, 1, 1, 5, LocationType.PHYSICAL_ROOM),
-            ClassSession(1, 1002, 101, 1, 1, 3, LocationType.ONLINE),
+            ClassSession(0, 1000, 100, 1, 1, 1, 5, LocationType.PHYSICAL_ROOM),
+            ClassSession(1, 1002, 101, 1, 1, 1, 3, LocationType.ONLINE),
         )
 
         with self.assertRaisesRegex(ValueError, "Chưa khai báo"):
@@ -441,7 +581,7 @@ class TestModels(unittest.TestCase):
     def test_wrong_plan_total_is_rejected(self) -> None:
         incomplete_sessions = (
             self.sessions[0],
-            ClassSession(1, 1002, 101, 1, 1, 3, LocationType.ONLINE),
+            ClassSession(1, 1002, 101, 1, 1, 1, 3, LocationType.ONLINE),
         )
 
         with self.assertRaisesRegex(ValueError, "không bằng"):

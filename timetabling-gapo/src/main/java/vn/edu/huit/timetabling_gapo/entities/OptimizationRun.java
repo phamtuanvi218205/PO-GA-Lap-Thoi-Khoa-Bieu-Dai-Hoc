@@ -44,11 +44,23 @@ public class OptimizationRun {
     @Column(name = "hard_violation_count")
     private Integer hardViolationCount;
 
+    /** Điểm ổn định thứ và tiết bắt đầu; được so sánh trước hai tầng mềm còn lại. */
+    @Column(name = "time_stability_score", precision = 18, scale = 6)
+    private BigDecimal timeStabilityScore;
+
     @Column(name = "general_quality_score", precision = 18, scale = 6)
     private BigDecimal generalQualityScore;
 
     @Column(name = "lecturer_preference_score", precision = 18, scale = 6)
     private BigDecimal lecturerPreferenceScore;
+
+    /**
+     * JSON lưu số lần đổi thứ, đổi tiết, đổi phòng, ngoại lệ hợp lệ,
+     * các component chất lượng chung và chi tiết preference theo giảng viên.
+     */
+    @Lob
+    @Column(name = "fitness_breakdown_json", columnDefinition = "nvarchar(max)")
+    private String fitnessBreakdownJson;
 
     @Lob
     @Column(name = "snapshot_json", nullable = false, columnDefinition = "nvarchar(max)")

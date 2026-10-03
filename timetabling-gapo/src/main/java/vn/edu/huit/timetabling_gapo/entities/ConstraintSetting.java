@@ -24,6 +24,10 @@ public class ConstraintSetting {
     @Column(name = "priority_tier", nullable = false)
     private Integer priorityTier;
 
+    /**
+     * Trọng số nội bộ trong cùng một tầng mềm. Ràng buộc HARD không dùng
+     * trường này vì được Validator xử lý trước khi tính fitness.
+     */
     @Column(name = "weight", precision = 12, scale = 4)
     private BigDecimal weight;
 

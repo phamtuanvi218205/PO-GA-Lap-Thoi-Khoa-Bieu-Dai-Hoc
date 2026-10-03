@@ -26,6 +26,13 @@ public class ClassSession {
     @Column(name = "session_number", nullable = false)
     private Integer sessionNumber;
 
+    /**
+     * Xác định chuỗi buổi cần ưu tiên giữ ổn định thứ và tiết bắt đầu
+     * giữa các tuần học khi điều kiện thực tế cho phép.
+     */
+    @Column(name = "stability_group_no", nullable = false)
+    private Integer stabilityGroupNo;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumns({
             @JoinColumn(name = "term_code", referencedColumnName = "term_code", nullable = false),

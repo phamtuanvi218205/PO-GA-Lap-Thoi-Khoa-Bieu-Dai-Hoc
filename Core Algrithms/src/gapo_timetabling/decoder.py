@@ -53,8 +53,13 @@ class DecodeResult:
         return self.status == DecodeStatus.SUCCESS
 
 
-def _preferred_option_index(gene: float, option_count: int) -> int:
-    """Đổi gene trong [0,1] thành chỉ số option, kể cả biên x=1."""
+def preferred_option_index(gene: float, option_count: int) -> int:
+    """Đổi gene trong [0,1] thành chỉ số option, kể cả biên x=1.
+
+    Hàm được công khai để decoder và repair dùng chung đúng một quy tắc ánh
+    xạ gene -> option. Nhờ đó hai module không thể vô tình hiểu một gene theo
+    hai cách khác nhau.
+    """
 
     return min(floor(gene * option_count), option_count - 1)
 
@@ -165,7 +170,7 @@ def decode_vector(
             )
 
     preferred_indices = tuple(
-        _preferred_option_index(vector[index], len(domain))
+        preferred_option_index(vector[index], len(domain))
         for index, domain in enumerate(option_domains)
     )
     option_orders = tuple(
