@@ -1,4 +1,8 @@
-"""Tao cac anh PNG tu ket qua benchmark."""
+"""Tạo bốn biểu đồ PNG từ dữ liệu benchmark đã tổng hợp.
+
+Module dùng backend không giao diện để chạy được trong terminal. Màu của từng
+thuật toán được giữ cố định giữa mọi biểu đồ nhằm tránh gây nhầm lẫn khi đọc.
+"""
 
 from __future__ import annotations
 
@@ -15,6 +19,7 @@ from ordering import function_sort_key
 
 
 ALGORITHM_COLORS = {
+    # Một ánh xạ màu duy nhất dùng cho đường hội tụ, boxplot và runtime.
     "GA": "#2563EB",
     "PO V2": "#EA580C",
     "GA-PO": "#16A34A",
@@ -22,13 +27,22 @@ ALGORITHM_COLORS = {
 
 
 def _safe_error(values: np.ndarray) -> np.ndarray:
-    # Log scale khong ve duoc 0, nen chi thay 0 bang mot epsilon rat nho.
+    """Thay sai số 0 bằng epsilon chỉ cho mục đích hiển thị trên thang log."""
+
+    # Dữ liệu CSV vẫn giữ giá trị 0 thật; phép thay thế không ảnh hưởng thống kê.
     return np.maximum(values, 1e-16)
 
 
 def plot_convergence(
     convergence_rows: list[dict[str, object]], output_directory: Path
 ) -> Path:
+    """Vẽ median và khoảng tứ phân vị sai số theo FE cho từng hàm.
+
+    Mỗi đường là trung vị qua các seed. Vùng mờ từ Q1 đến Q3 thể hiện độ phân
+    tán của 50% lần chạy ở giữa, nhờ đó có thể quan sát cả tốc độ hội tụ và độ
+    ổn định mà không để một vài ngoại lệ chi phối biểu đồ.
+    """
+
     functions = sorted(
         {str(row["function"]) for row in convergence_rows},
         key=function_sort_key,
@@ -113,6 +127,8 @@ def plot_convergence(
 def plot_final_error_boxplots(
     raw_rows: list[dict[str, object]], output_directory: Path
 ) -> Path:
+    """Vẽ boxplot sai số cuối để so sánh chất lượng và độ ổn định qua seed."""
+
     functions = sorted(
         {str(row["function"]) for row in raw_rows}, key=function_sort_key
     )
@@ -164,6 +180,8 @@ def plot_final_error_boxplots(
 def plot_rank_heatmap(
     rank_rows: list[dict[str, object]], output_directory: Path
 ) -> Path:
+    """Vẽ ma trận thứ hạng từng thuật toán trên từng hàm benchmark."""
+
     functions = sorted(
         {str(row["function"]) for row in rank_rows}, key=function_sort_key
     )
@@ -209,6 +227,8 @@ def plot_rank_heatmap(
 def plot_runtime(
     raw_rows: list[dict[str, object]], output_directory: Path
 ) -> Path:
+    """Vẽ runtime trung bình và độ lệch chuẩn với cùng ngân sách FE."""
+
     algorithms = list(ALGORITHM_COLORS.keys())
     means = []
     standard_deviations = []

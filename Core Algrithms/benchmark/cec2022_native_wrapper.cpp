@@ -1,7 +1,9 @@
-// Thin C ABI wrapper around the official CEC 2022 C++ evaluator.
-// The official source declares these globals as extern and defines them in
-// its example main.cpp. The benchmark links only the evaluator, so they are
-// defined here instead.
+// Cầu nối ABI C tối thiểu cho evaluator C++ chính thức của CEC 2022.
+//
+// Python ctypes chỉ cần một hàm có tên và quy ước gọi ổn định. Mã chính thức
+// khai báo các biến trạng thái dưới đây là extern và định nghĩa chúng trong
+// main.cpp mẫu. Benchmark không liên kết chương trình mẫu nên phải cung cấp
+// các định nghĩa tại đây; toàn bộ công thức vẫn nằm trong cec22_test_func.cpp.
 
 extern void cec22_test_func(
     double* x,
@@ -28,5 +30,7 @@ extern "C" __declspec(dllexport) void cec22_evaluate(
     int population_size,
     int function_number
 ) {
+    // Không biến đổi dữ liệu: chuyển nguyên con trỏ quần thể và vector kết quả
+    // sang evaluator chính thức. Một hàng của x tương ứng một cá thể D chiều.
     cec22_test_func(x, f, dimensions, population_size, function_number);
 }

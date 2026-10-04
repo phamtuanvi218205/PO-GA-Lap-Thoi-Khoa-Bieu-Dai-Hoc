@@ -1,4 +1,9 @@
-"""Adapter NumPy/ctypes cho evaluator CEC 2022 C++ chinh thuc."""
+"""Cầu nối NumPy/ctypes tới evaluator C++ chính thức của CEC 2022.
+
+Python quản lý quần thể dạng ``numpy.ndarray`` còn mã C++ tính giá trị của 12
+hàm benchmark. Module nạp DLL một lần, khai báo kiểu tham số C và bảo vệ trạng
+thái toàn cục của evaluator bằng khóa khi đổi hàm hoặc số chiều.
+"""
 
 from __future__ import annotations
 
@@ -18,6 +23,8 @@ _ACTIVE_KEY: tuple[int, int] | None = None
 
 
 def _load_evaluator():
+    """Chuẩn bị DLL nếu cần và trả về hàm C ``cec22_evaluate`` đã khai báo kiểu."""
+
     global _LIBRARY, _EVALUATE
     if _EVALUATE is not None:
         return _EVALUATE
@@ -42,7 +49,11 @@ def evaluate_population(
     population: np.ndarray,
     function_number: int,
 ) -> np.ndarray:
-    """Danh gia mot ma tran (N, D) bang CEC 2022 C++ chinh thuc."""
+    """Đánh giá ma trận quần thể ``(N, D)`` bằng CEC 2022 chính thức.
+
+    Mảng được ép sang ``float64`` liên tục trong bộ nhớ để truyền con trỏ trực
+    tiếp cho C++. Hàm trả một vector gồm đúng N giá trị fitness.
+    """
 
     global _ACTIVE_KEY
     positions = np.ascontiguousarray(population, dtype=np.float64)
@@ -58,8 +69,12 @@ def evaluate_population(
     evaluator = _load_evaluator()
     key = (function_number, dimensions)
 
+    # Evaluator chính thức lưu trạng thái hàm và dữ liệu dịch/xoay trong biến
+    # toàn cục, do đó các lời gọi phải được tuần tự hóa trong cùng process.
     with _LOCK:
         if _ACTIVE_KEY != key:
+            # Mã C++ đọc ``input_data`` theo đường dẫn tương đối. Chỉ đổi thư
+            # mục làm việc trong phạm vi lời gọi đầu tiên của cặp (hàm, D).
             previous_directory = os.getcwd()
             try:
                 os.chdir(SOURCE_DIRECTORY)

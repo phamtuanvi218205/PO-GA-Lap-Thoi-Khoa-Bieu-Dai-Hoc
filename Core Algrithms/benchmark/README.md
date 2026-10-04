@@ -1,93 +1,85 @@
-# Benchmark GA, PO V2 va GA-PO
+# Benchmark GA, PO V2 và GA–PO trên CEC 2022
 
-Thu muc nay danh gia ba thuat toan tren ham so hoc truoc khi dua vao bai toan
-xep lich. Benchmark khong doc database va khong dung encoder/decoder lich.
+Thư mục này chỉ đánh giá ba thuật toán trên bộ 12 hàm benchmark CEC 2022
+chính thức trước khi đưa chúng vào bài toán xếp lịch. Benchmark không đọc cơ sở
+dữ liệu và không sử dụng encoder/decoder thời khóa biểu.
 
-## Nguyen tac cong bang
+## Nguyên tắc công bằng
 
-- Ba thuat toan dung cung ham, so chieu, mien tim kiem va kich thuoc quan the.
-- Trong cung mot function va seed, ba thuat toan nhan ban sao cua cung mot
-  quan the ban dau.
-- Ngan sach duoc dem bang FE (fitness evaluations), khong chi bang iteration.
-- Cung phep sua bien `clip` duoc dung sau khi sinh vi tri moi.
-- Bao cao sai so `f_best - f*`, vi optimum cua CEC 2022 khong phai deu bang 0.
-- Dung lai neu evaluator tra gia tri thap hon optimum qua sai so lam tron;
-  khong ep sai so am ve 0 de che loi adapter.
+- Ba thuật toán dùng cùng hàm, số chiều, miền tìm kiếm và kích thước quần thể.
+- Với cùng một function và seed, ba thuật toán nhận bản sao của cùng quần thể
+  ban đầu.
+- Ngân sách được đo bằng FE (fitness evaluations), không chỉ bằng iteration.
+- Cùng phép sửa biên `clip` được dùng sau khi sinh vị trí mới.
+- Sai số được tính bằng `f_best - f*` vì optimum của CEC 2022 không đồng loạt
+  bằng 0.
+- Runner dừng nếu evaluator trả giá trị thấp hơn optimum vượt quá sai số làm
+  tròn; không che lỗi adapter bằng cách âm thầm ép sai số âm về 0.
 
-## Ba profile
+## Hai profile đều dùng CEC 2022
 
-| Profile | Muc dich | Quy mo |
+| Profile | Mục đích | Quy mô |
 |---|---|---|
-| `smoke` | Bat loi code va tao anh nhanh | 3 ham, D=10, 3 seed, 3.000 FE |
-| `standard` | Ket qua so bo tren ham co ban | 9 ham, D=20, 10 seed, 30.000 FE |
-| `cec2022_pilot` | Kiem tra ky thuat, khong tuning/bao cao | 12 ham, D=20, 3 seed, 30.000 FE |
-| `cec2022` | Thuc nghiem chinh | 12 ham CEC 2022, D=20, 30 seed, 300.000 FE |
+| `cec2022_pilot` | Kiểm tra kỹ thuật, ước lượng runtime; không dùng làm kết luận | 12 hàm, D=20, 3 seed, 30.000 FE |
+| `cec2022` | Thực nghiệm chính | 12 hàm, D=20, 30 seed, 300.000 FE |
 
-Profile `cec2022` rat lon: 12 x 3 x 30 = 1.080 lan chay, tong toi da
-324 trieu FE. Can chay khi may co du thoi gian. Khong dung ket qua `smoke` lam
-ket luan khoa hoc.
+Profile `cec2022` gồm `12 × 3 × 30 = 1.080` lần chạy, tương ứng tối đa
+324 triệu FE. Profile pilot chỉ dùng để bắt lỗi và kiểm tra đầu ra; không dùng
+để chọn lại tham số trên chính 12 hàm sẽ báo cáo.
 
-## Lenh chay
+## Lệnh chạy
 
-Mo terminal tai thu muc `Core Algrithms/benchmark`:
+Mở terminal tại thư mục `Core Algrithms/benchmark`:
 
 ```powershell
 python -m pip install -r requirements.txt
 python -m unittest discover -s tests -p "test_*.py" -v
-python run_benchmark.py --profile smoke
-python run_benchmark.py --profile standard
 python run_benchmark.py --profile cec2022_pilot
 python run_benchmark.py --profile cec2022
 ```
 
-Co the chia full CEC thanh cac shard seed doc lap, moi shard ghi mot output
-rieng, sau do hop lai. Khong bao gio cho nhieu process ghi cung mot CSV:
+Có thể chỉ định thư mục kết quả:
+
+```powershell
+python run_benchmark.py --profile cec2022_pilot --output results/cec2022_pilot_moi
+```
+
+Full CEC có thể chia thành các shard seed độc lập. Mỗi shard phải ghi vào một
+thư mục riêng; không cho nhiều process cùng ghi một CSV:
 
 ```powershell
 python run_benchmark.py --profile cec2022 --seed-start 1 --seed-end 8 --output results/cec2022_shard_01_08
-python merge_cec2022_shards.py --inputs results/cec2022_shard_01_08 ... --output results/cec2022_official_full
+python merge_cec2022_shards.py --inputs results/cec2022_shard_01_08 ... --output results/cec2022_only_official_full
 ```
 
-Khi shard chay song song, chi so runtime bi anh huong boi tranh chap CPU. File
-`merge_metadata.json` ghi ro dieu nay; ket qua fitness/FE van tai lap va doc lap.
+Khi shard chạy song song, runtime bị ảnh hưởng bởi tranh chấp CPU. File
+`merge_metadata.json` ghi rõ giới hạn này; fitness và FE vẫn tái lập theo seed.
 
-Co the chi dinh noi luu ket qua:
+`config.json` lưu cả cấu hình thực nghiệm và dấu vết giao thức thuật toán.
+Runner chỉ resume khi toàn bộ nội dung trùng khớp để không trộn kết quả cũ và
+mới sau khi code, tham số hoặc survivor selection thay đổi.
 
-```powershell
-python run_benchmark.py --profile standard --output results/standard_chinh
-```
+## File kết quả
 
-`config.json` luu ca cau hinh thuc nghiem va dau vet giao thuc thuat toan.
-Runner chi resume khi toan bo noi dung nay trung khop, nham tranh tron ket qua
-cu va moi sau khi code, tham so hoac survivor selection thay doi.
+- `raw_results.csv`: một dòng cho mỗi function–algorithm–seed.
+- `summary.csv`: best, worst, mean, median, standard deviation và runtime.
+- `convergence.csv`: best error theo từng mốc FE.
+- `ranks.csv`, `average_ranks.csv`: thứ hạng theo median của từng hàm.
+- `statistical_tests.csv`: Friedman và Wilcoxon có hiệu chỉnh Holm.
+- `01_convergence.png`: median và khoảng 25%–75% theo FE.
+- `02_final_error_boxplots.png`: độ ổn định của sai số cuối.
+- `03_rank_heatmap.png`: hạng 1, 2, 3 của từng thuật toán trên từng hàm.
+- `04_runtime.png`: thời gian với cùng ngân sách FE.
 
-Profile `cec2022_pilot` chi dung bat loi, uoc luong runtime va kiem tra output.
-Khong dung ket qua pilot de tuning tham so hoac lam bang chung khoa hoc.
+## Tham số thuật toán
 
-## File ket qua
+- GA: tournament size 3, SBX probability 0,9, SBX eta 15, polynomial mutation
+  probability `1/D`, mutation eta 20 và elitism một cá thể.
+- PO V2: `beta=1,5` và bốn công thức hành vi theo mã tham chiếu của tác giả.
+- GA–PO: `p=0,5`; mỗi thế hệ chia quần thể thành hai nhóm, hợp
+  `P(t) ∪ A' ∪ B'`, giữ N cá thể tốt nhất rồi xáo trộn.
 
-- `raw_results.csv`: mot dong cho moi function - algorithm - seed.
-- `summary.csv`: best, worst, mean, median, standard deviation va runtime.
-- `convergence.csv`: best error theo tung moc FE.
-- `ranks.csv`, `average_ranks.csv`: thu hang theo trung vi cua tung ham.
-- `statistical_tests.csv`: Friedman va Wilcoxon co hieu chinh Holm.
-- `01_convergence.png`: trung vi va khoang 25%-75% theo FE.
-- `02_final_error_boxplots.png`: do on dinh cua sai so cuoi.
-- `03_rank_heatmap.png`: thuat toan nao dung hang 1, 2, 3 tren tung ham.
-- `04_runtime.png`: thoi gian voi cung ngan sach FE.
-
-## Tham so dang dung
-
-- GA: tournament size 3, SBX probability 0.9, SBX eta 15,
-  polynomial mutation probability 1/D, mutation eta 20, elitism 1 ca the.
-- PO: `beta=1.5`, dung bon cong thuc PO V2 da chot trong project.
-- GA-PO: p=0.5; moi the he chia quan the thanh hai nhom, gop
-  `P(t) + A' + B'`, giu N ca the tot nhat va xao tron.
-
-Bo CEC 2022 chinh thuc giu nguyen cac tham so tren. Pilot khong duoc dung de
-chon lai tham so tren chinh 12 ham se bao cao.
-
-CEC 2022 duoc danh gia bang source C++ chinh thuc duoc pin commit va SHA-256.
-Lan chay CEC dau tien se tai source vao `.cache/cec2022_official` va bien dich
-DLL local; can Microsoft C++ Build Tools tren Windows. Nguon bo test:
+CEC 2022 được đánh giá bằng source C++ chính thức đã cố định commit và SHA-256.
+Lần chạy đầu tiên sẽ tải source vào `.cache/cec2022_official` và biên dịch DLL
+cục bộ; Windows cần Microsoft C++ Build Tools. Nguồn chính thức:
 https://github.com/P-N-Suganthan/2022-SO-BO

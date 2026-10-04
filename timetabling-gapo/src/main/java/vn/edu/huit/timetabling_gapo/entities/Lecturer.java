@@ -1,31 +1,25 @@
 package vn.edu.huit.timetabling_gapo.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "Lecturer")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Lecturer {
-
     @Id
     @Column(name = "lecturer_code", length = 20)
     private String lecturerCode;
 
-    @Column(name = "lecturer_name", nullable = false, length = 100)
-    private String lecturerName;
+    @Column(name = "full_name", nullable = false, length = 150)
+    private String fullName;
 
-    @Column(name = "academic_title", length = 50)
-    private String academicTitle;
+    @Column(name = "email", length = 150)
+    private String email;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "home_campus_code")
+    private Campus homeCampus;
 
     @Column(name = "is_active", nullable = false)
     private Boolean active;

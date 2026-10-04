@@ -9,7 +9,12 @@
 - Maven Wrapper
 - Spring Data JPA
 - Microsoft SQL Server
-- Python cho lõi thuật toán GA–PO (sẽ tích hợp ở giai đoạn sau)
+- Python cho toàn bộ lõi thuật toán GA, PO V2 và GA–PO
+
+Java không cài đặt lại thuật toán tối ưu. Backend Java chịu trách nhiệm đọc/ghi
+dữ liệu SQL Server và cung cấp API cho giao diện demo. Python nhận dữ liệu đã
+chuẩn hóa, chạy thuật toán và trả kết quả để Java lưu/hiển thị ở giai đoạn tích
+hợp sau.
 
 ## Cấu hình local
 

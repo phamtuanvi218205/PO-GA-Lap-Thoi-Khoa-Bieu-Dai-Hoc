@@ -1,7 +1,8 @@
-"""Tai va bien dich bo danh gia CEC 2022 chinh thuc vao cache local.
+"""Tải và biên dịch bộ đánh giá CEC 2022 chính thức vào cache cục bộ.
 
-Source duoc pin theo commit va SHA-256. Thu muc .cache bi Git bo qua; khong
-vendor lai ma nguon/du lieu cua ben thu ba vao project.
+Nguồn được cố định theo commit và SHA-256 để các máy dùng đúng cùng phiên bản.
+Thư mục ``.cache`` bị Git bỏ qua; mã và dữ liệu bên thứ ba không được sao chép
+trực tiếp vào phần source do project quản lý.
 """
 
 from __future__ import annotations
@@ -31,6 +32,8 @@ LIBRARY_PATH = CACHE_DIRECTORY / "cec2022_official.dll"
 
 
 def _sha256(path: Path) -> str:
+    """Tính SHA-256 theo từng khối để xác minh archive mà không nạp hết vào RAM."""
+
     digest = hashlib.sha256()
     with path.open("rb") as file:
         for chunk in iter(lambda: file.read(1024 * 1024), b""):
@@ -39,6 +42,8 @@ def _sha256(path: Path) -> str:
 
 
 def _download_archive() -> None:
+    """Tải archive chính thức nếu cache chưa có bản đúng checksum."""
+
     CACHE_DIRECTORY.mkdir(parents=True, exist_ok=True)
     if ARCHIVE_PATH.exists() and _sha256(ARCHIVE_PATH) == ARCHIVE_SHA256:
         return
@@ -56,6 +61,8 @@ def _download_archive() -> None:
 
 
 def _extract_source() -> None:
+    """Giải nén source và input_data sau khi kiểm tra cấu trúc archive."""
+
     required = SOURCE_DIRECTORY / "cec22_test_func.cpp"
     if required.exists() and (SOURCE_DIRECTORY / "input_data").is_dir():
         return
@@ -73,6 +80,8 @@ def _extract_source() -> None:
 
 
 def _build_library() -> None:
+    """Biên dịch wrapper và evaluator thành DLL có thể gọi từ Python."""
+
     if LIBRARY_PATH.exists():
         return
 
@@ -102,7 +111,7 @@ def _build_library() -> None:
 
 
 def prepare() -> Path:
-    """Bao dam source, data va DLL CEC 2022 chinh thuc san sang."""
+    """Bảo đảm archive, source, dữ liệu và DLL CEC 2022 đều sẵn sàng."""
 
     _download_archive()
     _extract_source()

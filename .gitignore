@@ -3,14 +3,19 @@
 /Docs/
 /ChangeLogs/
 /ProjectContext/
+/Plan/
 /KHOA LUAN - PO_sua_hoan_thien_bai_toan/
 /.tmp/
+/.pptx-*/
+/.codex-finalizer/
+/.chart-data-*/
+node_modules/
 *.pptx
 *.pptx.inspect.ndjson
-/\*.png
-/\*.jpg
-/\*.jpeg
-/\*.webp
+/*.png
+/*.jpg
+/*.jpeg
+/*.webp
 /~$*
 
 # Local secrets and environment files
@@ -77,6 +82,3 @@ Desktop.ini
 *.bak
 *.swp
 ~$*
-.png
-.jpg
-po_review_montage.png
