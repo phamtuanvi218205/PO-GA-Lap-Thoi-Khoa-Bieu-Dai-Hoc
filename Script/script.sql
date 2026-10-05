@@ -5,7 +5,7 @@
     - Create a teaching timetable before student registration.
     - No Student/StudentGroup input.
     - A lecturer is assigned to each TeachingPart before optimization.
-    - A locked PlanningScenario selects one approved TeachingPlan per TeachingPart.
+    - A locked PlanningScenario selects one system-validated TeachingPlan per TeachingPart.
     - Each ClassSession is one atomic session in one TermWeek.
     - The optimizer selects the actual date, start period and teaching location.
     - Room capacity is a SOFT criterion, never a hard filtering condition.
@@ -36,7 +36,9 @@ DROP TABLE IF EXISTS PlanningScenario;
 DROP TABLE IF EXISTS LecturerAvailability;
 DROP TABLE IF EXISTS RoomAvailability;
 DROP TABLE IF EXISTS ClassSession;
+DROP TABLE IF EXISTS TeachingPlanItem;
 DROP TABLE IF EXISTS TeachingPlan;
+DROP TABLE IF EXISTS TeachingPlanGenerationRule;
 DROP TABLE IF EXISTS TeachingPartRequiredEquipment;
 DROP TABLE IF EXISTS TeachingPart;
 DROP TABLE IF EXISTS RoomEquipment;
@@ -315,28 +317,89 @@ CREATE TABLE TeachingPartRequiredEquipment
     CONSTRAINT CK_TPRE_Quantity CHECK (minimum_quantity >= 1)
 );
 
--- One part may have several approved alternative plans.
+/*
+   Automatic plan-generation input for one TeachingPart.
+   Allowed durations are read from TeachingDurationRule by part_type, so they
+   are not duplicated in this table.
+*/
+CREATE TABLE TeachingPlanGenerationRule
+(
+    generation_rule_id     BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    teaching_part_id       BIGINT      NOT NULL,
+    start_week_number      INT         NOT NULL,
+    end_week_number        INT         NOT NULL,
+    max_sessions_per_week  INT         NOT NULL,
+    allows_intensive       BIT         NOT NULL DEFAULT 0,
+    max_candidate_plans    INT         NOT NULL DEFAULT 20,
+    is_active              BIT         NOT NULL DEFAULT 1,
+    note                   NVARCHAR(500) NULL,
+    CONSTRAINT FK_TeachingPlanGenerationRule_Part
+        FOREIGN KEY (teaching_part_id) REFERENCES TeachingPart(teaching_part_id),
+    CONSTRAINT UQ_TeachingPlanGenerationRule_Part UNIQUE (teaching_part_id),
+    CONSTRAINT CK_TeachingPlanGenerationRule_WeekRange
+        CHECK (start_week_number >= 1 AND end_week_number >= start_week_number),
+    CONSTRAINT CK_TeachingPlanGenerationRule_MaxSessions
+        CHECK (max_sessions_per_week >= 1),
+    CONSTRAINT CK_TeachingPlanGenerationRule_MaxCandidates
+        CHECK (max_candidate_plans >= 1)
+);
+
+-- Every generated plan already satisfies its rule; no human approval step exists.
 CREATE TABLE TeachingPlan
 (
     teaching_plan_id BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     teaching_part_id BIGINT        NOT NULL,
     plan_code        VARCHAR(40)   NOT NULL UNIQUE,
     plan_name        NVARCHAR(180) NOT NULL,
-    status           VARCHAR(20)   NOT NULL DEFAULT 'DRAFT',
+    status           VARCHAR(20)   NOT NULL DEFAULT 'VALID',
     allows_intensive BIT           NOT NULL DEFAULT 0,
-    approved_by      NVARCHAR(150) NULL,
-    approved_at      DATETIME2     NULL,
+    generation_no    INT           NOT NULL,
+    candidate_rank   INT           NOT NULL,
+    generation_key  CHAR(64)      NOT NULL,
+    generated_at     DATETIME2     NOT NULL DEFAULT SYSDATETIME(),
     note              NVARCHAR(500) NULL,
     CONSTRAINT FK_TeachingPlan_Part
         FOREIGN KEY (teaching_part_id) REFERENCES TeachingPart(teaching_part_id),
     CONSTRAINT UQ_TeachingPlan_Id_Part UNIQUE (teaching_plan_id, teaching_part_id),
+    CONSTRAINT UQ_TeachingPlan_GenerationRank
+        UNIQUE (teaching_part_id, generation_no, candidate_rank),
+    CONSTRAINT UQ_TeachingPlan_GenerationKeyRank
+        UNIQUE (teaching_part_id, generation_key, candidate_rank),
     CONSTRAINT CK_TeachingPlan_Status
-        CHECK (status IN ('DRAFT', 'APPROVED', 'RETIRED')),
-    CONSTRAINT CK_TeachingPlan_Approval
-        CHECK (
-            status <> 'APPROVED'
-            OR (approved_by IS NOT NULL AND approved_at IS NOT NULL)
-        )
+        CHECK (status IN ('VALID', 'RETIRED')),
+    CONSTRAINT CK_TeachingPlan_GenerationNo CHECK (generation_no >= 1),
+    CONSTRAINT CK_TeachingPlan_CandidateRank CHECK (candidate_rank >= 1),
+    CONSTRAINT CK_TeachingPlan_GenerationKey
+        CHECK (generation_key NOT LIKE '%[^0-9A-F]%')
+);
+
+/*
+   A generated plan must be reproducible before it is expanded
+   into optimizer-facing ClassSession rows. Each item is one planned session.
+*/
+CREATE TABLE TeachingPlanItem
+(
+    teaching_plan_item_id BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    teaching_plan_id      BIGINT      NOT NULL,
+    item_number           INT         NOT NULL,
+    term_code             VARCHAR(20) NOT NULL,
+    week_number           INT         NOT NULL,
+    session_order_in_week INT         NOT NULL,
+    duration_periods      TINYINT     NOT NULL,
+    stability_group_no    INT         NOT NULL DEFAULT 1,
+    CONSTRAINT FK_TeachingPlanItem_Plan
+        FOREIGN KEY (teaching_plan_id) REFERENCES TeachingPlan(teaching_plan_id),
+    CONSTRAINT FK_TeachingPlanItem_Week
+        FOREIGN KEY (term_code, week_number)
+        REFERENCES TermWeek(term_code, week_number),
+    CONSTRAINT UQ_TeachingPlanItem_Plan_Number
+        UNIQUE (teaching_plan_id, item_number),
+    CONSTRAINT UQ_TeachingPlanItem_Plan_Week_Order
+        UNIQUE (teaching_plan_id, week_number, session_order_in_week),
+    CONSTRAINT CK_TeachingPlanItem_Number CHECK (item_number >= 1),
+    CONSTRAINT CK_TeachingPlanItem_Order CHECK (session_order_in_week >= 1),
+    CONSTRAINT CK_TeachingPlanItem_Duration CHECK (duration_periods BETWEEN 1 AND 16),
+    CONSTRAINT CK_TeachingPlanItem_StabilityGroup CHECK (stability_group_no >= 1)
 );
 
 -- Atomic unit scheduled by one gene. Duration and week are fixed by its plan.
@@ -440,7 +503,7 @@ CREATE TABLE RoomAvailability
 );
 GO
 
-/* A run receives one locked scenario and one approved plan per selected part. */
+/* A run receives one locked scenario and one VALID plan per selected part. */
 CREATE TABLE PlanningScenario
 (
     scenario_id     BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -449,6 +512,9 @@ CREATE TABLE PlanningScenario
     term_code       VARCHAR(20)   NOT NULL,
     scope_type      VARCHAR(20)   NOT NULL,
     status          VARCHAR(20)   NOT NULL DEFAULT 'DRAFT',
+    scenario_batch_code VARCHAR(40) NOT NULL,
+    candidate_rank  INT           NOT NULL,
+    plan_rank_penalty INT         NOT NULL DEFAULT 0,
     created_by      NVARCHAR(150) NOT NULL,
     created_at      DATETIME2     NOT NULL DEFAULT SYSDATETIME(),
     locked_by       NVARCHAR(150) NULL,
@@ -460,6 +526,10 @@ CREATE TABLE PlanningScenario
         CHECK (scope_type IN ('FULL_TERM', 'SUBSET')),
     CONSTRAINT CK_PlanningScenario_Status
         CHECK (status IN ('DRAFT', 'READY', 'LOCKED', 'ARCHIVED')),
+    CONSTRAINT UQ_PlanningScenario_BatchRank
+        UNIQUE (scenario_batch_code, candidate_rank),
+    CONSTRAINT CK_PlanningScenario_CandidateRank CHECK (candidate_rank >= 1),
+    CONSTRAINT CK_PlanningScenario_PlanRankPenalty CHECK (plan_rank_penalty >= 0),
     CONSTRAINT CK_PlanningScenario_Lock
         CHECK (
             status <> 'LOCKED'
@@ -485,7 +555,8 @@ CREATE TABLE PlanningScenarioItem
         UNIQUE (scenario_id, teaching_plan_id)
 );
 
--- Priority tier is already decided; final soft formulas/weights remain Gate F.
+-- Gate F is finalized by D063-D075: hard feasibility is checked first, then
+-- schedules are compared lexicographically by Q_time, Q_general and Q_lecturer.
 CREATE TABLE ConstraintSetting
 (
     constraint_code VARCHAR(50)   NOT NULL PRIMARY KEY,
@@ -645,9 +716,9 @@ INSERT INTO TimePeriod(period_number, start_time, end_time, session_name) VALUES
 
 INSERT INTO TeachingDurationRule(part_type, duration_periods, is_standard, note) VALUES
 ('LECTURE', 3, 1, N'Khung lý thuyết chuẩn'),
-('LECTURE', 6, 1, N'Khung lý thuyết tăng cường được duyệt'),
+('LECTURE', 6, 1, N'Khung lý thuyết tăng cường được cấu hình cho phép'),
 ('PRACTICE', 5, 1, N'Khung thực hành chuẩn'),
-('PRACTICE', 6, 1, N'Khung thực hành tăng cường được duyệt');
+('PRACTICE', 6, 1, N'Khung thực hành tăng cường được cấu hình cho phép');
 
 INSERT INTO AllowedPeriodBlock(start_period, duration_periods, block_name) VALUES
 (1, 3, N'Tiết 1-3'), (4, 3, N'Tiết 4-6'),
@@ -690,7 +761,7 @@ SELECT location_id, 'CS2', 'COMPUTER_LAB', 60
 FROM TeachingLocation WHERE location_code = 'LAB_B1';
 
 INSERT INTO OnlineLocation(location_id, platform_name, meeting_note)
-SELECT location_id, N'Zoom', N'Liên kết được cấp sau khi lịch được duyệt'
+SELECT location_id, N'Zoom', N'Liên kết được cấp sau khi lịch được công bố'
 FROM TeachingLocation WHERE location_code = 'ZOOM01';
 
 INSERT INTO Lecturer(lecturer_code, full_name, email, home_campus_code) VALUES
@@ -746,40 +817,66 @@ INSERT INTO TeachingPartRequiredEquipment(teaching_part_id, equipment_code, mini
 SELECT teaching_part_id, 'COMPUTER', 40
 FROM TeachingPart WHERE part_code = 'LTWEB01_TH';
 
+-- Input rules consumed by the automatic TeachingPlanGenerator.
+INSERT INTO TeachingPlanGenerationRule
+    (teaching_part_id, start_week_number, end_week_number,
+     max_sessions_per_week, allows_intensive, max_candidate_plans, note)
+SELECT teaching_part_id, 1, 15, 2, 1, 20,
+       N'Cho phép cả kế hoạch trải đều và học tập trung'
+FROM TeachingPart WHERE part_code = 'KTDL01_LT';
+
+INSERT INTO TeachingPlanGenerationRule
+    (teaching_part_id, start_week_number, end_week_number,
+     max_sessions_per_week, allows_intensive, max_candidate_plans, note)
+SELECT teaching_part_id, 1, 15, 1, 1, 20,
+       N'Thực hành có thể kết thúc sớm khi rule cho phép'
+FROM TeachingPart WHERE part_code = 'LTWEB01_TH';
+
+INSERT INTO TeachingPlanGenerationRule
+    (teaching_part_id, start_week_number, end_week_number,
+     max_sessions_per_week, allows_intensive, max_candidate_plans, note)
+SELECT teaching_part_id, 1, 15, 1, 0, 20,
+       N'Lớp trực tuyến trải đều trong toàn bộ khoảng tuần'
+FROM TeachingPart WHERE part_code = 'TTNT01_LT';
+
 INSERT INTO TeachingPlan
     (teaching_part_id, plan_code, plan_name, status, allows_intensive,
-     approved_by, approved_at, note)
+     generation_no, candidate_rank, generation_key, note)
 SELECT teaching_part_id, 'KTDL01_STANDARD', N'15 buổi x 3 tiết',
-       'APPROVED', 0, N'Phòng Đào tạo', SYSDATETIME(),
-       N'Kế hoạch chuẩn kéo dài 15 tuần'
+       'VALID', 0, 1, 1,
+       '1111111111111111111111111111111111111111111111111111111111111111',
+       N'Kế hoạch hợp lệ được hệ thống sinh tự động'
 FROM TeachingPart WHERE part_code = 'KTDL01_LT';
 
 INSERT INTO TeachingPlan
     (teaching_part_id, plan_code, plan_name, status, allows_intensive,
-     approved_by, approved_at, note)
+     generation_no, candidate_rank, generation_key, note)
 SELECT teaching_part_id, 'KTDL01_ACCELERATED', N'5 buổi x 3 tiết và 5 buổi x 6 tiết',
-       'APPROVED', 1, N'Phòng Đào tạo', SYSDATETIME(),
-       N'Kế hoạch tăng tốc đã được duyệt, vẫn đủ 45 tiết'
+       'VALID', 1, 1, 2,
+       '1111111111111111111111111111111111111111111111111111111111111111',
+       N'Kế hoạch tăng tốc hợp lệ theo rule, vẫn đủ 45 tiết'
 FROM TeachingPart WHERE part_code = 'KTDL01_LT';
 
 INSERT INTO TeachingPlan
     (teaching_part_id, plan_code, plan_name, status, allows_intensive,
-     approved_by, approved_at, note)
+     generation_no, candidate_rank, generation_key, note)
 SELECT teaching_part_id, 'LTWEB01_STANDARD', N'6 buổi x 5 tiết',
-       'APPROVED', 0, N'Phòng Đào tạo', SYSDATETIME(),
-       N'Kế hoạch thực hành 30 tiết'
+       'VALID', 1, 1, 1,
+       '2222222222222222222222222222222222222222222222222222222222222222',
+       N'Kế hoạch thực hành 30 tiết do hệ thống sinh'
 FROM TeachingPart WHERE part_code = 'LTWEB01_TH';
 
 INSERT INTO TeachingPlan
     (teaching_part_id, plan_code, plan_name, status, allows_intensive,
-     approved_by, approved_at, note)
+     generation_no, candidate_rank, generation_key, note)
 SELECT teaching_part_id, 'TTNT01_ONLINE', N'15 buổi trực tuyến x 3 tiết',
-       'APPROVED', 0, N'Phòng Đào tạo', SYSDATETIME(),
-       N'Kế hoạch học trực tuyến'
+       'VALID', 0, 1, 1,
+       '3333333333333333333333333333333333333333333333333333333333333333',
+       N'Kế hoạch học trực tuyến do hệ thống sinh'
 FROM TeachingPart WHERE part_code = 'TTNT01_LT';
 GO
 
--- Expand every approved plan into atomic week-specific ClassSession rows.
+-- Materialize deterministic generated plan details for this development fixture.
 DECLARE @standardPlan BIGINT =
     (SELECT teaching_plan_id FROM TeachingPlan WHERE plan_code = 'KTDL01_STANDARD');
 DECLARE @acceleratedPlan BIGINT =
@@ -792,24 +889,24 @@ DECLARE @onlinePlan BIGINT =
 DECLARE @n INT = 1;
 WHILE @n <= 15
 BEGIN
-    INSERT INTO ClassSession
-        (teaching_plan_id, session_number, stability_group_no, term_code, week_number,
-         duration_periods, required_location_type)
-    VALUES (@standardPlan, @n, 1, '2026_HK1', @n, 3, 'PHYSICAL_ROOM');
+    INSERT INTO TeachingPlanItem
+        (teaching_plan_id, item_number, term_code, week_number,
+         session_order_in_week, duration_periods, stability_group_no)
+    VALUES (@standardPlan, @n, '2026_HK1', @n, 1, 3, 1);
     SET @n += 1;
 END;
 
 SET @n = 1;
 WHILE @n <= 10
 BEGIN
-    INSERT INTO ClassSession
-        (teaching_plan_id, session_number, stability_group_no, term_code, week_number,
-         duration_periods, required_location_type)
+    INSERT INTO TeachingPlanItem
+        (teaching_plan_id, item_number, term_code, week_number,
+         session_order_in_week, duration_periods, stability_group_no)
     VALUES
     (
-        @acceleratedPlan, @n, 1, '2026_HK1', @n,
+        @acceleratedPlan, @n, '2026_HK1', @n, 1,
         CASE WHEN @n <= 5 THEN 3 ELSE 6 END,
-        'PHYSICAL_ROOM'
+        1
     );
     SET @n += 1;
 END;
@@ -817,22 +914,38 @@ END;
 SET @n = 1;
 WHILE @n <= 6
 BEGIN
-    INSERT INTO ClassSession
-        (teaching_plan_id, session_number, stability_group_no, term_code, week_number,
-         duration_periods, required_location_type)
-    VALUES (@practicePlan, @n, 1, '2026_HK1', @n, 5, 'PHYSICAL_ROOM');
+    INSERT INTO TeachingPlanItem
+        (teaching_plan_id, item_number, term_code, week_number,
+         session_order_in_week, duration_periods, stability_group_no)
+    VALUES (@practicePlan, @n, '2026_HK1', @n, 1, 5, 1);
     SET @n += 1;
 END;
 
 SET @n = 1;
 WHILE @n <= 15
 BEGIN
-    INSERT INTO ClassSession
-        (teaching_plan_id, session_number, stability_group_no, term_code, week_number,
-         duration_periods, required_location_type)
-    VALUES (@onlinePlan, @n, 1, '2026_HK1', @n, 3, 'ONLINE');
+    INSERT INTO TeachingPlanItem
+        (teaching_plan_id, item_number, term_code, week_number,
+         session_order_in_week, duration_periods, stability_group_no)
+    VALUES (@onlinePlan, @n, '2026_HK1', @n, 1, 3, 1);
     SET @n += 1;
 END;
+
+-- SessionExpander production code performs the same projection after generation.
+INSERT INTO ClassSession
+    (teaching_plan_id, session_number, stability_group_no, term_code, week_number,
+     duration_periods, required_location_type)
+SELECT
+    item.teaching_plan_id,
+    item.item_number,
+    item.stability_group_no,
+    item.term_code,
+    item.week_number,
+    item.duration_periods,
+    part.required_location_type
+FROM TeachingPlanItem item
+JOIN TeachingPlan tp ON tp.teaching_plan_id = item.teaching_plan_id
+JOIN TeachingPart part ON part.teaching_part_id = tp.teaching_part_id;
 GO
 
 /* Availability samples. UNAVAILABLE is hard; preferences are soft. */
@@ -865,12 +978,14 @@ WHERE location_code = 'B304';
 
 INSERT INTO PlanningScenario
     (scenario_code, scenario_name, term_code, scope_type, status,
+     scenario_batch_code, candidate_rank, plan_rank_penalty,
      created_by, locked_by, locked_at, note)
 VALUES
 ('SCN_2026_HK1_FULL_01', N'Kịch bản toàn học kỳ minh họa',
  '2026_HK1', 'FULL_TERM', 'LOCKED',
- N'Phòng Đào tạo', N'Phòng Đào tạo', SYSDATETIME(),
- N'Chọn đúng một kế hoạch đã duyệt cho mỗi phần giảng dạy trong phạm vi');
+ 'FIXTURE_2026_HK1', 1, 0,
+ N'SYSTEM', N'SYSTEM', SYSDATETIME(),
+ N'Hệ thống chọn đúng một kế hoạch VALID cho mỗi phần trong phạm vi');
 
 DECLARE @scenarioId BIGINT =
     (SELECT scenario_id FROM PlanningScenario WHERE scenario_code = 'SCN_2026_HK1_FULL_01');
@@ -1010,6 +1125,12 @@ CREATE INDEX IX_CourseSection_Term
 CREATE INDEX IX_TeachingPart_Section_Lecturer
     ON TeachingPart(section_code, lecturer_code);
 
+CREATE INDEX IX_TeachingPlanGenerationRule_Active
+    ON TeachingPlanGenerationRule(is_active, teaching_part_id);
+
+CREATE INDEX IX_TeachingPlanItem_Plan_Week
+    ON TeachingPlanItem(teaching_plan_id, week_number, session_order_in_week);
+
 CREATE INDEX IX_ClassSession_Plan_Week
     ON ClassSession(teaching_plan_id, term_code, week_number);
 
@@ -1043,23 +1164,42 @@ UNION ALL SELECT 'TimePeriod', COUNT(*) FROM TimePeriod
 UNION ALL SELECT 'TeachingLocation', COUNT(*) FROM TeachingLocation
 UNION ALL SELECT 'CourseSection', COUNT(*) FROM CourseSection
 UNION ALL SELECT 'TeachingPart', COUNT(*) FROM TeachingPart
+UNION ALL SELECT 'TeachingPlanGenerationRule', COUNT(*) FROM TeachingPlanGenerationRule
 UNION ALL SELECT 'TeachingPlan', COUNT(*) FROM TeachingPlan
+UNION ALL SELECT 'TeachingPlanItem', COUNT(*) FROM TeachingPlanItem
 UNION ALL SELECT 'ClassSession', COUNT(*) FROM ClassSession
 UNION ALL SELECT 'PlanningScenario', COUNT(*) FROM PlanningScenario
 UNION ALL SELECT 'PlanningScenarioItem', COUNT(*) FROM PlanningScenarioItem
 UNION ALL SELECT 'OptimizationRun', COUNT(*) FROM OptimizationRun
 UNION ALL SELECT 'TimetableEntry', COUNT(*) FROM TimetableEntry;
 
--- Every plan must exactly match the total periods required by its TeachingPart.
+-- Every generated plan item set must match its TeachingPart total exactly.
 SELECT
     pl.plan_code,
     p.total_periods AS required_periods,
-    SUM(cs.duration_periods) AS planned_periods,
-    CASE WHEN SUM(cs.duration_periods) = p.total_periods THEN 'OK' ELSE 'MISMATCH' END AS validation_result
+    SUM(item.duration_periods) AS planned_periods,
+    CASE WHEN SUM(item.duration_periods) = p.total_periods THEN 'OK' ELSE 'MISMATCH' END AS validation_result
 FROM TeachingPlan pl
 JOIN TeachingPart p ON p.teaching_part_id = pl.teaching_part_id
-LEFT JOIN ClassSession cs ON cs.teaching_plan_id = pl.teaching_plan_id
+LEFT JOIN TeachingPlanItem item ON item.teaching_plan_id = pl.teaching_plan_id
 GROUP BY pl.plan_code, p.total_periods
+ORDER BY pl.plan_code;
+
+-- SessionExpander output must preserve every TeachingPlanItem exactly once.
+SELECT
+    pl.plan_code,
+    COUNT(item.teaching_plan_item_id) AS plan_item_count,
+    COUNT(cs.class_session_id) AS class_session_count,
+    CASE
+        WHEN COUNT(item.teaching_plan_item_id) = COUNT(cs.class_session_id) THEN 'OK'
+        ELSE 'MISMATCH'
+    END AS expansion_result
+FROM TeachingPlan pl
+LEFT JOIN TeachingPlanItem item ON item.teaching_plan_id = pl.teaching_plan_id
+LEFT JOIN ClassSession cs
+    ON cs.teaching_plan_id = item.teaching_plan_id
+   AND cs.session_number = item.item_number
+GROUP BY pl.plan_code
 ORDER BY pl.plan_code;
 
 -- A complete run should contain exactly one timetable entry per selected session.

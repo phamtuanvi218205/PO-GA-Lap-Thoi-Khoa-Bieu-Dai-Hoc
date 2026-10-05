@@ -148,7 +148,7 @@ class ConstraintFixture(unittest.TestCase):
                 teaching_plan_id=100 + index,
                 plan_code=f"PLAN_{index}",
                 teaching_part_index=index,
-                status=TeachingPlanStatus.APPROVED,
+                status=TeachingPlanStatus.VALID,
                 allows_intensive=False,
             )
             for index in range(4)

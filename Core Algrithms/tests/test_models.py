@@ -140,14 +140,14 @@ class TestModels(unittest.TestCase):
             teaching_plan_id=100,
             plan_code="KTDL01_STANDARD",
             teaching_part_index=0,
-            status=TeachingPlanStatus.APPROVED,
+            status=TeachingPlanStatus.VALID,
             allows_intensive=False,
         )
         self.online_plan = TeachingPlan(
             teaching_plan_id=101,
             plan_code="TTNT01_ONLINE",
             teaching_part_index=1,
-            status=TeachingPlanStatus.APPROVED,
+            status=TeachingPlanStatus.VALID,
             allows_intensive=False,
         )
 
