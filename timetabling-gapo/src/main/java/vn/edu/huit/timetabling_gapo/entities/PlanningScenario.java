@@ -34,6 +34,18 @@ public class PlanningScenario {
     @Column(name = "status", nullable = false, length = 20)
     private PlanningScenarioStatus status;
 
+    /** Nhóm các scenario ứng viên được tạo trong cùng một yêu cầu tự động. */
+    @Column(name = "scenario_batch_code", nullable = false, length = 40)
+    private String scenarioBatchCode;
+
+    /** Thứ hạng của scenario trong batch, bắt đầu từ 1. */
+    @Column(name = "candidate_rank", nullable = false)
+    private Integer candidateRank;
+
+    /** Tổng mức lùi khỏi plan ưu tiên số 1 của các TeachingPart. */
+    @Column(name = "plan_rank_penalty", nullable = false)
+    private Integer planRankPenalty;
+
     @Column(name = "created_by", nullable = false, length = 150)
     private String createdBy;
 

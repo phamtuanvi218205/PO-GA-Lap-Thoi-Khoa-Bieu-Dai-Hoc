@@ -143,7 +143,7 @@ class FitnessFixture(unittest.TestCase):
             teaching_plan_id=100,
             plan_code="JAVA01_PLAN",
             teaching_part_index=0,
-            status=TeachingPlanStatus.APPROVED,
+            status=TeachingPlanStatus.VALID,
             allows_intensive=False,
         )
         self.sessions = tuple(

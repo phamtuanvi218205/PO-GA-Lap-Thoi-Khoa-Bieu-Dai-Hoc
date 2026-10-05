@@ -160,10 +160,10 @@ class EncoderFixture(unittest.TestCase):
         )
 
         self.physical_plan = TeachingPlan(
-            100, "KTDL01_STANDARD", 0, TeachingPlanStatus.APPROVED, False
+            100, "KTDL01_STANDARD", 0, TeachingPlanStatus.VALID, False
         )
         self.online_plan = TeachingPlan(
-            101, "TTNT01_ONLINE", 1, TeachingPlanStatus.APPROVED, False
+            101, "TTNT01_ONLINE", 1, TeachingPlanStatus.VALID, False
         )
         self.physical_session = ClassSession(
             0, 1000, 100, 1, 1, 1, 3, LocationType.PHYSICAL_ROOM

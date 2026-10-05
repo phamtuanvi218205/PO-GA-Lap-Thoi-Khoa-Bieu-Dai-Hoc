@@ -32,11 +32,20 @@ public class TeachingPlan {
     @Column(name = "allows_intensive", nullable = false)
     private Boolean allowsIntensive;
 
-    @Column(name = "approved_by", length = 150)
-    private String approvedBy;
+    /** Số thế hệ tăng dần mỗi khi rule đầu vào của TeachingPart thay đổi. */
+    @Column(name = "generation_no", nullable = false)
+    private Integer generationNo;
 
-    @Column(name = "approved_at")
-    private LocalDateTime approvedAt;
+    /** Thứ hạng xác định của plan trong cùng một thế hệ, bắt đầu từ 1. */
+    @Column(name = "candidate_rank", nullable = false)
+    private Integer candidateRank;
+
+    /** SHA-256 của toàn bộ dữ liệu ảnh hưởng đến kết quả sinh plan. */
+    @Column(name = "generation_key", nullable = false, length = 64)
+    private String generationKey;
+
+    @Column(name = "generated_at", nullable = false)
+    private LocalDateTime generatedAt;
 
     @Column(name = "note", length = 500)
     private String note;

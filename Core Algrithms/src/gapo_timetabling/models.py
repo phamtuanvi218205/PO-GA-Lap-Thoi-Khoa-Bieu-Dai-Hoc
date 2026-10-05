@@ -82,10 +82,9 @@ class ConstraintType(str, Enum):
 
 
 class TeachingPlanStatus(str, Enum):
-    """Trạng thái phê duyệt của phương án chia một phần học thành các buổi."""
+    """Trạng thái sử dụng của plan do hệ thống sinh và kiểm tra tự động."""
 
-    DRAFT = "DRAFT"
-    APPROVED = "APPROVED"
+    VALID = "VALID"
     RETIRED = "RETIRED"
 
 
@@ -385,7 +384,7 @@ class TeachingPart:
 class TeachingPlan:
     """Phương án chia một ``TeachingPart`` thành các buổi cụ thể.
 
-    Scenario chỉ được chọn một plan đã phê duyệt cho mỗi phần giảng dạy.
+    Scenario chỉ được chọn một plan ``VALID`` cho mỗi phần giảng dạy.
     Các ``ClassSession`` thuộc plan xác định tuần và thời lượng từng buổi.
     """
 
@@ -878,8 +877,8 @@ class ProblemInstance:
                 raise ValueError("Scenario tham chiếu TeachingPlan không tồn tại.")
             if plan.teaching_part_index != item.teaching_part_index:
                 raise ValueError("TeachingPlan được chọn không thuộc TeachingPart tương ứng.")
-            if plan.status != TeachingPlanStatus.APPROVED:
-                raise ValueError("Scenario chỉ được chọn TeachingPlan đã APPROVED.")
+            if plan.status != TeachingPlanStatus.VALID:
+                raise ValueError("Scenario chỉ được chọn TeachingPlan VALID.")
             selected_plan_ids.add(plan.teaching_plan_id)
 
         sessions_by_plan: dict[int, list[ClassSession]] = {
