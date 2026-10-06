@@ -8,7 +8,8 @@ Các module được tách theo một chuỗi trách nhiệm rõ ràng:
 * ``repair`` thử thay đổi tối thiểu khi một lần decode thất bại;
 * ``constraints`` kiểm tra độc lập các điều kiện bắt buộc;
 * ``fitness`` đánh giá ba tầng chất lượng của lịch đã hợp lệ;
-* ``population`` tạo và đánh giá cá thể theo cùng một pipeline dùng chung.
+* ``population`` tạo và đánh giá cá thể theo cùng một pipeline dùng chung;
+* ``snapshot`` đọc hợp đồng JSON từ Java, kiểm tra checksum và chạy preflight.
 
 Các thuật toán GA, PO và GA–PO sử dụng hợp đồng này nhưng không được đặt
 logic cơ sở dữ liệu, API hoặc quy tắc nghiệp vụ mới trực tiếp vào optimizer.

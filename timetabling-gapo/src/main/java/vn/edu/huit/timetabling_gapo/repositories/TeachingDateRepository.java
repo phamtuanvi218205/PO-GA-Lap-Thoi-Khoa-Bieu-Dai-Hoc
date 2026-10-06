@@ -7,6 +7,8 @@ import vn.edu.huit.timetabling_gapo.entities.ids.TeachingDateId;
 import java.util.List;
 
 public interface TeachingDateRepository extends JpaRepository<TeachingDate, TeachingDateId> {
+    List<TeachingDate> findByAcademicTermTermCodeOrderByCalendarDate(String termCode);
+
     List<TeachingDate> findByAcademicTermTermCodeAndWeekNumberOrderByCalendarDate(
             String termCode,
             Integer weekNumber

@@ -598,6 +598,7 @@ CREATE TABLE OptimizationRun
     lecturer_preference_score DECIMAL(18,6) NULL,
     fitness_breakdown_json NVARCHAR(MAX) NULL,
     snapshot_json       NVARCHAR(MAX) NOT NULL,
+    snapshot_checksum   CHAR(64)      NOT NULL,
     gene_option_mapping_json NVARCHAR(MAX) NOT NULL,
     started_at          DATETIME2    NULL,
     finished_at         DATETIME2    NULL,
@@ -621,6 +622,9 @@ CREATE TABLE OptimizationRun
     CONSTRAINT CK_OptimizationRun_BreakdownJson
         CHECK (fitness_breakdown_json IS NULL OR ISJSON(fitness_breakdown_json) = 1),
     CONSTRAINT CK_OptimizationRun_SnapshotJson CHECK (ISJSON(snapshot_json) = 1),
+    CONSTRAINT CK_OptimizationRun_SnapshotChecksum
+        CHECK (LEN(snapshot_checksum) = 64
+               AND LOWER(snapshot_checksum) NOT LIKE '%[^0-9a-f]%'),
     CONSTRAINT CK_OptimizationRun_MappingJson CHECK (ISJSON(gene_option_mapping_json) = 1)
 );
 
@@ -1039,12 +1043,13 @@ INSERT INTO OptimizationRun
      random_seed, algorithm_version, status, hard_violation_count,
      time_stability_score, general_quality_score, lecturer_preference_score,
      fitness_breakdown_json,
-     snapshot_json, gene_option_mapping_json, started_at, finished_at)
+     snapshot_json, snapshot_checksum, gene_option_mapping_json, started_at, finished_at)
 VALUES
 (@scenarioId, 'GA_PO', 30, 10000, 20260917, 'sample-manual-1', 'COMPLETED', 0,
  NULL, NULL, NULL,
  N'{"status":"NOT_EVALUATED","reason":"manual sample for query and UI development"}',
  N'{"purpose":"sample database output; not an optimizer benchmark"}',
+ 'b00398573109a6c9308c73649993ca20ae4b4c9dfb44c0825ed7a99b56a4ce93',
  N'{"mapping":"generated from selected scenario sessions"}',
  SYSDATETIME(), SYSDATETIME());
 

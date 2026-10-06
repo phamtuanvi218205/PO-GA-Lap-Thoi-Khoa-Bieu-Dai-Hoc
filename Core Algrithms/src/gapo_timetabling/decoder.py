@@ -82,7 +82,7 @@ def _has_hard_violation(result: ValidationResult) -> bool:
     )
 
 
-def _explain_empty_domain(problem: ProblemInstance, session: ClassSession) -> str:
+def explain_empty_domain(problem: ProblemInstance, session: ClassSession) -> str:
     """Chỉ ra tầng lọc làm rỗng miền để hỗ trợ chẩn đoán dữ liệu đầu vào."""
 
     suitable_dates = tuple(
@@ -165,7 +165,7 @@ def decode_vector(
                 failed_session_index=session_index,
                 reason=(
                     f"ClassSession {session.class_session_id} không có option: "
-                    f"{_explain_empty_domain(problem, session)}"
+                    f"{explain_empty_domain(problem, session)}"
                 ),
             )
 

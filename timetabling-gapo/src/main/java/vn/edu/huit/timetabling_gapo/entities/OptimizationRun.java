@@ -66,6 +66,10 @@ public class OptimizationRun {
     @Column(name = "snapshot_json", nullable = false, columnDefinition = "nvarchar(max)")
     private String snapshotJson;
 
+    /** SHA-256 của JSON canonical để phát hiện snapshot bị thay đổi. */
+    @Column(name = "snapshot_checksum", nullable = false, length = 64)
+    private String snapshotChecksum;
+
     @Lob
     @Column(name = "gene_option_mapping_json", nullable = false, columnDefinition = "nvarchar(max)")
     private String geneOptionMappingJson;
