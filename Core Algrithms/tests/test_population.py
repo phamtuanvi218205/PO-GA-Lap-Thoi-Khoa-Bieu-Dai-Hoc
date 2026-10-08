@@ -218,6 +218,7 @@ class TestPopulation(ConstraintFixture):
         self.assertEqual(len(result.individuals), 5)
         self.assertEqual(result.fitness_evaluations, 5)
         self.assertEqual(result.candidate_attempts, 5)
+        self.assertEqual(result.total_repair_attempts, 0)
         for individual in result.individuals:
             self.assertTrue(
                 validate_timetable(
@@ -273,6 +274,7 @@ class TestPopulation(ConstraintFixture):
         self.assertEqual(result.status, PopulationInitializationStatus.NO_OPTION)
         self.assertEqual(result.candidate_attempts, 0)
         self.assertEqual(result.fitness_evaluations, 0)
+        self.assertEqual(result.total_repair_attempts, 0)
         self.assertEqual(result.individuals, ())
         self.assertIsNotNone(result.terminal_evaluation)
 
@@ -310,6 +312,48 @@ class TestPopulation(ConstraintFixture):
         self.assertEqual(result.fitness_evaluations, 0)
         self.assertEqual(result.individuals, ())
         self.assertNotIn("INFEASIBLE", result.status.value)
+
+    def test_initialization_sums_actual_repair_attempts(self) -> None:
+        """Chi phí repair phải cộng số lần thử, không chỉ số ứng viên."""
+
+        problem, domains, vector = self.make_backtracking_case()
+        config = CandidateEvaluationConfig(
+            max_decode_nodes=4,
+            enable_repair=True,
+            max_repair_attempts=2,
+            max_decode_nodes_per_repair_attempt=4,
+        )
+
+        # Vector fixture cần đúng hai lần thử repair trước khi trở thành một
+        # cá thể hợp lệ. Kết quả thật này được lặp lại hai lần để kiểm tra riêng
+        # trách nhiệm cộng dồn của initialize_population().
+        repaired_evaluation = evaluate_candidate(
+            problem,
+            domains,
+            vector,
+            config,
+        )
+        self.assertTrue(repaired_evaluation.is_success)
+        self.assertIsNotNone(repaired_evaluation.repair_result)
+        self.assertEqual(repaired_evaluation.repair_result.attempts, 2)
+
+        with patch(
+            "gapo_timetabling.population.evaluate_candidate",
+            return_value=repaired_evaluation,
+        ):
+            result = initialize_population(
+                problem,
+                domains,
+                population_size=2,
+                max_initialization_attempts=2,
+                seed=2026,
+                evaluation_config=config,
+            )
+
+        self.assertEqual(result.status, PopulationInitializationStatus.SUCCESS)
+        self.assertEqual(result.repaired_individual_count, 2)
+        self.assertEqual(result.failed_repair_count, 0)
+        self.assertEqual(result.total_repair_attempts, 4)
 
     def test_sort_uses_lexicographic_gate_f_order(self) -> None:
         """Q_general tốt không được bù cho Q_time kém hơn."""

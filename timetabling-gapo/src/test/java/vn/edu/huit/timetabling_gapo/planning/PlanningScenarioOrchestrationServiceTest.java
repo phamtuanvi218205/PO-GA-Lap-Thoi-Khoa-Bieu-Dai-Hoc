@@ -30,11 +30,14 @@ class PlanningScenarioOrchestrationServiceTest {
         section.setSectionCode("JAVA01");
         section.setAcademicTerm(term);
         section.setStatus(CourseSectionStatus.APPROVED);
+        Lecturer lecturer = new Lecturer();
+        lecturer.setLecturerCode("GV01");
         TeachingPart part = new TeachingPart();
         part.setTeachingPartId(1L);
         part.setPartCode("JAVA01_LT");
         part.setTotalPeriods(3);
         part.setCourseSection(section);
+        part.setLecturer(lecturer);
 
         TeachingPlan plan = new TeachingPlan();
         plan.setTeachingPlanId(10L);
@@ -117,5 +120,70 @@ class PlanningScenarioOrchestrationServiceTest {
                 Set.of(1L),
                 10
         ));
+    }
+
+    @Test
+    void rejectsScenarioWhenPartsOfSameSectionUseDifferentLecturers() {
+        AcademicTermRepository termRepository = mock(AcademicTermRepository.class);
+        TeachingPartRepository partRepository = mock(TeachingPartRepository.class);
+        ClassSessionRepository sessionRepository = mock(ClassSessionRepository.class);
+        PlanningScenarioRepository scenarioRepository = mock(PlanningScenarioRepository.class);
+        PlanningScenarioItemRepository itemRepository = mock(PlanningScenarioItemRepository.class);
+        TeachingPlanPersistenceService persistenceService = mock(TeachingPlanPersistenceService.class);
+
+        AcademicTerm term = new AcademicTerm();
+        term.setTermCode("2026_HK1");
+        CourseSection section = new CourseSection();
+        section.setSectionCode("JAVA01");
+        section.setAcademicTerm(term);
+        section.setStatus(CourseSectionStatus.APPROVED);
+
+        Lecturer firstLecturer = new Lecturer();
+        firstLecturer.setLecturerCode("GV01");
+        Lecturer secondLecturer = new Lecturer();
+        secondLecturer.setLecturerCode("GV02");
+
+        TeachingPart lecture = new TeachingPart();
+        lecture.setTeachingPartId(1L);
+        lecture.setPartCode("JAVA01_LT");
+        lecture.setCourseSection(section);
+        lecture.setLecturer(firstLecturer);
+        TeachingPart practice = new TeachingPart();
+        practice.setTeachingPartId(2L);
+        practice.setPartCode("JAVA01_TH");
+        practice.setCourseSection(section);
+        practice.setLecturer(secondLecturer);
+
+        when(termRepository.findById("2026_HK1")).thenReturn(Optional.of(term));
+        when(partRepository
+                .findByCourseSectionAcademicTermTermCodeAndCourseSectionStatusOrderByPartCode(
+                        "2026_HK1",
+                        CourseSectionStatus.APPROVED
+                ))
+                .thenReturn(List.of(lecture, practice));
+
+        PlanningScenarioOrchestrationService service =
+                new PlanningScenarioOrchestrationService(
+                        termRepository,
+                        partRepository,
+                        sessionRepository,
+                        scenarioRepository,
+                        itemRepository,
+                        persistenceService,
+                        new PlanningScenarioCandidatePlanner()
+                );
+
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                () -> service.createAndLockCandidates(new AutomaticScenarioRequest(
+                        "2026_HK1",
+                        ScenarioScopeType.FULL_TERM,
+                        Set.of(),
+                        10
+                ))
+        );
+
+        assertTrue(exception.getMessage().contains("phải dùng chung một giảng viên"));
+        verifyNoInteractions(persistenceService);
     }
 }

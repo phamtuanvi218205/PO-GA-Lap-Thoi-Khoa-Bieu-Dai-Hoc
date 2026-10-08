@@ -104,6 +104,18 @@ class PlanningScenarioStatus(str, Enum):
     ARCHIVED = "ARCHIVED"
 
 
+class OptimizationAlgorithm(str, Enum):
+    """Thuật toán được dùng trong một lần tối ưu thời khóa biểu.
+
+    Các giá trị phải giữ đồng nhất với enum Java và check constraint của
+    bảng ``OptimizationRun`` trong SQL Server.
+    """
+
+    GA = "GA"
+    PO = "PO"
+    GA_PO = "GA_PO"
+
+
 # ---------------------------------------------------------------------------
 # Lịch học kỳ và miền thời gian.
 # ---------------------------------------------------------------------------
@@ -731,10 +743,54 @@ class ProblemInstance:
         """Chạy toàn bộ kiểm tra tính toàn vẹn của snapshot theo thứ tự."""
 
         self._validate_indices()
+        self._validate_teaching_assignments()
         self._validate_calendar()
         self._validate_duration_rules()
         self._validate_availability_windows()
         self._validate_scenario_and_sessions()
+
+    def _validate_teaching_assignments(self) -> None:
+        """Kiểm tra quan hệ lớp học phần, phần giảng dạy và giảng viên.
+
+        Giảng viên vẫn được lưu trực tiếp tại từng ``TeachingPart`` để encoder,
+        decoder và fitness tra cứu nhanh. Tuy nhiên, về nghiệp vụ, phân công là
+        thống nhất cho cả ``CourseSection``: nếu một lớp có cả lý thuyết và
+        thực hành thì hai phần đó phải tham chiếu cùng một giảng viên.
+
+        Đây là bất biến của dữ liệu đầu vào, không phải ràng buộc để optimizer
+        cân nhắc. Snapshot vi phạm phải bị từ chối trước khi sinh option.
+        """
+
+        valid_section_codes = {
+            section.section_code
+            for section in self.course_sections
+        }
+        valid_lecturer_indices = {
+            lecturer.lecturer_index
+            for lecturer in self.lecturers
+        }
+        lecturer_by_section: dict[str, int] = {}
+
+        for part in self.teaching_parts:
+            if part.section_code not in valid_section_codes:
+                raise ValueError(
+                    f"TeachingPart {part.part_code} tham chiếu CourseSection "
+                    f"{part.section_code} không tồn tại."
+                )
+            if part.lecturer_index not in valid_lecturer_indices:
+                raise ValueError(
+                    f"TeachingPart {part.part_code} tham chiếu giảng viên không tồn tại."
+                )
+
+            assigned_lecturer = lecturer_by_section.setdefault(
+                part.section_code,
+                part.lecturer_index,
+            )
+            if assigned_lecturer != part.lecturer_index:
+                raise ValueError(
+                    "Mọi TeachingPart thuộc CourseSection "
+                    f"{part.section_code} phải dùng chung một giảng viên."
+                )
 
     def _validate_calendar(self) -> None:
         """Kiểm tra quan hệ giữa học kỳ, tuần học và ngày giảng dạy."""

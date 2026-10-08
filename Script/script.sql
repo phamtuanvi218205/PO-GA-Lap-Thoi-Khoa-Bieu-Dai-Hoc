@@ -4,7 +4,8 @@
     Current scope:
     - Create a teaching timetable before student registration.
     - No Student/StudentGroup input.
-    - A lecturer is assigned to each TeachingPart before optimization.
+    - A lecturer is assigned before optimization. Every TeachingPart of the
+      same CourseSection must reference that same lecturer.
     - A locked PlanningScenario selects one system-validated TeachingPlan per TeachingPart.
     - Each ClassSession is one atomic session in one TermWeek.
     - The optimizer selects the actual date, start period and teaching location.
@@ -302,6 +303,36 @@ CREATE TABLE TeachingPart
             (required_location_type = 'ONLINE' AND required_room_type IS NULL)
         )
 );
+GO
+
+/*
+   One class section has one preassigned lecturer. Lecture and practice remain
+   separate TeachingPart rows because they have independent duration, room and
+   timetable requirements, but they may not name different lecturers.
+*/
+CREATE TRIGGER TR_TeachingPart_OneLecturerPerCourseSection
+ON TeachingPart
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS
+    (
+        SELECT 1
+        FROM inserted AS changed_part
+        JOIN TeachingPart AS existing_part
+          ON existing_part.section_code = changed_part.section_code
+         AND existing_part.teaching_part_id <> changed_part.teaching_part_id
+         AND existing_part.lecturer_code <> changed_part.lecturer_code
+    )
+    BEGIN
+        THROW 51001,
+              'All TeachingPart rows of one CourseSection must use the same lecturer.',
+              1;
+    END;
+END;
+GO
 
 CREATE TABLE TeachingPartRequiredEquipment
 (
@@ -598,6 +629,7 @@ CREATE TABLE OptimizationRun
     lecturer_preference_score DECIMAL(18,6) NULL,
     fitness_breakdown_json NVARCHAR(MAX) NULL,
     snapshot_json       NVARCHAR(MAX) NOT NULL,
+    snapshot_checksum   CHAR(64)      NOT NULL,
     gene_option_mapping_json NVARCHAR(MAX) NOT NULL,
     started_at          DATETIME2    NULL,
     finished_at         DATETIME2    NULL,
@@ -621,6 +653,9 @@ CREATE TABLE OptimizationRun
     CONSTRAINT CK_OptimizationRun_BreakdownJson
         CHECK (fitness_breakdown_json IS NULL OR ISJSON(fitness_breakdown_json) = 1),
     CONSTRAINT CK_OptimizationRun_SnapshotJson CHECK (ISJSON(snapshot_json) = 1),
+    CONSTRAINT CK_OptimizationRun_SnapshotChecksum
+        CHECK (LEN(snapshot_checksum) = 64
+               AND LOWER(snapshot_checksum) NOT LIKE '%[^0-9a-f]%'),
     CONSTRAINT CK_OptimizationRun_MappingJson CHECK (ISJSON(gene_option_mapping_json) = 1)
 );
 
@@ -1039,12 +1074,13 @@ INSERT INTO OptimizationRun
      random_seed, algorithm_version, status, hard_violation_count,
      time_stability_score, general_quality_score, lecturer_preference_score,
      fitness_breakdown_json,
-     snapshot_json, gene_option_mapping_json, started_at, finished_at)
+     snapshot_json, snapshot_checksum, gene_option_mapping_json, started_at, finished_at)
 VALUES
 (@scenarioId, 'GA_PO', 30, 10000, 20260917, 'sample-manual-1', 'COMPLETED', 0,
  NULL, NULL, NULL,
  N'{"status":"NOT_EVALUATED","reason":"manual sample for query and UI development"}',
  N'{"purpose":"sample database output; not an optimizer benchmark"}',
+ 'b00398573109a6c9308c73649993ca20ae4b4c9dfb44c0825ed7a99b56a4ce93',
  N'{"mapping":"generated from selected scenario sessions"}',
  SYSDATETIME(), SYSDATETIME());
 
@@ -1172,6 +1208,14 @@ UNION ALL SELECT 'PlanningScenario', COUNT(*) FROM PlanningScenario
 UNION ALL SELECT 'PlanningScenarioItem', COUNT(*) FROM PlanningScenarioItem
 UNION ALL SELECT 'OptimizationRun', COUNT(*) FROM OptimizationRun
 UNION ALL SELECT 'TimetableEntry', COUNT(*) FROM TimetableEntry;
+
+-- Must return no rows: one CourseSection cannot have multiple lecturers.
+SELECT
+    section_code,
+    COUNT(DISTINCT lecturer_code) AS lecturer_count
+FROM TeachingPart
+GROUP BY section_code
+HAVING COUNT(DISTINCT lecturer_code) > 1;
 
 -- Every generated plan item set must match its TeachingPart total exactly.
 SELECT
