@@ -31,6 +31,13 @@ public class ConstraintSetting {
     @Column(name = "weight", precision = 12, scale = 4)
     private BigDecimal weight;
 
+    /**
+     * Ngưỡng số tùy chọn của tiêu chí. Ví dụ, tiêu chí hạn chế số tiết dạy
+     * liên tục dùng giá trị 6 để chỉ phạt phần vượt quá sáu tiết.
+     */
+    @Column(name = "threshold_value", precision = 12, scale = 4)
+    private BigDecimal thresholdValue;
+
     @Column(name = "is_enabled", nullable = false)
     private Boolean enabled;
 

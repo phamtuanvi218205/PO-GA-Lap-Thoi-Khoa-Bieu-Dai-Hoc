@@ -301,6 +301,19 @@ class TestModels(unittest.TestCase):
                 enabled=True,
             )
 
+    def test_constraint_threshold_must_be_positive_when_present(self) -> None:
+        """Ngưỡng cấu hình không được âm, bằng 0, NaN hoặc vô cực."""
+
+        with self.assertRaisesRegex(ValueError, "threshold_value"):
+            ConstraintSetting(
+                constraint_code="SOFT_LECTURER_CONSECUTIVE",
+                constraint_type=ConstraintType.SOFT,
+                priority_tier=2,
+                weight=0.10,
+                enabled=True,
+                threshold_value=0,
+            )
+
     def test_hard_constraint_does_not_use_fitness_weight(self) -> None:
         """Ràng buộc cứng được Validator xử lý trước và không đi vào fitness."""
 

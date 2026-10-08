@@ -595,6 +595,7 @@ CREATE TABLE ConstraintSetting
     constraint_kind VARCHAR(20)   NOT NULL,
     priority_tier   TINYINT       NOT NULL,
     weight          DECIMAL(12,4) NULL,
+    threshold_value DECIMAL(12,4) NULL,
     is_enabled      BIT           NOT NULL DEFAULT 1,
     note             NVARCHAR(500) NULL,
     CONSTRAINT CK_ConstraintSetting_Kind
@@ -602,6 +603,8 @@ CREATE TABLE ConstraintSetting
     CONSTRAINT CK_ConstraintSetting_Tier CHECK (priority_tier BETWEEN 1 AND 3),
     CONSTRAINT CK_ConstraintSetting_Weight
         CHECK (weight IS NULL OR weight >= 0),
+    CONSTRAINT CK_ConstraintSetting_Threshold
+        CHECK (threshold_value IS NULL OR threshold_value > 0),
     CONSTRAINT CK_ConstraintSetting_HardTier
         CHECK (constraint_kind <> 'HARD' OR priority_tier = 1),
     CONSTRAINT CK_ConstraintSetting_WeightUsage
@@ -1034,33 +1037,36 @@ WHERE pl.plan_code IN ('KTDL01_STANDARD', 'LTWEB01_STANDARD', 'TTNT01_ONLINE');
 -- Gate F uses three lexicographic soft tiers. Weights only combine components
 -- inside one tier; they never allow a lower tier to compensate for a higher one.
 INSERT INTO ConstraintSetting
-    (constraint_code, constraint_name, constraint_kind, priority_tier, weight, note)
+    (constraint_code, constraint_name, constraint_kind, priority_tier, weight,
+     threshold_value, note)
 VALUES
-('HARD_VALID_DATE', N'Ngày học được phép trong đúng tuần', 'HARD', 1, NULL,
+('HARD_VALID_DATE', N'Ngày học được phép trong đúng tuần', 'HARD', 1, NULL, NULL,
  N'Không xếp vào ngày nghỉ và không ra ngoài tuần của buổi'),
-('HARD_LECTURER_OVERLAP', N'Không trùng lịch giảng viên', 'HARD', 1, NULL,
+('HARD_LECTURER_OVERLAP', N'Không trùng lịch giảng viên', 'HARD', 1, NULL, NULL,
  N'Áp dụng cả phòng vật lý và lớp trực tuyến'),
-('HARD_ROOM_OVERLAP', N'Không trùng phòng vật lý', 'HARD', 1, NULL,
+('HARD_ROOM_OVERLAP', N'Không trùng phòng vật lý', 'HARD', 1, NULL, NULL,
  N'Không áp dụng cho lớp trực tuyến'),
-('HARD_AVAILABILITY', N'Tuân thủ khoảng không thể dạy/sử dụng', 'HARD', 1, NULL,
+('HARD_AVAILABILITY', N'Tuân thủ khoảng không thể dạy/sử dụng', 'HARD', 1, NULL, NULL,
  N'UNAVAILABLE là bắt buộc'),
-('HARD_LOCATION_MATCH', N'Đúng loại địa điểm, loại phòng và thiết bị', 'HARD', 1, NULL,
+('HARD_LOCATION_MATCH', N'Đúng loại địa điểm, loại phòng và thiết bị', 'HARD', 1, NULL, NULL,
  N'Không dùng capacity như điều kiện cứng'),
-('HARD_TRAVEL_TIME', N'Đủ thời gian di chuyển giữa các cơ sở', 'HARD', 1, NULL,
+('HARD_TRAVEL_TIME', N'Đủ thời gian di chuyển giữa các cơ sở', 'HARD', 1, NULL, NULL,
  N'Chỉ áp dụng khi phạm vi có nhiều cơ sở và đã cấu hình thời gian'),
-('SOFT_TIME_WEEKDAY_STABILITY', N'Ổn định thứ học giữa các tuần', 'SOFT', 1, 0.5000,
+('SOFT_TIME_WEEKDAY_STABILITY', N'Ổn định thứ học giữa các tuần', 'SOFT', 1, 0.5000, NULL,
  N'Thành phần thứ nhất của Q_time'),
-('SOFT_TIME_START_PERIOD_STABILITY', N'Ổn định tiết bắt đầu giữa các tuần', 'SOFT', 1, 0.5000,
+('SOFT_TIME_START_PERIOD_STABILITY', N'Ổn định tiết bắt đầu giữa các tuần', 'SOFT', 1, 0.5000, NULL,
  N'Thành phần thứ hai của Q_time'),
-('SOFT_CAPACITY', N'Mức thiếu sức chứa phòng vật lý', 'SOFT', 2, 0.4500,
+('SOFT_CAPACITY', N'Mức thiếu sức chứa phòng vật lý', 'SOFT', 2, 0.4091, NULL,
  N'Bỏ qua khi expected_enrollment hoặc capacity là NULL; không áp dụng ONLINE'),
-('SOFT_LECTURER_GAP', N'Khoảng trống trong ngày của giảng viên', 'SOFT', 2, 0.3000,
- N'Không tính trước buổi đầu, sau buổi cuối hoặc ngày không dạy'),
-('SOFT_ROOM_DISCOURAGED', N'Hạn chế dùng phòng trong khoảng DISCOURAGED', 'SOFT', 2, 0.1500,
+('SOFT_LECTURER_GAP', N'Khoảng trống trong ngày của giảng viên', 'SOFT', 2, 0.2273, NULL,
+ N'Chuẩn hóa bằng gap/(gap+teaching); không tính trước buổi đầu, sau buổi cuối hoặc ngày không dạy'),
+('SOFT_LECTURER_CONSECUTIVE', N'Hạn chế giảng viên dạy quá nhiều tiết liên tục', 'SOFT', 2, 0.0909, 6.0000,
+ N'Chỉ phạt số tiết vượt ngưỡng; ngưỡng mặc định là 6 tiết liên tục'),
+('SOFT_ROOM_DISCOURAGED', N'Hạn chế dùng phòng trong khoảng DISCOURAGED', 'SOFT', 2, 0.1818, NULL,
  N'Tính theo tỷ lệ tiết vật lý chồng lên khoảng DISCOURAGED'),
-('SOFT_ROOM_STABILITY', N'Ổn định phòng giữa các tuần', 'SOFT', 2, 0.1000,
+('SOFT_ROOM_STABILITY', N'Ổn định phòng giữa các tuần', 'SOFT', 2, 0.0909, NULL,
  N'Đổi phòng chỉ là thành phần nhẹ của Q_general'),
-('SOFT_LECTURER_PREFERENCE', N'Mong muốn thời gian của giảng viên', 'SOFT', 3, 1.0000,
+('SOFT_LECTURER_PREFERENCE', N'Mong muốn thời gian của giảng viên', 'SOFT', 3, 1.0000, NULL,
  N'Q_lecturer đứng sau Q_time và Q_general');
 GO
 

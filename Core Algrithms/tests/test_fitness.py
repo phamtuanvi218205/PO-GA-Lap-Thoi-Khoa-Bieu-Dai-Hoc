@@ -5,7 +5,11 @@ from dataclasses import replace
 from datetime import date, time, timedelta
 
 from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.fitness import calculate_fitness, calculate_time_stability
+from gapo_timetabling.fitness import (
+    DEFAULT_GENERAL_WEIGHTS,
+    calculate_fitness,
+    calculate_time_stability,
+)
 from gapo_timetabling.models import (
     AcademicTerm,
     AcademicTermStatus,
@@ -16,6 +20,8 @@ from gapo_timetabling.models import (
     ClassSession,
     Course,
     CourseSection,
+    ConstraintSetting,
+    ConstraintType,
     DateStatus,
     Lecturer,
     LocationType,
@@ -404,7 +410,12 @@ class TestTimeStability(FitnessFixture):
 
 
 class TestGeneralQuality(FitnessFixture):
-    """Kiểm tra bốn thành phần của ``Q_general``."""
+    """Kiểm tra năm thành phần của ``Q_general``."""
+
+    def test_default_general_weights_sum_to_one(self) -> None:
+        """Năm hệ số mặc định phải tạo một tổng trọng số chuẩn hóa."""
+
+        self.assertAlmostEqual(sum(DEFAULT_GENERAL_WEIGHTS.values()), 1.0)
 
     def test_capacity_uses_duration_weighted_shortage_ratio(self) -> None:
         result = calculate_fitness(
@@ -414,7 +425,7 @@ class TestGeneralQuality(FitnessFixture):
         )
 
         self.assertAlmostEqual(result.breakdown.capacity_component, 0.2)
-        self.assertAlmostEqual(result.general_quality_score, 0.45 * 0.2)
+        self.assertAlmostEqual(result.general_quality_score, 0.4091 * 0.2)
 
     def test_fitness_accepts_domains_generated_by_real_encoder(self) -> None:
         """Fitness phải nối được với output thật của encoder, không chỉ fixture."""
@@ -479,7 +490,7 @@ class TestGeneralQuality(FitnessFixture):
         self.assertEqual(result.breakdown.room_change_count, 1)
         self.assertAlmostEqual(result.breakdown.room_stability_component, 0.25)
         # Ba buổi ở phòng nhỏ và một buổi ở phòng đủ chỗ: Q_capacity=0,15.
-        expected_general = 0.45 * 0.15 + 0.10 * 0.25
+        expected_general = 0.4091 * 0.15 + 0.0909 * 0.25
         self.assertAlmostEqual(result.general_quality_score, expected_general)
 
     def test_lecturer_gap_counts_only_periods_between_same_day_sessions(self) -> None:
@@ -509,8 +520,174 @@ class TestGeneralQuality(FitnessFixture):
 
         result = calculate_fitness(problem, selected, domains)
 
-        # Khoảng trống là tiết 4--6: 3 tiết trống / 6 tiết giảng dạy.
-        self.assertAlmostEqual(result.breakdown.gap_component, 0.5)
+        # Khoảng trống là tiết 4--6. Công thức mới dùng 3 / (3 + 6).
+        self.assertAlmostEqual(result.breakdown.gap_component, 1 / 3)
+
+    def test_gap_component_remains_bounded_when_gap_exceeds_teaching_time(
+        self,
+    ) -> None:
+        """Khoảng nghỉ dài vẫn phải tạo component nằm trong khoảng [0,1]."""
+
+        sessions = (
+            replace(
+                self.sessions[0],
+                session_index=0,
+                session_number=1,
+                stability_group_no=1,
+                week_number=1,
+            ),
+            replace(
+                self.sessions[1],
+                session_index=1,
+                session_number=2,
+                stability_group_no=2,
+                week_number=1,
+            ),
+        )
+        part = replace(self.part, total_periods=6)
+        extended_periods = self.time_periods + tuple(
+            TimePeriod(
+                period_number=period_number,
+                start_time=time(6 + period_number, 0),
+                end_time=time(6 + period_number, 50),
+                session_type=SessionType.EVENING,
+            )
+            for period_number in range(10, 16)
+        )
+        problem = replace(
+            self.build_problem(part=part, sessions=sessions),
+            time_periods=extended_periods,
+            allowed_period_blocks=self.allowed_blocks
+            + (AllowedPeriodBlock(13, 3),),
+        )
+        selected = (
+            SessionOption(0, 0, self.monday_of_week(1), 1, 3),
+            SessionOption(1, 0, self.monday_of_week(1), 13, 15),
+        )
+        domains = ((selected[0],), (selected[1],))
+
+        result = calculate_fitness(problem, selected, domains)
+
+        # Chín tiết trống và sáu tiết dạy: 9 / (9 + 6) = 0,6.
+        self.assertAlmostEqual(result.breakdown.gap_component, 0.6)
+        self.assertLessEqual(result.breakdown.gap_component, 1.0)
+
+    def test_lecturer_consecutive_penalizes_only_periods_above_threshold(
+        self,
+    ) -> None:
+        """Chín tiết liền nhau chỉ bị phạt ba tiết vượt ngưỡng mặc định 6."""
+
+        sessions = tuple(
+            replace(
+                self.sessions[index],
+                session_index=index,
+                session_number=index + 1,
+                stability_group_no=index + 1,
+                week_number=1,
+            )
+            for index in range(3)
+        )
+        part = replace(self.part, total_periods=9)
+        problem = self.build_problem(part=part, sessions=sessions)
+        selected = (
+            SessionOption(0, 0, self.monday_of_week(1), 1, 3),
+            SessionOption(1, 0, self.monday_of_week(1), 4, 6),
+            SessionOption(2, 0, self.monday_of_week(1), 7, 9),
+        )
+        domains = tuple((option,) for option in selected)
+
+        result = calculate_fitness(problem, selected, domains)
+
+        self.assertAlmostEqual(
+            result.breakdown.lecturer_consecutive_component,
+            3 / 9,
+        )
+        self.assertAlmostEqual(
+            result.general_quality_score,
+            0.4091 * 0.2 + 0.0909 * (3 / 9),
+        )
+
+    def test_lecturer_consecutive_threshold_is_read_from_configuration(
+        self,
+    ) -> None:
+        """Snapshot có thể đổi ngưỡng mà không cần sửa công thức fitness."""
+
+        sessions = (
+            replace(
+                self.sessions[0],
+                session_index=0,
+                session_number=1,
+                stability_group_no=1,
+                week_number=1,
+            ),
+            replace(
+                self.sessions[1],
+                session_index=1,
+                session_number=2,
+                stability_group_no=2,
+                week_number=1,
+            ),
+        )
+        part = replace(self.part, total_periods=6)
+        configured_problem = replace(
+            self.build_problem(part=part, sessions=sessions),
+            constraint_settings=(
+                ConstraintSetting(
+                    constraint_code="SOFT_LECTURER_CONSECUTIVE",
+                    constraint_type=ConstraintType.SOFT,
+                    priority_tier=2,
+                    weight=0.10,
+                    enabled=True,
+                    threshold_value=3,
+                ),
+            ),
+        )
+        selected = (
+            SessionOption(0, 0, self.monday_of_week(1), 1, 3),
+            SessionOption(1, 0, self.monday_of_week(1), 4, 6),
+        )
+        domains = tuple((option,) for option in selected)
+
+        result = calculate_fitness(configured_problem, selected, domains)
+
+        self.assertAlmostEqual(
+            result.breakdown.lecturer_consecutive_component,
+            3 / 6,
+        )
+
+    def test_gap_breaks_the_consecutive_teaching_streak(self) -> None:
+        """Khoảng nghỉ giữa hai buổi phải kết thúc chuỗi dạy liên tục."""
+
+        sessions = (
+            replace(
+                self.sessions[0],
+                session_index=0,
+                session_number=1,
+                stability_group_no=1,
+                week_number=1,
+            ),
+            replace(
+                self.sessions[1],
+                session_index=1,
+                session_number=2,
+                stability_group_no=2,
+                week_number=1,
+            ),
+        )
+        part = replace(self.part, total_periods=6)
+        problem = self.build_problem(part=part, sessions=sessions)
+        selected = (
+            SessionOption(0, 0, self.monday_of_week(1), 1, 3),
+            SessionOption(1, 0, self.monday_of_week(1), 7, 9),
+        )
+        domains = tuple((option,) for option in selected)
+
+        result = calculate_fitness(problem, selected, domains)
+
+        self.assertEqual(
+            result.breakdown.lecturer_consecutive_component,
+            0.0,
+        )
 
     def test_room_discouraged_counts_unique_overlapping_periods(self) -> None:
         discouraged = AvailabilityWindow(

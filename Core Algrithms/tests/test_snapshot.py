@@ -185,6 +185,14 @@ def make_snapshot_payload() -> dict:
                 "weight": 1.0,
                 "enabled": True,
             },
+            {
+                "constraint_code": "SOFT_LECTURER_CONSECUTIVE",
+                "constraint_type": "SOFT",
+                "priority_tier": 2,
+                "weight": 0.1,
+                "threshold_value": 6,
+                "enabled": True,
+            },
         ],
     }
 
@@ -201,6 +209,7 @@ class TestSnapshotLoader(unittest.TestCase):
         self.assertEqual(problem.class_sessions[0].session_index, 0)
         self.assertEqual(problem.locations[0].location_index, 0)
         self.assertEqual(problem.teaching_parts[0].part_code, "JAVA01-LT")
+        self.assertEqual(problem.constraint_settings[2].threshold_value, 6.0)
         self.assertEqual(actual_checksum, checksum_json(payload))
 
     def test_checksum_is_independent_of_object_key_order(self) -> None:

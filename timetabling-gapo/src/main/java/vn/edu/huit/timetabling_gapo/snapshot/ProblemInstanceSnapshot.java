@@ -230,6 +230,7 @@ public record ProblemInstanceSnapshot(
             String constraintType,
             int priorityTier,
             Double weight,
+            Double thresholdValue,
             boolean enabled
     ) {
     }
