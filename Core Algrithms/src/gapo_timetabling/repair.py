@@ -10,8 +10,9 @@ Repair chỉ làm đúng ba việc:
 2. Đưa gene đó vào giữa khoảng của một option khác trong cùng miền cố định.
 3. Gọi lại decoder và nhận kết quả đã được decoder/validator kiểm tra.
 
-Cách làm này tuân theo D057 và D078: repair không được đổi giảng viên, plan,
-tuần, thời lượng, số buổi, tổng số tiết hoặc loại phần giảng dạy.
+Repair chỉ thay đổi lựa chọn trong miền option đã được sinh sẵn; nó không được
+đổi giảng viên, plan, tuần, thời lượng, số buổi, tổng số tiết hoặc loại phần
+giảng dạy.
 """
 
 from dataclasses import dataclass

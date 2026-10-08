@@ -1,10 +1,10 @@
 """Tính fitness mềm cho một thời khóa biểu đã vượt qua Validator.
 
-Module này triển khai Gate F theo ba tầng ưu tiên độc lập:
+Module này triển khai ba tầng mục tiêu có thứ tự ưu tiên độc lập:
 
 1. ``Q_time``: giữ ổn định thứ và tiết bắt đầu giữa các tuần.
-2. ``Q_general``: sức chứa, khoảng trống giảng viên, thời gian hạn chế dùng
-   phòng và mức ổn định phòng.
+2. ``Q_general``: sức chứa, khoảng trống giảng viên, số tiết dạy liên tục,
+   thời gian hạn chế dùng phòng và mức ổn định phòng.
 3. ``Q_lecturer``: mức đáp ứng mong muốn thời gian của giảng viên.
 
 Ba điểm được so sánh theo thứ tự từ trái sang phải bằng khóa
@@ -34,14 +34,20 @@ from .models import (
 )
 
 
-# Các trọng số mặc định đã được chốt trong D073. ConstraintSetting của
-# snapshot có thể ghi đè từng trọng số để phục vụ sensitivity test có kiểm soát.
+# Các trọng số mặc định được chuẩn hóa để tổng đúng bằng 1.0000. Đây là cấu
+# hình kỹ thuật ban đầu; ConstraintSetting của snapshot có thể ghi đè từng
+# trọng số để phục vụ sensitivity test có kiểm soát.
 DEFAULT_GENERAL_WEIGHTS = {
-    "SOFT_CAPACITY": 0.45,
-    "SOFT_LECTURER_GAP": 0.30,
-    "SOFT_ROOM_DISCOURAGED": 0.15,
-    "SOFT_ROOM_STABILITY": 0.10,
+    "SOFT_CAPACITY": 0.4091,
+    "SOFT_LECTURER_GAP": 0.2273,
+    "SOFT_LECTURER_CONSECUTIVE": 0.0909,
+    "SOFT_ROOM_DISCOURAGED": 0.1818,
+    "SOFT_ROOM_STABILITY": 0.0909,
 }
+
+# Nếu snapshot cũ chưa chứa tham số, fitness dùng ngưỡng mặc định tương thích.
+# Snapshot mới ghi rõ ngưỡng để kết quả có thể được tái lập.
+DEFAULT_MAX_CONSECUTIVE_PERIODS = 6
 
 
 @dataclass(frozen=True, slots=True)
@@ -67,11 +73,12 @@ class RoomStabilityResult:
 
 @dataclass(frozen=True, slots=True)
 class GeneralQualityResult:
-    """Bốn thành phần đã chuẩn hóa và điểm ``Q_general`` sau khi ghép."""
+    """Năm thành phần đã chuẩn hóa và điểm ``Q_general`` sau khi ghép."""
 
     score: float
     capacity_component: float
     gap_component: float
+    lecturer_consecutive_component: float
     room_discouraged_component: float
     room_stability: RoomStabilityResult
 
@@ -475,7 +482,17 @@ def _calculate_gap_component(
     selected_by_session: dict[int, SessionOption],
     session_context: dict[int, tuple[ClassSession, TeachingPart]],
 ) -> float:
-    """Tính tỷ lệ tiết trống giữa các buổi cùng giảng viên trong cùng ngày."""
+    """Tính tỷ lệ khoảng trống đã chuẩn hóa của giảng viên.
+
+    Chỉ các tiết trống nằm giữa hai buổi trong cùng ngày mới được tính. Mẫu số
+    gồm cả tiết trống và tiết giảng dạy của những ngày có ít nhất hai buổi::
+
+        Q_gap = total_gap_periods / (total_gap_periods + total_teaching_periods)
+
+    Công thức này giữ ``Q_gap`` trong ``[0, 1]`` ngay cả khi khoảng nghỉ dài
+    hơn tổng thời lượng giảng dạy. Ngày chỉ có một buổi không tạo khoảng trống
+    giữa buổi nên không được đưa vào mẫu số.
+    """
 
     options_by_lecturer_and_date: dict[
         tuple[int, date],
@@ -511,10 +528,83 @@ def _calculate_gap_component(
                 next_option.start_period - previous_option.end_period - 1,
             )
 
+    evaluated_periods = total_gap_periods + total_teaching_periods
+    if evaluated_periods == 0:
+        return 0.0
+
+    return total_gap_periods / evaluated_periods
+
+
+def _calculate_lecturer_consecutive_component(
+    selected_by_session: dict[int, SessionOption],
+    session_context: dict[int, tuple[ClassSession, TeachingPart]],
+    max_consecutive_periods: int,
+) -> float:
+    """Tính tỷ lệ tiết vượt ngưỡng dạy liên tục của giảng viên.
+
+    Các buổi của cùng giảng viên trong cùng ngày được sắp theo tiết bắt đầu.
+    Hai buổi nối tiếp nhau, ví dụ tiết 1--3 và 4--6, thuộc cùng một chuỗi dạy
+    liên tục. Chỉ phần vượt quá ``max_consecutive_periods`` mới bị phạt.
+
+    Công thức chuẩn hóa::
+
+        Q_consecutive = tổng tiết vượt ngưỡng / tổng tiết giảng dạy
+
+    Ví dụ một chuỗi tiết 1--9 với ngưỡng 6 có ba tiết vượt ngưỡng, nên thành
+    phần này bằng ``3 / 9`` nếu đó là toàn bộ lịch đang xét.
+    """
+
+    options_by_lecturer_and_date: dict[
+        tuple[int, date],
+        list[SessionOption],
+    ] = {}
+
+    for session_index, selected_option in selected_by_session.items():
+        _, part = session_context[session_index]
+        group_key = (part.lecturer_index, selected_option.teaching_date)
+        options_by_lecturer_and_date.setdefault(group_key, []).append(
+            selected_option
+        )
+
+    total_excess_periods = 0
+    total_teaching_periods = 0
+
+    for options in options_by_lecturer_and_date.values():
+        ordered_options = sorted(options, key=lambda option: option.start_period)
+        total_teaching_periods += sum(
+            option.end_period - option.start_period + 1
+            for option in ordered_options
+        )
+
+        current_streak_length = 0
+        previous_end_period: int | None = None
+
+        for option in ordered_options:
+            option_length = option.end_period - option.start_period + 1
+
+            if (
+                previous_end_period is not None
+                and option.start_period == previous_end_period + 1
+            ):
+                current_streak_length += option_length
+            else:
+                total_excess_periods += max(
+                    0,
+                    current_streak_length - max_consecutive_periods,
+                )
+                current_streak_length = option_length
+
+            previous_end_period = option.end_period
+
+        total_excess_periods += max(
+            0,
+            current_streak_length - max_consecutive_periods,
+        )
+
     if total_teaching_periods == 0:
         return 0.0
 
-    return total_gap_periods / total_teaching_periods
+    return total_excess_periods / total_teaching_periods
 
 
 def _calculate_room_discouraged_component(
@@ -566,7 +656,7 @@ def _get_soft_weight(
     problem: ProblemInstance,
     constraint_code: str,
 ) -> float:
-    """Lấy trọng số cấu hình hoặc dùng giá trị chính thức mặc định D073."""
+    """Lấy trọng số từ cấu hình hoặc dùng giá trị mặc định chuẩn hóa."""
 
     default_weight = DEFAULT_GENERAL_WEIGHTS[constraint_code]
 
@@ -585,11 +675,34 @@ def _get_soft_weight(
     return default_weight
 
 
+def _get_max_consecutive_periods(problem: ProblemInstance) -> int:
+    """Đọc ngưỡng tiết liên tục từ snapshot hoặc dùng mặc định là 6.
+
+    Ngưỡng biểu diễn số tiết nên bắt buộc là số nguyên dương. Việc kiểm tra tại
+    đây giúp phát hiện snapshot cấu hình sai trước khi optimizer chạy lâu.
+    """
+
+    for setting in problem.constraint_settings:
+        if setting.constraint_code != "SOFT_LECTURER_CONSECUTIVE":
+            continue
+        if setting.constraint_type != ConstraintType.SOFT:
+            raise ValueError(
+                "SOFT_LECTURER_CONSECUTIVE phải là ConstraintSetting loại SOFT."
+            )
+        if setting.threshold_value is None:
+            return DEFAULT_MAX_CONSECUTIVE_PERIODS
+        if not float(setting.threshold_value).is_integer():
+            raise ValueError("Ngưỡng tiết liên tục phải là một số nguyên dương.")
+        return int(setting.threshold_value)
+
+    return DEFAULT_MAX_CONSECUTIVE_PERIODS
+
+
 def _calculate_general_quality_from_validated_input(
     problem: ProblemInstance,
     selected_by_session: dict[int, SessionOption],
 ) -> GeneralQualityResult:
-    """Tính bốn thành phần và ghép thành ``Q_general`` theo D073."""
+    """Tính và tổng hợp các thành phần của ``Q_general``."""
 
     session_context = _build_session_context(problem)
     room_stability = _calculate_room_stability_from_validated_input(
@@ -605,6 +718,11 @@ def _calculate_general_quality_from_validated_input(
         selected_by_session,
         session_context,
     )
+    lecturer_consecutive_component = _calculate_lecturer_consecutive_component(
+        selected_by_session,
+        session_context,
+        _get_max_consecutive_periods(problem),
+    )
     room_discouraged_component = _calculate_room_discouraged_component(
         problem,
         selected_by_session,
@@ -613,6 +731,8 @@ def _calculate_general_quality_from_validated_input(
     score = (
         _get_soft_weight(problem, "SOFT_CAPACITY") * capacity_component
         + _get_soft_weight(problem, "SOFT_LECTURER_GAP") * gap_component
+        + _get_soft_weight(problem, "SOFT_LECTURER_CONSECUTIVE")
+        * lecturer_consecutive_component
         + _get_soft_weight(problem, "SOFT_ROOM_DISCOURAGED")
         * room_discouraged_component
         + _get_soft_weight(problem, "SOFT_ROOM_STABILITY")
@@ -623,6 +743,7 @@ def _calculate_general_quality_from_validated_input(
         score=score,
         capacity_component=capacity_component,
         gap_component=gap_component,
+        lecturer_consecutive_component=lecturer_consecutive_component,
         room_discouraged_component=room_discouraged_component,
         room_stability=room_stability,
     )
@@ -774,7 +895,7 @@ def calculate_fitness(
 
     Đây là hàm công khai mà GA, PO và pipeline lai sẽ gọi sau khi decoder và
     validator tạo được một lịch hoàn chỉnh. Thuộc tính ``fitness_key`` của kết
-    quả phải được dùng để so sánh hai lịch theo thứ tự nghiêm ngặt Gate F.
+    quả phải được dùng để so sánh hai lịch theo thứ tự mục tiêu nghiêm ngặt.
     """
 
     selected_by_session = _validate_fitness_inputs(
@@ -810,6 +931,9 @@ def calculate_fitness(
         ),
         capacity_component=general_quality.capacity_component,
         gap_component=general_quality.gap_component,
+        lecturer_consecutive_component=(
+            general_quality.lecturer_consecutive_component
+        ),
         room_discouraged_component=(
             general_quality.room_discouraged_component
         ),

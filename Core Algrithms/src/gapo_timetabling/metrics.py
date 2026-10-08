@@ -1,9 +1,9 @@
 """Các hợp đồng số liệu dùng chung cho GA, PO và GA–PO.
 
 Các optimizer của bài toán thời khóa biểu phải được so sánh trên cùng cách đếm
-Fitness Evaluation (FE) và cùng thứ tự fitness Gate F. Module này định nghĩa
-các cấu trúc dữ liệu và phép cộng số liệu trung lập với thuật toán để GA, PO
-và pipeline lai không tự tạo ba định dạng hoặc ba quy tắc đếm khác nhau.
+Fitness Evaluation (FE) và cùng thứ tự mục tiêu lexicographic. Module này định
+nghĩa các cấu trúc dữ liệu và phép cộng số liệu trung lập với thuật toán để GA,
+PO và pipeline lai không tự tạo ba định dạng hoặc ba quy tắc đếm khác nhau.
 
 Một mốc hội tụ không cộng ba score thành một giá trị vô hướng. Project đánh giá
 lịch hợp lệ theo thứ tự lexicographic ``Q_time -> Q_general -> Q_lecturer``;
@@ -71,8 +71,8 @@ class ConvergencePoint:
             self.lecturer_preference_score,
         )
 
-        # Các công thức Gate F tạo score hữu hạn và không âm. NaN, vô cực hoặc
-        # số âm thường cho biết dữ liệu đầu vào hay phép chuẩn hóa bị lỗi; không
+        # Các hàm mục tiêu tạo score hữu hạn và không âm. NaN, vô cực hoặc số
+        # âm thường cho biết dữ liệu đầu vào hay phép chuẩn hóa bị lỗi; không
         # được ghi chúng vào lịch sử hội tụ rồi tiếp tục chạy.
         if any(not isfinite(score) or score < 0 for score in scores):
             raise ValueError(
@@ -81,7 +81,7 @@ class ConvergencePoint:
 
     @property
     def fitness_key(self) -> tuple[float, float, float]:
-        """Trả khóa so sánh đúng thứ tự ưu tiên của Gate F.
+        """Trả khóa so sánh đúng thứ tự ưu tiên của ba tầng mục tiêu.
 
         Python so sánh tuple từ trái sang phải, vì vậy ``Q_general`` tốt hơn
         không thể bù cho ``Q_time`` kém hơn; tương tự, nguyện vọng giảng viên

@@ -117,7 +117,7 @@ def _individual_order_key(
     tuple[float, float, float],
     tuple[float, ...],
 ]:
-    """Khóa dùng để so sánh hai cá thể theo đúng Gate F.
+    """Khóa dùng để so sánh hai cá thể theo thứ tự mục tiêu của lịch.
 
     Fitness được ưu tiên theo:
     Q_time -> Q_general -> Q_lecturer.

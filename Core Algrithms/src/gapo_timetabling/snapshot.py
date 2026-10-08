@@ -426,6 +426,11 @@ def load_problem_instance_snapshot(
                 priority_tier=int(_required(item, "priority_tier")),
                 weight=None if item.get("weight") is None else float(item["weight"]),
                 enabled=bool(_required(item, "enabled")),
+                threshold_value=(
+                    None
+                    if item.get("threshold_value") is None
+                    else float(item["threshold_value"])
+                ),
             )
             for item in _required(payload, "constraint_settings")
         ),

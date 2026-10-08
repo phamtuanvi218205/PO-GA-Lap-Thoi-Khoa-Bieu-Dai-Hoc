@@ -554,6 +554,9 @@ public class ProblemInstanceSnapshotBuilder {
                         item.getConstraintKind().name(),
                         item.getPriorityTier(),
                         item.getWeight() == null ? null : item.getWeight().doubleValue(),
+                        item.getThresholdValue() == null
+                                ? null
+                                : item.getThresholdValue().doubleValue(),
                         Boolean.TRUE.equals(item.getEnabled())
                 ))
                 .toList();

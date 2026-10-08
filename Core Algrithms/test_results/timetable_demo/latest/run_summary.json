@@ -1,0 +1,188 @@
+{
+  "schema_version": "timetable-demo-report.v1",
+  "algorithm": "GA_PO",
+  "snapshot_checksum": "787b35904d183a288161e118e11dcfe5c4bf5c90a60c3e16f023603eec858eea",
+  "seed": 42,
+  "population_size": 20,
+  "timetable_entry_count": 108,
+  "best_fitness": {
+    "time_stability_score": 0.21022727272727273,
+    "general_quality_score": 0.20944367262641284,
+    "lecturer_preference_score": 0.3961510530137981,
+    "breakdown": {
+      "weekday_change_count": 19,
+      "start_period_change_count": 18,
+      "room_change_count": 5,
+      "valid_time_exception_count": 20,
+      "comparable_time_session_count": 88,
+      "comparable_physical_session_count": 108,
+      "capacity_component": 0.37818633799519796,
+      "gap_component": 0.08247422680412371,
+      "room_discouraged_component": 0.16898148148148148,
+      "room_stability_component": 0.046296296296296294,
+      "lecturer_breakdown": [
+        {
+          "lecturer_index": 0,
+          "evaluated_session_count": 36,
+          "missed_preferred_penalty": 68.0,
+          "discouraged_overlap_penalty": 5.3999999999999995
+        },
+        {
+          "lecturer_index": 1,
+          "evaluated_session_count": 24,
+          "missed_preferred_penalty": 44.800000000000004,
+          "discouraged_overlap_penalty": 9.0
+        },
+        {
+          "lecturer_index": 2,
+          "evaluated_session_count": 24,
+          "missed_preferred_penalty": 29.400000000000002,
+          "discouraged_overlap_penalty": 10.0
+        },
+        {
+          "lecturer_index": 3,
+          "evaluated_session_count": 24,
+          "missed_preferred_penalty": 41.1,
+          "discouraged_overlap_penalty": 10.5
+        }
+      ],
+      "lecturer_consecutive_component": 0.011574074074074073,
+      "time_exceptions": [
+        {
+          "session_index": 0,
+          "standard_iso_weekday": 3,
+          "standard_start_period": 7,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 1,
+          "standard_iso_weekday": 3,
+          "standard_start_period": 7,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 10,
+          "standard_iso_weekday": 1,
+          "standard_start_period": 7,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 19,
+          "standard_iso_weekday": 3,
+          "standard_start_period": 7,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 20,
+          "standard_iso_weekday": 3,
+          "standard_start_period": 7,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 29,
+          "standard_iso_weekday": 2,
+          "standard_start_period": 7,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 38,
+          "standard_iso_weekday": 5,
+          "standard_start_period": 1,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 48,
+          "standard_iso_weekday": 3,
+          "standard_start_period": 7,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 49,
+          "standard_iso_weekday": 3,
+          "standard_start_period": 7,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 58,
+          "standard_iso_weekday": 1,
+          "standard_start_period": 1,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 70,
+          "standard_iso_weekday": 1,
+          "standard_start_period": 7,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 83,
+          "standard_iso_weekday": 2,
+          "standard_start_period": 1,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 86,
+          "standard_iso_weekday": 5,
+          "standard_start_period": 4,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 91,
+          "standard_iso_weekday": 3,
+          "standard_start_period": 1,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 92,
+          "standard_iso_weekday": 3,
+          "standard_start_period": 1,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 96,
+          "standard_iso_weekday": 6,
+          "standard_start_period": 4,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 98,
+          "standard_iso_weekday": 6,
+          "standard_start_period": 4,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 99,
+          "standard_iso_weekday": 6,
+          "standard_start_period": 4,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 101,
+          "standard_iso_weekday": 6,
+          "standard_start_period": 4,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        },
+        {
+          "session_index": 105,
+          "standard_iso_weekday": 5,
+          "standard_start_period": 1,
+          "reason": "Miền option của session không còn lựa chọn dùng đúng thứ và tiết bắt đầu chuẩn sau các bộ lọc cứng."
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "completed_iterations": 20,
+    "candidate_attempts": 420,
+    "fitness_evaluations": 420,
+    "decode_failed_count": 0,
+    "validation_failed_count": 0,
+    "repaired_individual_count": 0,
+    "failed_repair_count": 0,
+    "total_repair_attempts": 0,
+    "discarded_offspring_count": 0,
+    "total_decode_nodes": 46168,
+    "total_decode_backtracks": 808,
+    "runtime_seconds": 112.36859819999881
+  }
+}

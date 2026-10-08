@@ -517,19 +517,30 @@ class AvailabilityWindow:
 
 @dataclass(frozen=True, slots=True)
 class ConstraintSetting:
-    """Cấu hình bật/tắt, tầng ưu tiên và trọng số của một tiêu chí."""
+    """Cấu hình bật/tắt, tầng ưu tiên và tham số của một tiêu chí.
+
+    ``threshold_value`` là ngưỡng số dùng cho những tiêu chí cần tham số riêng.
+    Ví dụ, ``SOFT_LECTURER_CONSECUTIVE`` dùng trường này để quy định số tiết
+    liên tục tối đa trước khi lịch bắt đầu nhận điểm phạt mềm.
+    """
 
     constraint_code: str
     constraint_type: ConstraintType
     priority_tier: int
     weight: float | None
     enabled: bool
+    threshold_value: float | None = None
 
     def __post_init__(self) -> None:
         """Kiểm tra tầng ưu tiên và cách dùng trọng số theo loại tiêu chí."""
 
         if not 1 <= self.priority_tier <= 3:
             raise ValueError("priority_tier phải nằm trong khoảng 1..3.")
+
+        if self.threshold_value is not None and (
+            not isfinite(self.threshold_value) or self.threshold_value <= 0
+        ):
+            raise ValueError("threshold_value phải hữu hạn và lớn hơn 0.")
 
         if self.constraint_type == ConstraintType.HARD:
             if self.priority_tier != 1:
@@ -600,7 +611,7 @@ class TimeStabilityException:
 class FitnessBreakdown:
     """Các số liệu giải thích ba tầng fitness của một lịch hợp lệ.
 
-    Các bộ đếm giữ lại dữ liệu thô của độ ổn định. Bốn component là giá trị
+    Các bộ đếm giữ lại dữ liệu thô của độ ổn định. Các component là giá trị
     đã chuẩn hóa dùng để ghép ``Q_general``. Chi tiết giảng viên được giữ
     riêng để không biến một score tổng thành kết quả không thể truy nguyên.
     """
@@ -616,6 +627,7 @@ class FitnessBreakdown:
     room_discouraged_component: float
     room_stability_component: float
     lecturer_breakdown: tuple[LecturerPreferenceBreakdown, ...]
+    lecturer_consecutive_component: float = 0.0
     time_exceptions: tuple[TimeStabilityException, ...] = ()
 
     def __post_init__(self) -> None:
@@ -635,6 +647,7 @@ class FitnessBreakdown:
         components = (
             self.capacity_component,
             self.gap_component,
+            self.lecturer_consecutive_component,
             self.room_discouraged_component,
             self.room_stability_component,
         )

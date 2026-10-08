@@ -15,7 +15,8 @@ Helper offspring chuyển vector đề xuất vào ``population.evaluate_candida
 và có thể thử lại theo giới hạn đã cấu hình. Decoder, repair, validator và
 fitness vẫn là các thành phần chịu trách nhiệm biến vector thành lịch và đánh
 giá chất lượng; PO không lặp lại các trách nhiệm đó trong module này. Vòng lặp
-``run_po`` đầy đủ được bổ sung ở bước sau.
+``run_po`` điều phối quần thể theo PO V2, lưu best toàn cục riêng và trả kết quả
+theo hợp đồng metrics dùng chung với GA và GA–PO.
 """
 
 from __future__ import annotations
@@ -25,20 +26,27 @@ import sys
 from dataclasses import dataclass, replace
 from enum import IntEnum
 from random import Random
+from time import perf_counter
 from typing import Sequence
 
 from .metrics import (
     ConvergencePoint,
     OptimizationMetrics,
+    OptimizationResult,
     accumulate_candidate_evaluation,
 )
-from .models import ProblemInstance, SessionOption
+from .models import (
+    OptimizationAlgorithm,
+    ProblemInstance,
+    SessionOption,
+)
 from .population import (
     CandidateEvaluationConfig,
     CandidateEvaluationResult,
     PopulationInitializationResult,
     PopulationInitializationStatus,
     TimetableIndividual,
+    best_individual,
     evaluate_candidate,
 )
 
@@ -286,7 +294,7 @@ def _create_convergence_point(
         best_individual: Cá thể tốt nhất từng được tìm thấy đến thời điểm này.
 
     Returns:
-        Mốc hội tụ chứa iteration, FE và ba tầng fitness Gate F.
+        Mốc hội tụ chứa iteration, FE và ba tầng mục tiêu của thời khóa biểu.
 
     Helper chỉ sao chép kết quả fitness đã có trong ``best_individual``. Nó
     không gọi lại Fitness, không làm tăng FE và không tự tìm cá thể tốt nhất.
@@ -300,6 +308,35 @@ def _create_convergence_point(
         time_stability_score=fitness.time_stability_score,
         general_quality_score=fitness.general_quality_score,
         lecturer_preference_score=fitness.lecturer_preference_score,
+    )
+
+
+def _initial_metrics(
+    initialization: PopulationInitializationResult,
+) -> OptimizationMetrics:
+    """Chuyển toàn bộ số liệu khởi tạo sang metrics dùng chung.
+
+    Quần thể đầu đã đi qua cùng pipeline Decoder → Repair → Validator →
+    Fitness nên chi phí của giai đoạn này phải được tính vào kết quả PO. Hàm
+    chỉ tạo một ảnh chụp bất biến mới; nó không sửa ``initialization`` và không
+    tự cộng thêm một lần đánh giá nào.
+    """
+
+    return OptimizationMetrics(
+        completed_iterations=0,
+        candidate_attempts=initialization.candidate_attempts,
+        fitness_evaluations=initialization.fitness_evaluations,
+        decode_failed_count=initialization.decode_failed_count,
+        validation_failed_count=initialization.validation_failed_count,
+        repaired_individual_count=(
+            initialization.repaired_individual_count
+        ),
+        failed_repair_count=initialization.failed_repair_count,
+        total_repair_attempts=initialization.total_repair_attempts,
+        discarded_offspring_count=0,
+        total_decode_nodes=initialization.total_decode_nodes,
+        total_decode_backtracks=initialization.total_decode_backtracks,
+        runtime_seconds=0.0,
     )
 
 
@@ -803,4 +840,179 @@ def _create_and_evaluate_po_offspring(
         metrics=updated_metrics,
         attempts_used=config.max_offspring_attempts,
         last_evaluation=last_evaluation,
+    )
+
+
+def run_po(
+    problem: ProblemInstance,
+    option_domains: tuple[tuple[SessionOption, ...], ...],
+    initialization: PopulationInitializationResult,
+    config: PoConfig,
+) -> OptimizationResult:
+    """Chạy PO V2 từ một quần thể thời khóa biểu đã khởi tạo hợp lệ.
+
+    Mean của quần thể cha được chụp một lần ở đầu mỗi iteration. ``alpha`` và
+    ``theta`` cũng được sinh một lần cho iteration, còn từng cá thể bốc riêng
+    một trong bốn hành vi PO. Một offspring hợp lệ luôn thay vị trí cha dù có
+    fitness xấu hơn; chỉ khi mọi lần thử đều thất bại mới giữ cha để bảo toàn
+    kích thước quần thể. Nghiệm tốt nhất toàn cục được lưu riêng và cập nhật
+    ngay để cá thể phía sau trong cùng iteration có thể sử dụng best mới.
+
+    Hàm không cài lại Decoder, Repair, Validator hoặc Fitness. Mọi vector đề
+    xuất đều được đánh giá qua ``_create_and_evaluate_po_offspring`` và hợp
+    đồng chung trong ``population.py``.
+    """
+
+    started_at = perf_counter()
+
+    max_iterations = _validate_po_run_inputs(
+        problem,
+        initialization,
+        config,
+    )
+
+    # Miền option thuộc về snapshot đầu vào của lần chạy. Cấu trúc sai hoặc
+    # miền rỗng phải bị phát hiện trước khi PO bắt đầu tiêu thụ RNG và FE.
+    if len(option_domains) != problem.dimension:
+        raise ValueError(
+            "Số miền option phải bằng số ClassSession."
+        )
+
+    for session_index, domain in enumerate(option_domains):
+        if not domain:
+            raise ValueError(
+                "PO không thể chạy khi có ClassSession "
+                "không có SessionOption."
+            )
+        if any(
+            option.session_index != session_index
+            for option in domain
+        ):
+            raise ValueError(
+                "Option phải nằm trong miền của đúng session_index."
+            )
+
+    # Tạo tuple mới để việc thay quần thể cục bộ không sửa kết quả khởi tạo.
+    population = tuple(initialization.individuals)
+    population_size = len(population)
+    best_so_far = best_individual(population)
+    metrics = _initial_metrics(initialization)
+
+    # Iteration 0 mô tả quần thể đầu. Helper chỉ sao chép fitness đã có nên
+    # việc ghi mốc này không làm tăng FE.
+    convergence_history: list[ConvergencePoint] = [
+        _create_convergence_point(
+            iteration=0,
+            fitness_evaluations=metrics.fitness_evaluations,
+            best_individual=best_so_far,
+        )
+    ]
+
+    # Một RNG duy nhất bảo đảm cùng input và seed tái lập được cả lần chạy.
+    rng = Random(config.seed)
+
+    for iteration in range(1, max_iterations + 1):
+        # X_mean phải được tính từ toàn bộ quần thể cha và giữ cố định trong
+        # iteration; không tính lại sau khi từng cá thể con xuất hiện.
+        population_mean = calculate_population_mean(
+            tuple(
+                individual.vector
+                for individual in population
+            )
+        )
+
+        # Hai tham số ngẫu nhiên này thuộc cấp iteration theo PO V2 tham chiếu.
+        # Các cá thể trong cùng iteration dùng chung alpha và theta.
+        alpha = rng.random() / 5.0
+        theta = rng.random() * math.pi
+
+        next_population: list[TimetableIndividual] = []
+
+        for current_index, current_individual in enumerate(population):
+            # Mỗi cá thể bốc riêng một trong bốn hành vi PO V2.
+            behavior = PoBehavior(
+                rng.randint(
+                    PoBehavior.FORAGING.value,
+                    PoBehavior.FEAR_OF_STRANGERS.value,
+                )
+            )
+
+            offspring_result = _create_and_evaluate_po_offspring(
+                problem=problem,
+                option_domains=option_domains,
+                current_individual=current_individual,
+                current_index=current_index,
+                behavior=behavior,
+                best_individual=best_so_far,
+                population_mean=population_mean,
+                iteration=iteration,
+                max_iterations=max_iterations,
+                alpha=alpha,
+                theta=theta,
+                rng=rng,
+                config=config,
+                metrics=metrics,
+            )
+
+            # Helper trả một ảnh chụp metrics mới sau toàn bộ lần thử của vị
+            # trí hiện tại. Không được bỏ phép gán này vì sẽ làm mất FE và các
+            # bộ đếm decode, validation, repair hoặc offspring bị loại.
+            metrics = offspring_result.metrics
+
+            if not offspring_result.is_success:
+                # Không có con hợp lệ sau toàn bộ số lần thử: giữ cha chỉ để
+                # quần thể không bị thiếu phần tử. Đây không phải chọn lọc tham
+                # lam dựa trên fitness.
+                next_population.append(current_individual)
+                continue
+
+            offspring = offspring_result.individual
+            if offspring is None:
+                raise RuntimeError(
+                    "PO báo tạo offspring thành công nhưng không trả "
+                    "TimetableIndividual."
+                )
+
+            # PO V2 nguyên bản cho con hợp lệ thay vị trí cha ngay cả khi con
+            # xấu hơn. Chỉ best toàn cục được bảo vệ riêng ở khối phía dưới.
+            next_population.append(offspring)
+
+            # Cập nhật tức thời để cá thể tiếp theo trong cùng iteration được
+            # phép sử dụng nghiệm tốt nhất mới vừa tìm thấy.
+            if offspring.fitness_key < best_so_far.fitness_key:
+                best_so_far = offspring
+
+        population = tuple(next_population)
+
+        # Mỗi vị trí phải tạo con hợp lệ hoặc giữ đúng cha tương ứng, vì vậy PO
+        # không được làm thay đổi kích thước quần thể giữa các iteration.
+        if len(population) != population_size:
+            raise RuntimeError(
+                "PO phải giữ nguyên kích thước quần thể."
+            )
+
+        metrics = replace(
+            metrics,
+            completed_iterations=iteration,
+        )
+
+        convergence_history.append(
+            _create_convergence_point(
+                iteration=iteration,
+                fitness_evaluations=metrics.fitness_evaluations,
+                best_individual=best_so_far,
+            )
+        )
+
+    final_metrics = replace(
+        metrics,
+        runtime_seconds=perf_counter() - started_at,
+    )
+
+    return OptimizationResult(
+        algorithm=OptimizationAlgorithm.PO,
+        best_individual=best_so_far,
+        final_population=population,
+        convergence_history=tuple(convergence_history),
+        metrics=final_metrics,
     )
