@@ -6,15 +6,18 @@ from dataclasses import FrozenInstanceError, replace
 from random import Random
 from unittest.mock import patch
 
+from gapo_timetabling.constraints import validate_timetable
 from gapo_timetabling.encoder import build_option_domains
 from gapo_timetabling.metrics import (
     OptimizationMetrics,
+    OptimizationResult,
     accumulate_candidate_evaluation,
 )
-from gapo_timetabling.models import SessionOption
+from gapo_timetabling.models import OptimizationAlgorithm, SessionOption
 from gapo_timetabling.po import (
     PoBehavior,
     PoConfig,
+    PoOffspringResult,
     _create_and_evaluate_po_offspring,
     _create_convergence_point,
     _validate_po_run_inputs,
@@ -22,11 +25,13 @@ from gapo_timetabling.po import (
     clip_vector_to_unit_interval,
     create_po_position,
     levy_flight,
+    run_po,
 )
 from gapo_timetabling.population import (
     CandidateEvaluationConfig,
     CandidateEvaluationStatus,
     PopulationInitializationStatus,
+    best_individual,
     evaluate_candidate,
     initialize_population,
 )
@@ -828,6 +833,377 @@ class TestPoOffspringCreation(ConstraintFixture):
                 )
 
         creator.assert_not_called()
+
+
+class TestPoRun(ConstraintFixture):
+    """Kiểm tra vòng lặp PO V2 và hợp đồng kết quả optimizer hoàn chỉnh."""
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.domains = build_option_domains(self.problem)
+        self.evaluation_config = CandidateEvaluationConfig(
+            max_decode_nodes=100,
+            enable_repair=False,
+            max_repair_attempts=0,
+        )
+
+    def make_initialization(
+        self,
+        population_size: int = 2,
+        seed: int = 42,
+    ):
+        """Tạo quần thể đầu bằng đúng pipeline production của project."""
+
+        initialization = initialize_population(
+            self.problem,
+            self.domains,
+            population_size=population_size,
+            max_initialization_attempts=30,
+            seed=seed,
+            evaluation_config=self.evaluation_config,
+        )
+        self.assertEqual(
+            initialization.status,
+            PopulationInitializationStatus.SUCCESS,
+        )
+        return initialization
+
+    def make_config(
+        self,
+        initialization,
+        *,
+        iterations: int,
+        max_offspring_attempts: int = 2,
+        seed: int = 2026,
+    ) -> PoConfig:
+        """Cấp tối đa một FE cho mỗi vị trí ở mỗi iteration đầy đủ."""
+
+        return PoConfig(
+            max_fitness_evaluations=(
+                initialization.fitness_evaluations
+                + iterations * len(initialization.individuals)
+            ),
+            max_offspring_attempts=max_offspring_attempts,
+            seed=seed,
+            evaluation_config=self.evaluation_config,
+        )
+
+    def successful_evaluation(self):
+        """Tạo evaluation SUCCESS dùng làm hợp đồng cuối của offspring giả."""
+
+        domains = tuple((option,) for option in self.valid_options)
+        evaluation = evaluate_candidate(
+            self.problem,
+            domains,
+            tuple(0.0 for _ in range(self.problem.dimension)),
+            CandidateEvaluationConfig(
+                max_decode_nodes=20,
+                enable_repair=False,
+                max_repair_attempts=0,
+            ),
+        )
+        self.assertTrue(evaluation.is_success)
+        self.assertIsNotNone(evaluation.individual)
+        return evaluation
+
+    def failed_evaluation(self):
+        """Tạo evaluation DECODE_FAILED thật, không phát sinh FE giả."""
+
+        domains = tuple((option,) for option in self.valid_options)
+        evaluation = evaluate_candidate(
+            self.problem,
+            domains,
+            tuple(0.0 for _ in range(self.problem.dimension)),
+            CandidateEvaluationConfig(
+                max_decode_nodes=1,
+                enable_repair=False,
+                max_repair_attempts=0,
+            ),
+        )
+        self.assertEqual(
+            evaluation.status,
+            CandidateEvaluationStatus.DECODE_FAILED,
+        )
+        self.assertEqual(evaluation.fitness_evaluations, 0)
+        return evaluation
+
+    @staticmethod
+    def with_fitness_score(individual, score: float):
+        """Tạo cá thể fixture có ba tầng fitness bằng cùng một giá trị."""
+
+        return replace(
+            individual,
+            fitness=replace(
+                individual.fitness,
+                time_stability_score=score,
+                general_quality_score=score,
+                lecturer_preference_score=score,
+            ),
+        )
+
+    @staticmethod
+    def successful_offspring_result(
+        incoming_metrics: OptimizationMetrics,
+        individual,
+        evaluation,
+    ) -> PoOffspringResult:
+        """Mô phỏng helper tạo đúng một offspring hợp lệ và một FE."""
+
+        updated_metrics = replace(
+            incoming_metrics,
+            candidate_attempts=incoming_metrics.candidate_attempts + 1,
+            fitness_evaluations=incoming_metrics.fitness_evaluations + 1,
+        )
+        successful_evaluation = replace(
+            evaluation,
+            individual=individual,
+        )
+        return PoOffspringResult(
+            individual=individual,
+            metrics=updated_metrics,
+            attempts_used=1,
+            last_evaluation=successful_evaluation,
+        )
+
+    def test_zero_iteration_returns_initial_population_and_common_result(self) -> None:
+        """Ngân sách chỉ đủ khởi tạo phải trả kết quả iteration 0 hợp lệ."""
+
+        initialization = self.make_initialization()
+        result = run_po(
+            self.problem,
+            self.domains,
+            initialization,
+            self.make_config(initialization, iterations=0),
+        )
+
+        self.assertIsInstance(result, OptimizationResult)
+        self.assertEqual(result.algorithm, OptimizationAlgorithm.PO)
+        self.assertEqual(result.final_population, initialization.individuals)
+        self.assertEqual(
+            result.best_individual,
+            best_individual(initialization.individuals),
+        )
+        self.assertEqual(result.metrics.completed_iterations, 0)
+        self.assertEqual(len(result.convergence_history), 1)
+        self.assertGreaterEqual(result.metrics.runtime_seconds, 0.0)
+
+    def test_valid_worse_offspring_replaces_parent_but_global_best_survives(
+        self,
+    ) -> None:
+        """PO V2 không chọn tham lam cha–con; best toàn cục được lưu riêng."""
+
+        initialization = self.make_initialization()
+        initial_best = best_individual(initialization.individuals)
+        worse_child = self.with_fitness_score(initial_best, score=10.0)
+        evaluation = self.successful_evaluation()
+
+        def create_worse_child(**kwargs):
+            return self.successful_offspring_result(
+                kwargs["metrics"],
+                worse_child,
+                evaluation,
+            )
+
+        with patch(
+            "gapo_timetabling.po._create_and_evaluate_po_offspring",
+            side_effect=create_worse_child,
+        ):
+            result = run_po(
+                self.problem,
+                self.domains,
+                initialization,
+                self.make_config(initialization, iterations=1),
+            )
+
+        self.assertEqual(
+            result.final_population,
+            tuple(worse_child for _ in initialization.individuals),
+        )
+        self.assertEqual(result.best_individual, initial_best)
+        self.assertNotIn(initial_best, result.final_population)
+
+    def test_best_is_updated_immediately_and_mean_is_fixed_per_iteration(
+        self,
+    ) -> None:
+        """Cá thể sau dùng best mới, nhưng mọi cá thể vẫn dùng cùng mean cha."""
+
+        initialization = self.make_initialization()
+        artificially_worse_population = tuple(
+            self.with_fitness_score(individual, score=10.0)
+            for individual in initialization.individuals
+        )
+        initialization = replace(
+            initialization,
+            individuals=artificially_worse_population,
+        )
+        better_child = self.with_fitness_score(
+            artificially_worse_population[0],
+            score=1.0,
+        )
+        evaluation = self.successful_evaluation()
+
+        def create_better_child(**kwargs):
+            return self.successful_offspring_result(
+                kwargs["metrics"],
+                better_child,
+                evaluation,
+            )
+
+        with patch(
+            "gapo_timetabling.po._create_and_evaluate_po_offspring",
+            side_effect=create_better_child,
+        ) as offspring_helper:
+            result = run_po(
+                self.problem,
+                self.domains,
+                initialization,
+                self.make_config(initialization, iterations=1),
+            )
+
+        calls = offspring_helper.call_args_list
+        self.assertEqual(len(calls), len(initialization.individuals))
+        self.assertEqual(calls[0].kwargs["best_individual"].fitness_key, (10.0,) * 3)
+        self.assertIs(calls[1].kwargs["best_individual"], better_child)
+        self.assertEqual(
+            calls[0].kwargs["population_mean"],
+            calls[1].kwargs["population_mean"],
+        )
+        self.assertEqual(calls[0].kwargs["alpha"], calls[1].kwargs["alpha"])
+        self.assertEqual(calls[0].kwargs["theta"], calls[1].kwargs["theta"])
+        self.assertIs(result.best_individual, better_child)
+
+    def test_exhausted_attempts_keep_each_parent_and_count_discard(self) -> None:
+        """Chỉ khi mọi lần thử thất bại, vị trí cũ mới được giữ nguyên."""
+
+        initialization = self.make_initialization()
+        evaluation = self.failed_evaluation()
+        config = self.make_config(
+            initialization,
+            iterations=1,
+            max_offspring_attempts=3,
+        )
+
+        def discard_child(**kwargs):
+            incoming_metrics = kwargs["metrics"]
+            updated_metrics = replace(
+                incoming_metrics,
+                candidate_attempts=(
+                    incoming_metrics.candidate_attempts
+                    + config.max_offspring_attempts
+                ),
+                decode_failed_count=(
+                    incoming_metrics.decode_failed_count
+                    + config.max_offspring_attempts
+                ),
+                discarded_offspring_count=(
+                    incoming_metrics.discarded_offspring_count + 1
+                ),
+            )
+            return PoOffspringResult(
+                individual=None,
+                metrics=updated_metrics,
+                attempts_used=config.max_offspring_attempts,
+                last_evaluation=evaluation,
+            )
+
+        with patch(
+            "gapo_timetabling.po._create_and_evaluate_po_offspring",
+            side_effect=discard_child,
+        ):
+            result = run_po(
+                self.problem,
+                self.domains,
+                initialization,
+                config,
+            )
+
+        self.assertEqual(result.final_population, initialization.individuals)
+        self.assertEqual(
+            result.metrics.discarded_offspring_count,
+            len(initialization.individuals),
+        )
+        self.assertEqual(
+            result.metrics.fitness_evaluations,
+            initialization.fitness_evaluations,
+        )
+
+    def test_real_run_is_reproducible_and_returns_valid_best_timetable(self) -> None:
+        """Cùng seed phải tái lập output phi thời gian và lịch tốt nhất hợp lệ."""
+
+        initialization = self.make_initialization(population_size=3)
+        config = self.make_config(
+            initialization,
+            iterations=2,
+            max_offspring_attempts=2,
+            seed=73,
+        )
+
+        first = run_po(
+            self.problem,
+            self.domains,
+            initialization,
+            config,
+        )
+        second = run_po(
+            self.problem,
+            self.domains,
+            initialization,
+            config,
+        )
+
+        self.assertEqual(first.best_individual, second.best_individual)
+        self.assertEqual(first.final_population, second.final_population)
+        self.assertEqual(first.convergence_history, second.convergence_history)
+        self.assertEqual(
+            replace(first.metrics, runtime_seconds=0.0),
+            replace(second.metrics, runtime_seconds=0.0),
+        )
+        self.assertLessEqual(
+            first.metrics.fitness_evaluations,
+            config.max_fitness_evaluations,
+        )
+
+        validation = validate_timetable(
+            self.problem,
+            first.best_individual.selected_options,
+        )
+        self.assertTrue(validation.is_valid)
+
+    def test_run_rejects_missing_or_misaligned_option_domain(self) -> None:
+        """Miền option sai snapshot phải bị từ chối trước vòng tối ưu."""
+
+        initialization = self.make_initialization()
+        config = self.make_config(initialization, iterations=0)
+
+        with self.assertRaisesRegex(ValueError, "Số miền option"):
+            run_po(
+                self.problem,
+                self.domains[:-1],
+                initialization,
+                config,
+            )
+
+        domains_with_empty_item = list(self.domains)
+        domains_with_empty_item[0] = ()
+        with self.assertRaisesRegex(ValueError, "không có SessionOption"):
+            run_po(
+                self.problem,
+                tuple(domains_with_empty_item),
+                initialization,
+                config,
+            )
+
+        domains_with_wrong_index = list(self.domains)
+        domains_with_wrong_index[0] = (
+            replace(domains_with_wrong_index[0][0], session_index=1),
+        )
+        with self.assertRaisesRegex(ValueError, "đúng session_index"):
+            run_po(
+                self.problem,
+                tuple(domains_with_wrong_index),
+                initialization,
+                config,
+            )
 
 
 class TestPoMath(unittest.TestCase):

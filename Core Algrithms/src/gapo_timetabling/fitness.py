@@ -1,6 +1,6 @@
 """Tính fitness mềm cho một thời khóa biểu đã vượt qua Validator.
 
-Module này triển khai Gate F theo ba tầng ưu tiên độc lập:
+Module này triển khai ba tầng mục tiêu có thứ tự ưu tiên độc lập:
 
 1. ``Q_time``: giữ ổn định thứ và tiết bắt đầu giữa các tuần.
 2. ``Q_general``: sức chứa, khoảng trống giảng viên, số tiết dạy liên tục,
@@ -34,9 +34,9 @@ from .models import (
 )
 
 
-# Các trọng số mặc định đã được chuẩn hóa trong D092 để tổng đúng bằng 1.0000.
-# Tỷ lệ này là cấu hình kỹ thuật ban đầu; ConstraintSetting của snapshot có thể
-# ghi đè từng trọng số để phục vụ sensitivity test có kiểm soát.
+# Các trọng số mặc định được chuẩn hóa để tổng đúng bằng 1.0000. Đây là cấu
+# hình kỹ thuật ban đầu; ConstraintSetting của snapshot có thể ghi đè từng
+# trọng số để phục vụ sensitivity test có kiểm soát.
 DEFAULT_GENERAL_WEIGHTS = {
     "SOFT_CAPACITY": 0.4091,
     "SOFT_LECTURER_GAP": 0.2273,
@@ -45,8 +45,8 @@ DEFAULT_GENERAL_WEIGHTS = {
     "SOFT_ROOM_STABILITY": 0.0909,
 }
 
-# Nếu snapshot cũ chưa chứa tham số mới, fitness vẫn đọc được và dùng ngưỡng
-# nghiệp vụ ban đầu đã chốt. Snapshot mới ghi rõ ngưỡng để kết quả tái lập được.
+# Nếu snapshot cũ chưa chứa tham số, fitness dùng ngưỡng mặc định tương thích.
+# Snapshot mới ghi rõ ngưỡng để kết quả có thể được tái lập.
 DEFAULT_MAX_CONSECUTIVE_PERIODS = 6
 
 
@@ -656,7 +656,7 @@ def _get_soft_weight(
     problem: ProblemInstance,
     constraint_code: str,
 ) -> float:
-    """Lấy trọng số cấu hình hoặc dùng giá trị chính thức mặc định D073."""
+    """Lấy trọng số từ cấu hình hoặc dùng giá trị mặc định chuẩn hóa."""
 
     default_weight = DEFAULT_GENERAL_WEIGHTS[constraint_code]
 
@@ -702,7 +702,7 @@ def _calculate_general_quality_from_validated_input(
     problem: ProblemInstance,
     selected_by_session: dict[int, SessionOption],
 ) -> GeneralQualityResult:
-    """Tính các thành phần và ghép thành ``Q_general`` theo D073, D089."""
+    """Tính và tổng hợp các thành phần của ``Q_general``."""
 
     session_context = _build_session_context(problem)
     room_stability = _calculate_room_stability_from_validated_input(
@@ -895,7 +895,7 @@ def calculate_fitness(
 
     Đây là hàm công khai mà GA, PO và pipeline lai sẽ gọi sau khi decoder và
     validator tạo được một lịch hoàn chỉnh. Thuộc tính ``fitness_key`` của kết
-    quả phải được dùng để so sánh hai lịch theo thứ tự nghiêm ngặt Gate F.
+    quả phải được dùng để so sánh hai lịch theo thứ tự mục tiêu nghiêm ngặt.
     """
 
     selected_by_session = _validate_fitness_inputs(

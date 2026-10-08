@@ -1,0 +1,109 @@
+﻿tuan,ngay,thu,tiet_bat_dau,tiet_ket_thuc,ma_lop_hoc_phan,ma_hoc_phan,ten_hoc_phan,hinh_thuc,ma_giang_vien,ten_giang_vien,phong,session_index
+1,2026-09-07,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,54
+1,2026-09-07,Thứ Hai,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,6
+1,2026-09-07,Thứ Hai,7,11,WEB01,WEB,Phát triển Web,Thực hành,GV002,Trần Minh Anh,LAB-A,66
+1,2026-09-08,Thứ Ba,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV003,Lê Hoàng Nam,LAB-A,78
+1,2026-09-08,Thứ Ba,1,3,WEB01,WEB,Phát triển Web,Lý thuyết,GV002,Trần Minh Anh,A201,60
+1,2026-09-08,Thứ Ba,4,6,OOP01,OOP,Lập trình hướng đối tượng,Lý thuyết,GV002,Trần Minh Anh,A201,12
+1,2026-09-08,Thứ Ba,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV003,Lê Hoàng Nam,A201,24
+1,2026-09-08,Thứ Ba,7,11,CTDL01,CTDL,Cấu trúc dữ liệu,Thực hành,GV004,Phạm Thu Hà,LAB-A,42
+1,2026-09-09,Thứ Tư,1,5,ATTT01,ATTT,An toàn thông tin,Thực hành,GV004,Phạm Thu Hà,LAB-A,90
+1,2026-09-09,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,0
+1,2026-09-09,Thứ Tư,4,6,MMT01,MMT,Mạng máy tính,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,48
+1,2026-09-09,Thứ Tư,7,11,OOP01,OOP,Lập trình hướng đối tượng,Thực hành,GV002,Trần Minh Anh,LAB-A,18
+1,2026-09-10,Thứ Năm,1,5,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV003,Lê Hoàng Nam,LAB-A,30
+1,2026-09-10,Thứ Năm,10,12,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV003,Lê Hoàng Nam,A201,72
+1,2026-09-11,Thứ Sáu,1,5,CLOUD01,CLOUD,Điện toán đám mây,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,102
+1,2026-09-11,Thứ Sáu,1,3,CTDL01,CTDL,Cấu trúc dữ liệu,Lý thuyết,GV004,Phạm Thu Hà,A201,36
+1,2026-09-11,Thứ Sáu,4,6,ATTT01,ATTT,An toàn thông tin,Lý thuyết,GV004,Phạm Thu Hà,A201,84
+1,2026-09-11,Thứ Sáu,7,9,CLOUD01,CLOUD,Điện toán đám mây,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,96
+2,2026-09-14,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,55
+2,2026-09-14,Thứ Hai,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,7
+2,2026-09-15,Thứ Ba,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV003,Lê Hoàng Nam,LAB-A,79
+2,2026-09-15,Thứ Ba,1,3,OOP01,OOP,Lập trình hướng đối tượng,Lý thuyết,GV002,Trần Minh Anh,A201,13
+2,2026-09-15,Thứ Ba,4,6,WEB01,WEB,Phát triển Web,Lý thuyết,GV002,Trần Minh Anh,A201,61
+2,2026-09-15,Thứ Ba,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV003,Lê Hoàng Nam,A201,25
+2,2026-09-15,Thứ Ba,7,11,CTDL01,CTDL,Cấu trúc dữ liệu,Thực hành,GV004,Phạm Thu Hà,LAB-A,43
+2,2026-09-17,Thứ Năm,1,5,WEB01,WEB,Phát triển Web,Thực hành,GV002,Trần Minh Anh,LAB-A,67
+2,2026-09-17,Thứ Năm,7,9,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV003,Lê Hoàng Nam,A201,73
+2,2026-09-17,Thứ Năm,7,11,ATTT01,ATTT,An toàn thông tin,Thực hành,GV004,Phạm Thu Hà,LAB-A,91
+2,2026-09-18,Thứ Sáu,1,5,CLOUD01,CLOUD,Điện toán đám mây,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,103
+2,2026-09-18,Thứ Sáu,1,3,CTDL01,CTDL,Cấu trúc dữ liệu,Lý thuyết,GV004,Phạm Thu Hà,A201,37
+2,2026-09-18,Thứ Sáu,4,6,ATTT01,ATTT,An toàn thông tin,Lý thuyết,GV004,Phạm Thu Hà,A201,85
+2,2026-09-18,Thứ Sáu,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV003,Lê Hoàng Nam,LAB-B,31
+2,2026-09-18,Thứ Sáu,7,9,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,1
+2,2026-09-19,Thứ Bảy,4,6,MMT01,MMT,Mạng máy tính,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,49
+2,2026-09-19,Thứ Bảy,7,11,OOP01,OOP,Lập trình hướng đối tượng,Thực hành,GV002,Trần Minh Anh,LAB-A,19
+2,2026-09-19,Thứ Bảy,10,12,CLOUD01,CLOUD,Điện toán đám mây,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,97
+3,2026-09-21,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,56
+3,2026-09-21,Thứ Hai,7,9,MMT01,MMT,Mạng máy tính,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,50
+3,2026-09-21,Thứ Hai,7,11,WEB01,WEB,Phát triển Web,Thực hành,GV002,Trần Minh Anh,LAB-A,68
+3,2026-09-21,Thứ Hai,10,12,CLOUD01,CLOUD,Điện toán đám mây,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,98
+3,2026-09-22,Thứ Ba,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV003,Lê Hoàng Nam,LAB-A,80
+3,2026-09-22,Thứ Ba,1,3,OOP01,OOP,Lập trình hướng đối tượng,Lý thuyết,GV002,Trần Minh Anh,A201,14
+3,2026-09-22,Thứ Ba,4,6,WEB01,WEB,Phát triển Web,Lý thuyết,GV002,Trần Minh Anh,A201,62
+3,2026-09-22,Thứ Ba,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV003,Lê Hoàng Nam,A201,26
+3,2026-09-22,Thứ Ba,7,11,CTDL01,CTDL,Cấu trúc dữ liệu,Thực hành,GV004,Phạm Thu Hà,LAB-A,44
+3,2026-09-23,Thứ Tư,1,3,CTDL01,CTDL,Cấu trúc dữ liệu,Lý thuyết,GV004,Phạm Thu Hà,A201,38
+3,2026-09-23,Thứ Tư,1,5,JAVA01,JAVA,Lập trình Java,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,8
+3,2026-09-23,Thứ Tư,4,6,ATTT01,ATTT,An toàn thông tin,Lý thuyết,GV004,Phạm Thu Hà,A201,86
+3,2026-09-23,Thứ Tư,7,9,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,2
+3,2026-09-24,Thứ Năm,1,5,OOP01,OOP,Lập trình hướng đối tượng,Thực hành,GV002,Trần Minh Anh,LAB-A,20
+3,2026-09-24,Thứ Năm,4,6,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV003,Lê Hoàng Nam,A201,74
+3,2026-09-24,Thứ Năm,7,11,ATTT01,ATTT,An toàn thông tin,Thực hành,GV004,Phạm Thu Hà,LAB-A,92
+3,2026-09-25,Thứ Sáu,1,5,CLOUD01,CLOUD,Điện toán đám mây,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,104
+3,2026-09-25,Thứ Sáu,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV003,Lê Hoàng Nam,LAB-B,32
+4,2026-09-28,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,57
+4,2026-09-28,Thứ Hai,7,11,CLOUD01,CLOUD,Điện toán đám mây,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,105
+4,2026-09-28,Thứ Hai,7,11,OOP01,OOP,Lập trình hướng đối tượng,Thực hành,GV002,Trần Minh Anh,LAB-B,21
+4,2026-09-29,Thứ Ba,1,3,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV003,Lê Hoàng Nam,A201,27
+4,2026-09-29,Thứ Ba,1,5,WEB01,WEB,Phát triển Web,Thực hành,GV002,Trần Minh Anh,LAB-A,69
+4,2026-09-29,Thứ Ba,4,6,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV003,Lê Hoàng Nam,A201,75
+4,2026-09-29,Thứ Ba,7,11,CTDL01,CTDL,Cấu trúc dữ liệu,Thực hành,GV004,Phạm Thu Hà,LAB-A,45
+4,2026-09-30,Thứ Tư,1,5,ATTT01,ATTT,An toàn thông tin,Thực hành,GV004,Phạm Thu Hà,LAB-A,93
+4,2026-09-30,Thứ Tư,1,5,JAVA01,JAVA,Lập trình Java,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,9
+4,2026-09-30,Thứ Tư,7,9,MMT01,MMT,Mạng máy tính,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,51
+4,2026-09-30,Thứ Tư,10,12,OOP01,OOP,Lập trình hướng đối tượng,Lý thuyết,GV002,Trần Minh Anh,A201,15
+4,2026-10-01,Thứ Năm,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV003,Lê Hoàng Nam,LAB-A,81
+4,2026-10-01,Thứ Năm,4,6,WEB01,WEB,Phát triển Web,Lý thuyết,GV002,Trần Minh Anh,A201,63
+4,2026-10-01,Thứ Năm,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV003,Lê Hoàng Nam,LAB-A,33
+4,2026-10-01,Thứ Năm,7,9,CTDL01,CTDL,Cấu trúc dữ liệu,Lý thuyết,GV004,Phạm Thu Hà,A201,39
+4,2026-10-01,Thứ Năm,10,12,ATTT01,ATTT,An toàn thông tin,Lý thuyết,GV004,Phạm Thu Hà,A201,87
+4,2026-10-02,Thứ Sáu,1,3,CLOUD01,CLOUD,Điện toán đám mây,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,99
+4,2026-10-02,Thứ Sáu,4,6,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,3
+5,2026-10-06,Thứ Ba,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV003,Lê Hoàng Nam,LAB-A,82
+5,2026-10-06,Thứ Ba,1,3,OOP01,OOP,Lập trình hướng đối tượng,Lý thuyết,GV002,Trần Minh Anh,A201,16
+5,2026-10-06,Thứ Ba,4,6,WEB01,WEB,Phát triển Web,Lý thuyết,GV002,Trần Minh Anh,A201,64
+5,2026-10-06,Thứ Ba,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV003,Lê Hoàng Nam,A201,28
+5,2026-10-06,Thứ Ba,7,11,CTDL01,CTDL,Cấu trúc dữ liệu,Thực hành,GV004,Phạm Thu Hà,LAB-A,46
+5,2026-10-07,Thứ Tư,1,3,CTDL01,CTDL,Cấu trúc dữ liệu,Lý thuyết,GV004,Phạm Thu Hà,A201,40
+5,2026-10-07,Thứ Tư,1,5,JAVA01,JAVA,Lập trình Java,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,10
+5,2026-10-07,Thứ Tư,4,6,ATTT01,ATTT,An toàn thông tin,Lý thuyết,GV004,Phạm Thu Hà,A201,88
+5,2026-10-07,Thứ Tư,7,9,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,4
+5,2026-10-07,Thứ Tư,7,11,OOP01,OOP,Lập trình hướng đối tượng,Thực hành,GV002,Trần Minh Anh,LAB-A,22
+5,2026-10-08,Thứ Năm,4,6,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV003,Lê Hoàng Nam,A201,76
+5,2026-10-08,Thứ Năm,7,11,ATTT01,ATTT,An toàn thông tin,Thực hành,GV004,Phạm Thu Hà,LAB-A,94
+5,2026-10-09,Thứ Sáu,1,5,CLOUD01,CLOUD,Điện toán đám mây,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,106
+5,2026-10-09,Thứ Sáu,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV003,Lê Hoàng Nam,LAB-B,34
+5,2026-10-09,Thứ Sáu,7,9,MMT01,MMT,Mạng máy tính,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,52
+5,2026-10-10,Thứ Bảy,1,5,WEB01,WEB,Phát triển Web,Thực hành,GV002,Trần Minh Anh,LAB-A,70
+5,2026-10-10,Thứ Bảy,4,6,CLOUD01,CLOUD,Điện toán đám mây,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,100
+5,2026-10-10,Thứ Bảy,7,11,MMT01,MMT,Mạng máy tính,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,58
+6,2026-10-12,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,59
+6,2026-10-12,Thứ Hai,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,11
+6,2026-10-12,Thứ Hai,7,11,WEB01,WEB,Phát triển Web,Thực hành,GV002,Trần Minh Anh,LAB-A,71
+6,2026-10-13,Thứ Ba,1,3,OOP01,OOP,Lập trình hướng đối tượng,Lý thuyết,GV002,Trần Minh Anh,A201,17
+6,2026-10-13,Thứ Ba,4,6,WEB01,WEB,Phát triển Web,Lý thuyết,GV002,Trần Minh Anh,A201,65
+6,2026-10-13,Thứ Ba,7,11,CTDL01,CTDL,Cấu trúc dữ liệu,Thực hành,GV004,Phạm Thu Hà,LAB-A,47
+6,2026-10-14,Thứ Tư,1,5,ATTT01,ATTT,An toàn thông tin,Thực hành,GV004,Phạm Thu Hà,LAB-A,95
+6,2026-10-14,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,5
+6,2026-10-14,Thứ Tư,4,6,CLOUD01,CLOUD,Điện toán đám mây,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,101
+6,2026-10-14,Thứ Tư,7,9,MMT01,MMT,Mạng máy tính,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,53
+6,2026-10-14,Thứ Tư,7,11,OOP01,OOP,Lập trình hướng đối tượng,Thực hành,GV002,Trần Minh Anh,LAB-B,23
+6,2026-10-15,Thứ Năm,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV003,Lê Hoàng Nam,LAB-A,83
+6,2026-10-15,Thứ Năm,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV003,Lê Hoàng Nam,A201,29
+6,2026-10-15,Thứ Năm,10,12,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV003,Lê Hoàng Nam,A201,77
+6,2026-10-16,Thứ Sáu,1,5,CLOUD01,CLOUD,Điện toán đám mây,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,107
+6,2026-10-16,Thứ Sáu,1,3,CTDL01,CTDL,Cấu trúc dữ liệu,Lý thuyết,GV004,Phạm Thu Hà,A201,41
+6,2026-10-16,Thứ Sáu,4,6,ATTT01,ATTT,An toàn thông tin,Lý thuyết,GV004,Phạm Thu Hà,A201,89
+6,2026-10-16,Thứ Sáu,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV003,Lê Hoàng Nam,LAB-B,35

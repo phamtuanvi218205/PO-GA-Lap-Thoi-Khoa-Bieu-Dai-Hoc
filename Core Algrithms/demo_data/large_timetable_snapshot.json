@@ -1,0 +1,2720 @@
+{
+  "schema_version": "problem-instance.v1",
+  "term": {
+    "term_code": "2026_HK1_DEMO_HARD",
+    "term_name": "Học kỳ 1 2026-2027 - demo khan hiếm tài nguyên",
+    "start_date": "2026-09-07",
+    "end_date": "2026-10-18",
+    "status": "PLANNING"
+  },
+  "scenario": {
+    "scenario_id": 9002,
+    "scenario_code": "SCN-DEMO-RESOURCE-CONSTRAINED-2026-HK1",
+    "term_code": "2026_HK1_DEMO_HARD",
+    "scope_type": "FULL_TERM",
+    "status": "LOCKED",
+    "items": [
+      {
+        "teaching_part_index": 0,
+        "teaching_plan_id": 1001
+      },
+      {
+        "teaching_part_index": 1,
+        "teaching_plan_id": 1002
+      },
+      {
+        "teaching_part_index": 2,
+        "teaching_plan_id": 1003
+      },
+      {
+        "teaching_part_index": 3,
+        "teaching_plan_id": 1004
+      },
+      {
+        "teaching_part_index": 4,
+        "teaching_plan_id": 1005
+      },
+      {
+        "teaching_part_index": 5,
+        "teaching_plan_id": 1006
+      },
+      {
+        "teaching_part_index": 6,
+        "teaching_plan_id": 1007
+      },
+      {
+        "teaching_part_index": 7,
+        "teaching_plan_id": 1008
+      },
+      {
+        "teaching_part_index": 8,
+        "teaching_plan_id": 1009
+      },
+      {
+        "teaching_part_index": 9,
+        "teaching_plan_id": 1010
+      },
+      {
+        "teaching_part_index": 10,
+        "teaching_plan_id": 1011
+      },
+      {
+        "teaching_part_index": 11,
+        "teaching_plan_id": 1012
+      },
+      {
+        "teaching_part_index": 12,
+        "teaching_plan_id": 1013
+      },
+      {
+        "teaching_part_index": 13,
+        "teaching_plan_id": 1014
+      },
+      {
+        "teaching_part_index": 14,
+        "teaching_plan_id": 1015
+      },
+      {
+        "teaching_part_index": 15,
+        "teaching_plan_id": 1016
+      },
+      {
+        "teaching_part_index": 16,
+        "teaching_plan_id": 1017
+      },
+      {
+        "teaching_part_index": 17,
+        "teaching_plan_id": 1018
+      }
+    ]
+  },
+  "weeks": [
+    {
+      "week_number": 1,
+      "start_date": "2026-09-07",
+      "end_date": "2026-09-13"
+    },
+    {
+      "week_number": 2,
+      "start_date": "2026-09-14",
+      "end_date": "2026-09-20"
+    },
+    {
+      "week_number": 3,
+      "start_date": "2026-09-21",
+      "end_date": "2026-09-27"
+    },
+    {
+      "week_number": 4,
+      "start_date": "2026-09-28",
+      "end_date": "2026-10-04"
+    },
+    {
+      "week_number": 5,
+      "start_date": "2026-10-05",
+      "end_date": "2026-10-11"
+    },
+    {
+      "week_number": 6,
+      "start_date": "2026-10-12",
+      "end_date": "2026-10-18"
+    }
+  ],
+  "teaching_dates": [
+    {
+      "calendar_date": "2026-09-07",
+      "week_number": 1,
+      "iso_weekday": 1,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-08",
+      "week_number": 1,
+      "iso_weekday": 2,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-09",
+      "week_number": 1,
+      "iso_weekday": 3,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-10",
+      "week_number": 1,
+      "iso_weekday": 4,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-11",
+      "week_number": 1,
+      "iso_weekday": 5,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-14",
+      "week_number": 2,
+      "iso_weekday": 1,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-15",
+      "week_number": 2,
+      "iso_weekday": 2,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-16",
+      "week_number": 2,
+      "iso_weekday": 3,
+      "status": "HOLIDAY"
+    },
+    {
+      "calendar_date": "2026-09-17",
+      "week_number": 2,
+      "iso_weekday": 4,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-18",
+      "week_number": 2,
+      "iso_weekday": 5,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-19",
+      "week_number": 2,
+      "iso_weekday": 6,
+      "status": "MAKEUP_ALLOWED"
+    },
+    {
+      "calendar_date": "2026-09-21",
+      "week_number": 3,
+      "iso_weekday": 1,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-22",
+      "week_number": 3,
+      "iso_weekday": 2,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-23",
+      "week_number": 3,
+      "iso_weekday": 3,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-24",
+      "week_number": 3,
+      "iso_weekday": 4,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-25",
+      "week_number": 3,
+      "iso_weekday": 5,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-28",
+      "week_number": 4,
+      "iso_weekday": 1,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-29",
+      "week_number": 4,
+      "iso_weekday": 2,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-09-30",
+      "week_number": 4,
+      "iso_weekday": 3,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-01",
+      "week_number": 4,
+      "iso_weekday": 4,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-02",
+      "week_number": 4,
+      "iso_weekday": 5,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-05",
+      "week_number": 5,
+      "iso_weekday": 1,
+      "status": "HOLIDAY"
+    },
+    {
+      "calendar_date": "2026-10-06",
+      "week_number": 5,
+      "iso_weekday": 2,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-07",
+      "week_number": 5,
+      "iso_weekday": 3,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-08",
+      "week_number": 5,
+      "iso_weekday": 4,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-09",
+      "week_number": 5,
+      "iso_weekday": 5,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-10",
+      "week_number": 5,
+      "iso_weekday": 6,
+      "status": "MAKEUP_ALLOWED"
+    },
+    {
+      "calendar_date": "2026-10-12",
+      "week_number": 6,
+      "iso_weekday": 1,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-13",
+      "week_number": 6,
+      "iso_weekday": 2,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-14",
+      "week_number": 6,
+      "iso_weekday": 3,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-15",
+      "week_number": 6,
+      "iso_weekday": 4,
+      "status": "NORMAL"
+    },
+    {
+      "calendar_date": "2026-10-16",
+      "week_number": 6,
+      "iso_weekday": 5,
+      "status": "NORMAL"
+    }
+  ],
+  "time_periods": [
+    {
+      "period_number": 1,
+      "start_time": "07:00:00",
+      "end_time": "07:45:00",
+      "session_type": "MORNING"
+    },
+    {
+      "period_number": 2,
+      "start_time": "07:50:00",
+      "end_time": "08:35:00",
+      "session_type": "MORNING"
+    },
+    {
+      "period_number": 3,
+      "start_time": "08:40:00",
+      "end_time": "09:25:00",
+      "session_type": "MORNING"
+    },
+    {
+      "period_number": 4,
+      "start_time": "09:35:00",
+      "end_time": "10:20:00",
+      "session_type": "MORNING"
+    },
+    {
+      "period_number": 5,
+      "start_time": "10:25:00",
+      "end_time": "11:10:00",
+      "session_type": "MORNING"
+    },
+    {
+      "period_number": 6,
+      "start_time": "11:15:00",
+      "end_time": "12:00:00",
+      "session_type": "MORNING"
+    },
+    {
+      "period_number": 7,
+      "start_time": "13:00:00",
+      "end_time": "13:45:00",
+      "session_type": "AFTERNOON"
+    },
+    {
+      "period_number": 8,
+      "start_time": "13:50:00",
+      "end_time": "14:35:00",
+      "session_type": "AFTERNOON"
+    },
+    {
+      "period_number": 9,
+      "start_time": "14:40:00",
+      "end_time": "15:25:00",
+      "session_type": "AFTERNOON"
+    },
+    {
+      "period_number": 10,
+      "start_time": "15:35:00",
+      "end_time": "16:20:00",
+      "session_type": "AFTERNOON"
+    },
+    {
+      "period_number": 11,
+      "start_time": "16:25:00",
+      "end_time": "17:10:00",
+      "session_type": "AFTERNOON"
+    },
+    {
+      "period_number": 12,
+      "start_time": "17:15:00",
+      "end_time": "18:00:00",
+      "session_type": "AFTERNOON"
+    }
+  ],
+  "allowed_period_blocks": [
+    {
+      "start_period": 1,
+      "duration_periods": 3
+    },
+    {
+      "start_period": 4,
+      "duration_periods": 3
+    },
+    {
+      "start_period": 7,
+      "duration_periods": 3
+    },
+    {
+      "start_period": 10,
+      "duration_periods": 3
+    },
+    {
+      "start_period": 1,
+      "duration_periods": 5
+    },
+    {
+      "start_period": 7,
+      "duration_periods": 5
+    }
+  ],
+  "teaching_duration_rules": [
+    {
+      "part_type": "LECTURE",
+      "duration_periods": 3,
+      "standard": true
+    },
+    {
+      "part_type": "PRACTICE",
+      "duration_periods": 5,
+      "standard": true
+    }
+  ],
+  "locations": [
+    {
+      "location_index": 0,
+      "location_id": 501,
+      "location_code": "A201",
+      "location_name": "Phòng lý thuyết A201",
+      "location_type": "PHYSICAL_ROOM",
+      "active": true,
+      "campus_code": "CS1",
+      "room_type": "LECTURE_ROOM",
+      "capacity": 45,
+      "equipment_quantities": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "location_index": 1,
+      "location_id": 502,
+      "location_code": "A202",
+      "location_name": "Phòng lý thuyết A202 chưa có máy chiếu",
+      "location_type": "PHYSICAL_ROOM",
+      "active": true,
+      "campus_code": "CS1",
+      "room_type": "LECTURE_ROOM",
+      "capacity": 35,
+      "equipment_quantities": []
+    },
+    {
+      "location_index": 2,
+      "location_id": 503,
+      "location_code": "LAB-A",
+      "location_name": "Phòng máy LAB-A",
+      "location_type": "PHYSICAL_ROOM",
+      "active": true,
+      "campus_code": "CS1",
+      "room_type": "COMPUTER_LAB",
+      "capacity": 40,
+      "equipment_quantities": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 40
+        }
+      ]
+    },
+    {
+      "location_index": 3,
+      "location_id": 504,
+      "location_code": "LAB-B",
+      "location_name": "Phòng máy LAB-B quy mô nhỏ",
+      "location_type": "PHYSICAL_ROOM",
+      "active": true,
+      "campus_code": "CS1",
+      "room_type": "COMPUTER_LAB",
+      "capacity": 30,
+      "equipment_quantities": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 25
+        }
+      ]
+    }
+  ],
+  "lecturers": [
+    {
+      "lecturer_index": 0,
+      "lecturer_code": "GV001",
+      "full_name": "Nguyễn Trọng Nghĩa",
+      "home_campus_code": "CS1"
+    },
+    {
+      "lecturer_index": 1,
+      "lecturer_code": "GV002",
+      "full_name": "Trần Minh Anh",
+      "home_campus_code": "CS1"
+    },
+    {
+      "lecturer_index": 2,
+      "lecturer_code": "GV003",
+      "full_name": "Lê Hoàng Nam",
+      "home_campus_code": "CS1"
+    },
+    {
+      "lecturer_index": 3,
+      "lecturer_code": "GV004",
+      "full_name": "Phạm Thu Hà",
+      "home_campus_code": "CS1"
+    }
+  ],
+  "courses": [
+    {
+      "course_code": "JAVA",
+      "course_name": "Lập trình Java"
+    },
+    {
+      "course_code": "OOP",
+      "course_name": "Lập trình hướng đối tượng"
+    },
+    {
+      "course_code": "CSDL",
+      "course_name": "Cơ sở dữ liệu"
+    },
+    {
+      "course_code": "CTDL",
+      "course_name": "Cấu trúc dữ liệu"
+    },
+    {
+      "course_code": "MMT",
+      "course_name": "Mạng máy tính"
+    },
+    {
+      "course_code": "WEB",
+      "course_name": "Phát triển Web"
+    },
+    {
+      "course_code": "AI",
+      "course_name": "Trí tuệ nhân tạo"
+    },
+    {
+      "course_code": "ATTT",
+      "course_name": "An toàn thông tin"
+    },
+    {
+      "course_code": "CLOUD",
+      "course_name": "Điện toán đám mây"
+    }
+  ],
+  "course_sections": [
+    {
+      "section_code": "JAVA01",
+      "course_code": "JAVA",
+      "section_name": "Lập trình Java 01",
+      "expected_enrollment": 58
+    },
+    {
+      "section_code": "OOP01",
+      "course_code": "OOP",
+      "section_name": "Lập trình hướng đối tượng 01",
+      "expected_enrollment": 64
+    },
+    {
+      "section_code": "CSDL01",
+      "course_code": "CSDL",
+      "section_name": "Cơ sở dữ liệu 01",
+      "expected_enrollment": 72
+    },
+    {
+      "section_code": "CTDL01",
+      "course_code": "CTDL",
+      "section_name": "Cấu trúc dữ liệu 01",
+      "expected_enrollment": 60
+    },
+    {
+      "section_code": "MMT01",
+      "course_code": "MMT",
+      "section_name": "Mạng máy tính 01",
+      "expected_enrollment": 80
+    },
+    {
+      "section_code": "WEB01",
+      "course_code": "WEB",
+      "section_name": "Phát triển Web 01",
+      "expected_enrollment": 56
+    },
+    {
+      "section_code": "AI01",
+      "course_code": "AI",
+      "section_name": "Trí tuệ nhân tạo 01",
+      "expected_enrollment": 75
+    },
+    {
+      "section_code": "ATTT01",
+      "course_code": "ATTT",
+      "section_name": "An toàn thông tin 01",
+      "expected_enrollment": 68
+    },
+    {
+      "section_code": "CLOUD01",
+      "course_code": "CLOUD",
+      "section_name": "Điện toán đám mây 01",
+      "expected_enrollment": 62
+    }
+  ],
+  "teaching_parts": [
+    {
+      "teaching_part_index": 0,
+      "teaching_part_id": 101,
+      "part_code": "JAVA01-LT",
+      "section_code": "JAVA01",
+      "part_type": "LECTURE",
+      "lecturer_index": 0,
+      "total_periods": 18,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "LECTURE_ROOM",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 1,
+      "teaching_part_id": 102,
+      "part_code": "JAVA01-TH",
+      "section_code": "JAVA01",
+      "part_type": "PRACTICE",
+      "lecturer_index": 0,
+      "total_periods": 30,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "COMPUTER_LAB",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 25
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 2,
+      "teaching_part_id": 103,
+      "part_code": "OOP01-LT",
+      "section_code": "OOP01",
+      "part_type": "LECTURE",
+      "lecturer_index": 1,
+      "total_periods": 18,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "LECTURE_ROOM",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 3,
+      "teaching_part_id": 104,
+      "part_code": "OOP01-TH",
+      "section_code": "OOP01",
+      "part_type": "PRACTICE",
+      "lecturer_index": 1,
+      "total_periods": 30,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "COMPUTER_LAB",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 25
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 4,
+      "teaching_part_id": 105,
+      "part_code": "CSDL01-LT",
+      "section_code": "CSDL01",
+      "part_type": "LECTURE",
+      "lecturer_index": 2,
+      "total_periods": 18,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "LECTURE_ROOM",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 5,
+      "teaching_part_id": 106,
+      "part_code": "CSDL01-TH",
+      "section_code": "CSDL01",
+      "part_type": "PRACTICE",
+      "lecturer_index": 2,
+      "total_periods": 30,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "COMPUTER_LAB",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 25
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 6,
+      "teaching_part_id": 107,
+      "part_code": "CTDL01-LT",
+      "section_code": "CTDL01",
+      "part_type": "LECTURE",
+      "lecturer_index": 3,
+      "total_periods": 18,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "LECTURE_ROOM",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 7,
+      "teaching_part_id": 108,
+      "part_code": "CTDL01-TH",
+      "section_code": "CTDL01",
+      "part_type": "PRACTICE",
+      "lecturer_index": 3,
+      "total_periods": 30,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "COMPUTER_LAB",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 35
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 8,
+      "teaching_part_id": 109,
+      "part_code": "MMT01-LT",
+      "section_code": "MMT01",
+      "part_type": "LECTURE",
+      "lecturer_index": 0,
+      "total_periods": 18,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "LECTURE_ROOM",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 9,
+      "teaching_part_id": 110,
+      "part_code": "MMT01-TH",
+      "section_code": "MMT01",
+      "part_type": "PRACTICE",
+      "lecturer_index": 0,
+      "total_periods": 30,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "COMPUTER_LAB",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 35
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 10,
+      "teaching_part_id": 111,
+      "part_code": "WEB01-LT",
+      "section_code": "WEB01",
+      "part_type": "LECTURE",
+      "lecturer_index": 1,
+      "total_periods": 18,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "LECTURE_ROOM",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 11,
+      "teaching_part_id": 112,
+      "part_code": "WEB01-TH",
+      "section_code": "WEB01",
+      "part_type": "PRACTICE",
+      "lecturer_index": 1,
+      "total_periods": 30,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "COMPUTER_LAB",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 35
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 12,
+      "teaching_part_id": 113,
+      "part_code": "AI01-LT",
+      "section_code": "AI01",
+      "part_type": "LECTURE",
+      "lecturer_index": 2,
+      "total_periods": 18,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "LECTURE_ROOM",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 13,
+      "teaching_part_id": 114,
+      "part_code": "AI01-TH",
+      "section_code": "AI01",
+      "part_type": "PRACTICE",
+      "lecturer_index": 2,
+      "total_periods": 30,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "COMPUTER_LAB",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 35
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 14,
+      "teaching_part_id": 115,
+      "part_code": "ATTT01-LT",
+      "section_code": "ATTT01",
+      "part_type": "LECTURE",
+      "lecturer_index": 3,
+      "total_periods": 18,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "LECTURE_ROOM",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 15,
+      "teaching_part_id": 116,
+      "part_code": "ATTT01-TH",
+      "section_code": "ATTT01",
+      "part_type": "PRACTICE",
+      "lecturer_index": 3,
+      "total_periods": 30,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "COMPUTER_LAB",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 35
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 16,
+      "teaching_part_id": 117,
+      "part_code": "CLOUD01-LT",
+      "section_code": "CLOUD01",
+      "part_type": "LECTURE",
+      "lecturer_index": 0,
+      "total_periods": 18,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "LECTURE_ROOM",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "teaching_part_index": 17,
+      "teaching_part_id": 118,
+      "part_code": "CLOUD01-TH",
+      "section_code": "CLOUD01",
+      "part_type": "PRACTICE",
+      "lecturer_index": 0,
+      "total_periods": 30,
+      "required_location_type": "PHYSICAL_ROOM",
+      "required_room_type": "COMPUTER_LAB",
+      "required_equipment": [
+        {
+          "equipment_code": "PROJECTOR",
+          "quantity": 1
+        },
+        {
+          "equipment_code": "COMPUTER",
+          "quantity": 35
+        }
+      ]
+    }
+  ],
+  "teaching_plans": [
+    {
+      "teaching_plan_id": 1001,
+      "plan_code": "PLAN-JAVA01-LT-WEEKLY",
+      "teaching_part_index": 0,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1002,
+      "plan_code": "PLAN-JAVA01-TH-WEEKLY",
+      "teaching_part_index": 1,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1003,
+      "plan_code": "PLAN-OOP01-LT-WEEKLY",
+      "teaching_part_index": 2,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1004,
+      "plan_code": "PLAN-OOP01-TH-WEEKLY",
+      "teaching_part_index": 3,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1005,
+      "plan_code": "PLAN-CSDL01-LT-WEEKLY",
+      "teaching_part_index": 4,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1006,
+      "plan_code": "PLAN-CSDL01-TH-WEEKLY",
+      "teaching_part_index": 5,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1007,
+      "plan_code": "PLAN-CTDL01-LT-WEEKLY",
+      "teaching_part_index": 6,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1008,
+      "plan_code": "PLAN-CTDL01-TH-WEEKLY",
+      "teaching_part_index": 7,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1009,
+      "plan_code": "PLAN-MMT01-LT-WEEKLY",
+      "teaching_part_index": 8,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1010,
+      "plan_code": "PLAN-MMT01-TH-WEEKLY",
+      "teaching_part_index": 9,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1011,
+      "plan_code": "PLAN-WEB01-LT-WEEKLY",
+      "teaching_part_index": 10,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1012,
+      "plan_code": "PLAN-WEB01-TH-WEEKLY",
+      "teaching_part_index": 11,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1013,
+      "plan_code": "PLAN-AI01-LT-WEEKLY",
+      "teaching_part_index": 12,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1014,
+      "plan_code": "PLAN-AI01-TH-WEEKLY",
+      "teaching_part_index": 13,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1015,
+      "plan_code": "PLAN-ATTT01-LT-WEEKLY",
+      "teaching_part_index": 14,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1016,
+      "plan_code": "PLAN-ATTT01-TH-WEEKLY",
+      "teaching_part_index": 15,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1017,
+      "plan_code": "PLAN-CLOUD01-LT-WEEKLY",
+      "teaching_part_index": 16,
+      "status": "VALID",
+      "allows_intensive": false
+    },
+    {
+      "teaching_plan_id": 1018,
+      "plan_code": "PLAN-CLOUD01-TH-WEEKLY",
+      "teaching_part_index": 17,
+      "status": "VALID",
+      "allows_intensive": false
+    }
+  ],
+  "class_sessions": [
+    {
+      "session_index": 0,
+      "class_session_id": 2001,
+      "teaching_plan_id": 1001,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 1,
+      "class_session_id": 2002,
+      "teaching_plan_id": 1001,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 2,
+      "class_session_id": 2003,
+      "teaching_plan_id": 1001,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 3,
+      "class_session_id": 2004,
+      "teaching_plan_id": 1001,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 4,
+      "class_session_id": 2005,
+      "teaching_plan_id": 1001,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 5,
+      "class_session_id": 2006,
+      "teaching_plan_id": 1001,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 6,
+      "class_session_id": 2007,
+      "teaching_plan_id": 1002,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 7,
+      "class_session_id": 2008,
+      "teaching_plan_id": 1002,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 8,
+      "class_session_id": 2009,
+      "teaching_plan_id": 1002,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 9,
+      "class_session_id": 2010,
+      "teaching_plan_id": 1002,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 10,
+      "class_session_id": 2011,
+      "teaching_plan_id": 1002,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 11,
+      "class_session_id": 2012,
+      "teaching_plan_id": 1002,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 12,
+      "class_session_id": 2013,
+      "teaching_plan_id": 1003,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 13,
+      "class_session_id": 2014,
+      "teaching_plan_id": 1003,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 14,
+      "class_session_id": 2015,
+      "teaching_plan_id": 1003,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 15,
+      "class_session_id": 2016,
+      "teaching_plan_id": 1003,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 16,
+      "class_session_id": 2017,
+      "teaching_plan_id": 1003,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 17,
+      "class_session_id": 2018,
+      "teaching_plan_id": 1003,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 18,
+      "class_session_id": 2019,
+      "teaching_plan_id": 1004,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 19,
+      "class_session_id": 2020,
+      "teaching_plan_id": 1004,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 20,
+      "class_session_id": 2021,
+      "teaching_plan_id": 1004,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 21,
+      "class_session_id": 2022,
+      "teaching_plan_id": 1004,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 22,
+      "class_session_id": 2023,
+      "teaching_plan_id": 1004,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 23,
+      "class_session_id": 2024,
+      "teaching_plan_id": 1004,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 24,
+      "class_session_id": 2025,
+      "teaching_plan_id": 1005,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 25,
+      "class_session_id": 2026,
+      "teaching_plan_id": 1005,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 26,
+      "class_session_id": 2027,
+      "teaching_plan_id": 1005,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 27,
+      "class_session_id": 2028,
+      "teaching_plan_id": 1005,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 28,
+      "class_session_id": 2029,
+      "teaching_plan_id": 1005,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 29,
+      "class_session_id": 2030,
+      "teaching_plan_id": 1005,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 30,
+      "class_session_id": 2031,
+      "teaching_plan_id": 1006,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 31,
+      "class_session_id": 2032,
+      "teaching_plan_id": 1006,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 32,
+      "class_session_id": 2033,
+      "teaching_plan_id": 1006,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 33,
+      "class_session_id": 2034,
+      "teaching_plan_id": 1006,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 34,
+      "class_session_id": 2035,
+      "teaching_plan_id": 1006,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 35,
+      "class_session_id": 2036,
+      "teaching_plan_id": 1006,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 36,
+      "class_session_id": 2037,
+      "teaching_plan_id": 1007,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 37,
+      "class_session_id": 2038,
+      "teaching_plan_id": 1007,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 38,
+      "class_session_id": 2039,
+      "teaching_plan_id": 1007,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 39,
+      "class_session_id": 2040,
+      "teaching_plan_id": 1007,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 40,
+      "class_session_id": 2041,
+      "teaching_plan_id": 1007,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 41,
+      "class_session_id": 2042,
+      "teaching_plan_id": 1007,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 42,
+      "class_session_id": 2043,
+      "teaching_plan_id": 1008,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 43,
+      "class_session_id": 2044,
+      "teaching_plan_id": 1008,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 44,
+      "class_session_id": 2045,
+      "teaching_plan_id": 1008,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 45,
+      "class_session_id": 2046,
+      "teaching_plan_id": 1008,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 46,
+      "class_session_id": 2047,
+      "teaching_plan_id": 1008,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 47,
+      "class_session_id": 2048,
+      "teaching_plan_id": 1008,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 48,
+      "class_session_id": 2049,
+      "teaching_plan_id": 1009,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 49,
+      "class_session_id": 2050,
+      "teaching_plan_id": 1009,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 50,
+      "class_session_id": 2051,
+      "teaching_plan_id": 1009,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 51,
+      "class_session_id": 2052,
+      "teaching_plan_id": 1009,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 52,
+      "class_session_id": 2053,
+      "teaching_plan_id": 1009,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 53,
+      "class_session_id": 2054,
+      "teaching_plan_id": 1009,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 54,
+      "class_session_id": 2055,
+      "teaching_plan_id": 1010,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 55,
+      "class_session_id": 2056,
+      "teaching_plan_id": 1010,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 56,
+      "class_session_id": 2057,
+      "teaching_plan_id": 1010,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 57,
+      "class_session_id": 2058,
+      "teaching_plan_id": 1010,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 58,
+      "class_session_id": 2059,
+      "teaching_plan_id": 1010,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 59,
+      "class_session_id": 2060,
+      "teaching_plan_id": 1010,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 60,
+      "class_session_id": 2061,
+      "teaching_plan_id": 1011,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 61,
+      "class_session_id": 2062,
+      "teaching_plan_id": 1011,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 62,
+      "class_session_id": 2063,
+      "teaching_plan_id": 1011,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 63,
+      "class_session_id": 2064,
+      "teaching_plan_id": 1011,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 64,
+      "class_session_id": 2065,
+      "teaching_plan_id": 1011,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 65,
+      "class_session_id": 2066,
+      "teaching_plan_id": 1011,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 66,
+      "class_session_id": 2067,
+      "teaching_plan_id": 1012,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 67,
+      "class_session_id": 2068,
+      "teaching_plan_id": 1012,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 68,
+      "class_session_id": 2069,
+      "teaching_plan_id": 1012,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 69,
+      "class_session_id": 2070,
+      "teaching_plan_id": 1012,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 70,
+      "class_session_id": 2071,
+      "teaching_plan_id": 1012,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 71,
+      "class_session_id": 2072,
+      "teaching_plan_id": 1012,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 72,
+      "class_session_id": 2073,
+      "teaching_plan_id": 1013,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 73,
+      "class_session_id": 2074,
+      "teaching_plan_id": 1013,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 74,
+      "class_session_id": 2075,
+      "teaching_plan_id": 1013,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 75,
+      "class_session_id": 2076,
+      "teaching_plan_id": 1013,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 76,
+      "class_session_id": 2077,
+      "teaching_plan_id": 1013,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 77,
+      "class_session_id": 2078,
+      "teaching_plan_id": 1013,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 78,
+      "class_session_id": 2079,
+      "teaching_plan_id": 1014,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 79,
+      "class_session_id": 2080,
+      "teaching_plan_id": 1014,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 80,
+      "class_session_id": 2081,
+      "teaching_plan_id": 1014,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 81,
+      "class_session_id": 2082,
+      "teaching_plan_id": 1014,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 82,
+      "class_session_id": 2083,
+      "teaching_plan_id": 1014,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 83,
+      "class_session_id": 2084,
+      "teaching_plan_id": 1014,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 84,
+      "class_session_id": 2085,
+      "teaching_plan_id": 1015,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 85,
+      "class_session_id": 2086,
+      "teaching_plan_id": 1015,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 86,
+      "class_session_id": 2087,
+      "teaching_plan_id": 1015,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 87,
+      "class_session_id": 2088,
+      "teaching_plan_id": 1015,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 88,
+      "class_session_id": 2089,
+      "teaching_plan_id": 1015,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 89,
+      "class_session_id": 2090,
+      "teaching_plan_id": 1015,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 90,
+      "class_session_id": 2091,
+      "teaching_plan_id": 1016,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 91,
+      "class_session_id": 2092,
+      "teaching_plan_id": 1016,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 92,
+      "class_session_id": 2093,
+      "teaching_plan_id": 1016,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 93,
+      "class_session_id": 2094,
+      "teaching_plan_id": 1016,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 94,
+      "class_session_id": 2095,
+      "teaching_plan_id": 1016,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 95,
+      "class_session_id": 2096,
+      "teaching_plan_id": 1016,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 96,
+      "class_session_id": 2097,
+      "teaching_plan_id": 1017,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 97,
+      "class_session_id": 2098,
+      "teaching_plan_id": 1017,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 98,
+      "class_session_id": 2099,
+      "teaching_plan_id": 1017,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 99,
+      "class_session_id": 2100,
+      "teaching_plan_id": 1017,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 100,
+      "class_session_id": 2101,
+      "teaching_plan_id": 1017,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 101,
+      "class_session_id": 2102,
+      "teaching_plan_id": 1017,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 3,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 102,
+      "class_session_id": 2103,
+      "teaching_plan_id": 1018,
+      "session_number": 1,
+      "stability_group_no": 1,
+      "week_number": 1,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 103,
+      "class_session_id": 2104,
+      "teaching_plan_id": 1018,
+      "session_number": 2,
+      "stability_group_no": 1,
+      "week_number": 2,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 104,
+      "class_session_id": 2105,
+      "teaching_plan_id": 1018,
+      "session_number": 3,
+      "stability_group_no": 1,
+      "week_number": 3,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 105,
+      "class_session_id": 2106,
+      "teaching_plan_id": 1018,
+      "session_number": 4,
+      "stability_group_no": 1,
+      "week_number": 4,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 106,
+      "class_session_id": 2107,
+      "teaching_plan_id": 1018,
+      "session_number": 5,
+      "stability_group_no": 1,
+      "week_number": 5,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    },
+    {
+      "session_index": 107,
+      "class_session_id": 2108,
+      "teaching_plan_id": 1018,
+      "session_number": 6,
+      "stability_group_no": 1,
+      "week_number": 6,
+      "duration_periods": 5,
+      "required_location_type": "PHYSICAL_ROOM"
+    }
+  ],
+  "lecturer_availabilities": [
+    {
+      "resource_index": 0,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 2,
+      "start_period": 1,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 4,
+      "start_period": 1,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 3,
+      "start_period": 10,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 5,
+      "start_period": 10,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 1,
+      "start_period": 1,
+      "end_period": 9,
+      "availability_type": "PREFERRED",
+      "preference_weight": 1.0
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 3,
+      "start_period": 1,
+      "end_period": 9,
+      "availability_type": "PREFERRED",
+      "preference_weight": 0.8
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 5,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "DISCOURAGED",
+      "preference_weight": 0.6
+    },
+    {
+      "resource_index": 1,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 1,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 1,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 2,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 1,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 3,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 1,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 4,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 1,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 5,
+      "start_period": 1,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 1,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 1,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "PREFERRED",
+      "preference_weight": 1.0
+    },
+    {
+      "resource_index": 1,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 2,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "PREFERRED",
+      "preference_weight": 0.8
+    },
+    {
+      "resource_index": 1,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 3,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "DISCOURAGED",
+      "preference_weight": 0.5
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 1,
+      "start_period": 1,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 3,
+      "start_period": 1,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 5,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 2,
+      "start_period": 10,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 2,
+      "start_period": 1,
+      "end_period": 9,
+      "availability_type": "PREFERRED",
+      "preference_weight": 1.0
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 4,
+      "start_period": 1,
+      "end_period": 9,
+      "availability_type": "PREFERRED",
+      "preference_weight": 0.9
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 5,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "DISCOURAGED",
+      "preference_weight": 0.5
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 1,
+      "start_period": 1,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 2,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 3,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 4,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 5,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 2,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "PREFERRED",
+      "preference_weight": 1.0
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 3,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "PREFERRED",
+      "preference_weight": 0.9
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 4,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "DISCOURAGED",
+      "preference_weight": 0.5
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "DATE",
+      "calendar_date": "2026-10-02",
+      "iso_weekday": null,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 1,
+      "scope_type": "DATE",
+      "calendar_date": "2026-09-23",
+      "iso_weekday": null,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "DATE",
+      "calendar_date": "2026-10-13",
+      "iso_weekday": null,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "DATE",
+      "calendar_date": "2026-09-10",
+      "iso_weekday": null,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    }
+  ],
+  "room_availabilities": [
+    {
+      "resource_index": 0,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 1,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 5,
+      "start_period": 1,
+      "end_period": 12,
+      "availability_type": "DISCOURAGED",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "DATE",
+      "calendar_date": "2026-09-09",
+      "iso_weekday": null,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "DATE",
+      "calendar_date": "2026-09-25",
+      "iso_weekday": null,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 0,
+      "scope_type": "DATE",
+      "calendar_date": "2026-10-13",
+      "iso_weekday": null,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 5,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 4,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "DISCOURAGED",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "DATE",
+      "calendar_date": "2026-09-10",
+      "iso_weekday": null,
+      "start_period": 7,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "DATE",
+      "calendar_date": "2026-09-23",
+      "iso_weekday": null,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "DATE",
+      "calendar_date": "2026-10-02",
+      "iso_weekday": null,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 2,
+      "scope_type": "DATE",
+      "calendar_date": "2026-10-13",
+      "iso_weekday": null,
+      "start_period": 1,
+      "end_period": 6,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 2,
+      "start_period": 1,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 4,
+      "start_period": 1,
+      "end_period": 12,
+      "availability_type": "UNAVAILABLE",
+      "preference_weight": null
+    },
+    {
+      "resource_index": 3,
+      "scope_type": "WEEKDAY",
+      "calendar_date": null,
+      "iso_weekday": 1,
+      "start_period": 1,
+      "end_period": 12,
+      "availability_type": "DISCOURAGED",
+      "preference_weight": null
+    }
+  ],
+  "campus_travel_times": [],
+  "constraint_settings": [
+    {
+      "constraint_code": "HARD_NO_LECTURER_OVERLAP",
+      "constraint_type": "HARD",
+      "priority_tier": 1,
+      "weight": null,
+      "enabled": true
+    },
+    {
+      "constraint_code": "HARD_NO_ROOM_OVERLAP",
+      "constraint_type": "HARD",
+      "priority_tier": 1,
+      "weight": null,
+      "enabled": true
+    },
+    {
+      "constraint_code": "SOFT_TIME_STABILITY",
+      "constraint_type": "SOFT",
+      "priority_tier": 1,
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "constraint_code": "SOFT_CAPACITY",
+      "constraint_type": "SOFT",
+      "priority_tier": 2,
+      "weight": 0.4091,
+      "enabled": true
+    },
+    {
+      "constraint_code": "SOFT_LECTURER_GAP",
+      "constraint_type": "SOFT",
+      "priority_tier": 2,
+      "weight": 0.2273,
+      "enabled": true
+    },
+    {
+      "constraint_code": "SOFT_LECTURER_CONSECUTIVE",
+      "constraint_type": "SOFT",
+      "priority_tier": 2,
+      "weight": 0.0909,
+      "enabled": true,
+      "threshold_value": 6
+    },
+    {
+      "constraint_code": "SOFT_ROOM_DISCOURAGED",
+      "constraint_type": "SOFT",
+      "priority_tier": 2,
+      "weight": 0.1818,
+      "enabled": true
+    },
+    {
+      "constraint_code": "SOFT_ROOM_STABILITY",
+      "constraint_type": "SOFT",
+      "priority_tier": 2,
+      "weight": 0.0909,
+      "enabled": true
+    }
+  ]
+}

@@ -2,14 +2,14 @@
 
 Module này là lớp dùng chung giữa GA, PO V2 và pipeline lai. Nó không chứa
 toán tử di truyền hoặc công thức cập nhật của PO. Trách nhiệm duy nhất là đưa
-một vector random-key đi qua đúng chuỗi xử lý đã chốt:
+một vector random-key đi qua đúng chuỗi xử lý chuẩn:
 
 ``Decoder -> Repair tùy chọn -> Validator độc lập -> Fitness``.
 
 Chỉ vector tạo được lịch hợp lệ mới trở thành ``TimetableIndividual``. Một
 vector ``DECODE_FAILED`` bị loại khỏi lần thử hiện tại, còn ``NO_OPTION`` là
-lỗi miền đầu vào và phải dừng trước khi khởi tạo quần thể. Cách phân biệt này
-tuân theo D051, D054, D056 và D058 trong context của project.
+lỗi miền đầu vào và phải dừng trước khi khởi tạo quần thể. Sự phân biệt này
+giúp không diễn giải một lỗi cá thể thành bằng chứng toàn bài toán vô nghiệm.
 """
 
 from __future__ import annotations
@@ -108,7 +108,7 @@ class TimetableIndividual:
 
     @property
     def fitness_key(self) -> tuple[float, float, float]:
-        """Khóa so sánh theo đúng thứ tự lexicographic đã chốt ở Gate F."""
+        """Khóa so sánh theo thứ tự mục tiêu lexicographic của thời khóa biểu."""
 
         return self.fitness.fitness_key
 
@@ -163,8 +163,8 @@ class PopulationInitializationResult:
 
     Khi ``status`` là ``SUCCESS``, số cá thể luôn đúng bằng kích thước yêu cầu.
     Khi hết giới hạn thử mà chưa đủ, kết quả dùng tên
-    ``NO_FEASIBLE_SOLUTION_FOUND`` theo D054/D056; tên này không khẳng định
-    bài toán toán học vô nghiệm.
+    ``NO_FEASIBLE_SOLUTION_FOUND``; tên này chỉ mô tả kết quả trong ngân sách
+    tìm kiếm đã cấp và không khẳng định bài toán toán học vô nghiệm.
     """
 
     status: PopulationInitializationStatus
@@ -268,9 +268,8 @@ def evaluate_candidate(
             reason=reason,
         )
 
-    # Đây là lần kiểm tra độc lập bắt buộc theo D058. Decoder hiện cũng có
-    # validator cuối, nhưng population không được dựa vào giả định đó để bỏ
-    # lớp bảo vệ trước Fitness.
+    # Đây là lớp kiểm tra độc lập trước Fitness. Decoder hiện cũng gọi validator
+    # ở cuối, nhưng cổng đánh giá không phụ thuộc vào chi tiết triển khai đó.
     validation = validate_timetable(problem, final_decode.selected_options)
     if not validation.is_valid:
         return CandidateEvaluationResult(
@@ -353,9 +352,9 @@ def initialize_population(
         )
     _validate_option_domains(problem, option_domains)
 
-    # D051 yêu cầu miền rỗng dừng trước khi khởi tạo. Chỉ khi phát hiện miền
-    # rỗng mới gọi decoder với vector trung tính để nhận đúng nguyên nhân đã
-    # được decoder chuẩn hóa; lần này không tính là một candidate attempt.
+    # Miền rỗng phải dừng trước khi khởi tạo. Khi phát hiện miền rỗng, decoder
+    # được gọi bằng vector trung tính để trả nguyên nhân đã chuẩn hóa; lần gọi
+    # chẩn đoán này không được tính là một candidate attempt.
     if any(not domain for domain in option_domains):
         neutral_vector = tuple(0.5 for _ in range(problem.dimension))
         terminal = evaluate_candidate(
@@ -496,7 +495,7 @@ def initialize_population(
 def sort_individuals(
     individuals: Iterable[TimetableIndividual],
 ) -> tuple[TimetableIndividual, ...]:
-    """Sắp xếp cá thể từ tốt đến kém theo Gate F và tie-break xác định.
+    """Sắp xếp cá thể theo thứ tự mục tiêu và tie-break xác định.
 
     Vector chỉ được dùng khi ba score bằng nhau hoàn toàn. Nó không thay đổi
     thứ tự ưu tiên nghiệp vụ, mà chỉ giúp cùng dữ liệu luôn có cùng thứ tự để
