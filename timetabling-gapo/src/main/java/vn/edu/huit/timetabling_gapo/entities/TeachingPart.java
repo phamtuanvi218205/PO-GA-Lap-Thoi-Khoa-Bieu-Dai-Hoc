@@ -26,6 +26,11 @@ public class TeachingPart {
     @Column(name = "part_type", nullable = false, length = 20)
     private PartType partType;
 
+    /**
+     * Giảng viên được phân công trước khi tối ưu. Mọi part thuộc cùng một
+     * CourseSection phải tham chiếu cùng giảng viên; policy tầng ứng dụng và
+     * trigger database bảo vệ bất biến này.
+     */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "lecturer_code", nullable = false)
     private Lecturer lecturer;

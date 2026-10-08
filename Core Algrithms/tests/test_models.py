@@ -21,6 +21,7 @@ from gapo_timetabling.models import (
     LecturerPreferenceBreakdown,
     LocationType,
     OnlineLocation,
+    OptimizationAlgorithm,
     PartType,
     PlanningScenario,
     PlanningScenarioItem,
@@ -631,6 +632,21 @@ class TestModels(unittest.TestCase):
         self.assertFalse(hasattr(self.problem, "student_groups"))
         self.assertFalse(hasattr(self.sessions[0], "student_group_indices"))
 
+    def test_parts_of_same_course_section_must_share_one_lecturer(self) -> None:
+        """Lý thuyết và thực hành cùng lớp không được gán hai giảng viên."""
+
+        conflicting_part = replace(
+            self.online_part,
+            section_code=self.lecture_part.section_code,
+            lecturer_index=1,
+        )
+
+        with self.assertRaisesRegex(ValueError, "phải dùng chung một giảng viên"):
+            self._build_problem(
+                self.sessions,
+                teaching_parts=(self.lecture_part, conflicting_part),
+            )
+
     def test_model_is_immutable(self) -> None:
         with self.assertRaises(FrozenInstanceError):
             self.small_room.capacity = 100
@@ -639,6 +655,10 @@ class TestModels(unittest.TestCase):
         self.assertEqual(RoomType.LECTURE_ROOM.value, "LECTURE_ROOM")
         self.assertEqual(LocationType.PHYSICAL_ROOM.value, "PHYSICAL_ROOM")
         self.assertEqual(AvailabilityType.PREFERRED.value, "PREFERRED")
+        self.assertEqual(
+            tuple(algorithm.value for algorithm in OptimizationAlgorithm),
+            ("GA", "PO", "GA_PO"),
+        )
 
     def test_availability_scope_must_be_unambiguous(self) -> None:
         with self.assertRaisesRegex(ValueError, "DATE"):

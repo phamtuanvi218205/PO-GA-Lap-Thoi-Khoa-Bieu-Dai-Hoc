@@ -7,6 +7,7 @@ import vn.edu.huit.timetabling_gapo.entities.*;
 import vn.edu.huit.timetabling_gapo.enums.LocationType;
 import vn.edu.huit.timetabling_gapo.enums.PlanningScenarioStatus;
 import vn.edu.huit.timetabling_gapo.enums.TeachingPlanStatus;
+import vn.edu.huit.timetabling_gapo.planning.TeachingAssignmentPolicy;
 import vn.edu.huit.timetabling_gapo.repositories.*;
 
 import java.util.*;
@@ -70,6 +71,7 @@ public class ProblemInstanceSnapshotBuilder {
                 .map(PlanningScenarioItem::getTeachingPart)
                 .sorted(Comparator.comparing(TeachingPart::getPartCode))
                 .toList();
+        TeachingAssignmentPolicy.requireOneLecturerPerCourseSection(parts);
         Map<Long, Integer> partIndexById = indexBy(
                 parts,
                 TeachingPart::getTeachingPartId

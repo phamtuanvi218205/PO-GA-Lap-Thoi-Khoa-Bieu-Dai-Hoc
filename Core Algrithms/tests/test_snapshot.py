@@ -224,6 +224,48 @@ class TestSnapshotLoader(unittest.TestCase):
         with self.assertRaisesRegex(SnapshotContractError, "schema version"):
             load_problem_instance_snapshot(payload)
 
+    def test_snapshot_rejects_different_lecturers_in_same_course_section(self) -> None:
+        """Hợp đồng JSON không được đưa phân công mâu thuẫn vào optimizer."""
+
+        payload = deepcopy(make_snapshot_payload())
+        payload["lecturers"].append({
+            "lecturer_index": 1,
+            "lecturer_code": "GV002",
+            "full_name": "Giảng viên 2",
+            "home_campus_code": "CS1",
+        })
+        second_part = deepcopy(payload["teaching_parts"][0])
+        second_part.update({
+            "teaching_part_index": 1,
+            "teaching_part_id": 12,
+            "part_code": "JAVA01-TH",
+            "lecturer_index": 1,
+        })
+        payload["teaching_parts"].append(second_part)
+
+        second_plan = deepcopy(payload["teaching_plans"][0])
+        second_plan.update({
+            "teaching_plan_id": 102,
+            "plan_code": "PLAN-JAVA01-TH-01",
+            "teaching_part_index": 1,
+        })
+        payload["teaching_plans"].append(second_plan)
+
+        second_session = deepcopy(payload["class_sessions"][0])
+        second_session.update({
+            "session_index": 1,
+            "class_session_id": 1002,
+            "teaching_plan_id": 102,
+        })
+        payload["class_sessions"].append(second_session)
+        payload["scenario"]["items"].append({
+            "teaching_part_index": 1,
+            "teaching_plan_id": 102,
+        })
+
+        with self.assertRaisesRegex(ValueError, "phải dùng chung một giảng viên"):
+            load_problem_instance_snapshot(payload)
+
     def test_ready_preflight_builds_deterministic_gene_option_mapping(self) -> None:
         payload = make_snapshot_payload()
 

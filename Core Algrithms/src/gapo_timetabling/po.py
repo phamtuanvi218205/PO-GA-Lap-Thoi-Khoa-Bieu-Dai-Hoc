@@ -6,26 +6,41 @@ hoặc ``SessionOption``; nó biểu diễn mức ưu tiên của option cho ses
 ứng. Vì decoder ánh xạ gene trong đoạn ``[0, 1]``, mọi vị trí do PO tạo ra phải
 được boundary control trước khi đánh giá.
 
-Module này chỉ cài đặt phần toán học tạo vị trí đề xuất:
+Module này cài đặt phần toán học tạo vị trí đề xuất và các helper nhỏ dùng để
+đưa một vị trí PO qua pipeline đánh giá chung:
 
 ``X hiện tại -> một hành vi PO V2 -> X đề xuất -> chặn biên [0, 1]``
 
-Vòng lặp optimizer được bổ sung ở bước sau sẽ chuyển vector đề xuất vào
-``population.evaluate_candidate``. Decoder, repair, validator và fitness vẫn là
-các thành phần chịu trách nhiệm biến vector thành lịch và đánh giá chất lượng;
-PO không lặp lại các trách nhiệm đó trong module này.
+Helper offspring chuyển vector đề xuất vào ``population.evaluate_candidate``
+và có thể thử lại theo giới hạn đã cấu hình. Decoder, repair, validator và
+fitness vẫn là các thành phần chịu trách nhiệm biến vector thành lịch và đánh
+giá chất lượng; PO không lặp lại các trách nhiệm đó trong module này. Vòng lặp
+``run_po`` đầy đủ được bổ sung ở bước sau.
 """
 
 from __future__ import annotations
 
 import math
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import IntEnum
 from random import Random
 from typing import Sequence
 
-from .population import CandidateEvaluationConfig
+from .metrics import (
+    ConvergencePoint,
+    OptimizationMetrics,
+    accumulate_candidate_evaluation,
+)
+from .models import ProblemInstance, SessionOption
+from .population import (
+    CandidateEvaluationConfig,
+    CandidateEvaluationResult,
+    PopulationInitializationResult,
+    PopulationInitializationStatus,
+    TimetableIndividual,
+    evaluate_candidate,
+)
 
 
 # ``Vector`` biểu diễn một vị trí trong không gian tìm kiếm liên tục của PO.
@@ -90,6 +105,202 @@ class PoConfig:
             raise ValueError(
                 "max_offspring_attempts phải lớn hơn hoặc bằng 1."
             )
+
+
+@dataclass(frozen=True, slots=True)
+class PoOffspringResult:
+    """Kết quả thử tạo một cá thể con PO cho một vị trí trong quần thể.
+
+    Attributes:
+        individual: Cá thể con hợp lệ đầu tiên tìm được, hoặc ``None`` nếu đã
+            dùng hết ``max_offspring_attempts``.
+        metrics: Ảnh chụp metrics sau khi cộng toàn bộ lần thử và, nếu cần,
+            một offspring bị bỏ.
+        attempts_used: Số vector PO đã thực sự sinh và đưa vào pipeline.
+        last_evaluation: Kết quả đánh giá của vector cuối cùng. Trường này giúp
+            truy nguyên nguyên nhân thất bại mà không biến lỗi cá thể thành lỗi
+            toàn bộ bài toán.
+
+    Result không quyết định cá thể nào sống sang thế hệ sau. Khi
+    ``individual`` là ``None``, vòng lặp PO cấp trên chịu trách nhiệm giữ cá
+    thể cha ở vị trí hiện tại để quần thể không bị thiếu.
+    """
+
+    individual: TimetableIndividual | None
+    metrics: OptimizationMetrics
+    attempts_used: int
+    last_evaluation: CandidateEvaluationResult
+
+    def __post_init__(self) -> None:
+        """Bảo đảm trạng thái trả về thống nhất với evaluation cuối."""
+
+        if self.attempts_used < 1:
+            raise ValueError("attempts_used phải lớn hơn hoặc bằng 1.")
+
+        if self.individual is None and self.last_evaluation.is_success:
+            raise ValueError(
+                "Evaluation thành công phải trả kèm TimetableIndividual."
+            )
+
+        if self.individual is not None:
+            if not self.last_evaluation.is_success:
+                raise ValueError(
+                    "Không được trả cá thể con từ evaluation thất bại."
+                )
+            if self.last_evaluation.individual != self.individual:
+                raise ValueError(
+                    "Cá thể con phải đúng là individual của evaluation cuối."
+                )
+
+    @property
+    def is_success(self) -> bool:
+        """Cho biết helper đã tạo được một cá thể con hợp lệ hay chưa."""
+
+        return self.individual is not None
+
+
+def _validate_po_run_inputs(
+    problem: ProblemInstance,
+    initialization: PopulationInitializationResult,
+    config: PoConfig,
+) -> int:
+    """Kiểm tra đầu vào và tính số iteration của một lần chạy PO.
+
+    Args:
+        problem: Snapshot bài toán thời khóa biểu đã khóa.
+        initialization: Kết quả tạo quần thể ban đầu bằng
+            :func:`population.initialize_population`.
+        config: Cấu hình ngân sách và đánh giá của PO.
+
+    Returns:
+        Số iteration PO được phép thực hiện sau giai đoạn khởi tạo.
+
+    Raises:
+        ValueError: Nếu khởi tạo thất bại, quần thể không đầy đủ, vector sai
+            số chiều, gene nằm ngoài miền hoặc ngân sách FE không phù hợp.
+
+    Quần thể ban đầu đã được đánh giá Fitness nên chi phí khởi tạo cũng phải
+    nằm trong ngân sách chung. Mỗi iteration có tối đa ``N`` offspring hợp lệ,
+    trong đó ``N`` là kích thước quần thể. Vì vậy phần FE còn lại phải chia hết
+    cho ``N`` để không tạo một iteration cuối chỉ xử lý một phần quần thể.
+    """
+
+    # PO chỉ được bắt đầu sau khi initialize_population() đã tạo đủ số cá thể
+    # hợp lệ. NO_OPTION và NO_FEASIBLE_SOLUTION_FOUND phải được xử lý trước.
+    if initialization.status != PopulationInitializationStatus.SUCCESS:
+        raise ValueError(
+            "PO chỉ nhận quần thể có trạng thái khởi tạo SUCCESS."
+        )
+
+    population = initialization.individuals
+    population_size = len(population)
+
+    # Một quần thể rỗng không có mean, best hoặc cá thể cha để cập nhật.
+    if population_size == 0:
+        raise ValueError("Quần thể ban đầu của PO không được rỗng.")
+
+    # Kết quả SUCCESS phải có đúng số cá thể mà bước khởi tạo đã yêu cầu.
+    if population_size != initialization.requested_population_size:
+        raise ValueError(
+            "Số cá thể khởi tạo phải bằng requested_population_size."
+        )
+
+    # Mỗi cá thể hợp lệ trong quần thể ban đầu đã được Fitness gọi đúng một
+    # lần. Do đó số FE khởi tạo phải bằng số cá thể được trả về.
+    if initialization.fitness_evaluations != population_size:
+        raise ValueError(
+            "FE khởi tạo phải bằng số cá thể hợp lệ trong quần thể."
+        )
+
+    # Một lần gọi Fitness luôn thuộc về một candidate attempt. Số FE không
+    # được lớn hơn tổng số vector đã được đưa vào pipeline đánh giá.
+    if initialization.fitness_evaluations > initialization.candidate_attempts:
+        raise ValueError(
+            "FE khởi tạo không được lớn hơn số candidate attempts."
+        )
+
+    for individual_index, individual in enumerate(population):
+        vector = individual.vector
+
+        # Số chiều vector phải bằng số ClassSession của ProblemInstance.
+        # Mỗi ClassSession tương ứng đúng một gene.
+        if len(vector) != problem.dimension:
+            raise ValueError(
+                "Vector của cá thể "
+                f"{individual_index} phải có đúng {problem.dimension} gene."
+            )
+
+        for gene_index, gene in enumerate(vector):
+            # NaN và vô cực không thể ánh xạ ổn định sang SessionOption.
+            if not math.isfinite(gene):
+                raise ValueError(
+                    "Gene "
+                    f"{gene_index} của cá thể {individual_index} "
+                    "phải là số hữu hạn."
+                )
+
+            # Random-key của project luôn nằm trong đoạn đóng [0, 1].
+            if gene < 0.0 or gene > 1.0:
+                raise ValueError(
+                    "Gene "
+                    f"{gene_index} của cá thể {individual_index} "
+                    "phải nằm trong [0, 1]."
+                )
+
+    remaining_fitness_evaluations = (
+        config.max_fitness_evaluations
+        - initialization.fitness_evaluations
+    )
+
+    # Ngân sách chung phải đủ trả cho chính quần thể ban đầu. Nếu số này âm,
+    # nghĩa là khởi tạo đã dùng nhiều FE hơn mức cấu hình cho toàn bộ run.
+    if remaining_fitness_evaluations < 0:
+        raise ValueError(
+            "max_fitness_evaluations không được nhỏ hơn FE khởi tạo."
+        )
+
+    # Mỗi iteration xử lý lần lượt toàn bộ N vị trí của quần thể. Không cho
+    # phép một iteration cuối chỉ xử lý một phần vì điều đó làm các cá thể
+    # không nhận cùng số cơ hội cập nhật.
+    if remaining_fitness_evaluations % population_size != 0:
+        raise ValueError(
+            "Phần FE còn lại phải chia hết cho kích thước quần thể."
+        )
+
+    max_iterations = remaining_fitness_evaluations // population_size
+    return max_iterations
+
+
+def _create_convergence_point(
+    iteration: int,
+    fitness_evaluations: int,
+    best_individual: TimetableIndividual,
+) -> ConvergencePoint:
+    """Tạo một mốc hội tụ từ cá thể tốt nhất hiện tại.
+
+    Args:
+        iteration: Vòng lặp vừa hoàn thành. Quần thể ban đầu sử dụng
+            ``iteration = 0``.
+        fitness_evaluations: Tổng số lần Fitness đã thực sự được gọi tính đến
+            thời điểm ghi mốc.
+        best_individual: Cá thể tốt nhất từng được tìm thấy đến thời điểm này.
+
+    Returns:
+        Mốc hội tụ chứa iteration, FE và ba tầng fitness Gate F.
+
+    Helper chỉ sao chép kết quả fitness đã có trong ``best_individual``. Nó
+    không gọi lại Fitness, không làm tăng FE và không tự tìm cá thể tốt nhất.
+    """
+
+    fitness = best_individual.fitness
+
+    return ConvergencePoint(
+        iteration=iteration,
+        fitness_evaluations=fitness_evaluations,
+        time_stability_score=fitness.time_stability_score,
+        general_quality_score=fitness.general_quality_score,
+        lecturer_preference_score=fitness.lecturer_preference_score,
+    )
 
 
 def clip_vector_to_unit_interval(vector: Vector) -> Vector:
@@ -460,3 +671,136 @@ def create_po_position(
         return tuple(new_position)
 
     raise ValueError(f"Hành vi PO không được hỗ trợ: {behavior}")
+
+
+def _create_and_evaluate_po_offspring(
+    problem: ProblemInstance,
+    option_domains: tuple[tuple[SessionOption, ...], ...],
+    current_individual: TimetableIndividual,
+    current_index: int,
+    behavior: PoBehavior,
+    best_individual: TimetableIndividual,
+    population_mean: Vector,
+    iteration: int,
+    max_iterations: int,
+    alpha: float,
+    theta: float,
+    rng: Random,
+    config: PoConfig,
+    metrics: OptimizationMetrics,
+) -> PoOffspringResult:
+    """Sinh và đánh giá một cá thể con PO với số lần thử hữu hạn.
+
+    Args:
+        problem: Snapshot bất biến của bài toán thời khóa biểu.
+        option_domains: Miền ``SessionOption`` cố định theo thứ tự gene.
+        current_individual: Cá thể cha tại vị trí đang được cập nhật.
+        current_index: Chỉ số zero-based của cá thể trong quần thể.
+        behavior: Hành vi PO đã được bốc cho cá thể này trong iteration.
+        best_individual: Nghiệm tốt nhất đã biết tại thời điểm xử lý cá thể.
+        population_mean: Mean của quần thể cha tại đầu iteration.
+        iteration: Iteration hiện tại, đánh số từ 1.
+        max_iterations: Tổng số iteration đã suy ra từ ngân sách FE.
+        alpha: Hệ số giao tiếp sinh một lần cho iteration.
+        theta: Góc sợ người lạ sinh một lần cho iteration.
+        rng: Nguồn ngẫu nhiên duy nhất của lần chạy PO.
+        config: Giới hạn thử offspring và cấu hình đánh giá dùng chung.
+        metrics: Ảnh chụp số liệu trước khi bắt đầu thử cá thể con này.
+
+    Returns:
+        :class:`PoOffspringResult` chứa cá thể con hợp lệ đầu tiên, hoặc
+        ``individual=None`` nếu mọi lần thử đều thất bại.
+
+    Raises:
+        ValueError: Nếu không còn ngân sách để chấp nhận thêm một FE, hoặc nếu
+            pipeline trả ``NO_OPTION`` do miền đầu vào không còn hợp lệ.
+        RuntimeError: Nếu ``evaluate_candidate`` phá hợp đồng nội bộ bằng cách
+            báo ``SUCCESS`` nhưng không trả cá thể.
+
+    Cùng một ``behavior``, ``alpha`` và ``theta`` được giữ trong mọi lần thử
+    của cá thể hiện tại để không thay đổi cấu trúc PO gốc. Mỗi lần gọi
+    :func:`create_po_position` vẫn tiêu thụ mẫu ngẫu nhiên mới, vì vậy vector
+    đề xuất có thể khác nhau. Helper dừng tại cá thể hợp lệ đầu tiên nên một vị
+    trí quần thể tạo tối đa một FE; các vector bị loại trước Fitness chỉ tăng
+    candidate attempts và chi phí decoder/repair.
+    """
+
+    # Nếu FE đã chạm ngân sách thì một vector thành công tiếp theo sẽ làm vượt
+    # giới hạn. Vòng lặp cấp trên không được gọi helper trong trạng thái này.
+    if metrics.fitness_evaluations >= config.max_fitness_evaluations:
+        raise ValueError(
+            "Không còn ngân sách Fitness Evaluation để tạo offspring."
+        )
+
+    updated_metrics = metrics
+    last_evaluation: CandidateEvaluationResult | None = None
+
+    for attempt_number in range(1, config.max_offspring_attempts + 1):
+        # Bước 1: áp dụng đúng hành vi PO đã chọn cho cá thể hiện tại. Các mẫu
+        # Lévy/Gaussian/Uniform bên trong được lấy tiếp từ cùng rng của run.
+        proposed_vector = create_po_position(
+            current=current_individual.vector,
+            current_index=current_index,
+            behavior=behavior,
+            best_position=best_individual.vector,
+            population_mean=population_mean,
+            iteration=iteration,
+            max_iterations=max_iterations,
+            alpha=alpha,
+            theta=theta,
+            rng=rng,
+        )
+
+        # Bước 2: mọi công thức PO đều có thể sinh gene ngoài [0,1]. Chặn biên
+        # trước decoder để giữ đúng hợp đồng random-key của project.
+        bounded_vector = clip_vector_to_unit_interval(proposed_vector)
+
+        # Bước 3: dùng cổng đánh giá duy nhất của GA/PO/hybrid. Helper không
+        # tự viết lại decoder, repair, validator hoặc fitness.
+        evaluation = evaluate_candidate(
+            problem,
+            option_domains,
+            bounded_vector,
+            config.evaluation_config,
+        )
+        last_evaluation = evaluation
+
+        # Bước 4: cộng attempt, FE thực tế, lỗi và chi phí tìm kiếm. Nếu trạng
+        # thái là NO_OPTION, hàm dùng chung sẽ phát ValueError để dừng run.
+        updated_metrics = accumulate_candidate_evaluation(
+            updated_metrics,
+            evaluation,
+        )
+
+        if evaluation.is_success:
+            if evaluation.individual is None:
+                raise RuntimeError(
+                    "Evaluation SUCCESS nhưng không có individual."
+                )
+
+            return PoOffspringResult(
+                individual=evaluation.individual,
+                metrics=updated_metrics,
+                attempts_used=attempt_number,
+                last_evaluation=evaluation,
+            )
+
+    # Vòng lặp luôn chạy ít nhất một lần vì PoConfig đã yêu cầu giới hạn dương.
+    if last_evaluation is None:
+        raise RuntimeError("PO không thực hiện lần thử offspring nào.")
+
+    # Chỉ sau khi dùng hết toàn bộ giới hạn mới tính một offspring bị bỏ. Các
+    # lần thử lẻ thất bại không được tính thành nhiều offspring bị bỏ.
+    updated_metrics = replace(
+        updated_metrics,
+        discarded_offspring_count=(
+            updated_metrics.discarded_offspring_count + 1
+        ),
+    )
+
+    return PoOffspringResult(
+        individual=None,
+        metrics=updated_metrics,
+        attempts_used=config.max_offspring_attempts,
+        last_evaluation=last_evaluation,
+    )

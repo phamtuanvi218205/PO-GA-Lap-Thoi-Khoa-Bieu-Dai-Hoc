@@ -176,6 +176,7 @@ class PopulationInitializationResult:
     validation_failed_count: int
     repaired_individual_count: int
     failed_repair_count: int
+    total_repair_attempts: int
     total_decode_nodes: int
     total_decode_backtracks: int
     terminal_evaluation: CandidateEvaluationResult | None
@@ -373,6 +374,7 @@ def initialize_population(
             validation_failed_count=0,
             repaired_individual_count=0,
             failed_repair_count=0,
+            total_repair_attempts=0,
             total_decode_nodes=0,
             total_decode_backtracks=0,
             terminal_evaluation=terminal,
@@ -387,6 +389,7 @@ def initialize_population(
     validation_failed_count = 0
     repaired_individual_count = 0
     failed_repair_count = 0
+    total_repair_attempts = 0
     total_decode_nodes = 0
     total_decode_backtracks = 0
     last_evaluation: CandidateEvaluationResult | None = None
@@ -409,6 +412,10 @@ def initialize_population(
         total_decode_backtracks += evaluation.total_decode_backtracks
 
         if evaluation.repair_result is not None:
+            # Một lần gọi repair có thể thử nhiều thay đổi gene. Tổng số lần
+            # thử phải được giữ riêng để đo đúng chi phí repair của khởi tạo.
+            total_repair_attempts += evaluation.repair_result.attempts
+
             if evaluation.repair_result.status == RepairStatus.REPAIRED:
                 repaired_individual_count += 1
             elif evaluation.repair_result.status == RepairStatus.FAILED:
@@ -427,6 +434,7 @@ def initialize_population(
                 validation_failed_count=validation_failed_count,
                 repaired_individual_count=repaired_individual_count,
                 failed_repair_count=failed_repair_count,
+                total_repair_attempts=total_repair_attempts,
                 total_decode_nodes=total_decode_nodes,
                 total_decode_backtracks=total_decode_backtracks,
                 terminal_evaluation=evaluation,
@@ -457,6 +465,7 @@ def initialize_population(
             validation_failed_count=validation_failed_count,
             repaired_individual_count=repaired_individual_count,
             failed_repair_count=failed_repair_count,
+            total_repair_attempts=total_repair_attempts,
             total_decode_nodes=total_decode_nodes,
             total_decode_backtracks=total_decode_backtracks,
             terminal_evaluation=None,
@@ -473,6 +482,7 @@ def initialize_population(
         validation_failed_count=validation_failed_count,
         repaired_individual_count=repaired_individual_count,
         failed_repair_count=failed_repair_count,
+        total_repair_attempts=total_repair_attempts,
         total_decode_nodes=total_decode_nodes,
         total_decode_backtracks=total_decode_backtracks,
         terminal_evaluation=last_evaluation,

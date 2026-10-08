@@ -4,7 +4,8 @@
     Current scope:
     - Create a teaching timetable before student registration.
     - No Student/StudentGroup input.
-    - A lecturer is assigned to each TeachingPart before optimization.
+    - A lecturer is assigned before optimization. Every TeachingPart of the
+      same CourseSection must reference that same lecturer.
     - A locked PlanningScenario selects one system-validated TeachingPlan per TeachingPart.
     - Each ClassSession is one atomic session in one TermWeek.
     - The optimizer selects the actual date, start period and teaching location.
@@ -302,6 +303,36 @@ CREATE TABLE TeachingPart
             (required_location_type = 'ONLINE' AND required_room_type IS NULL)
         )
 );
+GO
+
+/*
+   One class section has one preassigned lecturer. Lecture and practice remain
+   separate TeachingPart rows because they have independent duration, room and
+   timetable requirements, but they may not name different lecturers.
+*/
+CREATE TRIGGER TR_TeachingPart_OneLecturerPerCourseSection
+ON TeachingPart
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS
+    (
+        SELECT 1
+        FROM inserted AS changed_part
+        JOIN TeachingPart AS existing_part
+          ON existing_part.section_code = changed_part.section_code
+         AND existing_part.teaching_part_id <> changed_part.teaching_part_id
+         AND existing_part.lecturer_code <> changed_part.lecturer_code
+    )
+    BEGIN
+        THROW 51001,
+              'All TeachingPart rows of one CourseSection must use the same lecturer.',
+              1;
+    END;
+END;
+GO
 
 CREATE TABLE TeachingPartRequiredEquipment
 (
@@ -1177,6 +1208,14 @@ UNION ALL SELECT 'PlanningScenario', COUNT(*) FROM PlanningScenario
 UNION ALL SELECT 'PlanningScenarioItem', COUNT(*) FROM PlanningScenarioItem
 UNION ALL SELECT 'OptimizationRun', COUNT(*) FROM OptimizationRun
 UNION ALL SELECT 'TimetableEntry', COUNT(*) FROM TimetableEntry;
+
+-- Must return no rows: one CourseSection cannot have multiple lecturers.
+SELECT
+    section_code,
+    COUNT(DISTINCT lecturer_code) AS lecturer_count
+FROM TeachingPart
+GROUP BY section_code
+HAVING COUNT(DISTINCT lecturer_code) > 1;
 
 -- Every generated plan item set must match its TeachingPart total exactly.
 SELECT
