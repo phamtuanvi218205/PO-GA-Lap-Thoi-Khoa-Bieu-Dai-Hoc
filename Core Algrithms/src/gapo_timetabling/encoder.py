@@ -1,11 +1,19 @@
-"""Sinh miền ``SessionOption`` cho từng ``ClassSession``.
+"""Sinh option theo tuần và giao chúng thành mẫu lịch lặp cho cả học kỳ.
 
 Encoder chỉ kiểm tra những điều kiện bắt buộc có thể xác định cho *một* buổi
-độc lập: tuần/ngày, khung tiết, loại địa điểm, thiết bị và trạng thái
+độc lập: giảng viên đủ năng lực, tuần/ngày, khung tiết, loại địa điểm, thiết bị và trạng thái
 ``UNAVAILABLE``. Xung đột giữa nhiều buổi sẽ do decoder/validator xử lý; các
 tiêu chí mềm như sức chứa và mong muốn giảng viên sẽ do fitness đánh giá.
+
+Ngày nghỉ lễ không còn làm thay đổi miền tối ưu. ``TeachingDate`` vẫn được
+dùng để quy đổi thứ sang ngày thật của từng tuần và kiểm tra availability theo
+ngày, nhưng ``DateStatus`` không loại option. Sau khi sinh option nguyên tử,
+encoder lấy giao theo ``(thứ, tiết bắt đầu, địa điểm)`` giữa mọi tuần của cùng
+một nhóm lặp. Một giao điểm như vậy là một mẫu cố định cho toàn thời gian hoạt
+động của plan.
 """
 
+from dataclasses import dataclass
 from datetime import date
 
 from .models import (
@@ -14,7 +22,6 @@ from .models import (
     AvailabilityType,
     AvailabilityWindow,
     ClassSession,
-    DateStatus,
     LocationType,
     OnlineLocation,
     ProblemInstance,
@@ -23,6 +30,24 @@ from .models import (
     TeachingPart,
     TimePeriod,
 )
+
+
+@dataclass(frozen=True, slots=True)
+class RecurringPattern:
+    """Một mẫu thứ–tiết–địa điểm dùng được ở mọi tuần của một chuỗi buổi.
+
+    ``session_options`` chứa đúng một option nguyên tử cho mỗi lần xuất hiện
+    theo tuần, theo cùng thứ, tiết bắt đầu, địa điểm và giảng viên. Thời lượng
+    và tiết kết thúc có thể khác giữa các giai đoạn nếu TeachingPlan quy định.
+    """
+
+    group_index: int
+    lecturer_index: int
+    iso_weekday: int
+    start_period: int
+    location_index: int
+    session_options: tuple[SessionOption, ...]
+    raw_option_indices: tuple[int, ...]
 
 
 def period_ranges_overlap(
@@ -213,7 +238,6 @@ def build_options_for_session(
             item
             for item in problem.teaching_dates
             if item.week_number == class_session.week_number
-            and item.status != DateStatus.HOLIDAY
         ),
         key=lambda item: item.calendar_date,
     )
@@ -235,39 +259,49 @@ def build_options_for_session(
     locations = tuple(sorted(locations, key=lambda item: item.location_index))
     options: list[SessionOption] = []
 
-    for current_date in teaching_dates:
-        for block in valid_blocks:
-            lecturer_is_unavailable = is_resource_unavailable(
-                availability_windows=problem.lecturer_availabilities,
-                resource_index=teaching_part.lecturer_index,
-                teaching_date=current_date.calendar_date,
-                start_period=block.start_period,
-                end_period=block.end_period,
-            )
-            if lecturer_is_unavailable:
-                continue
-
-            for location in locations:
-                if isinstance(location, Room):
-                    room_is_unavailable = is_resource_unavailable(
-                        availability_windows=problem.room_availabilities,
-                        resource_index=location.location_index,
-                        teaching_date=current_date.calendar_date,
-                        start_period=block.start_period,
-                        end_period=block.end_period,
-                    )
-                    if room_is_unavailable:
-                        continue
-
-                options.append(
-                    SessionOption(
-                        session_index=class_session.session_index,
-                        location_index=location.location_index,
-                        teaching_date=current_date.calendar_date,
-                        start_period=block.start_period,
-                        end_period=block.end_period,
-                    )
+    # Miền option chứa mọi giảng viên đủ khả năng dạy *toàn bộ* lớp học phần.
+    # Gene phân công ở đầu vector sẽ chọn một người; decoder sau đó chỉ giữ
+    # các option mang đúng lecturer_index đó. Encoder không tự chọn người tốt.
+    eligible_lecturers = problem.eligible_lecturer_indices(teaching_part.section_code)
+    for lecturer_index in eligible_lecturers:
+        for current_date in teaching_dates:
+            for block in valid_blocks:
+                lecturer_is_unavailable = is_resource_unavailable(
+                    availability_windows=problem.lecturer_availabilities,
+                    resource_index=lecturer_index,
+                    teaching_date=current_date.calendar_date,
+                    start_period=block.start_period,
+                    end_period=block.end_period,
                 )
+                if lecturer_is_unavailable:
+                    continue
+
+                for location in locations:
+                    if isinstance(location, Room):
+                        room_is_unavailable = is_resource_unavailable(
+                            availability_windows=problem.room_availabilities,
+                            resource_index=location.location_index,
+                            teaching_date=current_date.calendar_date,
+                            start_period=block.start_period,
+                            end_period=block.end_period,
+                        )
+                        if room_is_unavailable:
+                            continue
+
+                    options.append(
+                        SessionOption(
+                            session_index=class_session.session_index,
+                            location_index=location.location_index,
+                            teaching_date=current_date.calendar_date,
+                            start_period=block.start_period,
+                            end_period=block.end_period,
+                            lecturer_index=(
+                                lecturer_index
+                                if problem.lecturer_course_capabilities
+                                else -1
+                            ),
+                        )
+                    )
 
     return tuple(options)
 
@@ -275,9 +309,113 @@ def build_options_for_session(
 def build_option_domains(
     problem: ProblemInstance,
 ) -> tuple[tuple[SessionOption, ...], ...]:
-    """Sinh miền option theo đúng thứ tự gene của ``ProblemInstance``."""
+    """Sinh một miền option cho mỗi session theo thứ tự ``session_index``.
+
+    Số miền bằng ``session_dimension``. Nhóm gene phân công giảng viên không
+    cần ``SessionOption`` riêng vì miền của chúng được lấy trực tiếp từ
+    ``eligible_lecturer_indices``.
+    """
 
     return tuple(
         build_options_for_session(problem, class_session)
         for class_session in problem.class_sessions
     )
+
+
+def build_recurring_patterns_for_group(
+    problem: ProblemInstance,
+    option_domains: tuple[tuple[SessionOption, ...], ...],
+    group_index: int,
+    lecturer_index: int,
+) -> tuple[RecurringPattern, ...]:
+    """Lấy các mẫu cố định khả thi cho một nhóm lặp và một giảng viên.
+
+    Một mẫu chỉ tồn tại khi mọi session theo tuần của nhóm đều có option cùng
+    thứ ISO, tiết bắt đầu và địa điểm. Vì mỗi option tuần đã qua bộ lọc
+    ``UNAVAILABLE``, phép giao này cũng loại mẫu đụng bất kỳ ngày bận cụ thể
+    nào của giảng viên hoặc phòng mà không cần cho phép lịch nhảy giữa tuần.
+    """
+
+    if len(option_domains) != problem.session_dimension:
+        raise ValueError("Số miền option phải bằng số ClassSession.")
+    if not 0 <= group_index < problem.schedule_dimension:
+        raise ValueError("group_index nằm ngoài miền nhóm lịch lặp.")
+
+    session_indices = problem.schedule_groups[group_index]
+    indexed_options_by_session: list[
+        dict[tuple[int, int, int], tuple[int, SessionOption]]
+    ] = []
+
+    for session_index in session_indices:
+        keyed: dict[tuple[int, int, int], tuple[int, SessionOption]] = {}
+        for raw_index, option in enumerate(option_domains[session_index]):
+            if problem.option_lecturer_index(option) != lecturer_index:
+                continue
+            key = (
+                option.teaching_date.isoweekday(),
+                option.start_period,
+                option.location_index,
+            )
+            # Trong một TermWeek hợp lệ chỉ có một ngày cho mỗi thứ. Giữ
+            # option đầu tiên giúp hành vi vẫn xác định nếu dữ liệu nguồn bị
+            # lặp nhưng chưa bị tầng import chặn.
+            keyed.setdefault(key, (raw_index, option))
+        indexed_options_by_session.append(keyed)
+
+    if not indexed_options_by_session:
+        return ()
+
+    common_keys = set(indexed_options_by_session[0])
+    for keyed in indexed_options_by_session[1:]:
+        common_keys.intersection_update(keyed)
+
+    patterns: list[RecurringPattern] = []
+    for iso_weekday, start_period, location_index in sorted(common_keys):
+        values = tuple(
+            keyed[(iso_weekday, start_period, location_index)]
+            for keyed in indexed_options_by_session
+        )
+        patterns.append(
+            RecurringPattern(
+                group_index=group_index,
+                lecturer_index=lecturer_index,
+                iso_weekday=iso_weekday,
+                start_period=start_period,
+                location_index=location_index,
+                session_options=tuple(value[1] for value in values),
+                raw_option_indices=tuple(value[0] for value in values),
+            )
+        )
+    return tuple(patterns)
+
+
+def build_all_recurring_pattern_domains(
+    problem: ProblemInstance,
+    option_domains: tuple[tuple[SessionOption, ...], ...],
+) -> tuple[tuple[RecurringPattern, ...], ...]:
+    """Sinh miền mẫu lặp của mọi gene lịch, gồm tất cả người đủ năng lực."""
+
+    plans_by_id = {
+        plan.teaching_plan_id: plan for plan in problem.teaching_plans
+    }
+    parts_by_index = {
+        part.teaching_part_index: part for part in problem.teaching_parts
+    }
+    domains: list[tuple[RecurringPattern, ...]] = []
+    for group_index, session_indices in enumerate(problem.schedule_groups):
+        first_session = problem.class_sessions[session_indices[0]]
+        part = parts_by_index[
+            plans_by_id[first_session.teaching_plan_id].teaching_part_index
+        ]
+        group_patterns: list[RecurringPattern] = []
+        for lecturer_index in problem.eligible_lecturer_indices(part.section_code):
+            group_patterns.extend(
+                build_recurring_patterns_for_group(
+                    problem,
+                    option_domains,
+                    group_index,
+                    lecturer_index,
+                )
+            )
+        domains.append(tuple(group_patterns))
+    return tuple(domains)

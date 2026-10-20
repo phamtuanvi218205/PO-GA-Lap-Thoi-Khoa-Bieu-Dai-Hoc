@@ -10,8 +10,9 @@ from __future__ import annotations
 
 import csv
 import json
+import textwrap
 from dataclasses import asdict, dataclass
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 from .metrics import OptimizationResult
@@ -26,16 +27,6 @@ WEEKDAY_NAMES = {
     5: "Thứ Sáu",
     6: "Thứ Bảy",
     7: "Chủ Nhật",
-}
-
-WEEKDAY_SHORT_NAMES = {
-    1: "T2",
-    2: "T3",
-    3: "T4",
-    4: "T5",
-    5: "T6",
-    6: "T7",
-    7: "CN",
 }
 
 PART_TYPE_NAMES = {
@@ -116,7 +107,7 @@ def build_timetable_report_rows(
         part = parts_by_index[plan.teaching_part_index]
         section = sections_by_code[part.section_code]
         course = courses_by_code[section.course_code]
-        lecturer = lecturers_by_index[part.lecturer_index]
+        lecturer = lecturers_by_index[problem.option_lecturer_index(option)]
         location = locations_by_index[option.location_index]
 
         rows.append(
@@ -322,106 +313,341 @@ def _plot_convergence(path: Path, result: OptimizationResult) -> None:
     pyplot.close(figure)
 
 
+def _select_representative_week_rows(
+    rows: tuple[TimetableReportRow, ...],
+) -> tuple[TimetableReportRow, ...]:
+    """Chọn một tuần đại diện để vẽ ảnh thời khóa biểu dễ đọc.
+
+    File CSV vẫn lưu toàn bộ các tuần. Ảnh chỉ trình bày một tuần vì lịch
+    production dùng mẫu lặp cố định. Hàm ưu tiên tuần có nhiều buổi nhất để
+    tránh chọn một tuần đầu hoặc cuối kỳ chỉ có một phần lịch; nếu nhiều tuần
+    có cùng số buổi thì chọn tuần có số thứ tự nhỏ nhất để kết quả xác định.
+    """
+
+    if not rows:
+        return ()
+
+    rows_by_week: dict[int, list[TimetableReportRow]] = {}
+    for row in rows:
+        rows_by_week.setdefault(row.week_number, []).append(row)
+
+    representative_week = min(
+        rows_by_week,
+        key=lambda week_number: (
+            -len(rows_by_week[week_number]),
+            week_number,
+        ),
+    )
+    return tuple(rows_by_week[representative_week])
+
+
+def _assign_parallel_lanes(
+    rows: tuple[TimetableReportRow, ...],
+) -> tuple[tuple[TimetableReportRow, int, int], ...]:
+    """Xếp các buổi trùng giờ vào các làn song song trong cùng một ngày.
+
+    Hai buổi chỉ dùng chung một làn khi buổi trước kết thúc trước tiết bắt đầu
+    của buổi sau. Cách xếp này không thay đổi lịch; nó chỉ ngăn các khối trên
+    ảnh che lẫn nhau khi nhiều lớp học đồng thời ở các phòng khác nhau.
+    """
+
+    ordered_rows = sorted(
+        rows,
+        key=lambda row: (
+            row.start_period,
+            row.end_period,
+            row.section_code,
+            row.part_type,
+        ),
+    )
+
+    # Tách thành các thành phần giao nhau. Một buổi đứng riêng ở đầu ngày sẽ
+    # được dùng toàn bộ chiều rộng dù phía sau ngày đó có nhóm khác bị trùng.
+    components: list[list[TimetableReportRow]] = []
+    component_end_period = -1
+    for row in ordered_rows:
+        if not components or row.start_period > component_end_period:
+            components.append([row])
+            component_end_period = row.end_period
+        else:
+            components[-1].append(row)
+            component_end_period = max(component_end_period, row.end_period)
+
+    placements: list[tuple[TimetableReportRow, int, int]] = []
+    for component in components:
+        lane_end_periods: list[int] = []
+        component_placements: list[tuple[TimetableReportRow, int]] = []
+        for row in component:
+            lane_index = next(
+                (
+                    index
+                    for index, end_period in enumerate(lane_end_periods)
+                    if end_period < row.start_period
+                ),
+                len(lane_end_periods),
+            )
+            if lane_index == len(lane_end_periods):
+                lane_end_periods.append(row.end_period)
+            else:
+                lane_end_periods[lane_index] = row.end_period
+            component_placements.append((row, lane_index))
+
+        lane_count = len(lane_end_periods)
+        placements.extend(
+            (row, lane_index, lane_count)
+            for row, lane_index in component_placements
+        )
+
+    return tuple(placements)
+
+
 def _plot_detailed_timetable(
     path: Path,
     rows: tuple[TimetableReportRow, ...],
 ) -> None:
-    """Vẽ toàn bộ thời khóa biểu, mỗi dòng biểu diễn đúng một buổi học.
+    """Vẽ một tuần dưới dạng lưới thứ/ngày và ca học.
 
-    Bảng chi tiết ưu tiên khả năng tra cứu hơn việc nén lịch thành heatmap. Mỗi
-    dòng giữ tuần, ngày, tiết, lớp, môn, hình thức, phòng và giảng viên nên ảnh
-    có thể dùng trực tiếp để kiểm tra một phân công cụ thể.
+    Lịch đầy đủ vẫn được lưu trong ``timetable.csv``. Ảnh PNG chỉ lấy một tuần
+    để tránh lặp lại cùng mẫu thứ, tiết và phòng ở mọi tuần hoạt động. Mỗi buổi
+    là một khối đặt đúng ngày và khoảng tiết; các buổi trùng giờ được chia làn.
     """
 
     pyplot = _load_plotting_library()
-    table_rows = [
-        (
-            row.week_number,
-            f"{WEEKDAY_SHORT_NAMES[row.teaching_date.isoweekday()]}\n"
-            f"{row.teaching_date.strftime('%d/%m/%Y')}",
-            f"{row.start_period}-{row.end_period}",
-            row.section_code,
-            row.course_name,
-            row.part_type,
-            row.location_code,
-            f"{row.lecturer_code}\n{row.lecturer_name}",
-        )
-        for row in rows
-    ]
+    from matplotlib.patches import Patch, Rectangle
 
-    # Chiều cao tăng theo số buổi để chữ không bị ép khi ảnh chứa cả học kỳ.
-    # Ảnh có thể dài nhưng vẫn giữ một tệp duy nhất và đọc được khi phóng to.
-    figure_height = max(10.0, 3.4 + len(table_rows) * 0.36)
-    figure, axis = pyplot.subplots(figsize=(18, figure_height))
-    axis.axis("off")
-    table = axis.table(
-        cellText=table_rows,
-        colLabels=(
-            "Tuần",
-            "Ngày",
-            "Tiết",
-            "Lớp HP",
-            "Tên học phần",
-            "Hình thức",
-            "Phòng",
-            "Giảng viên",
-        ),
-        loc="upper center",
-        cellLoc="center",
-        colWidths=(0.055, 0.105, 0.060, 0.085, 0.205, 0.105, 0.075, 0.245),
+    display_rows = _select_representative_week_rows(rows)
+    if not display_rows:
+        raise ValueError("Không thể vẽ thời khóa biểu khi kết quả không có buổi học.")
+
+    week_number = display_rows[0].week_number
+    week_start = min(
+        row.teaching_date - timedelta(days=row.teaching_date.isoweekday() - 1)
+        for row in display_rows
     )
-    table.auto_set_font_size(False)
-    table.set_fontsize(9)
-    table.scale(1, 1.75)
+    # Luôn hiển thị tối thiểu thứ Hai đến thứ Sáu. Thứ Bảy hoặc Chủ Nhật chỉ
+    # được thêm khi tuần đại diện thực sự có buổi học, tránh hai cột trống làm
+    # các khối trong ngày thường bị thu hẹp không cần thiết.
+    last_visible_weekday = max(
+        5,
+        max(row.teaching_date.isoweekday() for row in display_rows),
+    )
+    visible_weekdays = tuple(range(1, last_visible_weekday + 1))
+    rows_by_weekday = {
+        weekday: tuple(
+            row
+            for row in display_rows
+            if row.teaching_date.isoweekday() == weekday
+        )
+        for weekday in visible_weekdays
+    }
 
-    first_row_of_week: set[int] = set()
-    previous_week = None
-    for row_index, row in enumerate(rows, start=1):
-        if row.week_number != previous_week:
-            first_row_of_week.add(row_index)
-            previous_week = row.week_number
+    header_height = 1.45
+    period_count = max(16, max(row.end_period for row in display_rows))
+    left_column_width = 0.70
+    day_column_width = 1.0
+    total_width = left_column_width + len(visible_weekdays) * day_column_width
+    total_height = header_height + period_count
 
-    for (row_index, column_index), cell in table.get_celld().items():
-        cell.set_edgecolor("white")
-        if row_index == 0:
-            cell.set_facecolor("#16324f")
-            cell.set_text_props(color="white", fontweight="bold")
-        else:
-            source_row = rows[row_index - 1]
-            if source_row.part_type == "Lý thuyết":
-                background_color = "#e8f2ff"
-            else:
-                background_color = "#fff2df"
-            cell.set_facecolor(background_color)
+    figure, axis = pyplot.subplots(figsize=(22, 12))
+    axis.set_xlim(0, total_width)
+    axis.set_ylim(total_height, 0)
+    axis.axis("off")
 
-            if column_index in (0, 2, 3, 5, 6):
-                cell.set_text_props(fontweight="bold")
+    # Header bên trái và bảy cột ngày giữ cấu trúc quen thuộc của một lịch tuần.
+    axis.add_patch(
+        Rectangle(
+            (0, 0),
+            left_column_width,
+            header_height,
+            facecolor="#eef3f7",
+            edgecolor="#c8d2dc",
+            linewidth=1.0,
+        )
+    )
+    axis.text(
+        left_column_width / 2,
+        header_height / 2,
+        "Ca học",
+        ha="center",
+        va="center",
+        fontsize=11,
+        fontweight="bold",
+        color="#1686d9",
+    )
 
-            # Đường viền đậm đánh dấu lúc bắt đầu tuần mới để bảng dài vẫn
-            # dễ quét theo từng tuần.
-            if row_index in first_row_of_week:
-                cell.set_edgecolor("#16324f")
-                cell.set_linewidth(1.8)
+    for column_index, weekday in enumerate(visible_weekdays):
+        x = left_column_width + column_index * day_column_width
+        teaching_date = week_start + timedelta(days=weekday - 1)
+        axis.add_patch(
+            Rectangle(
+                (x, 0),
+                day_column_width,
+                header_height,
+                facecolor="#eef3f7",
+                edgecolor="#c8d2dc",
+                linewidth=1.0,
+            )
+        )
+        axis.text(
+            x + day_column_width / 2,
+            header_height / 2,
+            f"{WEEKDAY_NAMES[weekday]}\n{teaching_date.strftime('%d/%m/%Y')}",
+            ha="center",
+            va="center",
+            fontsize=10.5,
+            fontweight="bold",
+            color="#1686d9",
+        )
+
+    session_top = header_height
+    # Nền và lưới tiết giúp nhận biết vị trí tương đối của từng khối học.
+    for column_index, weekday in enumerate(visible_weekdays):
+        x = left_column_width + column_index * day_column_width
+        axis.add_patch(
+            Rectangle(
+                (x, session_top),
+                day_column_width,
+                period_count,
+                facecolor="#ffffff",
+                edgecolor="#c8d2dc",
+                linewidth=1.0,
+            )
+        )
+        for subdivision in range(1, 5):
+            inner_x = x + subdivision * day_column_width / 5
+            axis.plot(
+                [inner_x, inner_x],
+                [session_top, total_height],
+                color="#edf1f4",
+                linewidth=0.45,
+                zorder=1,
+            )
+
+    for period_offset in range(period_count + 1):
+        y = session_top + period_offset
+        is_shift_boundary = period_offset in (0, 6, 12, 16)
+        axis.plot(
+            [left_column_width, total_width],
+            [y, y],
+            color="#c8d2dc" if is_shift_boundary else "#edf1f4",
+            linewidth=1.0 if is_shift_boundary else 0.45,
+            zorder=1,
+        )
+
+    shifts = (
+        ("Sáng", 1, 6),
+        ("Chiều", 7, 12),
+        ("Tối", 13, period_count),
+    )
+    for shift_name, start_period, end_period in shifts:
+        if start_period > period_count:
+            continue
+        bounded_end = min(end_period, period_count)
+        y = session_top + start_period - 1
+        height = bounded_end - start_period + 1
+        axis.add_patch(
+            Rectangle(
+                (0, y),
+                left_column_width,
+                height,
+                facecolor="#fffecb",
+                edgecolor="#c8d2dc",
+                linewidth=1.0,
+            )
+        )
+        axis.text(
+            left_column_width / 2,
+            y + height / 2,
+            shift_name,
+            ha="center",
+            va="center",
+            fontsize=11,
+            fontweight="bold",
+            color="#52647a",
+        )
+
+    theory_color = "#cfe8ff"
+    practice_color = "#6bd234"
+    for column_index, weekday in enumerate(visible_weekdays):
+        placements = _assign_parallel_lanes(rows_by_weekday[weekday])
+        if not placements:
+            continue
+
+        day_x = left_column_width + column_index * day_column_width
+        outer_padding = 0.045
+        lane_gap = 0.025
+        usable_width = day_column_width - 2 * outer_padding
+
+        for row, lane_index, lane_count in placements:
+            lane_width = (
+                usable_width - max(0, lane_count - 1) * lane_gap
+            ) / lane_count
+            x = day_x + outer_padding + lane_index * (lane_width + lane_gap)
+            y = session_top + row.start_period - 1 + 0.06
+            height = row.end_period - row.start_period + 1 - 0.12
+            is_theory = row.part_type == "Lý thuyết"
+            axis.add_patch(
+                Rectangle(
+                    (x, y),
+                    lane_width,
+                    height,
+                    facecolor=theory_color if is_theory else practice_color,
+                    edgecolor="#8ba0b3" if is_theory else "#4aaa22",
+                    linewidth=0.8,
+                    zorder=3,
+                )
+            )
+
+            wrap_width = 20 if lane_count == 1 else 11
+            course_name = "\n".join(
+                textwrap.wrap(row.course_name, width=wrap_width)
+            )
+            lecturer_name = "\n".join(
+                textwrap.wrap(row.lecturer_name, width=wrap_width)
+            )
+            part_abbreviation = "LT" if is_theory else "TH"
+            label = (
+                f"{row.section_code} ({part_abbreviation})\n"
+                f"{course_name}\n"
+                f"Tiết {row.start_period}–{row.end_period}, {row.location_code}\n"
+                f"{lecturer_name}"
+            )
+            axis.text(
+                x + 0.025,
+                y + 0.16,
+                label,
+                ha="left",
+                va="top",
+                fontsize=7.4 if lane_count == 1 else 6.3,
+                fontweight="bold" if lane_count == 1 else "normal",
+                color="#08253d",
+                linespacing=1.1,
+                clip_on=True,
+                zorder=4,
+            )
 
     figure.suptitle(
-        f"THỜI KHÓA BIỂU CHI TIẾT — {len(rows)} BUỔI HỌC",
-        fontsize=16,
+        f"THỜI KHÓA BIỂU TUẦN {week_number} — {len(display_rows)} BUỔI HỌC",
+        fontsize=17,
         fontweight="bold",
-        y=0.995,
+        y=0.982,
     )
-    figure.text(
-        0.5,
-        0.977,
-        "Mỗi dòng là một buổi — xanh nhạt: lý thuyết; vàng nhạt: thực hành",
-        ha="center",
+    figure.legend(
+        handles=(
+            Patch(facecolor=theory_color, edgecolor="#8ba0b3", label="Lịch lý thuyết"),
+            Patch(facecolor=practice_color, edgecolor="#4aaa22", label="Lịch thực hành"),
+        ),
+        loc="lower center",
+        bbox_to_anchor=(0.5, 0.012),
+        ncol=2,
+        frameon=False,
         fontsize=10,
-        color="#455a64",
     )
     figure.subplots_adjust(
         left=0.025,
-        right=0.975,
-        top=0.955,
-        bottom=0.02,
+        right=0.985,
+        top=0.925,
+        bottom=0.075,
     )
     figure.savefig(path, dpi=180, bbox_inches="tight")
     pyplot.close(figure)

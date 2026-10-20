@@ -7,7 +7,6 @@ import vn.edu.huit.timetabling_gapo.entities.*;
 import vn.edu.huit.timetabling_gapo.enums.LocationType;
 import vn.edu.huit.timetabling_gapo.enums.PlanningScenarioStatus;
 import vn.edu.huit.timetabling_gapo.enums.TeachingPlanStatus;
-import vn.edu.huit.timetabling_gapo.planning.TeachingAssignmentPolicy;
 import vn.edu.huit.timetabling_gapo.repositories.*;
 
 import java.util.*;
@@ -37,6 +36,7 @@ public class ProblemInstanceSnapshotBuilder {
     private final TeachingPartRequiredEquipmentRepository partEquipmentRepository;
     private final ClassSessionRepository classSessionRepository;
     private final LecturerAvailabilityRepository lecturerAvailabilityRepository;
+    private final LecturerCourseCapabilityRepository lecturerCourseCapabilityRepository;
     private final RoomAvailabilityRepository roomAvailabilityRepository;
     private final CampusTravelTimeRepository campusTravelTimeRepository;
     private final ConstraintSettingRepository constraintSettingRepository;
@@ -71,7 +71,6 @@ public class ProblemInstanceSnapshotBuilder {
                 .map(PlanningScenarioItem::getTeachingPart)
                 .sorted(Comparator.comparing(TeachingPart::getPartCode))
                 .toList();
-        TeachingAssignmentPolicy.requireOneLecturerPerCourseSection(parts);
         Map<Long, Integer> partIndexById = indexBy(
                 parts,
                 TeachingPart::getTeachingPartId
@@ -82,20 +81,6 @@ public class ProblemInstanceSnapshotBuilder {
                 .sorted(Comparator.comparingInt(plan ->
                         requireIndex(partIndexById, plan.getTeachingPart().getTeachingPartId())))
                 .toList();
-
-        List<Lecturer> lecturers = parts.stream()
-                .map(TeachingPart::getLecturer)
-                .collect(Collectors.toMap(
-                        Lecturer::getLecturerCode,
-                        Function.identity(),
-                        (left, right) -> left,
-                        TreeMap::new
-                ))
-                .values().stream().toList();
-        Map<String, Integer> lecturerIndexByCode = indexBy(
-                lecturers,
-                Lecturer::getLecturerCode
-        );
 
         List<CourseSection> sections = parts.stream()
                 .map(TeachingPart::getCourseSection)
@@ -115,7 +100,30 @@ public class ProblemInstanceSnapshotBuilder {
                         TreeMap::new
                 ))
                 .values().stream().toList();
+        List<String> courseCodes = courses.stream()
+                .map(Course::getCourseCode)
+                .toList();
+        List<LecturerCourseCapability> capabilities = lecturerCourseCapabilityRepository
+                .findByCourseCourseCodeInOrderByCourseCourseCodeAscLecturerLecturerCodeAsc(
+                        courseCodes
+                ).stream()
+                .filter(item -> Boolean.TRUE.equals(item.getLecturer().getActive()))
+                .toList();
+        validateLecturerCapabilities(parts, capabilities);
 
+        List<Lecturer> lecturers = capabilities.stream()
+                .map(LecturerCourseCapability::getLecturer)
+                .collect(Collectors.toMap(
+                        Lecturer::getLecturerCode,
+                        Function.identity(),
+                        (left, right) -> left,
+                        TreeMap::new
+                ))
+                .values().stream().toList();
+        Map<String, Integer> lecturerIndexByCode = indexBy(
+                lecturers,
+                Lecturer::getLecturerCode
+        );
         List<TeachingLocation> locations = locationRepository.findAll().stream()
                 .sorted(Comparator
                         .comparing(TeachingLocation::getLocationCode)
@@ -137,9 +145,10 @@ public class ProblemInstanceSnapshotBuilder {
                 mapDurationRules(),
                 mapLocations(locations, locationIndexById),
                 mapLecturers(lecturers, lecturerIndexByCode),
+                mapLecturerCourseCapabilities(capabilities, lecturerIndexByCode),
                 mapCourses(courses),
                 mapCourseSections(sections),
-                mapTeachingParts(parts, partIndexById, lecturerIndexByCode),
+                mapTeachingParts(parts, partIndexById),
                 mapTeachingPlans(plans, partIndexById),
                 mapClassSessions(plans),
                 mapLecturerAvailabilities(termCode, lecturers, lecturerIndexByCode),
@@ -148,6 +157,35 @@ public class ProblemInstanceSnapshotBuilder {
                 mapConstraintSettings()
         );
         return serializer.serialize(snapshot);
+    }
+
+    private void validateLecturerCapabilities(
+            List<TeachingPart> parts,
+            List<LecturerCourseCapability> capabilities
+    ) {
+        Map<String, List<TeachingPart>> partsBySection = parts.stream()
+                .collect(Collectors.groupingBy(
+                        item -> item.getCourseSection().getSectionCode()
+                ));
+        for (Map.Entry<String, List<TeachingPart>> entry : partsBySection.entrySet()) {
+            String courseCode = entry.getValue().getFirst()
+                    .getCourseSection().getCourse().getCourseCode();
+            boolean requiresLecture = entry.getValue().stream()
+                    .anyMatch(item -> item.getPartType().name().equals("LECTURE"));
+            boolean requiresPractice = entry.getValue().stream()
+                    .anyMatch(item -> item.getPartType().name().equals("PRACTICE"));
+            boolean hasCandidate = capabilities.stream().anyMatch(item ->
+                    item.getCourse().getCourseCode().equals(courseCode)
+                            && (!requiresLecture || Boolean.TRUE.equals(item.getCanTeachLecture()))
+                            && (!requiresPractice || Boolean.TRUE.equals(item.getCanTeachPractice()))
+            );
+            if (!hasCandidate) {
+                throw new IllegalStateException(
+                        "CourseSection " + entry.getKey()
+                                + " không có giảng viên đủ khả năng dạy mọi phần học."
+                );
+            }
+        }
     }
 
     private void validateScenarioItems(
@@ -222,6 +260,9 @@ public class ProblemInstanceSnapshotBuilder {
     }
 
     private List<ProblemInstanceSnapshot.TeachingDateSnapshot> mapTeachingDates(String termCode) {
+        // dateStatus được chụp để truy nguyên dữ liệu lịch học kỳ nhưng core
+        // hiện hành không loại HOLIDAY/MAKEUP_ALLOWED khi tạo lịch. Ngày thật
+        // vẫn cần để áp dụng availability DATE của giảng viên và phòng.
         return teachingDateRepository.findByAcademicTermTermCodeOrderByCalendarDate(termCode)
                 .stream()
                 .map(item -> new ProblemInstanceSnapshot.TeachingDateSnapshot(
@@ -350,7 +391,27 @@ public class ProblemInstanceSnapshotBuilder {
                         item.getFullName(),
                         item.getHomeCampus() == null
                                 ? null
-                                : item.getHomeCampus().getCampusCode()
+                                : item.getHomeCampus().getCampusCode(),
+                        item.getMaxTeachingPeriods()
+                ))
+                .toList();
+    }
+
+    private List<ProblemInstanceSnapshot.LecturerCourseCapabilitySnapshot>
+    mapLecturerCourseCapabilities(
+            List<LecturerCourseCapability> capabilities,
+            Map<String, Integer> lecturerIndexByCode
+    ) {
+        return capabilities.stream()
+                .map(item -> new ProblemInstanceSnapshot.LecturerCourseCapabilitySnapshot(
+                        requireIndex(
+                                lecturerIndexByCode,
+                                item.getLecturer().getLecturerCode()
+                        ),
+                        item.getCourse().getCourseCode(),
+                        Boolean.TRUE.equals(item.getCanTeachLecture()),
+                        Boolean.TRUE.equals(item.getCanTeachPractice()),
+                        item.getSuitabilityScore().doubleValue()
                 ))
                 .toList();
     }
@@ -379,8 +440,7 @@ public class ProblemInstanceSnapshotBuilder {
 
     private List<ProblemInstanceSnapshot.TeachingPartSnapshot> mapTeachingParts(
             List<TeachingPart> parts,
-            Map<Long, Integer> partIndexById,
-            Map<String, Integer> lecturerIndexByCode
+            Map<Long, Integer> partIndexById
     ) {
         return parts.stream()
                 .map(item -> new ProblemInstanceSnapshot.TeachingPartSnapshot(
@@ -389,7 +449,7 @@ public class ProblemInstanceSnapshotBuilder {
                         item.getPartCode(),
                         item.getCourseSection().getSectionCode(),
                         item.getPartType().name(),
-                        requireIndex(lecturerIndexByCode, item.getLecturer().getLecturerCode()),
+                        null,
                         item.getTotalPeriods(),
                         item.getRequiredLocationType().name(),
                         item.getRequiredRoomType() == null

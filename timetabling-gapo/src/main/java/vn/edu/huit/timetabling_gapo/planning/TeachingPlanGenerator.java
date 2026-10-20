@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
  * Sinh tự động các phương án chia tổng số tiết thành các buổi theo rule.
  *
  * <p>Generator không dùng dữ liệu ngày, tiết hoặc phòng. Nó chỉ quyết định
- * tuần và thời lượng của từng buổi. Encoder sẽ xử lý ngày–tiết–địa điểm sau
- * khi plan được mở rộng thành ClassSession.</p>
+ * tuần, số buổi mỗi tuần và thời lượng. Sau khi plan được mở rộng, encoder
+ * tìm các mẫu thứ-tiết-địa điểm cố định dùng được cho toàn bộ chuỗi tuần.</p>
  *
  * <p>Mỗi tổ hợp số lượng duration tạo một lịch trải đều. Khi rule cho phép
  * học tập trung, generator tạo thêm lịch xếp sớm liên tiếp. Mọi kết quả được

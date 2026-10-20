@@ -116,7 +116,7 @@ class TestConvergencePoint(unittest.TestCase):
                         )
 
     def test_time_stability_remains_the_first_comparison_tier(self) -> None:
-        """Q_general tốt hơn không được bù cho Q_time kém hơn."""
+        """Metric vẫn phải giữ thứ tự lexicographic của hợp đồng kết quả."""
 
         stable_schedule = ConvergencePoint(
             iteration=1,

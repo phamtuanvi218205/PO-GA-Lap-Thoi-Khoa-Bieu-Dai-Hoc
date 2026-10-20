@@ -15,7 +15,7 @@ public interface TimetableEntryRepository extends JpaRepository<TimetableEntry, 
             join fetch cs.termWeek tw
             join fetch cs.teachingPlan plan
             join fetch plan.teachingPart part
-            join fetch part.lecturer lecturer
+            join fetch te.lecturer lecturer
             join fetch part.courseSection section
             join fetch section.course course
             join fetch te.teachingLocation location
@@ -31,7 +31,7 @@ public interface TimetableEntryRepository extends JpaRepository<TimetableEntry, 
             join fetch cs.termWeek tw
             join fetch cs.teachingPlan plan
             join fetch plan.teachingPart part
-            join fetch part.lecturer lecturer
+            join fetch te.lecturer lecturer
             join fetch part.courseSection section
             join fetch section.course course
             join fetch te.teachingLocation location

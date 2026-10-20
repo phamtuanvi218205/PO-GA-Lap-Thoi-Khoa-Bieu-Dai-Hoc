@@ -6,8 +6,9 @@ import vn.edu.huit.timetabling_gapo.enums.LocationType;
 import java.util.List;
 
 /**
- * Chuyển các item của một plan hợp lệ thành danh sách buổi nguyên tử mà
- * encoder và optimizer sẽ sử dụng. Lớp này không chọn ngày, tiết hoặc phòng.
+ * Chuyển các item của một plan hợp lệ thành các lần xuất hiện theo tuần.
+ * Những lần xuất hiện có cùng stabilityGroupNo tạo một chuỗi lặp và sẽ dùng
+ * chung một gene thứ-tiết-địa điểm trong optimizer. Lớp này không chọn lịch.
  */
 @Component
 public class SessionExpander {

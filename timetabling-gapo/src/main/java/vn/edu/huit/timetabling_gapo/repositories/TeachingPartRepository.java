@@ -12,5 +12,4 @@ public interface TeachingPartRepository extends JpaRepository<TeachingPart, Long
             String termCode,
             CourseSectionStatus status
     );
-    List<TeachingPart> findByLecturerLecturerCodeOrderByPartCode(String lecturerCode);
 }

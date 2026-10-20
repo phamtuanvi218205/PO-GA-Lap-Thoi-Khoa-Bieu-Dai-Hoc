@@ -20,8 +20,8 @@ import json
 from pathlib import Path
 from typing import Any, Mapping
 
-from .decoder import explain_empty_domain
-from .encoder import build_option_domains
+from .decoder import explain_empty_domain, explain_empty_recurring_group
+from .encoder import build_all_recurring_pattern_domains, build_option_domains
 from .models import (
     AcademicTerm,
     AcademicTermStatus,
@@ -37,6 +37,7 @@ from .models import (
     CourseSection,
     DateStatus,
     Lecturer,
+    LecturerCourseCapability,
     LocationType,
     OnlineLocation,
     PartType,
@@ -59,8 +60,9 @@ from .models import (
 )
 
 
-SNAPSHOT_SCHEMA_VERSION = "problem-instance.v1"
-MAPPING_SCHEMA_VERSION = "gene-option-mapping.v1"
+SNAPSHOT_SCHEMA_VERSION = "problem-instance.v2"
+LEGACY_SNAPSHOT_SCHEMA_VERSION = "problem-instance.v1"
+MAPPING_SCHEMA_VERSION = "gene-option-mapping.v3"
 
 
 class SnapshotContractError(ValueError):
@@ -207,7 +209,7 @@ def load_problem_instance_snapshot(
     *,
     expected_checksum: str | None = None,
 ) -> tuple[ProblemInstance, str]:
-    """Nạp snapshot v1 thành ``ProblemInstance`` và trả checksum đã tính.
+    """Nạp snapshot v2 hoặc snapshot v1 tương thích và trả checksum đã tính.
 
     ``expected_checksum`` thường lấy từ ``OptimizationRun``. Nếu checksum
     không khớp, hàm dừng ngay vì dữ liệu đã bị thay đổi hoặc truyền thiếu.
@@ -215,10 +217,18 @@ def load_problem_instance_snapshot(
 
     payload = _load_json_object(source)
     schema_version = _required(payload, "schema_version")
-    if schema_version != SNAPSHOT_SCHEMA_VERSION:
+    if schema_version not in {SNAPSHOT_SCHEMA_VERSION, LEGACY_SNAPSHOT_SCHEMA_VERSION}:
         raise SnapshotContractError(
             "Không hỗ trợ snapshot schema version "
-            f"'{schema_version}'; cần '{SNAPSHOT_SCHEMA_VERSION}'."
+            f"'{schema_version}'; cần '{SNAPSHOT_SCHEMA_VERSION}' hoặc "
+            f"'{LEGACY_SNAPSHOT_SCHEMA_VERSION}'."
+        )
+    if (
+        schema_version == SNAPSHOT_SCHEMA_VERSION
+        and "lecturer_course_capabilities" not in payload
+    ):
+        raise SnapshotContractError(
+            "Snapshot problem-instance.v2 thiếu lecturer_course_capabilities."
         )
 
     actual_checksum = checksum_json(payload)
@@ -334,6 +344,11 @@ def load_problem_instance_snapshot(
                 lecturer_code=str(_required(item, "lecturer_code")),
                 full_name=str(_required(item, "full_name")),
                 home_campus_code=item.get("home_campus_code"),
+                max_teaching_periods=(
+                    None
+                    if item.get("max_teaching_periods") is None
+                    else int(item["max_teaching_periods"])
+                ),
             )
             for item in _required(payload, "lecturers")
         ),
@@ -364,7 +379,11 @@ def load_problem_instance_snapshot(
                 part_code=str(_required(item, "part_code")),
                 section_code=str(_required(item, "section_code")),
                 part_type=PartType(_required(item, "part_type")),
-                lecturer_index=int(_required(item, "lecturer_index")),
+                lecturer_index=(
+                    None
+                    if item.get("lecturer_index") is None
+                    else int(item["lecturer_index"])
+                ),
                 total_periods=int(_required(item, "total_periods")),
                 required_location_type=LocationType(
                     _required(item, "required_location_type")
@@ -434,6 +453,16 @@ def load_problem_instance_snapshot(
             )
             for item in _required(payload, "constraint_settings")
         ),
+        lecturer_course_capabilities=tuple(
+            LecturerCourseCapability(
+                lecturer_index=int(_required(item, "lecturer_index")),
+                course_code=str(_required(item, "course_code")),
+                can_teach_lecture=bool(_required(item, "can_teach_lecture")),
+                can_teach_practice=bool(_required(item, "can_teach_practice")),
+                suitability_score=float(item.get("suitability_score", 1.0)),
+            )
+            for item in payload.get("lecturer_course_capabilities", [])
+        ),
     )
     return problem, actual_checksum
 
@@ -449,34 +478,70 @@ def build_gene_option_mapping(
     số mà random-key và decoder sử dụng, không phải ID tự phát trong database.
     """
 
-    if len(option_domains) != problem.dimension:
+    if len(option_domains) != problem.session_dimension:
         raise ValueError("Số miền option phải bằng số ClassSession.")
 
     locations_by_index = {
         location.location_index: location
         for location in problem.locations
     }
+    assignment_genes = []
+    for gene_index, section_code in enumerate(problem.assignment_section_codes):
+        assignment_genes.append(
+            {
+                "gene_index": gene_index,
+                "gene_type": "LECTURER_ASSIGNMENT",
+                "section_code": section_code,
+                "lecturer_indices": list(
+                    problem.eligible_lecturer_indices(section_code)
+                ),
+            }
+        )
+
     genes = []
-    for session, domain in zip(problem.class_sessions, option_domains):
+    recurring_domains = build_all_recurring_pattern_domains(
+        problem,
+        option_domains,
+    )
+    for group_index, patterns in enumerate(recurring_domains):
+        plan_id, stability_group_no = problem.schedule_group_keys[group_index]
+        conditional_indices: dict[int, int] = {}
         options = []
-        for option_index, option in enumerate(domain):
-            location = locations_by_index[option.location_index]
+        for option_index, pattern in enumerate(patterns):
+            location = locations_by_index[pattern.location_index]
+            lecturer_index = pattern.lecturer_index
+            conditional_option_index = conditional_indices.get(lecturer_index, 0)
+            conditional_indices[lecturer_index] = conditional_option_index + 1
             options.append(
                 {
                     "option_index": option_index,
-                    "location_index": option.location_index,
+                    "conditional_option_index": conditional_option_index,
+                    "lecturer_index": lecturer_index,
+                    "iso_weekday": pattern.iso_weekday,
+                    "start_period": pattern.start_period,
+                    "location_index": pattern.location_index,
                     "location_id": location.location_id,
                     "location_code": location.location_code,
-                    "teaching_date": option.teaching_date.isoformat(),
-                    "start_period": option.start_period,
-                    "end_period": option.end_period,
+                    "occurrences": [
+                        {
+                            "session_index": occurrence.session_index,
+                            "class_session_id": problem.class_sessions[
+                                occurrence.session_index
+                            ].class_session_id,
+                            "teaching_date": occurrence.teaching_date.isoformat(),
+                            "end_period": occurrence.end_period,
+                        }
+                        for occurrence in pattern.session_options
+                    ],
                 }
             )
-
         genes.append(
             {
-                "gene_index": session.session_index,
-                "class_session_id": session.class_session_id,
+                "gene_index": problem.schedule_gene_offset + group_index,
+                "gene_type": "RECURRING_SCHEDULE",
+                "teaching_plan_id": plan_id,
+                "stability_group_no": stability_group_no,
+                "session_indices": list(problem.schedule_groups[group_index]),
                 "options": options,
             }
         )
@@ -485,6 +550,16 @@ def build_gene_option_mapping(
         "schema_version": MAPPING_SCHEMA_VERSION,
         "snapshot_checksum": snapshot_checksum,
         "dimension": problem.dimension,
+        "assignment_dimension": problem.assignment_dimension,
+        "session_dimension": problem.session_dimension,
+        "schedule_dimension": problem.schedule_dimension,
+        "encoding_rule": (
+            "Mỗi gene phân công chọn một lecturer_index cho CourseSection; "
+            "mỗi gene lịch chọn một mẫu thứ-tiết-địa điểm lặp ở mọi tuần "
+            "hoạt động của một stability group. Mẫu được lọc theo đúng giảng "
+            "viên đã chọn trước khi random-key được ánh xạ."
+        ),
+        "assignment_genes": assignment_genes,
         "genes": genes,
     }
 
@@ -502,7 +577,7 @@ def prepare_snapshot_for_optimization(
     )
     option_domains = build_option_domains(problem)
 
-    issues = tuple(
+    atomic_issues = tuple(
         NoOptionIssue(
             session_index=session.session_index,
             class_session_id=session.class_session_id,
@@ -511,6 +586,19 @@ def prepare_snapshot_for_optimization(
         for session, domain in zip(problem.class_sessions, option_domains)
         if not domain
     )
+    recurring_domains = build_all_recurring_pattern_domains(problem, option_domains)
+    recurring_issues = tuple(
+        NoOptionIssue(
+            session_index=problem.schedule_groups[group_index][0],
+            class_session_id=problem.class_sessions[
+                problem.schedule_groups[group_index][0]
+            ].class_session_id,
+            reason=explain_empty_recurring_group(problem, group_index),
+        )
+        for group_index, domain in enumerate(recurring_domains)
+        if not domain
+    )
+    issues = atomic_issues + recurring_issues
     if issues:
         return PreparedSnapshot(
             status=SnapshotPreparationStatus.NO_OPTION,

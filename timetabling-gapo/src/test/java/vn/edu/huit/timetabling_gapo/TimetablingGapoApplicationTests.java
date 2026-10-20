@@ -71,7 +71,7 @@ class TimetablingGapoApplicationTests {
 		assertEquals(first.sha256Checksum(), second.sha256Checksum());
 		assertEquals(64, first.sha256Checksum().length());
 		assertEquals(first.snapshot(), restored);
-		assertEquals("problem-instance.v1", restored.schemaVersion());
+		assertEquals("problem-instance.v2", restored.schemaVersion());
 		assertFalse(restored.classSessions().isEmpty());
 		assertEquals(0, restored.classSessions().getFirst().sessionIndex());
 		assertNotNull(restored.scenario());

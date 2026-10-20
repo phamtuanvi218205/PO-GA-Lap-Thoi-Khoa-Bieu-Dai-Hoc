@@ -27,12 +27,12 @@ public class TeachingPart {
     private PartType partType;
 
     /**
-     * Giảng viên được phân công trước khi tối ưu. Mọi part thuộc cùng một
-     * CourseSection phải tham chiếu cùng giảng viên; policy tầng ứng dụng và
-     * trigger database bảo vệ bất biến này.
+     * Phân công cũ được giữ nullable để đọc dữ liệu lịch sử. Snapshot v2 lấy
+     * ứng viên từ LecturerCourseCapability và để optimizer chọn một giảng
+     * viên chung cho toàn bộ TeachingPart của CourseSection.
      */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "lecturer_code", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecturer_code")
     private Lecturer lecturer;
 
     @Column(name = "total_periods", nullable = false)

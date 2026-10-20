@@ -7,10 +7,19 @@ import vn.edu.huit.timetabling_gapo.enums.LocationType;
 @Entity
 @Table(
         name = "ClassSession",
-        uniqueConstraints = @UniqueConstraint(
-                name = "UQ_ClassSession_Plan_Number",
-                columnNames = {"teaching_plan_id", "session_number"}
-        )
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "UQ_ClassSession_Plan_Number",
+                        columnNames = {"teaching_plan_id", "session_number"}
+                ),
+                @UniqueConstraint(
+                        name = "UQ_ClassSession_Plan_Week_Group",
+                        columnNames = {
+                                "teaching_plan_id", "term_code",
+                                "week_number", "stability_group_no"
+                        }
+                )
+        }
 )
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class ClassSession {
@@ -27,8 +36,8 @@ public class ClassSession {
     private Integer sessionNumber;
 
     /**
-     * Xác định chuỗi buổi cần ưu tiên giữ ổn định thứ và tiết bắt đầu
-     * giữa các tuần học khi điều kiện thực tế cho phép.
+     * Xác định chuỗi buổi dùng chung bắt buộc một mẫu thứ, tiết bắt đầu và
+     * địa điểm trong tất cả tuần hoạt động của plan.
      */
     @Column(name = "stability_group_no", nullable = false)
     private Integer stabilityGroupNo;

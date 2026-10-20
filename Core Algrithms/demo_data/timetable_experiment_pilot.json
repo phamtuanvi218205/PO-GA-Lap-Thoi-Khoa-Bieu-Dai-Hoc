@@ -1,0 +1,16 @@
+{
+  "schema_version": "timetable-experiment.v1",
+  "experiment_id": "resource-constrained-pilot",
+  "base_request_path": "optimization_run_request.example.json",
+  "algorithms": [
+    "GA",
+    "PO",
+    "GA_PO"
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "create_plots": true
+}

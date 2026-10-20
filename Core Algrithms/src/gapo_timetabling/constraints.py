@@ -15,7 +15,6 @@ from .models import (
     AvailabilityType,
     AvailabilityWindow,
     ClassSession,
-    DateStatus,
     LocationType,
     OnlineLocation,
     ProblemInstance,
@@ -34,6 +33,9 @@ class HardViolationCode(str, Enum):
     DATE_NOT_ALLOWED = "DATE_NOT_ALLOWED"
     PERIOD_NOT_ALLOWED = "PERIOD_NOT_ALLOWED"
     LOCATION_NOT_ALLOWED = "LOCATION_NOT_ALLOWED"
+    LECTURER_NOT_QUALIFIED = "LECTURER_NOT_QUALIFIED"
+    SECTION_LECTURER_MISMATCH = "SECTION_LECTURER_MISMATCH"
+    LECTURER_LOAD_EXCEEDED = "LECTURER_LOAD_EXCEEDED"
     LECTURER_UNAVAILABLE = "LECTURER_UNAVAILABLE"
     ROOM_UNAVAILABLE = "ROOM_UNAVAILABLE"
     LECTURER_CONFLICT = "LECTURER_CONFLICT"
@@ -202,13 +204,12 @@ def _validate_one_option(
     if (
         teaching_date is None
         or teaching_date.week_number != session.week_number
-        or teaching_date.status == DateStatus.HOLIDAY
     ):
         violations.append(
             HardConstraintViolation(
                 code=HardViolationCode.DATE_NOT_ALLOWED,
                 session_indices=(session.session_index,),
-                message="Ngày được chọn không được phép cho tuần của ClassSession.",
+                message="Ngày được chọn không thuộc tuần của ClassSession.",
             )
         )
 
@@ -245,9 +246,22 @@ def _validate_one_option(
             )
         )
 
+    lecturer_index = problem.option_lecturer_index(option)
+    if lecturer_index not in problem.eligible_lecturer_indices(part.section_code):
+        violations.append(
+            HardConstraintViolation(
+                code=HardViolationCode.LECTURER_NOT_QUALIFIED,
+                session_indices=(session.session_index,),
+                message=(
+                    "Giảng viên của option không đủ khả năng dạy toàn bộ "
+                    "các phần thuộc lớp học phần."
+                ),
+            )
+        )
+
     if _resource_is_unavailable(
         problem.lecturer_availabilities,
-        part.lecturer_index,
+        lecturer_index,
         option,
     ):
         violations.append(
@@ -349,12 +363,10 @@ def _validate_pairs(
 
     for first_position in range(len(valid_options)):
         first_option = valid_options[first_position]
-        _, first_part = session_context[first_option.session_index]
         first_location = locations_by_index[first_option.location_index]
 
         for second_position in range(first_position + 1, len(valid_options)):
             second_option = valid_options[second_position]
-            _, second_part = session_context[second_option.session_index]
             second_location = locations_by_index[second_option.location_index]
 
             if first_option.teaching_date != second_option.teaching_date:
@@ -371,7 +383,10 @@ def _validate_pairs(
                 second_option.session_index,
             )))
 
-            same_lecturer = first_part.lecturer_index == second_part.lecturer_index
+            same_lecturer = (
+                problem.option_lecturer_index(first_option)
+                == problem.option_lecturer_index(second_option)
+            )
             if same_lecturer and periods_overlap:
                 violations.append(
                     HardConstraintViolation(
@@ -478,5 +493,62 @@ def validate_timetable(
             session_context,
         )
     )
+
+    # Một CourseSection chỉ có một gene phân công. Vì vậy mọi buổi lý thuyết
+    # và thực hành của cùng lớp phải mang cùng lecturer_index sau giải mã.
+    lecturers_by_section: dict[str, dict[int, list[int]]] = {}
+    load_by_lecturer: dict[int, int] = {}
+    for option in structurally_valid_options:
+        session, part = session_context[option.session_index]
+        lecturer_index = problem.option_lecturer_index(option)
+        lecturers_by_section.setdefault(part.section_code, {}).setdefault(
+            lecturer_index, []
+        ).append(session.session_index)
+        load_by_lecturer[lecturer_index] = (
+            load_by_lecturer.get(lecturer_index, 0) + session.duration_periods
+        )
+
+    for section_code, grouped in lecturers_by_section.items():
+        if len(grouped) <= 1:
+            continue
+        affected = tuple(sorted(index for indices in grouped.values() for index in indices))
+        violations.append(
+            HardConstraintViolation(
+                code=HardViolationCode.SECTION_LECTURER_MISMATCH,
+                session_indices=affected,
+                message=(
+                    f"Các buổi của CourseSection {section_code} không dùng chung "
+                    "một giảng viên."
+                ),
+            )
+        )
+
+    lecturers_by_index = {
+        lecturer.lecturer_index: lecturer for lecturer in problem.lecturers
+    }
+    for lecturer_index, assigned_periods in load_by_lecturer.items():
+        lecturer = lecturers_by_index.get(lecturer_index)
+        # Option mang lecturer_index lạ đã được ghi nhận bằng
+        # LECTURER_NOT_QUALIFIED ở kiểm tra đơn. Không truy cập trực tiếp vào
+        # dict để validator vẫn trả lỗi có cấu trúc thay vì phát sinh KeyError.
+        if lecturer is None:
+            continue
+        maximum = lecturer.max_teaching_periods
+        if maximum is not None and assigned_periods > maximum:
+            affected = tuple(sorted(
+                option.session_index
+                for option in structurally_valid_options
+                if problem.option_lecturer_index(option) == lecturer_index
+            ))
+            violations.append(
+                HardConstraintViolation(
+                    code=HardViolationCode.LECTURER_LOAD_EXCEEDED,
+                    session_indices=affected,
+                    message=(
+                        f"Giảng viên {lecturer_index} được phân {assigned_periods} tiết, "
+                        f"vượt giới hạn {maximum} tiết trong snapshot."
+                    ),
+                )
+            )
 
     return ValidationResult(tuple(violations))

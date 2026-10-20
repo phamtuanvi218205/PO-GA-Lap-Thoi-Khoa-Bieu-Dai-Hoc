@@ -485,7 +485,10 @@ class TestHybridCommandLine(unittest.TestCase):
         self.assertIn("KẾT QUẢ XẾP THỜI KHÓA BIỂU", output)
         self.assertIn("Số vi phạm bắt buộc       : 0", output)
         self.assertIn("TUẦN 1", output)
-        self.assertIn("Thứ Hai, ngày 07/09/2026", output)
+        # Snapshot v2 có thêm gene phân công giảng viên nên cùng seed tạo một
+        # quỹ đạo random-key khác snapshot v1. Kết quả vẫn phải tái lập đúng
+        # ngày hợp lệ mà optimizer v2 đã chọn.
+        self.assertIn("Thứ Tư, ngày 09/09/2026", output)
         self.assertIn("Lớp HP", output)
         self.assertIn("Lý thuyết", output)
         self.assertIn("KẾT LUẬN: Đã xếp đủ 1 buổi học", output)
@@ -505,8 +508,7 @@ class TestHybridCommandLine(unittest.TestCase):
 
     def test_main_reports_no_option_before_initialization(self) -> None:
         payload = deepcopy(make_snapshot_payload())
-        for teaching_date in payload["teaching_dates"]:
-            teaching_date["status"] = "HOLIDAY"
+        payload["teaching_dates"] = []
 
         with TemporaryDirectory() as temporary_directory:
             snapshot_path = self.write_snapshot(

@@ -195,7 +195,7 @@ def _validate_option_domains(
 ) -> None:
     """Kiểm tra cấu trúc miền mà không thay decoder kiểm tra tính khả thi."""
 
-    if len(option_domains) != problem.dimension:
+    if len(option_domains) != problem.session_dimension:
         raise ValueError("Số miền option phải bằng số ClassSession.")
 
     for session_index, domain in enumerate(option_domains):

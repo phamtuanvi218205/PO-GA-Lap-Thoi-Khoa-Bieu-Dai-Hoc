@@ -23,4 +23,8 @@ public class Lecturer {
 
     @Column(name = "is_active", nullable = false)
     private Boolean active;
+
+    /** Giới hạn cứng số tiết trong phạm vi một snapshot; null là chưa giới hạn. */
+    @Column(name = "max_teaching_periods")
+    private Integer maxTeachingPeriods;
 }

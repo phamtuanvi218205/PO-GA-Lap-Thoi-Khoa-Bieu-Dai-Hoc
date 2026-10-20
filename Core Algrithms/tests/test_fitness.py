@@ -425,7 +425,7 @@ class TestGeneralQuality(FitnessFixture):
         )
 
         self.assertAlmostEqual(result.breakdown.capacity_component, 0.2)
-        self.assertAlmostEqual(result.general_quality_score, 0.4091 * 0.2)
+        self.assertAlmostEqual(result.general_quality_score, 0.45 * 0.2)
 
     def test_fitness_accepts_domains_generated_by_real_encoder(self) -> None:
         """Fitness phải nối được với output thật của encoder, không chỉ fixture."""
@@ -477,7 +477,7 @@ class TestGeneralQuality(FitnessFixture):
         )
         self.assertLess(stable_result.fitness_key, less_stable_result.fitness_key)
 
-    def test_room_change_is_a_light_general_quality_penalty(self) -> None:
+    def test_room_change_metric_is_retained_but_has_no_production_weight(self) -> None:
         selected = list(self.stable_options)
         selected[3] = self.option(3, room_index=1)
 
@@ -490,7 +490,9 @@ class TestGeneralQuality(FitnessFixture):
         self.assertEqual(result.breakdown.room_change_count, 1)
         self.assertAlmostEqual(result.breakdown.room_stability_component, 0.25)
         # Ba buổi ở phòng nhỏ và một buổi ở phòng đủ chỗ: Q_capacity=0,15.
-        expected_general = 0.4091 * 0.15 + 0.0909 * 0.25
+        # Lịch lặp toàn kỳ đã cố định phòng bằng cấu trúc gene. Component cũ
+        # vẫn được tính để tương thích báo cáo, nhưng trọng số production là 0.
+        expected_general = 0.45 * 0.15
         self.assertAlmostEqual(result.general_quality_score, expected_general)
 
     def test_lecturer_gap_counts_only_periods_between_same_day_sessions(self) -> None:
@@ -604,7 +606,7 @@ class TestGeneralQuality(FitnessFixture):
         )
         self.assertAlmostEqual(
             result.general_quality_score,
-            0.4091 * 0.2 + 0.0909 * (3 / 9),
+            0.45 * 0.2 + 0.10 * (3 / 9),
         )
 
     def test_lecturer_consecutive_threshold_is_read_from_configuration(

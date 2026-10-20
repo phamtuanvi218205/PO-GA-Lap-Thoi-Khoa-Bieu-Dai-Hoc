@@ -11,6 +11,10 @@ import java.util.List;
  * <p>Các record chỉ chứa kiểu dữ liệu trao đổi, không chứa entity JPA. Nhờ đó
  * snapshot không phụ thuộc persistence context và không thể vô tình thay đổi
  * khi dữ liệu database được chỉnh sau thời điểm tạo.</p>
+ *
+ * <p>classSessions vẫn là các lần xuất hiện theo tuần để giữ đúng tổng số
+ * tiết và ngày đầu ra. Python gom các dòng có cùng teachingPlanId và
+ * stabilityGroupNo thành một gene lịch lặp cho cả học kỳ.</p>
  */
 public record ProblemInstanceSnapshot(
         String schemaVersion,
@@ -23,6 +27,7 @@ public record ProblemInstanceSnapshot(
         List<TeachingDurationRuleSnapshot> teachingDurationRules,
         List<LocationSnapshot> locations,
         List<LecturerSnapshot> lecturers,
+        List<LecturerCourseCapabilitySnapshot> lecturerCourseCapabilities,
         List<CourseSnapshot> courses,
         List<CourseSectionSnapshot> courseSections,
         List<TeachingPartSnapshot> teachingParts,
@@ -33,7 +38,7 @@ public record ProblemInstanceSnapshot(
         List<CampusTravelTimeSnapshot> campusTravelTimes,
         List<ConstraintSettingSnapshot> constraintSettings
 ) {
-    public static final String SCHEMA_VERSION = "problem-instance.v1";
+    public static final String SCHEMA_VERSION = "problem-instance.v2";
 
     public ProblemInstanceSnapshot {
         weeks = List.copyOf(weeks);
@@ -43,6 +48,7 @@ public record ProblemInstanceSnapshot(
         teachingDurationRules = List.copyOf(teachingDurationRules);
         locations = List.copyOf(locations);
         lecturers = List.copyOf(lecturers);
+        lecturerCourseCapabilities = List.copyOf(lecturerCourseCapabilities);
         courses = List.copyOf(courses);
         courseSections = List.copyOf(courseSections);
         teachingParts = List.copyOf(teachingParts);
@@ -150,7 +156,17 @@ public record ProblemInstanceSnapshot(
             int lecturerIndex,
             String lecturerCode,
             String fullName,
-            String homeCampusCode
+            String homeCampusCode,
+            Integer maxTeachingPeriods
+    ) {
+    }
+
+    public record LecturerCourseCapabilitySnapshot(
+            int lecturerIndex,
+            String courseCode,
+            boolean canTeachLecture,
+            boolean canTeachPractice,
+            double suitabilityScore
     ) {
     }
 
@@ -174,7 +190,7 @@ public record ProblemInstanceSnapshot(
             String partCode,
             String sectionCode,
             String partType,
-            int lecturerIndex,
+            Integer lecturerIndex,
             int totalPeriods,
             String requiredLocationType,
             String requiredRoomType,

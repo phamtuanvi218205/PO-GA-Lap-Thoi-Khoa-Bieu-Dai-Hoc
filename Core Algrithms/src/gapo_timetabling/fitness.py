@@ -2,10 +2,12 @@
 
 Module này triển khai ba tầng mục tiêu có thứ tự ưu tiên độc lập:
 
-1. ``Q_time``: giữ ổn định thứ và tiết bắt đầu giữa các tuần.
-2. ``Q_general``: sức chứa, khoảng trống giảng viên, số tiết dạy liên tục,
-   thời gian hạn chế dùng phòng và mức ổn định phòng.
-3. ``Q_lecturer``: mức đáp ứng mong muốn thời gian của giảng viên.
+1. ``Q_time``: bằng 0 vì độ ổn định thứ và tiết đã được bảo đảm bởi một gene
+   chung cho toàn bộ chuỗi tuần; trường này được giữ để tương thích kết quả.
+2. ``Q_general``: sức chứa, khoảng trống, số tiết dạy liên tục, thời gian hạn
+   chế dùng phòng và cân bằng khối lượng giảng dạy. Độ ổn định phòng vẫn được
+   ghi trong breakdown để đọc kết quả cũ nhưng có trọng số 0 ở D094.
+3. ``Q_lecturer``: mong muốn thời gian và độ phù hợp môn–giảng viên.
 
 Ba điểm được so sánh theo thứ tự từ trái sang phải bằng khóa
 ``(Q_time, Q_general, Q_lecturer)``. Chúng không được cộng thành một số duy
@@ -18,6 +20,7 @@ from dataclasses import dataclass
 from datetime import date
 
 from .constraints import validate_timetable
+from .encoder import build_recurring_patterns_for_group
 from .models import (
     AvailabilityScopeType,
     AvailabilityType,
@@ -38,11 +41,26 @@ from .models import (
 # hình kỹ thuật ban đầu; ConstraintSetting của snapshot có thể ghi đè từng
 # trọng số để phục vụ sensitivity test có kiểm soát.
 DEFAULT_GENERAL_WEIGHTS = {
-    "SOFT_CAPACITY": 0.4091,
-    "SOFT_LECTURER_GAP": 0.2273,
-    "SOFT_LECTURER_CONSECUTIVE": 0.0909,
-    "SOFT_ROOM_DISCOURAGED": 0.1818,
-    "SOFT_ROOM_STABILITY": 0.0909,
+    "SOFT_CAPACITY": 0.4500,
+    "SOFT_LECTURER_GAP": 0.2500,
+    "SOFT_LECTURER_CONSECUTIVE": 0.1000,
+    "SOFT_ROOM_DISCOURAGED": 0.2000,
+    "SOFT_ROOM_STABILITY": 0.0000,
+    "SOFT_WORKLOAD_BALANCE": 0.0,
+}
+
+DYNAMIC_ASSIGNMENT_GENERAL_WEIGHTS = {
+    "SOFT_CAPACITY": 0.4010,
+    "SOFT_LECTURER_GAP": 0.2228,
+    "SOFT_LECTURER_CONSECUTIVE": 0.0891,
+    "SOFT_ROOM_DISCOURAGED": 0.1782,
+    "SOFT_ROOM_STABILITY": 0.0000,
+    "SOFT_WORKLOAD_BALANCE": 0.1089,
+}
+
+DEFAULT_LECTURER_WEIGHTS = {
+    "SOFT_LECTURER_TIME_PREFERENCE": 0.5,
+    "SOFT_COURSE_SUITABILITY": 0.5,
 }
 
 # Nếu snapshot cũ chưa chứa tham số, fitness dùng ngưỡng mặc định tương thích.
@@ -73,7 +91,7 @@ class RoomStabilityResult:
 
 @dataclass(frozen=True, slots=True)
 class GeneralQualityResult:
-    """Năm thành phần đã chuẩn hóa và điểm ``Q_general`` sau khi ghép."""
+    """Các thành phần đã chuẩn hóa và điểm ``Q_general`` sau khi ghép."""
 
     score: float
     capacity_component: float
@@ -81,6 +99,7 @@ class GeneralQualityResult:
     lecturer_consecutive_component: float
     room_discouraged_component: float
     room_stability: RoomStabilityResult
+    workload_balance_component: float
 
 
 @dataclass(frozen=True, slots=True)
@@ -89,6 +108,7 @@ class LecturerPreferenceResult:
 
     score: float
     breakdown: tuple[LecturerPreferenceBreakdown, ...]
+    course_suitability_component: float = 0.0
 
 
 def _get_time_pattern(option: SessionOption) -> tuple[int, int]:
@@ -191,11 +211,14 @@ def _choose_standard_room(selected_options: tuple[SessionOption, ...]) -> int:
 def _domain_contains_pattern(
     option_domain: tuple[SessionOption, ...],
     standard_pattern: tuple[int, int],
+    lecturer_index: int,
+    problem: ProblemInstance,
 ) -> bool:
-    """Cho biết miền của một session còn option đúng mẫu chuẩn hay không."""
+    """Kiểm tra mẫu chuẩn trong miền của đúng giảng viên đã được chọn."""
 
     return any(
-        _get_time_pattern(option) == standard_pattern
+        problem.option_lecturer_index(option) == lecturer_index
+        and _get_time_pattern(option) == standard_pattern
         for option in option_domain
     )
 
@@ -212,7 +235,7 @@ def _validate_fitness_inputs(
     thức phía sau không phụ thuộc vào thứ tự của ``selected_options``.
     """
 
-    if len(option_domains) != problem.dimension:
+    if len(option_domains) != problem.session_dimension:
         raise ValueError("Số miền option phải bằng số ClassSession.")
 
     for session_index, domain in enumerate(option_domains):
@@ -302,7 +325,12 @@ def _calculate_time_stability_from_validated_input(
                 continue
 
             session_domain = option_domains[session.session_index]
-            if not _domain_contains_pattern(session_domain, standard_pattern):
+            if not _domain_contains_pattern(
+                session_domain,
+                standard_pattern,
+                problem.option_lecturer_index(selected_option),
+                problem,
+            ):
                 exceptions.append(
                     TimeStabilityException(
                         session_index=session.session_index,
@@ -501,7 +529,15 @@ def _calculate_gap_component(
 
     for session_index, selected_option in selected_by_session.items():
         _, part = session_context[session_index]
-        group_key = (part.lecturer_index, selected_option.teaching_date)
+        lecturer_index = (
+            selected_option.lecturer_index
+            if selected_option.lecturer_index >= 0
+            else part.lecturer_index
+        )
+        group_key = (
+            lecturer_index,
+            selected_option.teaching_date,
+        )
         options_by_lecturer_and_date.setdefault(group_key, []).append(
             selected_option
         )
@@ -561,7 +597,15 @@ def _calculate_lecturer_consecutive_component(
 
     for session_index, selected_option in selected_by_session.items():
         _, part = session_context[session_index]
-        group_key = (part.lecturer_index, selected_option.teaching_date)
+        lecturer_index = (
+            selected_option.lecturer_index
+            if selected_option.lecturer_index >= 0
+            else part.lecturer_index
+        )
+        group_key = (
+            lecturer_index,
+            selected_option.teaching_date,
+        )
         options_by_lecturer_and_date.setdefault(group_key, []).append(
             selected_option
         )
@@ -658,7 +702,13 @@ def _get_soft_weight(
 ) -> float:
     """Lấy trọng số từ cấu hình hoặc dùng giá trị mặc định chuẩn hóa."""
 
-    default_weight = DEFAULT_GENERAL_WEIGHTS[constraint_code]
+    general_defaults = (
+        DYNAMIC_ASSIGNMENT_GENERAL_WEIGHTS
+        if problem.lecturer_course_capabilities
+        else DEFAULT_GENERAL_WEIGHTS
+    )
+    all_defaults = general_defaults | DEFAULT_LECTURER_WEIGHTS
+    default_weight = all_defaults[constraint_code]
 
     for setting in problem.constraint_settings:
         if setting.constraint_code != constraint_code:
@@ -673,6 +723,43 @@ def _get_soft_weight(
         return float(setting.weight)
 
     return default_weight
+
+
+def _calculate_workload_balance_component(
+    problem: ProblemInstance,
+    selected_by_session: dict[int, SessionOption],
+) -> float:
+    """Đo độ lệch tải giữa các giảng viên có thể tham gia scenario.
+
+    Tổng số tiết của từng người được lấy từ các option đã chọn. Mức lệch tuyệt
+    đối quanh tải trung bình được chia cho ``2 * tổng tải`` nên nằm trong
+    ``[0,1)``. Giảng viên đủ năng lực nhưng không được phân lớp vẫn có tải 0;
+    nhờ đó optimizer có tín hiệu để tránh dồn toàn bộ lớp cho một người.
+    """
+
+    if not problem.lecturer_course_capabilities:
+        return 0.0
+
+    active_lecturers = sorted({
+        lecturer_index
+        for section_code in problem.assignment_section_codes
+        for lecturer_index in problem.eligible_lecturer_indices(section_code)
+    })
+    if len(active_lecturers) < 2:
+        return 0.0
+
+    loads = {lecturer_index: 0 for lecturer_index in active_lecturers}
+    for option in selected_by_session.values():
+        lecturer_index = problem.option_lecturer_index(option)
+        loads[lecturer_index] = loads.get(lecturer_index, 0) + (
+            option.end_period - option.start_period + 1
+        )
+
+    total_load = sum(loads.values())
+    if total_load == 0:
+        return 0.0
+    mean_load = total_load / len(loads)
+    return sum(abs(load - mean_load) for load in loads.values()) / (2 * total_load)
 
 
 def _get_max_consecutive_periods(problem: ProblemInstance) -> int:
@@ -727,6 +814,10 @@ def _calculate_general_quality_from_validated_input(
         problem,
         selected_by_session,
     )
+    workload_balance_component = _calculate_workload_balance_component(
+        problem,
+        selected_by_session,
+    )
 
     score = (
         _get_soft_weight(problem, "SOFT_CAPACITY") * capacity_component
@@ -737,6 +828,8 @@ def _calculate_general_quality_from_validated_input(
         * room_discouraged_component
         + _get_soft_weight(problem, "SOFT_ROOM_STABILITY")
         * room_stability.score
+        + _get_soft_weight(problem, "SOFT_WORKLOAD_BALANCE")
+        * workload_balance_component
     )
 
     return GeneralQualityResult(
@@ -746,6 +839,7 @@ def _calculate_general_quality_from_validated_input(
         lecturer_consecutive_component=lecturer_consecutive_component,
         room_discouraged_component=room_discouraged_component,
         room_stability=room_stability,
+        workload_balance_component=workload_balance_component,
     )
 
 
@@ -805,14 +899,36 @@ def _calculate_lecturer_preference_from_validated_input(
     """
 
     session_context = _build_session_context(problem)
+    # Preference phải được so trong miền các mẫu cố định khả thi cho cả kỳ,
+    # không phải với một option tuần riêng lẻ mà các tuần khác không thể cùng
+    # sử dụng. Nếu không giới hạn như vậy, fitness sẽ phạt thuật toán vì không
+    # chọn một phương án vốn không thuộc không gian nghiệm mới.
+    recurring_options_by_session: dict[int, list[SessionOption]] = {
+        session.session_index: [] for session in problem.class_sessions
+    }
+    for group_index, session_indices in enumerate(problem.schedule_groups):
+        selected_lecturer = problem.option_lecturer_index(
+            selected_by_session[session_indices[0]]
+        )
+        patterns = build_recurring_patterns_for_group(
+            problem,
+            option_domains,
+            group_index,
+            selected_lecturer,
+        )
+        for pattern in patterns:
+            for option in pattern.session_options:
+                recurring_options_by_session[option.session_index].append(option)
     penalties_by_lecturer: dict[int, dict[str, float | int]] = {}
     total_penalty = 0.0
     total_opportunity = 0.0
 
     for session_index, selected_option in selected_by_session.items():
-        _, part = session_context[session_index]
-        lecturer_index = part.lecturer_index
-        domain = option_domains[session_index]
+        lecturer_index = problem.option_lecturer_index(selected_option)
+        # So sánh preference trong miền của cùng người. Nếu để option của
+        # giảng viên khác tham gia, Q_lecturer sẽ vô tình đánh giá lại quyết
+        # định phân công thay vì chỉ đánh giá thời gian của người đã chọn.
+        domain = tuple(recurring_options_by_session[session_index])
         domain_values = tuple(
             _preference_values_for_option(
                 option,
@@ -883,7 +999,62 @@ def _calculate_lecturer_preference_from_validated_input(
         for lecturer_index, values in sorted(penalties_by_lecturer.items())
     )
 
-    return LecturerPreferenceResult(score=score, breakdown=breakdown)
+    sections_by_code = {
+        section.section_code: section for section in problem.course_sections
+    }
+    capability_scores = {
+        (item.lecturer_index, item.course_code): item.suitability_score
+        for item in problem.lecturer_course_capabilities
+    }
+    weighted_suitability_penalty = 0.0
+    total_section_periods = 0
+    seen_sections: set[str] = set()
+    for session_index, selected_option in selected_by_session.items():
+        session, part = session_context[session_index]
+        if part.section_code in seen_sections:
+            continue
+        seen_sections.add(part.section_code)
+        section = sections_by_code[part.section_code]
+        lecturer_index = problem.option_lecturer_index(selected_option)
+        section_periods = sum(
+            candidate.total_periods
+            for candidate in problem.teaching_parts
+            if candidate.section_code == part.section_code
+        )
+        # Snapshot v1 không có capability; phân công cũ được xem là phù hợp
+        # hoàn toàn để kết quả lịch cũ không bị thay đổi.
+        suitability = capability_scores.get(
+            (lecturer_index, section.course_code),
+            1.0,
+        )
+        weighted_suitability_penalty += section_periods * (1.0 - suitability)
+        total_section_periods += section_periods
+
+    course_suitability_component = (
+        0.0
+        if total_section_periods == 0
+        else weighted_suitability_penalty / total_section_periods
+    )
+    if not problem.lecturer_course_capabilities:
+        return LecturerPreferenceResult(score=score, breakdown=breakdown)
+
+    time_weight = _get_soft_weight(problem, "SOFT_LECTURER_TIME_PREFERENCE")
+    suitability_weight = _get_soft_weight(problem, "SOFT_COURSE_SUITABILITY")
+    active_weight = time_weight + suitability_weight
+    combined_score = (
+        0.0
+        if active_weight == 0.0
+        else (
+            time_weight * score
+            + suitability_weight * course_suitability_component
+        ) / active_weight
+    )
+
+    return LecturerPreferenceResult(
+        score=combined_score,
+        breakdown=breakdown,
+        course_suitability_component=course_suitability_component,
+    )
 
 
 def calculate_fitness(
@@ -938,6 +1109,10 @@ def calculate_fitness(
             general_quality.room_discouraged_component
         ),
         room_stability_component=general_quality.room_stability.score,
+        workload_balance_component=general_quality.workload_balance_component,
+        course_suitability_component=(
+            lecturer_preference.course_suitability_component
+        ),
         lecturer_breakdown=lecturer_preference.breakdown,
         time_exceptions=time_stability.exceptions,
     )

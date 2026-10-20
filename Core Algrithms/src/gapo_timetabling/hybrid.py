@@ -463,14 +463,14 @@ def _build_argument_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(
         description=(
-            "Chạy thuật toán lai GA-PO từ snapshot problem-instance.v1 "
+            "Chạy thuật toán lai GA-PO từ snapshot problem-instance.v2 "
             "và in thời khóa biểu tốt nhất."
         )
     )
     parser.add_argument(
         "snapshot",
         type=Path,
-        help="Đường dẫn đến snapshot JSON problem-instance.v1.",
+        help="Đường dẫn đến snapshot JSON problem-instance.v2 (v1 vẫn được đọc).",
     )
     parser.add_argument(
         "--population-size",

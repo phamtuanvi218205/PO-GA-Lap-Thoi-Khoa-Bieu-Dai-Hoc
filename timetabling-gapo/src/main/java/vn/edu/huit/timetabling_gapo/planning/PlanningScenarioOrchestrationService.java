@@ -36,8 +36,6 @@ public class PlanningScenarioOrchestrationService {
         if (parts.isEmpty()) {
             throw new IllegalStateException("Phạm vi scenario không có TeachingPart nào.");
         }
-        TeachingAssignmentPolicy.requireOneLecturerPerCourseSection(parts);
-
         Map<Long, TeachingPart> partsById = parts.stream().collect(Collectors.toMap(
                 TeachingPart::getTeachingPartId,
                 Function.identity()

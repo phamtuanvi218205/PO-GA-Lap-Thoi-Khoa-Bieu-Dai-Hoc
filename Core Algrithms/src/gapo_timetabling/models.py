@@ -317,18 +317,26 @@ class OnlineLocation(TeachingLocation):
 
 @dataclass(frozen=True, slots=True)
 class Lecturer:
-    """Giảng viên đã được phân công trước khi thuật toán xếp lịch."""
+    """Giảng viên có thể được thuật toán phân công cho lớp học phần.
+
+    ``max_teaching_periods`` là tải giảng dạy tối đa trong đúng phạm vi của
+    snapshot. Giá trị ``None`` nghĩa là nguồn dữ liệu chưa áp một giới hạn
+    cứng; fitness vẫn có thể đánh giá độ cân bằng tải giữa các giảng viên.
+    """
 
     lecturer_index: int
     lecturer_code: str
     full_name: str
     home_campus_code: str | None = None
+    max_teaching_periods: int | None = None
 
     def __post_init__(self) -> None:
         """Bảo đảm chỉ số giảng viên có thể dùng làm chỉ số mảng."""
 
         if self.lecturer_index < 0:
             raise ValueError("lecturer_index không được âm.")
+        if self.max_teaching_periods is not None and self.max_teaching_periods <= 0:
+            raise ValueError("max_teaching_periods phải dương hoặc None.")
 
 
 @dataclass(frozen=True, slots=True)
@@ -337,6 +345,36 @@ class Course:
 
     course_code: str
     course_name: str
+
+
+@dataclass(frozen=True, slots=True)
+class LecturerCourseCapability:
+    """Khả năng một giảng viên đảm nhận một môn học.
+
+    Bản ghi gắn với ``Course`` thay vì ``CourseSection``. Vì vậy một giảng
+    viên đủ khả năng dạy môn JAVA có thể được optimizer thử cho JAVA01,
+    JAVA02 hoặc lớp học phần khác của cùng môn. Hai cờ loại phần bảo đảm chỉ
+    những giảng viên dạy được toàn bộ lý thuyết/thực hành cần thiết của một
+    lớp mới xuất hiện trong miền gene phân công.
+    """
+
+    lecturer_index: int
+    course_code: str
+    can_teach_lecture: bool
+    can_teach_practice: bool
+    suitability_score: float = 1.0
+
+    def __post_init__(self) -> None:
+        """Kiểm tra khóa tham chiếu và điểm phù hợp đã chuẩn hóa."""
+
+        if self.lecturer_index < 0:
+            raise ValueError("lecturer_index của capability không được âm.")
+        if not self.course_code.strip():
+            raise ValueError("course_code của capability không được rỗng.")
+        if not 0.0 <= self.suitability_score <= 1.0:
+            raise ValueError("suitability_score phải nằm trong [0,1].")
+        if not self.can_teach_lecture and not self.can_teach_practice:
+            raise ValueError("Capability phải cho phép ít nhất một loại phần học.")
 
 
 @dataclass(frozen=True, slots=True)
@@ -359,8 +397,10 @@ class CourseSection:
 class TeachingPart:
     """Khối lượng lý thuyết hoặc thực hành phải hoàn thành cho một lớp.
 
-    Giảng viên, tổng số tiết và yêu cầu địa điểm đã được xác định trước khi
-    tối ưu. Một ``TeachingPart`` có thể có nhiều ``TeachingPlan`` thay thế.
+    Tổng số tiết và yêu cầu địa điểm được xác định trước khi tối ưu. Trong
+    snapshot mới, ``lecturer_index`` là ``None`` vì giảng viên được chọn bằng
+    gene ở cấp ``CourseSection``. Trường này chỉ được giữ để đọc snapshot v1
+    cũ, nơi giảng viên từng được gán cứng vào mỗi phần học.
     """
 
     teaching_part_index: int
@@ -368,7 +408,7 @@ class TeachingPart:
     part_code: str
     section_code: str
     part_type: PartType
-    lecturer_index: int
+    lecturer_index: int | None
     total_periods: int
     required_location_type: LocationType
     required_room_type: RoomType | None
@@ -411,10 +451,11 @@ class TeachingPlan:
 class ClassSession:
     """Một buổi nguyên tử cần được gán ngày, khung tiết và địa điểm.
 
-    ``session_index`` là vị trí gene tương ứng trong vector nghiệm. Buổi đã
+    ``session_index`` là chỉ số xác định của lần xuất hiện theo tuần. Buổi đã
     biết tuần, thời lượng và plan nguồn nhưng chưa biết vị trí lịch cuối cùng.
-    Các buổi cùng plan và cùng ``stability_group_no`` tạo thành một chuỗi cần
-    ưu tiên giữ ổn định thứ và tiết bắt đầu giữa các tuần.
+    Các buổi cùng plan và cùng ``stability_group_no`` tạo thành một chuỗi lặp
+    và dùng chung đúng một gene lịch cho toàn bộ các tuần hoạt động. Vì vậy
+    ``session_index`` không còn đồng nghĩa với chỉ số gene lịch.
     """
 
     session_index: int
@@ -628,6 +669,8 @@ class FitnessBreakdown:
     room_stability_component: float
     lecturer_breakdown: tuple[LecturerPreferenceBreakdown, ...]
     lecturer_consecutive_component: float = 0.0
+    workload_balance_component: float = 0.0
+    course_suitability_component: float = 0.0
     time_exceptions: tuple[TimeStabilityException, ...] = ()
 
     def __post_init__(self) -> None:
@@ -650,6 +693,8 @@ class FitnessBreakdown:
             self.lecturer_consecutive_component,
             self.room_discouraged_component,
             self.room_stability_component,
+            self.workload_balance_component,
+            self.course_suitability_component,
         )
         if any(not isfinite(value) or value < 0 for value in components):
             raise ValueError("Các component fitness phải hữu hạn và không âm.")
@@ -693,7 +738,7 @@ class FitnessResult:
 
 @dataclass(frozen=True, slots=True)
 class SessionOption:
-    """Một lựa chọn ngày, khung tiết và địa điểm cho một ``ClassSession``.
+    """Một lựa chọn giảng viên, ngày, khung tiết và địa điểm cho một buổi.
 
     Option chỉ hợp lệ ở cấp một buổi. Tính tương thích với các option khác
     được decoder và validator kiểm tra khi ghép thành lịch hoàn chỉnh.
@@ -704,6 +749,7 @@ class SessionOption:
     teaching_date: date
     start_period: int
     end_period: int
+    lecturer_index: int = -1
 
 
 @dataclass(frozen=True, slots=True)
@@ -751,6 +797,7 @@ class ProblemInstance:
     room_availabilities: tuple[AvailabilityWindow, ...]
     campus_travel_times: tuple[CampusTravelTime, ...]
     constraint_settings: tuple[ConstraintSetting, ...]
+    lecturer_course_capabilities: tuple[LecturerCourseCapability, ...] = ()
 
     def __post_init__(self) -> None:
         """Chạy toàn bộ kiểm tra tính toàn vẹn của snapshot theo thứ tự."""
@@ -765,13 +812,12 @@ class ProblemInstance:
     def _validate_teaching_assignments(self) -> None:
         """Kiểm tra quan hệ lớp học phần, phần giảng dạy và giảng viên.
 
-        Giảng viên vẫn được lưu trực tiếp tại từng ``TeachingPart`` để encoder,
-        decoder và fitness tra cứu nhanh. Tuy nhiên, về nghiệp vụ, phân công là
-        thống nhất cho cả ``CourseSection``: nếu một lớp có cả lý thuyết và
-        thực hành thì hai phần đó phải tham chiếu cùng một giảng viên.
-
-        Đây là bất biến của dữ liệu đầu vào, không phải ràng buộc để optimizer
-        cân nhắc. Snapshot vi phạm phải bị từ chối trước khi sinh option.
+        Snapshot v2 khai báo năng lực theo môn và để optimizer chọn một giảng
+        viên chung cho toàn bộ phần học của mỗi lớp học phần. Snapshot v1 chưa
+        có capability vẫn được hỗ trợ bằng cách xem phân công cũ là miền chỉ
+        có đúng một ứng viên. Cách tương thích này không làm thay đổi kết quả
+        cũ nhưng cho phép mô hình mới tối ưu đồng thời người dạy và thời khóa
+        biểu.
         """
 
         valid_section_codes = {
@@ -782,6 +828,11 @@ class ProblemInstance:
             lecturer.lecturer_index
             for lecturer in self.lecturers
         }
+        valid_course_codes = {course.course_code for course in self.courses}
+        section_by_code = {
+            section.section_code: section
+            for section in self.course_sections
+        }
         lecturer_by_section: dict[str, int] = {}
 
         for part in self.teaching_parts:
@@ -790,19 +841,43 @@ class ProblemInstance:
                     f"TeachingPart {part.part_code} tham chiếu CourseSection "
                     f"{part.section_code} không tồn tại."
                 )
-            if part.lecturer_index not in valid_lecturer_indices:
+            if part.lecturer_index is not None and part.lecturer_index not in valid_lecturer_indices:
                 raise ValueError(
                     f"TeachingPart {part.part_code} tham chiếu giảng viên không tồn tại."
                 )
 
-            assigned_lecturer = lecturer_by_section.setdefault(
-                part.section_code,
-                part.lecturer_index,
-            )
-            if assigned_lecturer != part.lecturer_index:
+            if not self.lecturer_course_capabilities:
+                if part.lecturer_index is None:
+                    raise ValueError(
+                        "Snapshot v1 phải gán lecturer_index cho mọi TeachingPart."
+                    )
+                assigned_lecturer = lecturer_by_section.setdefault(
+                    part.section_code,
+                    part.lecturer_index,
+                )
+                if assigned_lecturer != part.lecturer_index:
+                    raise ValueError(
+                        "Mọi TeachingPart thuộc CourseSection phải dùng chung một giảng viên."
+                    )
+
+        seen_capabilities: set[tuple[int, str]] = set()
+        for capability in self.lecturer_course_capabilities:
+            if capability.lecturer_index not in valid_lecturer_indices:
+                raise ValueError("Capability tham chiếu giảng viên không tồn tại.")
+            if capability.course_code not in valid_course_codes:
+                raise ValueError("Capability tham chiếu môn học không tồn tại.")
+            key = (capability.lecturer_index, capability.course_code)
+            if key in seen_capabilities:
+                raise ValueError("Capability giảng viên–môn học bị trùng.")
+            seen_capabilities.add(key)
+
+        for section_code in self.assignment_section_codes:
+            if section_code not in section_by_code:
+                raise ValueError(f"CourseSection {section_code} không tồn tại.")
+            if not self.eligible_lecturer_indices(section_code):
                 raise ValueError(
-                    "Mọi TeachingPart thuộc CourseSection "
-                    f"{part.section_code} phải dùng chung một giảng viên."
+                    f"CourseSection {section_code} không có giảng viên đủ khả năng "
+                    "dạy toàn bộ các phần học."
                 )
 
     def _validate_calendar(self) -> None:
@@ -898,7 +973,7 @@ class ProblemInstance:
         expected_session_indices = tuple(range(len(self.class_sessions)))
         actual_session_indices = tuple(session.session_index for session in self.class_sessions)
         if actual_session_indices != expected_session_indices:
-            raise ValueError("session_index phải liên tục từ 0 và theo đúng thứ tự gene.")
+            raise ValueError("session_index phải liên tục từ 0 và theo đúng thứ tự snapshot.")
 
         expected_location_indices = tuple(range(len(self.locations)))
         actual_location_indices = tuple(location.location_index for location in self.locations)
@@ -963,6 +1038,23 @@ class ProblemInstance:
                 raise ValueError("ClassSession tham chiếu tuần không tồn tại trong học kỳ.")
             sessions_by_plan[session.teaching_plan_id].append(session)
 
+        # Một stability group biểu diễn một buổi lặp cố định của plan. Nếu
+        # cùng group xuất hiện hai lần trong một tuần thì một gene sẽ không
+        # thể biểu diễn hai buổi khác nhau mà không gây trùng lịch với chính
+        # nó. Plan có hai buổi mỗi tuần phải dùng hai group riêng.
+        seen_group_weeks: set[tuple[int, int, int]] = set()
+        for session in self.class_sessions:
+            occurrence_key = (
+                session.teaching_plan_id,
+                session.stability_group_no,
+                session.week_number,
+            )
+            if occurrence_key in seen_group_weeks:
+                raise ValueError(
+                    "Mỗi nhóm lịch lặp chỉ được có một ClassSession trong một tuần."
+                )
+            seen_group_weeks.add(occurrence_key)
+
         for item in self.scenario.items:
             part = parts_by_index[item.teaching_part_index]
             sessions = sessions_by_plan[item.teaching_plan_id]
@@ -1003,8 +1095,133 @@ class ProblemInstance:
 
     @property
     def dimension(self) -> int:
-        """Số gene bằng đúng số ClassSession trong scenario đã khóa."""
+        """Tổng số gene phân công và gene mẫu lịch lặp cho cả học kỳ."""
+
+        return self.assignment_dimension + self.schedule_dimension
+
+    @property
+    def session_dimension(self) -> int:
+        """Số lần xuất hiện theo tuần cần có trong lịch đầu ra.
+
+        Thuộc tính này được giữ để mô tả kích thước dữ liệu session và tương
+        thích với các hợp đồng báo cáo cũ. Số gene lịch thực tế được cung cấp
+        bởi :attr:`schedule_dimension`.
+        """
+
         return len(self.class_sessions)
+
+    @property
+    def schedule_group_keys(self) -> tuple[tuple[int, int], ...]:
+        """Khóa các chuỗi buổi lặp, theo thứ tự xác định.
+
+        Mỗi khóa gồm ``(teaching_plan_id, stability_group_no)``. Một plan có
+        hai buổi cố định mỗi tuần sẽ có hai khóa và do đó có hai gene lịch.
+        """
+
+        return tuple(sorted({
+            (session.teaching_plan_id, session.stability_group_no)
+            for session in self.class_sessions
+        }))
+
+    @property
+    def schedule_groups(self) -> tuple[tuple[int, ...], ...]:
+        """Các ``session_index`` cùng dùng một mẫu thứ–tiết–địa điểm."""
+
+        return tuple(
+            tuple(
+                session.session_index
+                for session in self.class_sessions
+                if (
+                    session.teaching_plan_id,
+                    session.stability_group_no,
+                ) == group_key
+            )
+            for group_key in self.schedule_group_keys
+        )
+
+    @property
+    def schedule_dimension(self) -> int:
+        """Số gene lịch lặp, bằng số chuỗi buổi của các plan đã chọn."""
+
+        return len(self.schedule_group_keys)
+
+    def schedule_group_index_for_session(self, session_index: int) -> int:
+        """Trả chỉ số gene lịch của một lần xuất hiện theo tuần."""
+
+        for group_index, session_indices in enumerate(self.schedule_groups):
+            if session_index in session_indices:
+                return group_index
+        raise ValueError(f"Không tìm thấy nhóm lịch cho session_index={session_index}.")
+
+    @property
+    def assignment_section_codes(self) -> tuple[str, ...]:
+        """Danh sách lớp học phần có gene phân công, theo thứ tự xác định."""
+
+        # Snapshot v1 đã gán cứng giảng viên và không có gene phân công. Nhờ
+        # nhánh này, kết quả benchmark/demo cũ vẫn tái lập đúng chiều vector.
+        if not self.lecturer_course_capabilities:
+            return ()
+        section_codes_in_scope = {part.section_code for part in self.teaching_parts}
+        return tuple(
+            section.section_code
+            for section in self.course_sections
+            if section.section_code in section_codes_in_scope
+        )
+
+    @property
+    def assignment_dimension(self) -> int:
+        """Số gene đầu vector dùng để chọn một giảng viên cho mỗi lớp."""
+
+        return len(self.assignment_section_codes)
+
+    @property
+    def schedule_gene_offset(self) -> int:
+        """Vị trí bắt đầu của nhóm gene lịch trong vector nghiệm."""
+
+        return self.assignment_dimension
+
+    def eligible_lecturer_indices(self, section_code: str) -> tuple[int, ...]:
+        """Trả miền giảng viên có thể dạy mọi phần của một lớp học phần."""
+
+        parts = tuple(
+            part for part in self.teaching_parts if part.section_code == section_code
+        )
+        if not parts:
+            return ()
+
+        if not self.lecturer_course_capabilities:
+            legacy_indices = {part.lecturer_index for part in parts}
+            return tuple(sorted(index for index in legacy_indices if index is not None))
+
+        section = next(
+            item for item in self.course_sections if item.section_code == section_code
+        )
+        required_types = {part.part_type for part in parts}
+        eligible: list[int] = []
+        for capability in self.lecturer_course_capabilities:
+            if capability.course_code != section.course_code:
+                continue
+            if PartType.LECTURE in required_types and not capability.can_teach_lecture:
+                continue
+            if PartType.PRACTICE in required_types and not capability.can_teach_practice:
+                continue
+            eligible.append(capability.lecturer_index)
+        return tuple(sorted(eligible))
+
+    def option_lecturer_index(self, option: SessionOption) -> int:
+        """Đọc giảng viên của option, có fallback cho snapshot v1 cũ."""
+
+        if option.lecturer_index >= 0:
+            return option.lecturer_index
+        session = self.class_sessions[option.session_index]
+        plan = next(
+            item for item in self.teaching_plans
+            if item.teaching_plan_id == session.teaching_plan_id
+        )
+        lecturer_index = self.teaching_parts[plan.teaching_part_index].lecturer_index
+        if lecturer_index is None:
+            raise ValueError("SessionOption v2 phải chứa lecturer_index.")
+        return lecturer_index
 
     @property
     def location_count(self) -> int:

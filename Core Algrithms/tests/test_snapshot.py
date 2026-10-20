@@ -117,6 +117,16 @@ def make_snapshot_payload() -> dict:
                 "lecturer_code": "GV001",
                 "full_name": "Giảng viên 1",
                 "home_campus_code": "CS1",
+                "max_teaching_periods": 30,
+            },
+        ],
+        "lecturer_course_capabilities": [
+            {
+                "lecturer_index": 0,
+                "course_code": "JAVA",
+                "can_teach_lecture": True,
+                "can_teach_practice": False,
+                "suitability_score": 1.0,
             },
         ],
         "courses": [
@@ -137,7 +147,7 @@ def make_snapshot_payload() -> dict:
                 "part_code": "JAVA01-LT",
                 "section_code": "JAVA01",
                 "part_type": "LECTURE",
-                "lecturer_index": 0,
+                "lecturer_index": None,
                 "total_periods": 3,
                 "required_location_type": "PHYSICAL_ROOM",
                 "required_room_type": "LECTURE_ROOM",
@@ -200,12 +210,13 @@ def make_snapshot_payload() -> dict:
 class TestSnapshotLoader(unittest.TestCase):
     """Bảo vệ version, checksum và ánh xạ domain qua biên JSON."""
 
-    def test_loads_v1_snapshot_into_problem_instance(self) -> None:
+    def test_loads_v2_snapshot_into_problem_instance(self) -> None:
         payload = make_snapshot_payload()
 
         problem, actual_checksum = load_problem_instance_snapshot(payload)
 
-        self.assertEqual(problem.dimension, 1)
+        self.assertEqual(problem.dimension, 2)
+        self.assertEqual(problem.assignment_dimension, 1)
         self.assertEqual(problem.class_sessions[0].session_index, 0)
         self.assertEqual(problem.locations[0].location_index, 0)
         self.assertEqual(problem.teaching_parts[0].part_code, "JAVA01-LT")
@@ -233,22 +244,17 @@ class TestSnapshotLoader(unittest.TestCase):
         with self.assertRaisesRegex(SnapshotContractError, "schema version"):
             load_problem_instance_snapshot(payload)
 
-    def test_snapshot_rejects_different_lecturers_in_same_course_section(self) -> None:
-        """Hợp đồng JSON không được đưa phân công mâu thuẫn vào optimizer."""
+    def test_snapshot_rejects_section_without_fully_capable_lecturer(self) -> None:
+        """Một người phải dạy được mọi loại part của lớp học phần."""
 
         payload = deepcopy(make_snapshot_payload())
-        payload["lecturers"].append({
-            "lecturer_index": 1,
-            "lecturer_code": "GV002",
-            "full_name": "Giảng viên 2",
-            "home_campus_code": "CS1",
-        })
         second_part = deepcopy(payload["teaching_parts"][0])
         second_part.update({
             "teaching_part_index": 1,
             "teaching_part_id": 12,
             "part_code": "JAVA01-TH",
-            "lecturer_index": 1,
+            "part_type": "PRACTICE",
+            "lecturer_index": None,
         })
         payload["teaching_parts"].append(second_part)
 
@@ -271,8 +277,13 @@ class TestSnapshotLoader(unittest.TestCase):
             "teaching_part_index": 1,
             "teaching_plan_id": 102,
         })
+        payload["teaching_duration_rules"].append({
+            "part_type": "PRACTICE",
+            "duration_periods": 3,
+            "standard": True,
+        })
 
-        with self.assertRaisesRegex(ValueError, "phải dùng chung một giảng viên"):
+        with self.assertRaisesRegex(ValueError, "không có giảng viên đủ khả năng"):
             load_problem_instance_snapshot(payload)
 
     def test_ready_preflight_builds_deterministic_gene_option_mapping(self) -> None:
@@ -290,7 +301,12 @@ class TestSnapshotLoader(unittest.TestCase):
             first.gene_option_mapping["schema_version"],
             MAPPING_SCHEMA_VERSION,
         )
-        self.assertEqual(first.gene_option_mapping["dimension"], 1)
+        self.assertEqual(first.gene_option_mapping["dimension"], 2)
+        self.assertEqual(first.gene_option_mapping["assignment_dimension"], 1)
+        self.assertEqual(
+            first.gene_option_mapping["assignment_genes"][0]["section_code"],
+            "JAVA01",
+        )
         self.assertEqual(
             first.gene_option_mapping["genes"][0]["options"][0]["location_code"],
             "B304",
@@ -306,8 +322,7 @@ class TestSnapshotLoader(unittest.TestCase):
 
     def test_empty_domain_stops_preflight_with_no_option(self) -> None:
         payload = deepcopy(make_snapshot_payload())
-        for teaching_date in payload["teaching_dates"]:
-            teaching_date["status"] = "HOLIDAY"
+        payload["teaching_dates"] = []
 
         prepared = prepare_snapshot_for_optimization(payload)
 

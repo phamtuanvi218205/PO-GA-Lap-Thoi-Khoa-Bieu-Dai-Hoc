@@ -7,12 +7,12 @@ logic xếp lịch, không tự kiểm tra xung đột và không thay đổi c�
 Repair chỉ làm đúng ba việc:
 
 1. Chọn một gene để thử lại.
-2. Đưa gene đó vào giữa khoảng của một option khác trong cùng miền cố định.
+2. Đưa gene đó vào giữa khoảng của một lựa chọn khác trong cùng miền cố định.
 3. Gọi lại decoder và nhận kết quả đã được decoder/validator kiểm tra.
 
-Repair chỉ thay đổi lựa chọn trong miền option đã được sinh sẵn; nó không được
-đổi giảng viên, plan, tuần, thời lượng, số buổi, tổng số tiết hoặc loại phần
-giảng dạy.
+Repair có thể đổi gene phân công sang giảng viên đủ năng lực khác hoặc đổi
+gene lịch sang option khác. Nó không tạo giảng viên/option mới, không đổi plan,
+tuần, thời lượng, số buổi, tổng số tiết hoặc loại phần giảng dạy.
 """
 
 from dataclasses import dataclass
@@ -25,6 +25,7 @@ from .decoder import (
     decode_vector,
     preferred_option_index,
 )
+from .encoder import build_recurring_patterns_for_group
 from .models import ProblemInstance, SessionOption
 
 
@@ -102,10 +103,10 @@ def _validate_repair_input(
         raise ValueError("max_repair_attempts phải lớn hơn hoặc bằng 1.")
     if max_decode_nodes_per_attempt < 1:
         raise ValueError("max_decode_nodes_per_attempt phải lớn hơn hoặc bằng 1.")
-    if len(option_domains) != problem.dimension:
+    if len(option_domains) != problem.session_dimension:
         raise ValueError("Số miền option phải bằng số ClassSession.")
     if len(vector) != problem.dimension:
-        raise ValueError("Số gene phải bằng số ClassSession.")
+        raise ValueError("Số gene phải bằng tổng gene phân công và gene lịch.")
 
     for session_index, domain in enumerate(option_domains):
         if any(option.session_index != session_index for option in domain):
@@ -133,6 +134,7 @@ def _session_retry_order(
 
 
 def _candidate_vectors(
+    problem: ProblemInstance,
     option_domains: tuple[tuple[SessionOption, ...], ...],
     vector: tuple[float, ...],
     failed_session_index: int | None,
@@ -144,25 +146,78 @@ def _candidate_vectors(
     tuần, thời lượng và dữ liệu nghiệp vụ đã được khóa trong ProblemInstance.
     """
 
-    retry_order = _session_retry_order(len(vector), failed_session_index)
-    for session_index in retry_order:
-        option_count = len(option_domains[session_index])
+    failed_group_index = None
+    if failed_session_index is not None:
+        failed_group_index = problem.schedule_group_index_for_session(
+            failed_session_index
+        )
+    schedule_order = _session_retry_order(
+        problem.schedule_dimension,
+        failed_group_index,
+    )
+    lecturer_by_section: dict[str, int] = {}
+    for assignment_index, section_code in enumerate(
+        problem.assignment_section_codes
+    ):
+        eligible = problem.eligible_lecturer_indices(section_code)
+        lecturer_by_section[section_code] = eligible[
+            preferred_option_index(vector[assignment_index], len(eligible))
+        ]
+
+    if not problem.lecturer_course_capabilities:
+        for part in problem.teaching_parts:
+            if part.lecturer_index is None:
+                raise ValueError("Snapshot v1 thiếu lecturer_index.")
+            lecturer_by_section[part.section_code] = part.lecturer_index
+
+    plans_by_id = {
+        plan.teaching_plan_id: plan for plan in problem.teaching_plans
+    }
+    parts_by_index = {
+        part.teaching_part_index: part for part in problem.teaching_parts
+    }
+    gene_order = tuple(range(problem.assignment_dimension)) + tuple(
+        problem.schedule_gene_offset + group_index
+        for group_index in schedule_order
+    )
+    for gene_index in gene_order:
+        if gene_index < problem.assignment_dimension:
+            section_code = problem.assignment_section_codes[gene_index]
+            option_count = len(problem.eligible_lecturer_indices(section_code))
+            changed_session_index = None
+        else:
+            group_index = gene_index - problem.schedule_gene_offset
+            session_index = problem.schedule_groups[group_index][0]
+            session = problem.class_sessions[session_index]
+            part = parts_by_index[
+                plans_by_id[session.teaching_plan_id].teaching_part_index
+            ]
+            selected_lecturer = lecturer_by_section[part.section_code]
+            option_count = len(
+                build_recurring_patterns_for_group(
+                    problem,
+                    option_domains,
+                    group_index,
+                    selected_lecturer,
+                )
+            )
+            changed_session_index = session_index
         if option_count < 2:
             # Miền có một option không có lựa chọn thay thế để repair.
             continue
 
         current_index = preferred_option_index(
-            vector[session_index],
+            vector[gene_index],
             option_count,
         )
         for offset in range(1, option_count):
             requested_index = (current_index + offset) % option_count
             candidate = list(vector)
-            candidate[session_index] = gene_for_option_index(
+            candidate[gene_index] = gene_for_option_index(
                 requested_index,
                 option_count,
             )
-            yield session_index, requested_index, tuple(candidate)
+            yield changed_session_index, requested_index, tuple(candidate)
 
 
 def repair_vector(
@@ -228,6 +283,7 @@ def repair_vector(
     last_requested_index: int | None = None
 
     candidates = _candidate_vectors(
+        problem,
         option_domains,
         vector,
         initial_decode_result.failed_session_index,

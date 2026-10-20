@@ -29,6 +29,11 @@ public class TimetableEntry {
     @JoinColumn(name = "class_session_id", nullable = false)
     private ClassSession classSession;
 
+    /** Giảng viên thực tế do gene phân công của optimizer lựa chọn. */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "lecturer_code", nullable = false)
+    private Lecturer lecturer;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "term_code", nullable = false)
     private AcademicTerm academicTerm;

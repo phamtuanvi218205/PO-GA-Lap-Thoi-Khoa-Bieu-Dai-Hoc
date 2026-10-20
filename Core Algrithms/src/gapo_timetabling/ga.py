@@ -1,8 +1,8 @@
 """Genetic Algorithm cho bài toán xếp thời khóa biểu random-key.
 
 Module này chỉ chịu trách nhiệm tối ưu các vector random-key bằng các toán tử
-GA. Mỗi gene tương ứng đúng một ``ClassSession`` và chỉ biểu diễn mức ưu tiên
-của ``SessionOption``; gene không lưu trực tiếp ngày, phòng hoặc tiết học.
+GA. Mỗi gene lịch tương ứng một chuỗi buổi lặp của cả học kỳ và biểu diễn mức
+ưu tiên của mẫu thứ–tiết–địa điểm; gene không lưu trực tiếp ID nghiệp vụ.
 
 Mọi offspring bắt buộc đi qua cổng đánh giá chung của ``population.py``:
 
@@ -555,8 +555,8 @@ def _validate_ga_run_inputs(
             "FE khởi tạo không được lớn hơn số candidate attempts."
         )
 
-    if len(option_domains) != problem.dimension:
-        raise ValueError("Số miền option phải bằng số ClassSession.")
+    if len(option_domains) != problem.session_dimension:
+        raise ValueError("Số miền option nguyên tử phải bằng số ClassSession.")
 
     for session_index, domain in enumerate(option_domains):
         # Một miền rỗng tương đương NO_OPTION và phải bị chặn trước optimizer.

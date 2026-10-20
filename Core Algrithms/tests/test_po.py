@@ -249,7 +249,7 @@ class TestPoRunInputValidation(ConstraintFixture):
                     )
 
     def test_each_vector_must_match_problem_dimension(self) -> None:
-        """Mỗi ClassSession phải tiếp tục có đúng một gene trong PO."""
+        """Mỗi vector PO phải khớp số gene phân công cộng gene recurring."""
 
         initialization = self.make_initialization(population_size=2)
         invalid_individual = replace(

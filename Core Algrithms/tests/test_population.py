@@ -356,7 +356,7 @@ class TestPopulation(ConstraintFixture):
         self.assertEqual(result.total_repair_attempts, 4)
 
     def test_sort_uses_lexicographic_gate_f_order(self) -> None:
-        """Q_general tốt không được bù cho Q_time kém hơn."""
+        """Khóa fitness vẫn phải giữ thứ tự lexicographic của hợp đồng."""
 
         config = CandidateEvaluationConfig(
             max_decode_nodes=20,

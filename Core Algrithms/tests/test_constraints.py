@@ -293,7 +293,7 @@ class TestTimetableValidator(ConstraintFixture):
             self.violation_codes(result),
         )
 
-    def test_holiday_is_not_allowed(self) -> None:
+    def test_holiday_status_does_not_block_term_recurring_schedule(self) -> None:
         options = list(self.valid_options)
         options[0] = replace(
             options[0],
@@ -302,10 +302,7 @@ class TestTimetableValidator(ConstraintFixture):
 
         result = validate_timetable(self.problem, tuple(options))
 
-        self.assertIn(
-            HardViolationCode.DATE_NOT_ALLOWED,
-            self.violation_codes(result),
-        )
+        self.assertNotIn(HardViolationCode.DATE_NOT_ALLOWED, self.violation_codes(result))
 
     def test_wrong_period_range_is_not_allowed(self) -> None:
         options = list(self.valid_options)

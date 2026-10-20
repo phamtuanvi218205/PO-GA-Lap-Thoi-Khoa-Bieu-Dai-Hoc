@@ -76,34 +76,18 @@ def _build_weeks() -> list[dict[str, object]]:
 
 
 def _build_teaching_dates() -> list[dict[str, object]]:
-    """Create working dates, holidays, and explicit Saturday makeup dates."""
-
-    holidays = {
-        date(2026, 9, 16),  # Week 2 Wednesday.
-        date(2026, 10, 5),  # Week 5 Monday.
-    }
-    makeup_saturdays = {
-        date(2026, 9, 19),
-        date(2026, 10, 10),
-    }
+    """Create Monday-to-Friday dates; holidays are outside optimization."""
 
     teaching_dates: list[dict[str, object]] = []
     for week_number in range(1, WEEK_COUNT + 1):
         monday = FIRST_MONDAY + timedelta(days=7 * (week_number - 1))
-        weekdays = range(6) if week_number in (2, 5) else range(5)
-        for day_offset in weekdays:
+        for day_offset in range(5):
             current = monday + timedelta(days=day_offset)
-            if current in holidays:
-                status = "HOLIDAY"
-            elif current in makeup_saturdays:
-                status = "MAKEUP_ALLOWED"
-            else:
-                status = "NORMAL"
             teaching_dates.append({
                 "calendar_date": current.isoformat(),
                 "week_number": week_number,
                 "iso_weekday": current.isoweekday(),
-                "status": status,
+                "status": "NORMAL",
             })
     return teaching_dates
 
@@ -140,11 +124,9 @@ def _build_time_periods() -> list[dict[str, object]]:
 def _build_locations() -> list[dict[str, object]]:
     """Create four rooms of which only a subset fits each teaching part.
 
-    The secondary lecture room lacks a projector. The secondary laboratory
-    has only 25 computers. Consequently all lecture parts compete for A201,
-    while the six high-requirement practice parts compete for LAB-A alone.
-    Capacities are deliberately below most expected enrollments; this affects
-    soft fitness but does not remove otherwise feasible options.
+    Cả hai phòng của mỗi loại đều đủ thiết bị tối thiểu để lịch lặp toàn kỳ
+    có nghiệm. Tài nguyên vẫn khan hiếm vì 18 chuỗi buổi phải chia sẻ đúng hai
+    phòng lý thuyết và hai phòng máy; sức chứa tiếp tục là tiêu chí mềm.
     """
 
     return [
@@ -166,13 +148,15 @@ def _build_locations() -> list[dict[str, object]]:
             "location_index": 1,
             "location_id": 502,
             "location_code": "A202",
-            "location_name": "Phòng lý thuyết A202 chưa có máy chiếu",
+            "location_name": "Phòng lý thuyết A202",
             "location_type": "PHYSICAL_ROOM",
             "active": True,
             "campus_code": "CS1",
             "room_type": "LECTURE_ROOM",
             "capacity": 35,
-            "equipment_quantities": [],
+            "equipment_quantities": [
+                {"equipment_code": "PROJECTOR", "quantity": 1},
+            ],
         },
         {
             "location_index": 2,
@@ -193,7 +177,7 @@ def _build_locations() -> list[dict[str, object]]:
             "location_index": 3,
             "location_id": 504,
             "location_code": "LAB-B",
-            "location_name": "Phòng máy LAB-B quy mô nhỏ",
+            "location_name": "Phòng máy LAB-B",
             "location_type": "PHYSICAL_ROOM",
             "active": True,
             "campus_code": "CS1",
@@ -201,7 +185,7 @@ def _build_locations() -> list[dict[str, object]]:
             "capacity": 30,
             "equipment_quantities": [
                 {"equipment_code": "PROJECTOR", "quantity": 1},
-                {"equipment_code": "COMPUTER", "quantity": 25},
+                {"equipment_code": "COMPUTER", "quantity": 40},
             ],
         },
     ]
@@ -301,48 +285,35 @@ def _build_academic_objects() -> tuple[
 
 
 def _build_lecturer_availabilities() -> list[dict[str, object]]:
-    """Create dense recurring and date-specific lecturer restrictions."""
+    """Create restrictive but term-recurring-feasible lecturer calendars."""
 
     windows = [
-        # GV001 teaches three sections and is unavailable every Tuesday/Thursday.
+        # GV001 teaches three sections and loses every Tuesday.
         _availability(0, "UNAVAILABLE", 1, 12, iso_weekday=2),
-        _availability(0, "UNAVAILABLE", 1, 12, iso_weekday=4),
-        _availability(0, "UNAVAILABLE", 10, 12, iso_weekday=3),
-        _availability(0, "UNAVAILABLE", 10, 12, iso_weekday=5),
         _availability(0, "PREFERRED", 1, 9, iso_weekday=1, preference_weight=1.0),
         _availability(0, "PREFERRED", 1, 9, iso_weekday=3, preference_weight=0.8),
         _availability(0, "DISCOURAGED", 7, 12, iso_weekday=5, preference_weight=0.6),
-        # GV002 has alternating morning/afternoon commitments and no Friday.
-        _availability(1, "UNAVAILABLE", 1, 6, iso_weekday=1),
-        _availability(1, "UNAVAILABLE", 7, 12, iso_weekday=2),
-        _availability(1, "UNAVAILABLE", 1, 6, iso_weekday=3),
-        _availability(1, "UNAVAILABLE", 7, 12, iso_weekday=4),
-        _availability(1, "UNAVAILABLE", 1, 12, iso_weekday=5),
+        # GV002 loses every Wednesday.
+        _availability(1, "UNAVAILABLE", 1, 12, iso_weekday=3),
         _availability(1, "PREFERRED", 7, 12, iso_weekday=1, preference_weight=1.0),
         _availability(1, "PREFERRED", 1, 6, iso_weekday=2, preference_weight=0.8),
         _availability(1, "DISCOURAGED", 7, 12, iso_weekday=3, preference_weight=0.5),
-        # GV003 is available mainly on Tuesday/Thursday plus Friday afternoon.
+        # GV003 loses every Monday.
         _availability(2, "UNAVAILABLE", 1, 12, iso_weekday=1),
-        _availability(2, "UNAVAILABLE", 1, 12, iso_weekday=3),
-        _availability(2, "UNAVAILABLE", 1, 6, iso_weekday=5),
-        _availability(2, "UNAVAILABLE", 10, 12, iso_weekday=2),
         _availability(2, "PREFERRED", 1, 9, iso_weekday=2, preference_weight=1.0),
         _availability(2, "PREFERRED", 1, 9, iso_weekday=4, preference_weight=0.9),
         _availability(2, "DISCOURAGED", 7, 12, iso_weekday=5, preference_weight=0.5),
-        # GV004 has only four principal half-day windows during a normal week.
-        _availability(3, "UNAVAILABLE", 1, 12, iso_weekday=1),
-        _availability(3, "UNAVAILABLE", 1, 6, iso_weekday=2),
-        _availability(3, "UNAVAILABLE", 7, 12, iso_weekday=3),
-        _availability(3, "UNAVAILABLE", 1, 6, iso_weekday=4),
-        _availability(3, "UNAVAILABLE", 7, 12, iso_weekday=5),
+        # GV004 loses every Friday.
+        _availability(3, "UNAVAILABLE", 1, 12, iso_weekday=5),
         _availability(3, "PREFERRED", 7, 12, iso_weekday=2, preference_weight=1.0),
         _availability(3, "PREFERRED", 1, 6, iso_weekday=3, preference_weight=0.9),
         _availability(3, "DISCOURAGED", 7, 12, iso_weekday=4, preference_weight=0.5),
-        # One-off duties force schedule exceptions in separate weeks.
-        _availability(0, "UNAVAILABLE", 7, 12, calendar_date="2026-10-02"),
+        # One-off duties remain represented. A recurring pattern intersecting
+        # one of these dates is rejected for the whole active plan.
+        _availability(0, "UNAVAILABLE", 7, 12, calendar_date="2026-10-13"),
         _availability(1, "UNAVAILABLE", 7, 12, calendar_date="2026-09-23"),
-        _availability(2, "UNAVAILABLE", 1, 6, calendar_date="2026-10-13"),
-        _availability(3, "UNAVAILABLE", 7, 12, calendar_date="2026-09-10"),
+        _availability(2, "UNAVAILABLE", 1, 6, calendar_date="2026-10-05"),
+        _availability(3, "UNAVAILABLE", 7, 12, calendar_date="2026-10-09"),
     ]
     return windows
 
@@ -459,31 +430,24 @@ def build_snapshot() -> dict[str, object]:
                 "enabled": True,
             },
             {
-                "constraint_code": "SOFT_TIME_STABILITY",
-                "constraint_type": "SOFT",
-                "priority_tier": 1,
-                "weight": 1.0,
-                "enabled": True,
-            },
-            {
                 "constraint_code": "SOFT_CAPACITY",
                 "constraint_type": "SOFT",
                 "priority_tier": 2,
-                "weight": 0.4091,
+                "weight": 0.4500,
                 "enabled": True,
             },
             {
                 "constraint_code": "SOFT_LECTURER_GAP",
                 "constraint_type": "SOFT",
                 "priority_tier": 2,
-                "weight": 0.2273,
+                "weight": 0.2500,
                 "enabled": True,
             },
             {
                 "constraint_code": "SOFT_LECTURER_CONSECUTIVE",
                 "constraint_type": "SOFT",
                 "priority_tier": 2,
-                "weight": 0.0909,
+                "weight": 0.1000,
                 "enabled": True,
                 "threshold_value": 6,
             },
@@ -491,14 +455,7 @@ def build_snapshot() -> dict[str, object]:
                 "constraint_code": "SOFT_ROOM_DISCOURAGED",
                 "constraint_type": "SOFT",
                 "priority_tier": 2,
-                "weight": 0.1818,
-                "enabled": True,
-            },
-            {
-                "constraint_code": "SOFT_ROOM_STABILITY",
-                "constraint_type": "SOFT",
-                "priority_tier": 2,
-                "weight": 0.0909,
+                "weight": 0.2000,
                 "enabled": True,
             },
         ],

@@ -1,10 +1,11 @@
 """Các phép toán nền tảng của Parrot Optimizer V2 cho bài toán thời khóa biểu.
 
-Trong mô hình random-key của project, một cá thể là vector số thực ``X`` có số
-chiều bằng số ``ClassSession``. Gene thứ ``d`` không lưu trực tiếp ID của phòng
-hoặc ``SessionOption``; nó biểu diễn mức ưu tiên của option cho session tương
-ứng. Vì decoder ánh xạ gene trong đoạn ``[0, 1]``, mọi vị trí do PO tạo ra phải
-được boundary control trước khi đánh giá.
+Trong mô hình random-key của project, một cá thể là vector số thực ``X`` gồm
+gene phân công theo lớp học phần và gene lịch theo nhóm buổi lặp. Gene thứ
+``d`` không lưu trực tiếp ID của phòng hoặc ID option; gene lịch biểu diễn mức
+ưu tiên của mẫu lặp cho nhóm tương ứng. Vì decoder ánh xạ gene trong đoạn
+``[0, 1]``, mọi vị trí do PO tạo ra phải được boundary control trước khi đánh
+giá.
 
 Module này cài đặt phần toán học tạo vị trí đề xuất và các helper nhỏ dùng để
 đưa một vị trí PO qua pipeline đánh giá chung:
@@ -230,8 +231,8 @@ def _validate_po_run_inputs(
     for individual_index, individual in enumerate(population):
         vector = individual.vector
 
-        # Số chiều vector phải bằng số ClassSession của ProblemInstance.
-        # Mỗi ClassSession tương ứng đúng một gene.
+        # Vector gồm gene phân công theo lớp và gene lịch theo nhóm recurring;
+        # số occurrence ClassSession không còn quyết định trực tiếp số chiều.
         if len(vector) != problem.dimension:
             raise ValueError(
                 "Vector của cá thể "
@@ -730,7 +731,7 @@ def _create_and_evaluate_po_offspring(
 
     Args:
         problem: Snapshot bất biến của bài toán thời khóa biểu.
-        option_domains: Miền ``SessionOption`` cố định theo thứ tự gene.
+        option_domains: Miền option nguyên tử dùng để dựng các mẫu lặp.
         current_individual: Cá thể cha tại vị trí đang được cập nhật.
         current_index: Chỉ số zero-based của cá thể trong quần thể.
         behavior: Hành vi PO đã được bốc cho cá thể này trong iteration.
@@ -873,7 +874,7 @@ def run_po(
 
     # Miền option thuộc về snapshot đầu vào của lần chạy. Cấu trúc sai hoặc
     # miền rỗng phải bị phát hiện trước khi PO bắt đầu tiêu thụ RNG và FE.
-    if len(option_domains) != problem.dimension:
+    if len(option_domains) != problem.session_dimension:
         raise ValueError(
             "Số miền option phải bằng số ClassSession."
         )
