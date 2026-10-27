@@ -3,36 +3,35 @@
 import unittest
 from dataclasses import FrozenInstanceError
 
-from gapo_timetabling.metrics import (
+from gapo_timetabling.core.metrics import (
     ConvergencePoint,
     OptimizationMetrics,
     OptimizationResult,
 )
-from gapo_timetabling.models import (
+from gapo_timetabling.core.models import (
     FitnessBreakdown,
     FitnessResult,
     OptimizationAlgorithm,
 )
-from gapo_timetabling.population import TimetableIndividual
+from gapo_timetabling.core.population import TimetableIndividual
 
 
 class TestConvergencePoint(unittest.TestCase):
-    """Kiểm tra dữ liệu một mốc hội tụ và thứ tự fitness Gate F."""
+    """Kiểm tra dữ liệu một mốc hội tụ và thứ tự fitness."""
 
     def test_valid_point_exposes_lexicographic_fitness_key(self) -> None:
-        """Mốc hợp lệ phải giữ ba score riêng theo đúng thứ tự ưu tiên."""
+        """Mốc hợp lệ phải giữ hai score riêng theo đúng thứ tự ưu tiên."""
 
         point = ConvergencePoint(
             iteration=3,
             fitness_evaluations=120,
-            time_stability_score=0.1,
             general_quality_score=0.2,
             lecturer_preference_score=0.3,
         )
 
         self.assertEqual(point.iteration, 3)
         self.assertEqual(point.fitness_evaluations, 120)
-        self.assertEqual(point.fitness_key, (0.1, 0.2, 0.3))
+        self.assertEqual(point.fitness_key, (0.2, 0.3))
 
     def test_initial_population_can_use_iteration_zero(self) -> None:
         """Quần thể đã đánh giá trước vòng đầu được phép ghi tại iteration 0."""
@@ -40,7 +39,6 @@ class TestConvergencePoint(unittest.TestCase):
         point = ConvergencePoint(
             iteration=0,
             fitness_evaluations=30,
-            time_stability_score=0.0,
             general_quality_score=0.0,
             lecturer_preference_score=0.0,
         )
@@ -55,7 +53,6 @@ class TestConvergencePoint(unittest.TestCase):
             ConvergencePoint(
                 iteration=-1,
                 fitness_evaluations=30,
-                time_stability_score=0.0,
                 general_quality_score=0.0,
                 lecturer_preference_score=0.0,
             )
@@ -69,7 +66,6 @@ class TestConvergencePoint(unittest.TestCase):
                     ConvergencePoint(
                         iteration=0,
                         fitness_evaluations=invalid_evaluations,
-                        time_stability_score=0.0,
                         general_quality_score=0.0,
                         lecturer_preference_score=0.0,
                     )
@@ -78,9 +74,8 @@ class TestConvergencePoint(unittest.TestCase):
         """Không tầng fitness nào được nhận score âm."""
 
         invalid_scores = (
-            (-0.1, 0.0, 0.0),
-            (0.0, -0.1, 0.0),
-            (0.0, 0.0, -0.1),
+            (-0.1, 0.0),
+            (0.0, -0.1),
         )
 
         for scores in invalid_scores:
@@ -89,17 +84,16 @@ class TestConvergencePoint(unittest.TestCase):
                     ConvergencePoint(
                         iteration=1,
                         fitness_evaluations=30,
-                        time_stability_score=scores[0],
-                        general_quality_score=scores[1],
-                        lecturer_preference_score=scores[2],
+                        general_quality_score=scores[0],
+                        lecturer_preference_score=scores[1],
                     )
 
     def test_non_finite_score_is_rejected_in_every_tier(self) -> None:
         """NaN và vô cực không được đi vào dữ liệu convergence."""
 
         for invalid_value in (float("nan"), float("inf"), float("-inf")):
-            for score_index in range(3):
-                scores = [0.0, 0.0, 0.0]
+            for score_index in range(2):
+                scores = [0.0, 0.0]
                 scores[score_index] = invalid_value
 
                 with self.subTest(
@@ -110,32 +104,29 @@ class TestConvergencePoint(unittest.TestCase):
                         ConvergencePoint(
                             iteration=1,
                             fitness_evaluations=30,
-                            time_stability_score=scores[0],
-                            general_quality_score=scores[1],
-                            lecturer_preference_score=scores[2],
+                            general_quality_score=scores[0],
+                            lecturer_preference_score=scores[1],
                         )
 
-    def test_time_stability_remains_the_first_comparison_tier(self) -> None:
-        """Q_general tốt hơn không được bù cho Q_time kém hơn."""
+    def test_general_quality_remains_the_first_comparison_tier(self) -> None:
+        """Chất lượng chung phải được so trước mong muốn giảng viên."""
 
-        stable_schedule = ConvergencePoint(
+        better_general = ConvergencePoint(
             iteration=1,
             fitness_evaluations=30,
-            time_stability_score=0.0,
-            general_quality_score=1.0,
+            general_quality_score=0.0,
             lecturer_preference_score=1.0,
         )
-        unstable_schedule = ConvergencePoint(
+        better_preference = ConvergencePoint(
             iteration=1,
             fitness_evaluations=30,
-            time_stability_score=0.1,
-            general_quality_score=0.0,
+            general_quality_score=0.1,
             lecturer_preference_score=0.0,
         )
 
         self.assertLess(
-            stable_schedule.fitness_key,
-            unstable_schedule.fitness_key,
+            better_general.fitness_key,
+            better_preference.fitness_key,
         )
 
     def test_point_is_immutable(self) -> None:
@@ -144,7 +135,6 @@ class TestConvergencePoint(unittest.TestCase):
         point = ConvergencePoint(
             iteration=1,
             fitness_evaluations=30,
-            time_stability_score=0.0,
             general_quality_score=0.0,
             lecturer_preference_score=0.0,
         )
@@ -276,16 +266,12 @@ class TestOptimizationResult(unittest.TestCase):
 
     @staticmethod
     def create_individual(
-        fitness_key: tuple[float, float, float],
+        fitness_key: tuple[float, float],
     ) -> TimetableIndividual:
         """Tạo cá thể tối giản có FitnessResult hợp lệ cho test hợp đồng."""
 
         breakdown = FitnessBreakdown(
-            weekday_change_count=0,
-            start_period_change_count=0,
             room_change_count=0,
-            valid_time_exception_count=0,
-            comparable_time_session_count=0,
             comparable_physical_session_count=0,
             capacity_component=0.0,
             gap_component=0.0,
@@ -294,9 +280,8 @@ class TestOptimizationResult(unittest.TestCase):
             lecturer_breakdown=(),
         )
         fitness = FitnessResult(
-            time_stability_score=fitness_key[0],
-            general_quality_score=fitness_key[1],
-            lecturer_preference_score=fitness_key[2],
+            general_quality_score=fitness_key[0],
+            lecturer_preference_score=fitness_key[1],
             breakdown=breakdown,
         )
         return TimetableIndividual(
@@ -336,24 +321,23 @@ class TestOptimizationResult(unittest.TestCase):
     def create_point(
         iteration: int,
         fitness_evaluations: int,
-        fitness_key: tuple[float, float, float],
+        fitness_key: tuple[float, float],
     ) -> ConvergencePoint:
         """Chuyển một khóa Gate F thành mốc hội tụ tương ứng."""
 
         return ConvergencePoint(
             iteration=iteration,
             fitness_evaluations=fitness_evaluations,
-            time_stability_score=fitness_key[0],
-            general_quality_score=fitness_key[1],
-            lecturer_preference_score=fitness_key[2],
+            general_quality_score=fitness_key[0],
+            lecturer_preference_score=fitness_key[1],
         )
 
     def create_valid_result(self) -> OptimizationResult:
         """Tạo kết quả có best tốt dần và khớp metrics cuối."""
 
-        best = self.create_individual((1.0, 2.0, 3.0))
+        best = self.create_individual((1.0, 2.0))
         history = (
-            self.create_point(0, 10, (2.0, 0.0, 0.0)),
+            self.create_point(0, 10, (2.0, 0.0)),
             self.create_point(1, 20, best.fitness_key),
         )
         return OptimizationResult(
@@ -370,7 +354,7 @@ class TestOptimizationResult(unittest.TestCase):
         result = self.create_valid_result()
 
         self.assertEqual(result.algorithm, OptimizationAlgorithm.PO)
-        self.assertEqual(result.best_individual.fitness_key, (1.0, 2.0, 3.0))
+        self.assertEqual(result.best_individual.fitness_key, (1.0, 2.0))
         self.assertEqual(len(result.final_population), 1)
         self.assertEqual(len(result.convergence_history), 2)
         self.assertEqual(result.metrics.fitness_evaluations, 20)
@@ -401,7 +385,7 @@ class TestOptimizationResult(unittest.TestCase):
     def test_history_must_start_at_iteration_zero(self) -> None:
         """Mốc đầu tiên luôn đại diện cho quần thể ban đầu."""
 
-        best = self.create_individual((1.0, 0.0, 0.0))
+        best = self.create_individual((1.0, 0.0))
 
         with self.assertRaisesRegex(ValueError, "iteration bằng 0"):
             OptimizationResult(
@@ -417,19 +401,19 @@ class TestOptimizationResult(unittest.TestCase):
     def test_history_order_and_best_so_far_cannot_regress(self) -> None:
         """Iteration, FE và best-so-far phải tiến triển đúng hướng."""
 
-        best = self.create_individual((1.0, 0.0, 0.0))
+        best = self.create_individual((1.0, 0.0))
         metrics = self.create_metrics()
         invalid_histories = (
             (
-                self.create_point(0, 10, (2.0, 0.0, 0.0)),
+                self.create_point(0, 10, (2.0, 0.0)),
                 self.create_point(0, 20, best.fitness_key),
             ),
             (
-                self.create_point(0, 21, (2.0, 0.0, 0.0)),
+                self.create_point(0, 21, (2.0, 0.0)),
                 self.create_point(1, 20, best.fitness_key),
             ),
             (
-                self.create_point(0, 10, (0.5, 0.0, 0.0)),
+                self.create_point(0, 10, (0.5, 0.0)),
                 self.create_point(1, 20, best.fitness_key),
             ),
         )
@@ -468,7 +452,7 @@ class TestOptimizationResult(unittest.TestCase):
                 metrics=self.create_metrics(fitness_evaluations=21),
             )
 
-        other_best = self.create_individual((0.5, 0.0, 0.0))
+        other_best = self.create_individual((0.5, 0.0))
         with self.assertRaisesRegex(ValueError, "best_individual"):
             OptimizationResult(
                 algorithm=valid.algorithm,

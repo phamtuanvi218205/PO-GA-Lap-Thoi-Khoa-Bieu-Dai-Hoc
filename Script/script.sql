@@ -4,11 +4,16 @@
     Current scope:
     - Create a teaching timetable before student registration.
     - No Student/StudentGroup input.
-    - A lecturer is assigned before optimization. Every TeachingPart of the
-      same CourseSection must reference that same lecturer.
+    - Lecturers declare the courses and part types they can teach.
+    - The optimizer assigns one lecturer to each CourseSection; lecture and
+      practice parts of that section inherit the same selected lecturer.
     - A locked PlanningScenario selects one system-validated TeachingPlan per TeachingPart.
-    - Each ClassSession is one atomic session in one TermWeek.
-    - The optimizer selects the actual date, start period and teaching location.
+    - ClassSession rows remain weekly occurrences for total-period accounting.
+    - Occurrences with the same plan and stability group share one schedule gene.
+    - The optimizer selects one weekday, start period and location pattern that
+      repeats throughout every active week of that group.
+    - Holiday/makeup status is informational and does not alter optimization;
+      lecturer and room UNAVAILABLE windows are still hard constraints.
     - Room capacity is a SOFT criterion, never a hard filtering condition.
 
     WARNING: rerunning this file drops and recreates all project tables.
@@ -42,6 +47,7 @@ DROP TABLE IF EXISTS TeachingPlan;
 DROP TABLE IF EXISTS TeachingPlanGenerationRule;
 DROP TABLE IF EXISTS TeachingPartRequiredEquipment;
 DROP TABLE IF EXISTS TeachingPart;
+DROP TABLE IF EXISTS CourseTeachingStructureRequiredEquipment;
 DROP TABLE IF EXISTS RoomEquipment;
 DROP TABLE IF EXISTS Equipment;
 
@@ -51,6 +57,8 @@ DROP TABLE IF EXISTS SectionStudentGroup;
 DROP TABLE IF EXISTS StudentGroup;
 
 DROP TABLE IF EXISTS CourseSection;
+DROP TABLE IF EXISTS CourseTeachingStructure;
+DROP TABLE IF EXISTS LecturerCourseCapability;
 DROP TABLE IF EXISTS Course;
 DROP TABLE IF EXISTS Lecturer;
 DROP TABLE IF EXISTS OnlineLocation;
@@ -67,7 +75,10 @@ DROP TABLE IF EXISTS TimeSlot; -- legacy
 DROP TABLE IF EXISTS AcademicTerm;
 GO
 
-/* Academic calendar. The core stores actual dates and ISO weekday 1..7. */
+/*
+   Academic calendar. Actual dates remain necessary for DATE availability.
+   date_status is retained for source traceability, not for holiday filtering.
+*/
 CREATE TABLE AcademicTerm
 (
     term_code       VARCHAR(20)    NOT NULL PRIMARY KEY,
@@ -226,8 +237,11 @@ CREATE TABLE Lecturer
     email           VARCHAR(150)  NULL,
     home_campus_code VARCHAR(20)  NULL,
     is_active      BIT           NOT NULL DEFAULT 1,
+    max_teaching_periods INT      NULL,
     CONSTRAINT FK_Lecturer_HomeCampus
-        FOREIGN KEY (home_campus_code) REFERENCES Campus(campus_code)
+        FOREIGN KEY (home_campus_code) REFERENCES Campus(campus_code),
+    CONSTRAINT CK_Lecturer_MaxTeachingPeriods
+        CHECK (max_teaching_periods IS NULL OR max_teaching_periods > 0)
 );
 
 CREATE TABLE Course
@@ -237,6 +251,57 @@ CREATE TABLE Course
     credits        DECIMAL(4,1)  NULL,
     is_active      BIT           NOT NULL DEFAULT 1,
     CONSTRAINT CK_Course_Credits CHECK (credits IS NULL OR credits > 0)
+);
+
+/*
+   Reusable teaching structure of a course. Users declare this once for a
+   course; TeachingPartGenerator materializes it only for sections opened in
+   the selected term.
+*/
+CREATE TABLE CourseTeachingStructure
+(
+    course_structure_id      BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    course_code              VARCHAR(20) NOT NULL,
+    part_type                VARCHAR(20) NOT NULL,
+    total_periods            INT NOT NULL,
+    required_location_type   VARCHAR(20) NOT NULL DEFAULT 'PHYSICAL_ROOM',
+    required_room_type       VARCHAR(30) NULL,
+    max_sessions_per_week    INT NOT NULL DEFAULT 1,
+    allows_intensive         BIT NOT NULL DEFAULT 0,
+    max_candidate_plans      INT NOT NULL DEFAULT 200,
+    is_active                BIT NOT NULL DEFAULT 1,
+    note                     NVARCHAR(255) NULL,
+    CONSTRAINT UQ_CourseTeachingStructure UNIQUE(course_code, part_type),
+    CONSTRAINT FK_CTS_Course FOREIGN KEY(course_code) REFERENCES Course(course_code),
+    CONSTRAINT CK_CTS_PartType CHECK(part_type IN ('LECTURE','PRACTICE')),
+    CONSTRAINT CK_CTS_TotalPeriods CHECK(total_periods > 0),
+    CONSTRAINT CK_CTS_MaxSessions CHECK(max_sessions_per_week BETWEEN 1 AND 7),
+    CONSTRAINT CK_CTS_MaxPlans CHECK(max_candidate_plans BETWEEN 1 AND 200),
+    CONSTRAINT CK_CTS_LocationType
+        CHECK(required_location_type IN ('PHYSICAL_ROOM','ONLINE')),
+    CONSTRAINT CK_CTS_RoomRequirement CHECK(
+        (required_location_type='PHYSICAL_ROOM' AND required_room_type IS NOT NULL)
+        OR (required_location_type='ONLINE' AND required_room_type IS NULL)
+    )
+);
+
+CREATE TABLE LecturerCourseCapability
+(
+    lecturer_code       VARCHAR(20)  NOT NULL,
+    course_code         VARCHAR(20)  NOT NULL,
+    can_teach_lecture   BIT          NOT NULL DEFAULT 0,
+    can_teach_practice  BIT          NOT NULL DEFAULT 0,
+    suitability_score   DECIMAL(5,4) NOT NULL DEFAULT 1.0000,
+    CONSTRAINT PK_LecturerCourseCapability
+        PRIMARY KEY (lecturer_code, course_code),
+    CONSTRAINT FK_LCC_Lecturer
+        FOREIGN KEY (lecturer_code) REFERENCES Lecturer(lecturer_code),
+    CONSTRAINT FK_LCC_Course
+        FOREIGN KEY (course_code) REFERENCES Course(course_code),
+    CONSTRAINT CK_LCC_AtLeastOnePartType
+        CHECK (can_teach_lecture = 1 OR can_teach_practice = 1),
+    CONSTRAINT CK_LCC_Suitability
+        CHECK (suitability_score BETWEEN 0.0000 AND 1.0000)
 );
 
 CREATE TABLE CourseSection
@@ -263,6 +328,19 @@ CREATE TABLE Equipment
     equipment_name NVARCHAR(150) NOT NULL
 );
 
+CREATE TABLE CourseTeachingStructureRequiredEquipment
+(
+    course_structure_id BIGINT NOT NULL,
+    equipment_code VARCHAR(30) NOT NULL,
+    minimum_quantity INT NOT NULL DEFAULT 1,
+    CONSTRAINT PK_CTSRE PRIMARY KEY(course_structure_id,equipment_code),
+    CONSTRAINT FK_CTSRE_Structure FOREIGN KEY(course_structure_id)
+        REFERENCES CourseTeachingStructure(course_structure_id),
+    CONSTRAINT FK_CTSRE_Equipment FOREIGN KEY(equipment_code)
+        REFERENCES Equipment(equipment_code),
+    CONSTRAINT CK_CTSRE_Quantity CHECK(minimum_quantity >= 1)
+);
+
 CREATE TABLE RoomEquipment
 (
     room_location_id BIGINT      NOT NULL,
@@ -276,14 +354,15 @@ CREATE TABLE RoomEquipment
     CONSTRAINT CK_RoomEquipment_Quantity CHECK (quantity >= 1)
 );
 
--- A TeachingPart is lecture/practice work of one section and has one lecturer.
+-- lecturer_code is retained only for legacy rows; optimizer v2 uses capability genes.
 CREATE TABLE TeachingPart
 (
     teaching_part_id      BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     section_code          VARCHAR(30) NOT NULL,
     part_code             VARCHAR(30) NOT NULL UNIQUE,
     part_type             VARCHAR(20) NOT NULL,
-    lecturer_code         VARCHAR(20) NOT NULL,
+    course_structure_id   BIGINT NULL,
+    lecturer_code         VARCHAR(20) NULL,
     total_periods         INT         NOT NULL,
     required_room_type    VARCHAR(30) NULL,
     required_location_type VARCHAR(20) NOT NULL DEFAULT 'PHYSICAL_ROOM',
@@ -292,6 +371,10 @@ CREATE TABLE TeachingPart
         FOREIGN KEY (section_code) REFERENCES CourseSection(section_code),
     CONSTRAINT FK_TeachingPart_Lecturer
         FOREIGN KEY (lecturer_code) REFERENCES Lecturer(lecturer_code),
+    CONSTRAINT FK_TeachingPart_Structure
+        FOREIGN KEY (course_structure_id)
+        REFERENCES CourseTeachingStructure(course_structure_id),
+    CONSTRAINT UQ_TeachingPart_SectionType UNIQUE(section_code,part_type),
     CONSTRAINT CK_TeachingPart_Type CHECK (part_type IN ('LECTURE', 'PRACTICE')),
     CONSTRAINT CK_TeachingPart_TotalPeriods CHECK (total_periods > 0),
     CONSTRAINT CK_TeachingPart_LocationType
@@ -303,35 +386,6 @@ CREATE TABLE TeachingPart
             (required_location_type = 'ONLINE' AND required_room_type IS NULL)
         )
 );
-GO
-
-/*
-   One class section has one preassigned lecturer. Lecture and practice remain
-   separate TeachingPart rows because they have independent duration, room and
-   timetable requirements, but they may not name different lecturers.
-*/
-CREATE TRIGGER TR_TeachingPart_OneLecturerPerCourseSection
-ON TeachingPart
-AFTER INSERT, UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    IF EXISTS
-    (
-        SELECT 1
-        FROM inserted AS changed_part
-        JOIN TeachingPart AS existing_part
-          ON existing_part.section_code = changed_part.section_code
-         AND existing_part.teaching_part_id <> changed_part.teaching_part_id
-         AND existing_part.lecturer_code <> changed_part.lecturer_code
-    )
-    BEGIN
-        THROW 51001,
-              'All TeachingPart rows of one CourseSection must use the same lecturer.',
-              1;
-    END;
-END;
 GO
 
 CREATE TABLE TeachingPartRequiredEquipment
@@ -361,7 +415,7 @@ CREATE TABLE TeachingPlanGenerationRule
     end_week_number        INT         NOT NULL,
     max_sessions_per_week  INT         NOT NULL,
     allows_intensive       BIT         NOT NULL DEFAULT 0,
-    max_candidate_plans    INT         NOT NULL DEFAULT 20,
+    max_candidate_plans    INT         NOT NULL DEFAULT 200,
     is_active              BIT         NOT NULL DEFAULT 1,
     note                   NVARCHAR(500) NULL,
     CONSTRAINT FK_TeachingPlanGenerationRule_Part
@@ -405,8 +459,8 @@ CREATE TABLE TeachingPlan
 );
 
 /*
-   A generated plan must be reproducible before it is expanded
-   into optimizer-facing ClassSession rows. Each item is one planned session.
+   A generated plan must be reproducible before it is expanded into weekly
+   ClassSession rows. Equal stability_group_no values form one recurring gene.
 */
 CREATE TABLE TeachingPlanItem
 (
@@ -433,7 +487,7 @@ CREATE TABLE TeachingPlanItem
     CONSTRAINT CK_TeachingPlanItem_StabilityGroup CHECK (stability_group_no >= 1)
 );
 
--- Atomic unit scheduled by one gene. Duration and week are fixed by its plan.
+-- Weekly occurrence. One recurring gene is shared by the same plan/group.
 CREATE TABLE ClassSession
 (
     class_session_id BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -452,6 +506,8 @@ CREATE TABLE ClassSession
         REFERENCES TermWeek(term_code, week_number),
     CONSTRAINT UQ_ClassSession_Plan_Number
         UNIQUE (teaching_plan_id, session_number),
+    CONSTRAINT UQ_ClassSession_Plan_Week_Group
+        UNIQUE (teaching_plan_id, term_code, week_number, stability_group_no),
     CONSTRAINT UQ_ClassSession_Id_Term
         UNIQUE (class_session_id, term_code),
     CONSTRAINT UQ_ClassSession_Id_LocationType
@@ -586,8 +642,8 @@ CREATE TABLE PlanningScenarioItem
         UNIQUE (scenario_id, teaching_plan_id)
 );
 
--- Gate F is finalized by D063-D075: hard feasibility is checked first, then
--- schedules are compared lexicographically by Q_time, Q_general and Q_lecturer.
+-- Hard feasibility is checked first, then feasible schedules are compared
+-- lexicographically by Q_general and Q_lecturer.
 CREATE TABLE ConstraintSetting
 (
     constraint_code VARCHAR(50)   NOT NULL PRIMARY KEY,
@@ -626,8 +682,16 @@ CREATE TABLE OptimizationRun
     random_seed         BIGINT       NOT NULL,
     algorithm_version   VARCHAR(50)  NOT NULL,
     status              VARCHAR(20)  NOT NULL DEFAULT 'PENDING',
+    current_fitness_evaluations BIGINT NOT NULL DEFAULT 0,
+    completed_iterations INT         NOT NULL DEFAULT 0,
+    progress_updated_at DATETIME2    NULL,
+    cancel_requested    BIT          NOT NULL DEFAULT 0,
+    timeout_seconds     INT          NULL,
+    request_config_json NVARCHAR(MAX) NULL,
+    queued_at           DATETIME2    NOT NULL DEFAULT SYSUTCDATETIME(),
+    worker_id           VARCHAR(64)  NULL,
+    lease_expires_at    DATETIME2    NULL,
     hard_violation_count INT         NULL,
-    time_stability_score DECIMAL(18,6) NULL,
     general_quality_score DECIMAL(18,6) NULL,
     lecturer_preference_score DECIMAL(18,6) NULL,
     fitness_breakdown_json NVARCHAR(MAX) NULL,
@@ -644,17 +708,24 @@ CREATE TABLE OptimizationRun
     CONSTRAINT CK_OptimizationRun_Population CHECK (population_size > 0),
     CONSTRAINT CK_OptimizationRun_FE CHECK (max_fitness_evaluations > 0),
     CONSTRAINT CK_OptimizationRun_Status
-        CHECK (status IN ('PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED')),
+        CHECK (status IN ('PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED', 'TIMED_OUT')),
+    CONSTRAINT CK_OptimizationRun_CurrentFE
+        CHECK (current_fitness_evaluations >= 0
+               AND current_fitness_evaluations <= max_fitness_evaluations),
+    CONSTRAINT CK_OptimizationRun_CompletedIterations
+        CHECK (completed_iterations >= 0),
+    CONSTRAINT CK_OptimizationRun_Timeout
+        CHECK (timeout_seconds IS NULL OR timeout_seconds > 0),
     CONSTRAINT CK_OptimizationRun_HardViolations
         CHECK (hard_violation_count IS NULL OR hard_violation_count >= 0),
-    CONSTRAINT CK_OptimizationRun_TimeScore
-        CHECK (time_stability_score IS NULL OR time_stability_score >= 0),
     CONSTRAINT CK_OptimizationRun_GeneralScore
         CHECK (general_quality_score IS NULL OR general_quality_score >= 0),
     CONSTRAINT CK_OptimizationRun_LecturerScore
         CHECK (lecturer_preference_score IS NULL OR lecturer_preference_score >= 0),
     CONSTRAINT CK_OptimizationRun_BreakdownJson
         CHECK (fitness_breakdown_json IS NULL OR ISJSON(fitness_breakdown_json) = 1),
+    CONSTRAINT CK_OptimizationRun_RequestConfigJson
+        CHECK (request_config_json IS NULL OR ISJSON(request_config_json) = 1),
     CONSTRAINT CK_OptimizationRun_SnapshotJson CHECK (ISJSON(snapshot_json) = 1),
     CONSTRAINT CK_OptimizationRun_SnapshotChecksum
         CHECK (LEN(snapshot_checksum) = 64
@@ -667,6 +738,7 @@ CREATE TABLE TimetableEntry
     timetable_entry_id BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     run_id              BIGINT      NOT NULL,
     class_session_id    BIGINT      NOT NULL,
+    lecturer_code       VARCHAR(20) NOT NULL,
     term_code           VARCHAR(20) NOT NULL,
     teaching_date       DATE        NOT NULL,
     location_id         BIGINT      NOT NULL,
@@ -678,6 +750,8 @@ CREATE TABLE TimetableEntry
     CONSTRAINT FK_TimetableEntry_SessionTerm
         FOREIGN KEY (class_session_id, term_code)
         REFERENCES ClassSession(class_session_id, term_code),
+    CONSTRAINT FK_TimetableEntry_Lecturer
+        FOREIGN KEY (lecturer_code) REFERENCES Lecturer(lecturer_code),
     CONSTRAINT FK_TimetableEntry_SessionLocationType
         FOREIGN KEY (class_session_id, location_type)
         REFERENCES ClassSession(class_session_id, required_location_type),
@@ -695,7 +769,7 @@ GO
 
 /* -------------------------------------------------------------------------
    SAMPLE DATA
-   This small instance exercises weeks, holidays, physical/online locations,
+   This small instance exercises weekly occurrences, physical/online locations,
    soft capacity, different teaching-plan structures and lecturer preferences.
    ------------------------------------------------------------------------- */
 INSERT INTO AcademicTerm(term_code, term_name, start_date, end_date, status)
@@ -725,14 +799,7 @@ BEGIN
     SET @d = DATEADD(DAY, 1, @d);
 END;
 
--- Holiday is on an unused sample Monday; Saturday is explicitly allowed for makeup.
-UPDATE TeachingDate
-SET date_status = 'HOLIDAY', note = N'Ngày nghỉ minh họa'
-WHERE term_code = '2026_HK1' AND calendar_date = '2026-09-07';
-
-UPDATE TeachingDate
-SET date_status = 'MAKEUP_ALLOWED', note = N'Ngày học bù minh họa'
-WHERE term_code = '2026_HK1' AND calendar_date = '2026-09-05';
+-- Không đánh dấu ngày lễ/học bù trong bài toán tối ưu hiện hành.
 
 INSERT INTO TimePeriod(period_number, start_time, end_time, session_name) VALUES
 (1,  '06:45', '07:35', 'MORNING'),
@@ -802,17 +869,44 @@ INSERT INTO OnlineLocation(location_id, platform_name, meeting_note)
 SELECT location_id, N'Zoom', N'Liên kết được cấp sau khi lịch được công bố'
 FROM TeachingLocation WHERE location_code = 'ZOOM01';
 
-INSERT INTO Lecturer(lecturer_code, full_name, email, home_campus_code) VALUES
-('GV01', N'Đinh Nguyễn Trọng Nghĩa', 'nghia@example.edu.vn', 'CS1'),
-('GV02', N'Nguyễn Văn An', 'an@example.edu.vn', 'CS1'),
-('GV03', N'Trần Thị Bình', 'binh@example.edu.vn', 'CS2');
+INSERT INTO Lecturer
+    (lecturer_code, full_name, email, home_campus_code, max_teaching_periods)
+VALUES
+('GV01', N'Đinh Nguyễn Trọng Nghĩa', 'nghia@example.edu.vn', 'CS1', 120),
+('GV02', N'Nguyễn Văn An', 'an@example.edu.vn', 'CS1', 120),
+('GV03', N'Trần Thị Bình', 'binh@example.edu.vn', 'CS2', 120);
 
 INSERT INTO Course(course_code, course_name, credits) VALUES
 ('KTDL', N'Khai thác dữ liệu', 3.0),
 ('LTWEB', N'Lập trình Web', 3.0),
 ('TTNT', N'Trí tuệ nhân tạo', 3.0);
 
--- expected_enrollment is planning data, not actual student registration.
+INSERT INTO CourseTeachingStructure(
+    course_code,part_type,total_periods,required_location_type,
+    required_room_type,max_sessions_per_week,allows_intensive,
+    max_candidate_plans,note
+) VALUES
+('KTDL','LECTURE',45,'PHYSICAL_ROOM','LECTURE_ROOM',2,1,200,
+ N'Phần lý thuyết 45 tiết'),
+('LTWEB','PRACTICE',30,'PHYSICAL_ROOM','COMPUTER_LAB',1,1,200,
+ N'Phần thực hành 30 tiết'),
+('TTNT','LECTURE',45,'ONLINE',NULL,1,0,200,
+ N'Phần lý thuyết trực tuyến 45 tiết');
+
+-- Năng lực được khai báo ở cấp môn, không gắn cứng vào JAVA01/JAVA02.
+INSERT INTO LecturerCourseCapability
+    (lecturer_code, course_code, can_teach_lecture, can_teach_practice,
+     suitability_score)
+VALUES
+('GV01', 'KTDL', 1, 1, 1.0000),
+('GV02', 'KTDL', 1, 1, 0.8500),
+('GV01', 'LTWEB', 1, 1, 0.8000),
+('GV02', 'LTWEB', 1, 1, 1.0000),
+('GV02', 'TTNT', 1, 1, 0.8000),
+('GV03', 'TTNT', 1, 1, 1.0000);
+
+-- expected_enrollment is the approved planning headcount used by the hard
+-- room-capacity constraint for physical classes.
 INSERT INTO CourseSection
     (section_code, term_code, course_code, section_name, expected_enrollment, status)
 VALUES
@@ -836,16 +930,38 @@ INSERT INTO RoomEquipment(room_location_id, equipment_code, quantity)
 SELECT location_id, 'COMPUTER', 60
 FROM TeachingLocation WHERE location_code = 'LAB_B1';
 
+INSERT INTO CourseTeachingStructureRequiredEquipment(
+    course_structure_id,equipment_code,minimum_quantity
+)
+SELECT course_structure_id,'PROJECTOR',1
+FROM CourseTeachingStructure
+WHERE course_code='KTDL' AND part_type='LECTURE';
+
+INSERT INTO CourseTeachingStructureRequiredEquipment(
+    course_structure_id,equipment_code,minimum_quantity
+)
+SELECT course_structure_id,'COMPUTER',40
+FROM CourseTeachingStructure
+WHERE course_code='LTWEB' AND part_type='PRACTICE';
+
 INSERT INTO TeachingPart
     (section_code, part_code, part_type, lecturer_code, total_periods,
      required_room_type, required_location_type, note)
 VALUES
-('KTDL01', 'KTDL01_LT', 'LECTURE', 'GV01', 45,
+('KTDL01', 'KTDL01_LT', 'LECTURE', NULL, 45,
  'LECTURE_ROOM', 'PHYSICAL_ROOM', N'Phần lý thuyết 45 tiết'),
-('LTWEB01', 'LTWEB01_TH', 'PRACTICE', 'GV02', 30,
+('LTWEB01', 'LTWEB01_TH', 'PRACTICE', NULL, 30,
  'COMPUTER_LAB', 'PHYSICAL_ROOM', N'Phần thực hành 30 tiết'),
-('TTNT01', 'TTNT01_LT', 'LECTURE', 'GV03', 45,
+('TTNT01', 'TTNT01_LT', 'LECTURE', NULL, 45,
  NULL, 'ONLINE', N'Phần lý thuyết trực tuyến 45 tiết');
+
+UPDATE part
+SET course_structure_id=structure.course_structure_id
+FROM TeachingPart AS part
+JOIN CourseSection AS section ON section.section_code=part.section_code
+JOIN CourseTeachingStructure AS structure
+  ON structure.course_code=section.course_code
+ AND structure.part_type=part.part_type;
 
 INSERT INTO TeachingPartRequiredEquipment(teaching_part_id, equipment_code, minimum_quantity)
 SELECT teaching_part_id, 'PROJECTOR', 1
@@ -859,22 +975,22 @@ FROM TeachingPart WHERE part_code = 'LTWEB01_TH';
 INSERT INTO TeachingPlanGenerationRule
     (teaching_part_id, start_week_number, end_week_number,
      max_sessions_per_week, allows_intensive, max_candidate_plans, note)
-SELECT teaching_part_id, 1, 15, 2, 1, 20,
-       N'Cho phép cả kế hoạch trải đều và học tập trung'
+SELECT teaching_part_id, 1, 15, 2, 1, 200,
+       N'Cho phép các khoảng tuần liên tục và phương án tăng tốc'
 FROM TeachingPart WHERE part_code = 'KTDL01_LT';
 
 INSERT INTO TeachingPlanGenerationRule
     (teaching_part_id, start_week_number, end_week_number,
      max_sessions_per_week, allows_intensive, max_candidate_plans, note)
-SELECT teaching_part_id, 1, 15, 1, 1, 20,
-       N'Thực hành có thể kết thúc sớm khi rule cho phép'
+SELECT teaching_part_id, 1, 15, 1, 1, 200,
+       N'Thực hành có thể bắt đầu ở mọi tuần hợp lệ và học liên tục'
 FROM TeachingPart WHERE part_code = 'LTWEB01_TH';
 
 INSERT INTO TeachingPlanGenerationRule
     (teaching_part_id, start_week_number, end_week_number,
      max_sessions_per_week, allows_intensive, max_candidate_plans, note)
-SELECT teaching_part_id, 1, 15, 1, 0, 20,
-       N'Lớp trực tuyến trải đều trong toàn bộ khoảng tuần'
+SELECT teaching_part_id, 1, 15, 1, 0, 200,
+       N'Lớp trực tuyến học liên tục trong khoảng tuần được chọn'
 FROM TeachingPart WHERE part_code = 'TTNT01_LT';
 
 INSERT INTO TeachingPlan
@@ -1040,8 +1156,8 @@ INSERT INTO ConstraintSetting
     (constraint_code, constraint_name, constraint_kind, priority_tier, weight,
      threshold_value, note)
 VALUES
-('HARD_VALID_DATE', N'Ngày học được phép trong đúng tuần', 'HARD', 1, NULL, NULL,
- N'Không xếp vào ngày nghỉ và không ra ngoài tuần của buổi'),
+('HARD_VALID_DATE', N'Ngày học thuộc đúng tuần hoạt động', 'HARD', 1, NULL, NULL,
+ N'Ngày lễ/học bù không tham gia lọc; ngày thật dùng để kiểm tra availability DATE'),
 ('HARD_LECTURER_OVERLAP', N'Không trùng lịch giảng viên', 'HARD', 1, NULL, NULL,
  N'Áp dụng cả phòng vật lý và lớp trực tuyến'),
 ('HARD_ROOM_OVERLAP', N'Không trùng phòng vật lý', 'HARD', 1, NULL, NULL,
@@ -1049,25 +1165,23 @@ VALUES
 ('HARD_AVAILABILITY', N'Tuân thủ khoảng không thể dạy/sử dụng', 'HARD', 1, NULL, NULL,
  N'UNAVAILABLE là bắt buộc'),
 ('HARD_LOCATION_MATCH', N'Đúng loại địa điểm, loại phòng và thiết bị', 'HARD', 1, NULL, NULL,
- N'Không dùng capacity như điều kiện cứng'),
+ N'Kiểm tra loại địa điểm, loại phòng và thiết bị bắt buộc'),
+('HARD_ROOM_CAPACITY', N'Phòng đủ sức chứa lớp học phần', 'HARD', 1, NULL, NULL,
+ N'Buổi vật lý yêu cầu capacity >= expected_enrollment; dữ liệu thiếu bị chặn ở readiness'),
 ('HARD_TRAVEL_TIME', N'Đủ thời gian di chuyển giữa các cơ sở', 'HARD', 1, NULL, NULL,
  N'Chỉ áp dụng khi phạm vi có nhiều cơ sở và đã cấu hình thời gian'),
-('SOFT_TIME_WEEKDAY_STABILITY', N'Ổn định thứ học giữa các tuần', 'SOFT', 1, 0.5000, NULL,
- N'Thành phần thứ nhất của Q_time'),
-('SOFT_TIME_START_PERIOD_STABILITY', N'Ổn định tiết bắt đầu giữa các tuần', 'SOFT', 1, 0.5000, NULL,
- N'Thành phần thứ hai của Q_time'),
-('SOFT_CAPACITY', N'Mức thiếu sức chứa phòng vật lý', 'SOFT', 2, 0.4091, NULL,
- N'Bỏ qua khi expected_enrollment hoặc capacity là NULL; không áp dụng ONLINE'),
-('SOFT_LECTURER_GAP', N'Khoảng trống trong ngày của giảng viên', 'SOFT', 2, 0.2273, NULL,
+('SOFT_LECTURER_GAP', N'Khoảng trống trong ngày của giảng viên', 'SOFT', 2, 0.3720, NULL,
  N'Chuẩn hóa bằng gap/(gap+teaching); không tính trước buổi đầu, sau buổi cuối hoặc ngày không dạy'),
-('SOFT_LECTURER_CONSECUTIVE', N'Hạn chế giảng viên dạy quá nhiều tiết liên tục', 'SOFT', 2, 0.0909, 6.0000,
+('SOFT_LECTURER_CONSECUTIVE', N'Hạn chế giảng viên dạy quá nhiều tiết liên tục', 'SOFT', 2, 0.1487, 6.0000,
  N'Chỉ phạt số tiết vượt ngưỡng; ngưỡng mặc định là 6 tiết liên tục'),
-('SOFT_ROOM_DISCOURAGED', N'Hạn chế dùng phòng trong khoảng DISCOURAGED', 'SOFT', 2, 0.1818, NULL,
+('SOFT_ROOM_DISCOURAGED', N'Hạn chế dùng phòng trong khoảng DISCOURAGED', 'SOFT', 2, 0.2975, NULL,
  N'Tính theo tỷ lệ tiết vật lý chồng lên khoảng DISCOURAGED'),
-('SOFT_ROOM_STABILITY', N'Ổn định phòng giữa các tuần', 'SOFT', 2, 0.0909, NULL,
- N'Đổi phòng chỉ là thành phần nhẹ của Q_general'),
-('SOFT_LECTURER_PREFERENCE', N'Mong muốn thời gian của giảng viên', 'SOFT', 3, 1.0000, NULL,
- N'Q_lecturer đứng sau Q_time và Q_general');
+('SOFT_WORKLOAD_BALANCE', N'Cân bằng khối lượng giảng dạy', 'SOFT', 2, 0.1818, NULL,
+ N'Tính trên tổng số tiết được phân cho các giảng viên đủ năng lực'),
+('SOFT_LECTURER_TIME_PREFERENCE', N'Mong muốn thời gian của giảng viên', 'SOFT', 3, 0.5000, NULL,
+ N'Một nửa Q_lecturer; đứng sau Q_general'),
+('SOFT_COURSE_SUITABILITY', N'Mức phù hợp môn và giảng viên', 'SOFT', 3, 0.5000, NULL,
+ N'Một nửa Q_lecturer; 1-suitability_score là mức phạt');
 GO
 
 /* One manually constructed sample result for query/UI development.
@@ -1078,12 +1192,12 @@ DECLARE @scenarioId BIGINT =
 INSERT INTO OptimizationRun
     (scenario_id, algorithm_name, population_size, max_fitness_evaluations,
      random_seed, algorithm_version, status, hard_violation_count,
-     time_stability_score, general_quality_score, lecturer_preference_score,
+     general_quality_score, lecturer_preference_score,
      fitness_breakdown_json,
      snapshot_json, snapshot_checksum, gene_option_mapping_json, started_at, finished_at)
 VALUES
 (@scenarioId, 'GA_PO', 30, 10000, 20260917, 'sample-manual-1', 'COMPLETED', 0,
- NULL, NULL, NULL,
+ NULL, NULL,
  N'{"status":"NOT_EVALUATED","reason":"manual sample for query and UI development"}',
  N'{"purpose":"sample database output; not an optimizer benchmark"}',
  'b00398573109a6c9308c73649993ca20ae4b4c9dfb44c0825ed7a99b56a4ce93',
@@ -1094,11 +1208,12 @@ DECLARE @runId BIGINT = SCOPE_IDENTITY();
 
 -- KTDL: Tuesday, periods 1-3, F201, weeks 1-15.
 INSERT INTO TimetableEntry
-    (run_id, class_session_id, term_code, teaching_date,
+    (run_id, class_session_id, lecturer_code, term_code, teaching_date,
      location_id, location_type, start_period, end_period)
 SELECT
     @runId,
     cs.class_session_id,
+    'GV01',
     cs.term_code,
     DATEADD(DAY, 1, tw.start_date),
     tl.location_id,
@@ -1116,11 +1231,12 @@ WHERE pl.plan_code = 'KTDL01_STANDARD'
 -- LTWEB: Thursday, periods 7-11, LAB_A1, weeks 1-6.
 -- Capacity is 40 while expected enrollment is 45: still valid, but penalized softly.
 INSERT INTO TimetableEntry
-    (run_id, class_session_id, term_code, teaching_date,
+    (run_id, class_session_id, lecturer_code, term_code, teaching_date,
      location_id, location_type, start_period, end_period)
 SELECT
     @runId,
     cs.class_session_id,
+    'GV02',
     cs.term_code,
     DATEADD(DAY, 3, tw.start_date),
     tl.location_id,
@@ -1137,11 +1253,12 @@ WHERE pl.plan_code = 'LTWEB01_STANDARD'
 
 -- TTNT: Wednesday, periods 1-3, online, weeks 1-15.
 INSERT INTO TimetableEntry
-    (run_id, class_session_id, term_code, teaching_date,
+    (run_id, class_session_id, lecturer_code, term_code, teaching_date,
      location_id, location_type, start_period, end_period)
 SELECT
     @runId,
     cs.class_session_id,
+    'GV03',
     cs.term_code,
     DATEADD(DAY, 2, tw.start_date),
     tl.location_id,
@@ -1166,6 +1283,9 @@ CREATE INDEX IX_CourseSection_Term
 
 CREATE INDEX IX_TeachingPart_Section_Lecturer
     ON TeachingPart(section_code, lecturer_code);
+
+CREATE INDEX IX_LecturerCourseCapability_Course
+    ON LecturerCourseCapability(course_code, lecturer_code);
 
 CREATE INDEX IX_TeachingPlanGenerationRule_Active
     ON TeachingPlanGenerationRule(is_active, teaching_part_id);
@@ -1205,6 +1325,7 @@ UNION ALL SELECT 'TeachingDate', COUNT(*) FROM TeachingDate
 UNION ALL SELECT 'TimePeriod', COUNT(*) FROM TimePeriod
 UNION ALL SELECT 'TeachingLocation', COUNT(*) FROM TeachingLocation
 UNION ALL SELECT 'CourseSection', COUNT(*) FROM CourseSection
+UNION ALL SELECT 'LecturerCourseCapability', COUNT(*) FROM LecturerCourseCapability
 UNION ALL SELECT 'TeachingPart', COUNT(*) FROM TeachingPart
 UNION ALL SELECT 'TeachingPlanGenerationRule', COUNT(*) FROM TeachingPlanGenerationRule
 UNION ALL SELECT 'TeachingPlan', COUNT(*) FROM TeachingPlan
@@ -1215,13 +1336,29 @@ UNION ALL SELECT 'PlanningScenarioItem', COUNT(*) FROM PlanningScenarioItem
 UNION ALL SELECT 'OptimizationRun', COUNT(*) FROM OptimizationRun
 UNION ALL SELECT 'TimetableEntry', COUNT(*) FROM TimetableEntry;
 
--- Must return no rows: one CourseSection cannot have multiple lecturers.
+-- Must return no rows: every section needs at least one lecturer who can
+-- teach all part types present in that section.
 SELECT
-    section_code,
-    COUNT(DISTINCT lecturer_code) AS lecturer_count
-FROM TeachingPart
-GROUP BY section_code
-HAVING COUNT(DISTINCT lecturer_code) > 1;
+    cs.section_code
+FROM CourseSection cs
+WHERE EXISTS (SELECT 1 FROM TeachingPart p WHERE p.section_code = cs.section_code)
+  AND NOT EXISTS
+  (
+      SELECT 1
+      FROM LecturerCourseCapability cap
+      WHERE cap.course_code = cs.course_code
+        AND NOT EXISTS
+        (
+            SELECT 1
+            FROM TeachingPart p
+            WHERE p.section_code = cs.section_code
+              AND (
+                  (p.part_type = 'LECTURE' AND cap.can_teach_lecture = 0)
+                  OR
+                  (p.part_type = 'PRACTICE' AND cap.can_teach_practice = 0)
+              )
+        )
+  );
 
 -- Every generated plan item set must match its TeachingPart total exactly.
 SELECT
@@ -1292,7 +1429,7 @@ JOIN TeachingPlan pl ON pl.teaching_plan_id = ses.teaching_plan_id
 JOIN TeachingPart p ON p.teaching_part_id = pl.teaching_part_id
 JOIN CourseSection csn ON csn.section_code = p.section_code
 JOIN Course c ON c.course_code = csn.course_code
-JOIN Lecturer l ON l.lecturer_code = p.lecturer_code
+JOIN Lecturer l ON l.lecturer_code = te.lecturer_code
 JOIN TeachingDate td
     ON td.term_code = te.term_code AND td.calendar_date = te.teaching_date
 JOIN TeachingLocation loc ON loc.location_id = te.location_id

@@ -5,10 +5,10 @@ from datetime import timedelta
 import random
 import unittest
 
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.decoder import DecodeStatus, decode_vector
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.models import DateStatus, SessionOption, TeachingDate
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.decoder import DecodeStatus, decode_vector
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.core.models import DateStatus, SessionOption, TeachingDate
 from tests.decoder_scenarios import make_multisession_problem, make_stress_domains
 from tests.test_constraints import ConstraintFixture
 
@@ -22,7 +22,9 @@ class TestDecoderMultisession(ConstraintFixture):
 
         result = decode_vector(problem, domains, vector, max_decode_nodes=200)
 
-        self.assertEqual(problem.dimension, 12)
+        self.assertEqual(problem.session_dimension, 12)
+        self.assertEqual(problem.schedule_dimension, 4)
+        self.assertEqual(problem.dimension, 4)
         self.assertTrue(all(domains))
         self.assertEqual(result.status, DecodeStatus.SUCCESS)
         self.assertTrue(validate_timetable(problem, result.selected_options).is_valid)
@@ -40,23 +42,26 @@ class TestDecoderMultisession(ConstraintFixture):
         self.assertEqual(first, second)
         self.assertEqual(first.status, DecodeStatus.SUCCESS)
         self.assertTrue(validate_timetable(problem, first.selected_options).is_valid)
-        for session_index, selected_index in enumerate(first.selected_option_indices):
-            domain_size = len(domains[session_index])
-            mapped_index = min(
-                int(first.repaired_vector[session_index] * domain_size),
-                domain_size - 1,
-            )
-            self.assertEqual(mapped_index, selected_index)
+        for session_indices in problem.schedule_groups:
+            patterns = {
+                (
+                    first.selected_options[index].teaching_date.isoweekday(),
+                    first.selected_options[index].start_period,
+                    first.selected_options[index].location_index,
+                )
+                for index in session_indices
+            }
+            self.assertEqual(len(patterns), 1)
 
     def test_small_node_budget_reports_decode_failed(self) -> None:
         problem = make_multisession_problem(3)
         domains = make_stress_domains(problem)
         vector = (0.75,) * problem.dimension
 
-        result = decode_vector(problem, domains, vector, max_decode_nodes=5)
+        result = decode_vector(problem, domains, vector, max_decode_nodes=2)
 
         self.assertEqual(result.status, DecodeStatus.DECODE_FAILED)
-        self.assertEqual(result.nodes_explored, 5)
+        self.assertEqual(result.nodes_explored, 2)
         self.assertIn("max_decode_nodes", result.reason)
 
     def test_forty_seeded_vectors_find_valid_stress_schedules(self) -> None:

@@ -2,15 +2,16 @@ import unittest
 from dataclasses import replace
 from datetime import date, time
 
-from gapo_timetabling.encoder import (
+from gapo_timetabling.core.encoder import (
     build_option_domains,
     build_options_for_session,
+    build_recurring_patterns_for_group,
     get_periods_for_block,
     is_resource_unavailable,
     period_ranges_overlap,
     room_can_host_part,
 )
-from gapo_timetabling.models import (
+from gapo_timetabling.core.models import (
     AcademicTerm,
     AcademicTermStatus,
     AllowedPeriodBlock,
@@ -57,7 +58,8 @@ class EncoderFixture(unittest.TestCase):
         )
         self.week = TermWeek(1, date(2026, 8, 17), date(2026, 8, 23))
 
-        # Tuần có một ngày thường, một ngày nghỉ và một ngày học bù được phép.
+        # Trạng thái ngày vẫn được lưu để truy vết, nhưng mô hình lịch lặp
+        # toàn kỳ không dùng ngày nghỉ/học bù để loại option.
         self.tuesday = TeachingDate(
             date(2026, 8, 18), 1, 2, DateStatus.NORMAL
         )
@@ -89,8 +91,7 @@ class EncoderFixture(unittest.TestCase):
             TeachingDurationRule(PartType.PRACTICE, 6, True),
         )
 
-        # Phòng chỉ có 20 chỗ trong khi chỉ tiêu lớp là 60. Encoder vẫn phải
-        # giữ phòng vì sức chứa là tiêu chí mềm.
+        # Phòng mặc định vừa đủ 60 chỗ cho lớp dự kiến 60 người.
         self.small_lecture_room = Room(
             location_index=0,
             location_id=10,
@@ -99,7 +100,7 @@ class EncoderFixture(unittest.TestCase):
             active=True,
             campus_code="CS1",
             room_type=RoomType.LECTURE_ROOM,
-            capacity=20,
+            capacity=60,
             equipment_quantities=(("PROJECTOR", 1),),
         )
         self.computer_lab = Room(
@@ -311,19 +312,32 @@ class TestResourceAvailability(unittest.TestCase):
 
 
 class TestRoomCompatibility(EncoderFixture):
-    def test_small_room_remains_valid_because_capacity_is_soft(self) -> None:
-        self.assertEqual(self.small_lecture_room.capacity, 20)
+    def test_small_room_is_rejected_by_hard_capacity(self) -> None:
+        undersized_room = replace(self.small_lecture_room, capacity=20)
         self.assertEqual(self.sections[0].expected_enrollment, 60)
+        self.assertFalse(
+            room_can_host_part(
+                undersized_room,
+                self.physical_part,
+                self.sections[0].expected_enrollment,
+            )
+        )
+
+    def test_room_with_sufficient_capacity_is_accepted(self) -> None:
         self.assertTrue(
-            room_can_host_part(self.small_lecture_room, self.physical_part)
+            room_can_host_part(
+                self.small_lecture_room,
+                self.physical_part,
+                self.sections[0].expected_enrollment,
+            )
         )
 
     def test_inactive_room_is_rejected(self) -> None:
         inactive_room = replace(self.small_lecture_room, active=False)
-        self.assertFalse(room_can_host_part(inactive_room, self.physical_part))
+        self.assertFalse(room_can_host_part(inactive_room, self.physical_part, 60))
 
     def test_wrong_room_type_is_rejected(self) -> None:
-        self.assertFalse(room_can_host_part(self.computer_lab, self.physical_part))
+        self.assertFalse(room_can_host_part(self.computer_lab, self.physical_part, 60))
 
     def test_room_missing_required_equipment_is_rejected(self) -> None:
         room_without_projector = replace(
@@ -331,7 +345,7 @@ class TestRoomCompatibility(EncoderFixture):
             equipment_quantities=(),
         )
         self.assertFalse(
-            room_can_host_part(room_without_projector, self.physical_part)
+            room_can_host_part(room_without_projector, self.physical_part, 60)
         )
 
 
@@ -373,18 +387,18 @@ class TestBuildOptionsForSession(EncoderFixture):
 
         options = build_options_for_session(problem, self.physical_session)
 
-        self.assertEqual(len(options), 4)
+        self.assertEqual(len(options), 6)
         self.assertTrue(
             all(option.location_index == self.small_lecture_room.location_index
                 for option in options)
         )
         self.assertEqual(
             {option.teaching_date for option in options},
-            {self.tuesday.calendar_date, self.saturday_makeup.calendar_date},
-        )
-        self.assertNotIn(
-            self.wednesday_holiday.calendar_date,
-            {option.teaching_date for option in options},
+            {
+                self.tuesday.calendar_date,
+                self.wednesday_holiday.calendar_date,
+                self.saturday_makeup.calendar_date,
+            },
         )
 
     def test_only_configured_blocks_are_generated(self) -> None:
@@ -410,7 +424,7 @@ class TestBuildOptionsForSession(EncoderFixture):
 
         options = build_options_for_session(problem, self.physical_session)
 
-        self.assertEqual(len(options), 3)
+        self.assertEqual(len(options), 5)
         self.assertNotIn(
             SessionOption(0, 0, self.tuesday.calendar_date, 1, 3),
             options,
@@ -429,10 +443,146 @@ class TestBuildOptionsForSession(EncoderFixture):
 
         options = build_options_for_session(problem, self.physical_session)
 
-        self.assertEqual(len(options), 3)
+        self.assertEqual(len(options), 5)
         self.assertNotIn(
             SessionOption(0, 0, self.tuesday.calendar_date, 4, 6),
             options,
+        )
+
+    def test_exact_date_unavailable_removes_pattern_from_whole_term_group(self) -> None:
+        """Một ngày bận riêng lẻ phải loại pattern lặp tương ứng của cả kỳ."""
+
+        second_week = TermWeek(2, date(2026, 8, 24), date(2026, 8, 30))
+        second_tuesday = TeachingDate(
+            date(2026, 8, 25), 2, 2, DateStatus.NORMAL
+        )
+        second_session = ClassSession(
+            1, 1002, 100, 2, 1, 2, 3, LocationType.PHYSICAL_ROOM
+        )
+        unavailable_on_second_tuesday = AvailabilityWindow(
+            resource_index=0,
+            scope_type=AvailabilityScopeType.DATE,
+            calendar_date=second_tuesday.calendar_date,
+            start_period=1,
+            end_period=3,
+            availability_type=AvailabilityType.UNAVAILABLE,
+        )
+        problem = ProblemInstance(
+            term=replace(self.term, end_date=second_week.end_date),
+            scenario=PlanningScenario(
+                scenario_id=1,
+                scenario_code="SCN_RECURRING_DATE_UNAVAILABLE",
+                term_code=self.term.term_code,
+                scope_type=ScenarioScopeType.FULL_TERM,
+                status=PlanningScenarioStatus.LOCKED,
+                items=(PlanningScenarioItem(0, 100),),
+            ),
+            weeks=(self.week, second_week),
+            teaching_dates=(self.tuesday, second_tuesday),
+            time_periods=self.time_periods,
+            allowed_period_blocks=self.allowed_blocks,
+            teaching_duration_rules=self.duration_rules,
+            locations=(self.small_lecture_room,),
+            lecturers=self.lecturers,
+            courses=self.courses,
+            course_sections=self.sections,
+            teaching_parts=(replace(self.physical_part, total_periods=6),),
+            teaching_plans=(self.physical_plan,),
+            class_sessions=(self.physical_session, second_session),
+            lecturer_availabilities=(unavailable_on_second_tuesday,),
+            room_availabilities=(),
+            campus_travel_times=(),
+            constraint_settings=(),
+        )
+
+        domains = build_option_domains(problem)
+        patterns = build_recurring_patterns_for_group(
+            problem,
+            domains,
+            group_index=0,
+            lecturer_index=0,
+        )
+
+        self.assertNotIn(
+            (2, 1, self.small_lecture_room.location_index),
+            {
+                (pattern.iso_weekday, pattern.start_period, pattern.location_index)
+                for pattern in patterns
+            },
+        )
+        self.assertIn(
+            (2, 4, self.small_lecture_room.location_index),
+            {
+                (pattern.iso_weekday, pattern.start_period, pattern.location_index)
+                for pattern in patterns
+            },
+        )
+
+    def test_exact_date_room_unavailable_removes_recurring_pattern(self) -> None:
+        """Phòng bận ở một tuần phải loại pattern phòng đó cho cả chuỗi lặp."""
+
+        second_week = TermWeek(2, date(2026, 8, 24), date(2026, 8, 30))
+        second_tuesday = TeachingDate(
+            date(2026, 8, 25), 2, 2, DateStatus.NORMAL
+        )
+        second_session = ClassSession(
+            1, 1002, 100, 2, 1, 2, 3, LocationType.PHYSICAL_ROOM
+        )
+        room_unavailable_on_second_tuesday = AvailabilityWindow(
+            resource_index=self.small_lecture_room.location_index,
+            scope_type=AvailabilityScopeType.DATE,
+            calendar_date=second_tuesday.calendar_date,
+            start_period=1,
+            end_period=3,
+            availability_type=AvailabilityType.UNAVAILABLE,
+        )
+        problem = ProblemInstance(
+            term=replace(self.term, end_date=second_week.end_date),
+            scenario=PlanningScenario(
+                scenario_id=1,
+                scenario_code="SCN_RECURRING_ROOM_DATE_UNAVAILABLE",
+                term_code=self.term.term_code,
+                scope_type=ScenarioScopeType.FULL_TERM,
+                status=PlanningScenarioStatus.LOCKED,
+                items=(PlanningScenarioItem(0, 100),),
+            ),
+            weeks=(self.week, second_week),
+            teaching_dates=(self.tuesday, second_tuesday),
+            time_periods=self.time_periods,
+            allowed_period_blocks=self.allowed_blocks,
+            teaching_duration_rules=self.duration_rules,
+            locations=(self.small_lecture_room,),
+            lecturers=self.lecturers,
+            courses=self.courses,
+            course_sections=self.sections,
+            teaching_parts=(replace(self.physical_part, total_periods=6),),
+            teaching_plans=(self.physical_plan,),
+            class_sessions=(self.physical_session, second_session),
+            lecturer_availabilities=(),
+            room_availabilities=(room_unavailable_on_second_tuesday,),
+            campus_travel_times=(),
+            constraint_settings=(),
+        )
+
+        domains = build_option_domains(problem)
+        patterns = build_recurring_patterns_for_group(
+            problem,
+            domains,
+            group_index=0,
+            lecturer_index=0,
+        )
+        pattern_keys = {
+            (pattern.iso_weekday, pattern.start_period, pattern.location_index)
+            for pattern in patterns
+        }
+
+        self.assertNotIn(
+            (2, 1, self.small_lecture_room.location_index),
+            pattern_keys,
+        )
+        self.assertIn(
+            (2, 4, self.small_lecture_room.location_index),
+            pattern_keys,
         )
 
     def test_preference_does_not_remove_option(self) -> None:
@@ -449,7 +599,7 @@ class TestBuildOptionsForSession(EncoderFixture):
 
         options = build_options_for_session(problem, self.physical_session)
 
-        self.assertEqual(len(options), 4)
+        self.assertEqual(len(options), 6)
 
     def test_room_discouraged_does_not_remove_option(self) -> None:
         discouraged = AvailabilityWindow(
@@ -465,14 +615,14 @@ class TestBuildOptionsForSession(EncoderFixture):
 
         options = build_options_for_session(problem, self.physical_session)
 
-        self.assertEqual(len(options), 4)
+        self.assertEqual(len(options), 6)
 
     def test_online_session_uses_only_active_online_location(self) -> None:
         problem = self.build_problem()
 
         options = build_options_for_session(problem, self.online_session)
 
-        self.assertEqual(len(options), 4)
+        self.assertEqual(len(options), 6)
         self.assertTrue(
             all(option.location_index == self.zoom.location_index for option in options)
         )
@@ -501,7 +651,7 @@ class TestBuildOptionsForSession(EncoderFixture):
 
         options = build_options_for_session(problem, self.physical_session)
 
-        self.assertEqual(len(options), 2)
+        self.assertEqual(len(options), 3)
         self.assertTrue(all(option.start_period == 4 for option in options))
 
     def test_option_domains_follow_gene_order(self) -> None:

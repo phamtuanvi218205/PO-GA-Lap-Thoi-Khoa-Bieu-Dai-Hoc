@@ -3,8 +3,8 @@
 from dataclasses import replace
 from datetime import timedelta
 
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.models import (
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.core.models import (
     DateStatus,
     LocationType,
     ProblemInstance,
@@ -16,7 +16,7 @@ from tests.test_constraints import ConstraintFixture
 
 
 def make_multisession_problem(week_count: int = 3) -> ProblemInstance:
-    """Lặp bốn part đã biết qua nhiều tuần, mỗi buổi vẫn là một gene riêng."""
+    """Lặp bốn part qua nhiều tuần, mỗi chuỗi dùng một gene lịch chung."""
 
     if week_count < 1:
         raise ValueError("week_count phải lớn hơn hoặc bằng 1.")
@@ -106,6 +106,7 @@ def make_stress_domains(
             option
             for option in domain
             if option.location_index == location_index
+            and option.teaching_date.isoweekday() == 2
             and option.start_period in allowed_starts[part_index]
         )
         if len(selected) != len(allowed_starts[part_index]):

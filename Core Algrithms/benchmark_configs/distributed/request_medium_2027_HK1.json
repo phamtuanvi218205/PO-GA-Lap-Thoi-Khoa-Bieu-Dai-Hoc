@@ -1,0 +1,30 @@
+{
+  "schema_version": "optimization-run-request.v1",
+  "request_id": "benchmark-scale-medium-template",
+  "algorithm": "GA_PO",
+  "snapshot": {
+    "path": "../../demo_data/scalability/timetable_scale_medium_2027_HK1.json",
+    "checksum": "febb4aea01f64c0c1ff827cdb2c779b868999156edc89d81b18ff99e4f323886"
+  },
+  "population_size": 30,
+  "max_fitness_evaluations": 630,
+  "random_seed": 1,
+  "max_initialization_attempts": 30000,
+  "max_offspring_attempts": 5,
+  "evaluation": {
+    "max_decode_nodes": 20000,
+    "enable_repair": true,
+    "max_repair_attempts": 3,
+    "max_decode_nodes_per_repair_attempt": 20000
+  },
+  "ga": {
+    "tournament_size": 3,
+    "crossover_probability": 0.9,
+    "crossover_distribution_index": 15.0,
+    "mutation_probability": null,
+    "mutation_distribution_index": 20.0
+  },
+  "hybrid": {
+    "ga_ratio": 0.5
+  }
+}

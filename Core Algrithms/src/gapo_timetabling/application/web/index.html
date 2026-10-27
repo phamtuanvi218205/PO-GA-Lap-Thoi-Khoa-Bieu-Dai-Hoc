@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Giao diện nhập dữ liệu, chạy thuật toán và tra cứu thời khóa biểu.">
+  <title>Hệ thống xếp thời khóa biểu</title>
+  <link rel="stylesheet" href="/ui-assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-name">Xếp thời khóa biểu</div>
+    <nav class="nav-list" aria-label="Điều hướng chính">
+      <button class="nav-item is-active" data-view="input">Dữ liệu</button>
+      <button class="nav-item" data-view="prepare">Chuẩn bị</button>
+      <button class="nav-item" data-view="optimize">Thuật toán</button>
+      <button class="nav-item" data-view="schedule">Thời khóa biểu</button>
+    </nav>
+    <div class="connection-status" id="api-status-text">Đang kết nối</div>
+  </header>
+
+  <main class="main-content">
+    <header class="page-header">
+      <h1 id="page-title">Dữ liệu học kỳ</h1>
+      <div class="term-picker">
+        <label for="term-select">Học kỳ</label>
+        <div class="select-row">
+          <select id="term-select" aria-label="Chọn học kỳ">
+            <option value="">Đang tải học kỳ…</option>
+          </select>
+          <button class="secondary-button" id="refresh-terms">Tải lại</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="view is-visible" id="view-input" data-title="Dữ liệu học kỳ">
+      <div class="section-heading section-actions">
+        <a class="secondary-button" href="/api/input-data/excel-template">Tải file Excel mẫu</a>
+      </div>
+
+      <div class="two-column-layout">
+        <section class="plain-section">
+          <h3>Nhập từ Excel</h3>
+          <p class="section-note">Chọn file .xlsx có dung lượng tối đa 10 MB.</p>
+          <label class="upload-zone" for="excel-file" id="upload-zone">
+            <input id="excel-file" type="file" accept=".xlsx">
+            <strong>Chọn hoặc kéo file Excel vào đây</strong>
+            <small id="excel-file-name">Chưa chọn file</small>
+          </label>
+          <div class="button-row">
+            <button class="secondary-button" id="preview-excel">Kiểm tra</button>
+            <button class="primary-button" id="apply-excel">Lưu dữ liệu</button>
+          </div>
+          <div class="result-box is-hidden" id="excel-result"></div>
+        </section>
+
+        <section class="plain-section">
+          <h3>Nhập bằng JSON</h3>
+          <div class="button-row compact-row">
+            <button class="secondary-button" id="load-manual">Nạp học kỳ đang chọn</button>
+            <button class="text-button" id="format-json">Định dạng JSON</button>
+          </div>
+          <label class="field-label" for="manual-json">Dữ liệu học kỳ</label>
+          <textarea id="manual-json" class="json-editor" spellcheck="false" placeholder="Dữ liệu JSON"></textarea>
+          <div class="button-row">
+            <button class="secondary-button" id="validate-manual">Kiểm tra</button>
+            <button class="primary-button" id="apply-manual">Lưu dữ liệu</button>
+          </div>
+          <div class="result-box is-hidden" id="manual-result"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="view" id="view-prepare" data-title="Chuẩn bị bài toán">
+      <div class="action-row">
+        <div>
+          <span class="field-caption">Học kỳ đang chọn</span>
+          <strong id="prepare-term">Chưa chọn học kỳ</strong>
+        </div>
+        <div class="button-row no-margin">
+          <button class="danger-button" id="reset-semester">Đặt lại để demo</button>
+          <button class="secondary-button" id="check-readiness">Kiểm tra dữ liệu</button>
+          <button class="primary-button" id="prepare-semester">Tạo bài toán</button>
+        </div>
+      </div>
+
+      <div class="result-box is-hidden" id="reset-result"></div>
+
+      <div class="readiness-card empty-state" id="readiness-card">
+        <h3>Chưa kiểm tra dữ liệu</h3>
+      </div>
+
+    </section>
+
+    <section class="view" id="view-optimize" data-title="Chạy thuật toán">
+      <div class="optimizer-layout">
+        <section class="plain-section optimizer-form">
+          <h3>Cấu hình</h3>
+          <div class="field-grid">
+            <label>
+              <span>Bài toán đã chuẩn bị</span>
+              <input id="scenario-display" value="Chưa có bài toán sẵn sàng" readonly>
+              <input id="scenario-select" type="hidden" value="">
+            </label>
+            <label>
+              <span>Thuật toán</span>
+              <select id="algorithm-select">
+                <option value="GA_PO">GA–PO</option>
+                <option value="GA">GA</option>
+                <option value="PO">PO</option>
+              </select>
+            </label>
+            <label>
+              <span>Kích thước quần thể</span>
+              <input id="population-size" type="number" min="2" value="60">
+            </label>
+            <label>
+              <span>Ngân sách FE</span>
+              <input id="max-fe" type="number" min="2" value="3060">
+            </label>
+            <label>
+              <span>Seed</span>
+              <input id="random-seed" type="number" value="42">
+            </label>
+            <label>
+              <span>Giới hạn thời gian (giây)</span>
+              <input id="timeout-seconds" type="number" min="1" placeholder="Không giới hạn">
+            </label>
+          </div>
+          <button class="primary-button full-width" id="start-run">Chạy thuật toán</button>
+        </section>
+
+        <section class="run-card" id="run-card">
+          <div class="run-card-header">
+            <h3 id="run-status">Chưa bắt đầu</h3>
+            <span class="run-badge neutral" id="run-badge">Chưa có run</span>
+          </div>
+          <div class="progress-track"><span id="run-progress" style="width:0%"></span></div>
+          <div class="progress-labels">
+            <strong id="run-progress-label">0%</strong>
+            <span id="run-fe-label">0 / 0 FE</span>
+          </div>
+          <dl class="metric-list">
+            <div><dt>Vòng lặp</dt><dd id="run-iteration">—</dd></div>
+            <div><dt>Q_general tốt nhất</dt><dd id="run-general">—</dd></div>
+            <div><dt>Q_lecturer tốt nhất</dt><dd id="run-lecturer">—</dd></div>
+          </dl>
+          <div class="run-error is-hidden" id="run-error"></div>
+          <div class="button-row no-margin">
+            <button class="danger-button" id="cancel-run" disabled>Hủy</button>
+            <button class="secondary-button" id="view-run-schedule" disabled>Xem thời khóa biểu</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="view" id="view-schedule" data-title="Thời khóa biểu">
+      <div class="section-heading section-actions schedule-heading">
+        <div class="export-actions">
+          <a class="secondary-button is-disabled" id="export-csv" href="#">Tải CSV</a>
+          <a class="primary-button is-disabled" id="export-xlsx" href="#">Tải Excel</a>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <label>
+          <span>Run ID</span>
+          <input id="schedule-run-id" type="number" min="1" placeholder="Ví dụ: 12">
+        </label>
+        <label>
+          <span>Giảng viên</span>
+          <input id="filter-lecturer" type="text" placeholder="Nhập mã hoặc tên">
+        </label>
+        <label>
+          <span>Mã lớp học phần</span>
+          <input id="filter-section" type="text" placeholder="Tất cả">
+        </label>
+        <button class="primary-button" id="load-schedule">Xem lịch</button>
+      </div>
+
+      <div class="week-navigation">
+        <button class="secondary-button" id="previous-week" type="button">Tuần trước</button>
+        <strong id="current-week-label">Tuần 1</strong>
+        <button class="secondary-button" id="next-week" type="button">Tuần sau</button>
+      </div>
+
+      <div class="schedule-summary is-hidden" id="schedule-summary">
+        <div><span>Học kỳ</span><strong id="schedule-term">—</strong></div>
+        <div><span>Số buổi</span><strong id="schedule-count">0</strong></div>
+        <div><span>Giảng viên</span><strong id="schedule-lecturer-count">0</strong></div>
+        <div><span>Lớp học phần</span><strong id="schedule-section-count">0</strong></div>
+      </div>
+
+      <div class="schedule-legend">
+        <span><i class="legend-color lecture"></i>Lý thuyết</span>
+        <span><i class="legend-color practice"></i>Thực hành</span>
+        <span><i class="legend-color online"></i>Trực tuyến</span>
+      </div>
+
+      <div class="schedule-container" id="schedule-container">
+        <div class="empty-state schedule-empty">
+          <h3>Chưa có lịch để hiển thị</h3>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast-region" id="toast-region" aria-live="polite"></div>
+  <script src="/ui-assets/app.js?v=20261024-d106" defer></script>
+</body>
+</html>

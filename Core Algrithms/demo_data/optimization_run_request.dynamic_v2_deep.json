@@ -1,0 +1,30 @@
+{
+  "schema_version": "optimization-run-request.v1",
+  "request_id": "dynamic-assignment-deep-ga-po",
+  "algorithm": "GA_PO",
+  "snapshot": {
+    "path": "dynamic_assignment_snapshot_v2.json",
+    "checksum": null
+  },
+  "population_size": 50,
+  "max_fitness_evaluations": 5050,
+  "random_seed": 42,
+  "max_initialization_attempts": 20000,
+  "max_offspring_attempts": 5,
+  "evaluation": {
+    "max_decode_nodes": 20000,
+    "enable_repair": true,
+    "max_repair_attempts": 3,
+    "max_decode_nodes_per_repair_attempt": 20000
+  },
+  "ga": {
+    "tournament_size": 3,
+    "crossover_probability": 0.9,
+    "crossover_distribution_index": 15.0,
+    "mutation_probability": null,
+    "mutation_distribution_index": 20.0
+  },
+  "hybrid": {
+    "ga_ratio": 0.5
+  }
+}

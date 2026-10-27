@@ -1,10 +1,11 @@
 import unittest
 from dataclasses import replace
+from datetime import date
 
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.decoder import DecodeStatus, decode_vector
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.models import (
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.decoder import DecodeStatus, decode_vector
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.core.models import (
     AvailabilityScopeType,
     AvailabilityType,
     AvailabilityWindow,
@@ -104,7 +105,7 @@ class TestDecoder(ConstraintFixture):
         self.assertIn("khung tiết", result.reason)
 
     def test_empty_domain_explains_hard_availability(self) -> None:
-        unavailable = AvailabilityWindow(
+        unavailable_tuesday = AvailabilityWindow(
             resource_index=0,
             scope_type=AvailabilityScopeType.DATE,
             calendar_date=self.tuesday.calendar_date,
@@ -112,9 +113,13 @@ class TestDecoder(ConstraintFixture):
             end_period=9,
             availability_type=AvailabilityType.UNAVAILABLE,
         )
+        unavailable_wednesday = replace(
+            unavailable_tuesday,
+            calendar_date=self.wednesday_holiday.calendar_date,
+        )
         problem = replace(
             self.problem,
-            lecturer_availabilities=(unavailable,),
+            lecturer_availabilities=(unavailable_tuesday, unavailable_wednesday),
         )
         domains = list(self.singleton_domains())
         domains[0] = ()
@@ -227,12 +232,12 @@ class TestDecoder(ConstraintFixture):
         self.assertEqual(result.selected_options, ())
 
     def test_invalid_option_in_domain_is_not_selected(self) -> None:
-        holiday = replace(
+        invalid_date = replace(
             self.valid_options[0],
-            teaching_date=self.wednesday_holiday.calendar_date,
+            teaching_date=date(2027, 1, 1),
         )
         domains = (
-            (holiday, self.valid_options[0]),
+            (invalid_date, self.valid_options[0]),
             (self.valid_options[1],),
             (self.valid_options[2],),
             (self.valid_options[3],),
@@ -241,21 +246,21 @@ class TestDecoder(ConstraintFixture):
         result = decode_vector(
             self.problem,
             domains,
-            (0.25, 0.0, 0.0, 0.0),
+            (0.75, 0.0, 0.0, 0.0),
             max_decode_nodes=20,
         )
 
         self.assertEqual(result.status, DecodeStatus.SUCCESS)
         self.assertEqual(result.selected_option_indices[0], 1)
-        self.assertEqual(result.repaired_vector[0], 0.75)
+        self.assertEqual(result.repaired_vector[0], 0.25)
 
     def test_nonempty_domain_with_only_invalid_option_decode_failed(self) -> None:
-        holiday = replace(
+        invalid_date = replace(
             self.valid_options[0],
-            teaching_date=self.wednesday_holiday.calendar_date,
+            teaching_date=date(2027, 1, 1),
         )
         domains = (
-            (holiday,),
+            (invalid_date,),
             (self.valid_options[1],),
             (self.valid_options[2],),
             (self.valid_options[3],),

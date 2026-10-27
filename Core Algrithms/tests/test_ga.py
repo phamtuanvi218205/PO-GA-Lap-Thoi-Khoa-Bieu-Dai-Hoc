@@ -6,10 +6,10 @@ from math import nan
 from random import Random
 from unittest.mock import patch
 
-import gapo_timetabling.ga as ga_module
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.ga import (
+import gapo_timetabling.core.ga as ga_module
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.core.ga import (
     GAConfig,
     _validate_ga_run_inputs,
     clamp_vector,
@@ -19,16 +19,16 @@ from gapo_timetabling.ga import (
     simulated_binary_crossover,
     tournament_select,
 )
-from gapo_timetabling.metrics import OptimizationResult
-from gapo_timetabling.models import OptimizationAlgorithm
-from gapo_timetabling.population import (
+from gapo_timetabling.core.metrics import OptimizationResult
+from gapo_timetabling.core.models import OptimizationAlgorithm
+from gapo_timetabling.core.population import (
     CandidateEvaluationConfig,
     CandidateEvaluationStatus,
     PopulationInitializationStatus,
     evaluate_candidate as population_evaluate_candidate,
     initialize_population,
 )
-from gapo_timetabling.repair import RepairResult, RepairStatus
+from gapo_timetabling.core.repair import RepairResult, RepairStatus
 from tests.test_constraints import ConstraintFixture
 
 
@@ -292,15 +292,14 @@ class TestGeneticAlgorithm(ConstraintFixture):
         self.assertEqual(first, original_first)
         self.assertEqual(second, original_second)
 
-    def test_tournament_selection_uses_lexicographic_gate_f_order(self) -> None:
+    def test_tournament_selection_uses_lexicographic_fitness_order(self) -> None:
         base = self.base_individual()
         better = replace(
             base,
             vector=(0.9,) * self.problem.dimension,
             fitness=replace(
                 base.fitness,
-                time_stability_score=0.0,
-                general_quality_score=100.0,
+                general_quality_score=0.0,
                 lecturer_preference_score=100.0,
             ),
         )
@@ -309,8 +308,7 @@ class TestGeneticAlgorithm(ConstraintFixture):
             vector=(0.1,) * self.problem.dimension,
             fitness=replace(
                 base.fitness,
-                time_stability_score=0.01,
-                general_quality_score=0.0,
+                general_quality_score=0.01,
                 lecturer_preference_score=0.0,
             ),
         )
@@ -329,7 +327,6 @@ class TestGeneticAlgorithm(ConstraintFixture):
             vector=(0.1,) * self.problem.dimension,
             fitness=replace(
                 base.fitness,
-                time_stability_score=0.0,
                 general_quality_score=0.0,
                 lecturer_preference_score=0.0,
             ),
@@ -339,7 +336,6 @@ class TestGeneticAlgorithm(ConstraintFixture):
             vector=(0.9,) * self.problem.dimension,
             fitness=replace(
                 base.fitness,
-                time_stability_score=1.0,
                 general_quality_score=1.0,
                 lecturer_preference_score=1.0,
             ),
@@ -512,7 +508,7 @@ class TestGeneticAlgorithm(ConstraintFixture):
         )
 
         with patch(
-            "gapo_timetabling.ga.evaluate_candidate",
+            "gapo_timetabling.core.ga.evaluate_candidate",
             return_value=success,
         ) as evaluation_mock:
             result = run_ga(
@@ -542,7 +538,7 @@ class TestGeneticAlgorithm(ConstraintFixture):
         )
 
         with patch(
-            "gapo_timetabling.ga.evaluate_candidate",
+            "gapo_timetabling.core.ga.evaluate_candidate",
             return_value=failed,
         ) as evaluation_mock:
             result = run_ga(
@@ -583,7 +579,7 @@ class TestGeneticAlgorithm(ConstraintFixture):
         )
 
         with patch(
-            "gapo_timetabling.ga.evaluate_candidate",
+            "gapo_timetabling.core.ga.evaluate_candidate",
             side_effect=(decode_failed, validation_failed, success, success),
         ):
             result = run_ga(
@@ -673,7 +669,7 @@ class TestGeneticAlgorithm(ConstraintFixture):
         )
 
         with patch(
-            "gapo_timetabling.ga.evaluate_candidate",
+            "gapo_timetabling.core.ga.evaluate_candidate",
             side_effect=(repaired_success, failed_with_repair),
         ):
             result = run_ga(
@@ -776,7 +772,7 @@ class TestGeneticAlgorithm(ConstraintFixture):
         )
 
         with patch(
-            "gapo_timetabling.ga.evaluate_candidate",
+            "gapo_timetabling.core.ga.evaluate_candidate",
             wraps=population_evaluate_candidate,
         ) as shared_pipeline:
             run_ga(self.problem, self.domains, initialization, config)
@@ -824,6 +820,28 @@ class TestGeneticAlgorithm(ConstraintFixture):
         )
         self.assertEqual(result.metrics.completed_iterations, 3)
 
+    def test_progress_callback_reports_initial_and_final_state(self) -> None:
+        initialization = self.make_initialization(population_size=4)
+        config = self.make_config(initialization, generations=2)
+        updates = []
+
+        result = run_ga(
+            self.problem,
+            self.domains,
+            initialization,
+            config,
+            progress_callback=updates.append,
+        )
+
+        self.assertGreaterEqual(len(updates), 3)
+        self.assertEqual(updates[0].iteration, 0)
+        self.assertEqual(
+            updates[-1].metrics.fitness_evaluations,
+            result.metrics.fitness_evaluations,
+        )
+        self.assertEqual(updates[-1].iteration, result.metrics.completed_iterations)
+        self.assertTrue(all(0.0 <= update.progress_ratio <= 1.0 for update in updates))
+
     def test_unexpected_no_option_stops_without_retry(self) -> None:
         initialization = self.make_initialization(population_size=4)
         no_option = self.no_option_evaluation()
@@ -834,7 +852,7 @@ class TestGeneticAlgorithm(ConstraintFixture):
         )
 
         with patch(
-            "gapo_timetabling.ga.evaluate_candidate",
+            "gapo_timetabling.core.ga.evaluate_candidate",
             return_value=no_option,
         ) as evaluation_mock:
             with self.assertRaisesRegex(ValueError, "NO_OPTION"):

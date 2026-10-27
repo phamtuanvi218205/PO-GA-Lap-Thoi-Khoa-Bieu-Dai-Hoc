@@ -3,13 +3,14 @@
 import unittest
 from pathlib import Path
 
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.population import (
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.encoder import build_all_recurring_pattern_domains
+from gapo_timetabling.core.population import (
     CandidateEvaluationConfig,
     PopulationInitializationStatus,
     initialize_population,
 )
-from gapo_timetabling.snapshot import (
+from gapo_timetabling.core.snapshot import (
     SnapshotPreparationStatus,
     prepare_snapshot_for_optimization,
 )
@@ -32,15 +33,29 @@ class TestResourceConstrainedDemoData(unittest.TestCase):
     def test_snapshot_is_large_and_resource_constrained(self) -> None:
         problem = self.prepared.problem
         domain_sizes = tuple(map(len, self.prepared.option_domains))
+        recurring_domain_sizes = tuple(
+            map(
+                len,
+                build_all_recurring_pattern_domains(
+                    problem,
+                    self.prepared.option_domains,
+                ),
+            )
+        )
 
         self.assertEqual(self.prepared.status, SnapshotPreparationStatus.READY)
-        self.assertEqual(problem.dimension, 108)
+        # Snapshot giữ 108 dòng buổi theo tuần để xuất kết quả, nhưng lịch
+        # lặp toàn kỳ chỉ cần 18 gene lịch: một gene cho mỗi chuỗi buổi.
+        self.assertEqual(problem.session_dimension, 108)
+        self.assertEqual(problem.schedule_dimension, 18)
+        self.assertEqual(problem.dimension, 18)
         self.assertEqual(len(problem.course_sections), 9)
         self.assertEqual(len(problem.lecturers), 4)
         self.assertEqual(len(problem.rooms), 4)
-        self.assertEqual(min(domain_sizes), 2)
-        self.assertLessEqual(max(domain_sizes), 13)
-        self.assertEqual(sum(domain_sizes), 704)
+        self.assertEqual((min(domain_sizes), max(domain_sizes)), (10, 32))
+        self.assertEqual(sum(domain_sizes), 2_217)
+        self.assertEqual((min(recurring_domain_sizes), max(recurring_domain_sizes)), (7, 26))
+        self.assertEqual(sum(recurring_domain_sizes), 312)
 
     def test_snapshot_has_a_hard_feasible_timetable(self) -> None:
         """A difficult fixture must not silently become an impossible fixture."""

@@ -1,0 +1,14 @@
+{
+  "schema_version": "timetable-experiment.v1",
+  "experiment_id": "recurring-dynamic-assignment-smoke",
+  "base_request_path": "optimization_run_request.dynamic_v2.json",
+  "algorithms": [
+    "GA",
+    "PO",
+    "GA_PO"
+  ],
+  "seeds": [
+    42
+  ],
+  "create_plots": true
+}

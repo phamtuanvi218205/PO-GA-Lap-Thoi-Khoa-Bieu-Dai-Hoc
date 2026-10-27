@@ -1,0 +1,10 @@
+{
+  "schema_version": "timetable-experiment.v1",
+  "experiment_id": "timetable-scale-small-30pop-20iterations-10seeds",
+  "base_request_path": "request_small_2027_HK1.json",
+  "algorithms": ["GA", "PO", "GA_PO"],
+  "seeds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  "include_greedy_baseline": true,
+  "create_plots": true,
+  "runtime_comparison_valid": false
+}

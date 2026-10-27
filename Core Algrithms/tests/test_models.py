@@ -2,7 +2,7 @@ import unittest
 from dataclasses import FrozenInstanceError, replace
 from datetime import date, time
 
-from gapo_timetabling.models import (
+from gapo_timetabling.core.models import (
     AcademicTerm,
     AcademicTermStatus,
     AllowedPeriodBlock,
@@ -37,7 +37,6 @@ from gapo_timetabling.models import (
     TeachingPlan,
     TeachingPlanStatus,
     TermWeek,
-    TimeStabilityException,
     TimePeriod,
 )
 
@@ -78,8 +77,9 @@ class TestModels(unittest.TestCase):
             TeachingDurationRule(PartType.PRACTICE, 6, True),
         )
 
-        # Phòng chỉ có 30 chỗ trong khi lớp dự kiến 60 người.
-        # Model vẫn chấp nhận vì sức chứa là tiêu chí mềm, không phải hard constraint.
+        # Domain model cho phép lưu phòng nhỏ để dữ liệu nguồn có thể tồn tại ở
+        # trạng thái nháp. Readiness/Encoder/Validator mới là các lớp từ chối dùng
+        # phòng này cho lớp 60 người theo hard constraint D109.
         self.small_room = Room(
             location_index=0,
             location_id=1,
@@ -188,7 +188,7 @@ class TestModels(unittest.TestCase):
                 enabled=True,
             ),
             ConstraintSetting(
-                constraint_code="SOFT_CAPACITY",
+                constraint_code="SOFT_LECTURER_GAP",
                 constraint_type=ConstraintType.SOFT,
                 priority_tier=2,
                 weight=0.45,
@@ -232,8 +232,10 @@ class TestModels(unittest.TestCase):
             constraint_settings=self.constraints,
         )
 
-    def test_dimension_equals_class_session_count(self) -> None:
-        self.assertEqual(self.problem.dimension, 3)
+    def test_dimension_uses_one_gene_per_recurring_group(self) -> None:
+        self.assertEqual(self.problem.session_dimension, 3)
+        self.assertEqual(self.problem.schedule_dimension, 2)
+        self.assertEqual(self.problem.dimension, 2)
         self.assertEqual(
             tuple(session.session_index for session in self.problem.class_sessions),
             (0, 1, 2),
@@ -271,7 +273,7 @@ class TestModels(unittest.TestCase):
             enabled=True,
         )
         general_setting = ConstraintSetting(
-            constraint_code="SOFT_CAPACITY",
+            constraint_code="SOFT_LECTURER_GAP",
             constraint_type=ConstraintType.SOFT,
             priority_tier=2,
             weight=0.45,
@@ -294,7 +296,7 @@ class TestModels(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "SOFT phải có trọng số"):
             ConstraintSetting(
-                constraint_code="SOFT_CAPACITY",
+                constraint_code="SOFT_LECTURER_GAP",
                 constraint_type=ConstraintType.SOFT,
                 priority_tier=2,
                 weight=None,
@@ -327,7 +329,7 @@ class TestModels(unittest.TestCase):
             )
 
     def test_fitness_result_exposes_lexicographic_key_and_breakdown(self) -> None:
-        """Kết quả giữ ba score riêng và đủ dữ liệu giải thích tối thiểu."""
+        """Kết quả giữ hai score riêng và đủ dữ liệu giải thích tối thiểu."""
 
         lecturer_detail = LecturerPreferenceBreakdown(
             lecturer_index=0,
@@ -335,47 +337,29 @@ class TestModels(unittest.TestCase):
             missed_preferred_penalty=0.25,
             discouraged_overlap_penalty=0.0,
         )
-        time_exception = TimeStabilityException(
-            session_index=1,
-            standard_iso_weekday=2,
-            standard_start_period=1,
-            reason="Ngày học chuẩn không còn option sau bộ lọc cứng.",
-        )
         breakdown = FitnessBreakdown(
-            weekday_change_count=1,
-            start_period_change_count=0,
             room_change_count=1,
-            valid_time_exception_count=1,
-            comparable_time_session_count=2,
             comparable_physical_session_count=2,
             capacity_component=0.2,
             gap_component=0.1,
             room_discouraged_component=0.0,
             room_stability_component=0.5,
             lecturer_breakdown=(lecturer_detail,),
-            time_exceptions=(time_exception,),
         )
         result = FitnessResult(
-            time_stability_score=0.25,
             general_quality_score=0.17,
             lecturer_preference_score=0.125,
             breakdown=breakdown,
         )
 
-        self.assertEqual(result.fitness_key, (0.25, 0.17, 0.125))
-        self.assertEqual(result.breakdown.weekday_change_count, 1)
+        self.assertEqual(result.fitness_key, (0.17, 0.125))
         self.assertEqual(result.breakdown.lecturer_breakdown, (lecturer_detail,))
-        self.assertEqual(result.breakdown.time_exceptions, (time_exception,))
 
     def test_fitness_result_rejects_negative_score(self) -> None:
         """Score âm không phải kết quả hợp lệ của các công thức Gate F."""
 
         breakdown = FitnessBreakdown(
-            weekday_change_count=0,
-            start_period_change_count=0,
             room_change_count=0,
-            valid_time_exception_count=0,
-            comparable_time_session_count=0,
             comparable_physical_session_count=0,
             capacity_component=0.0,
             gap_component=0.0,
@@ -386,8 +370,7 @@ class TestModels(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "score phải hữu hạn và không âm"):
             FitnessResult(
-                time_stability_score=-0.1,
-                general_quality_score=0.0,
+                general_quality_score=-0.1,
                 lecturer_preference_score=0.0,
                 breakdown=breakdown,
             )
@@ -490,7 +473,7 @@ class TestModels(unittest.TestCase):
 
     def test_lecture_session_with_three_periods_is_allowed(self) -> None:
         self.assertEqual(self.sessions[0].duration_periods, 3)
-        self.assertEqual(self.problem.dimension, 3)
+        self.assertEqual(self.problem.dimension, 2)
 
     def test_lecture_session_with_six_periods_is_allowed(self) -> None:
         six_period_sessions = (

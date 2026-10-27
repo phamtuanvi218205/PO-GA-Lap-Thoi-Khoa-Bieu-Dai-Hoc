@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gapo-timetabling"
+version = "0.1.0"
+description = "University timetabling with GA, Parrot Optimizer and GA-PO"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "matplotlib>=3.8",
+    "numpy>=1.26",
+    "openpyxl>=3.1",
+    "pyodbc>=5.1",
+    "python-multipart>=0.0.12",
+    "scipy>=1.12",
+    "uvicorn[standard]>=0.32",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+gapo-timetabling = "gapo_timetabling.application.app_cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "Core Algrithms/src"}
+
+[tool.setuptools.packages.find]
+where = ["Core Algrithms/src"]
+
+[tool.setuptools.package-data]
+gapo_timetabling = ["application/web/*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["Core Algrithms/src"]
+testpaths = ["Core Algrithms/tests"]

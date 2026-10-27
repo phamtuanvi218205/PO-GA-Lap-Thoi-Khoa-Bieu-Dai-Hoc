@@ -1,0 +1,56 @@
+{
+  "schema_version": "timetable-scalability-fixtures.v1",
+  "source_snapshot": "benchmark_snapshot_2027_HK1.json",
+  "resource_policy": "Giữ nguyên sáu giảng viên, năm địa điểm và availability; tăng số lớp để tăng kích thước và cạnh tranh. Profile lớn nâng trần tải mỗi giảng viên từ 120 lên 150 tiết để vẫn tồn tại lịch hợp lệ, nhưng tỷ lệ tổng tiết/trần tải vẫn cao hơn profile vừa.",
+  "benchmark_executed": false,
+  "profiles": [
+    {
+      "profile": "small",
+      "file": "timetable_scale_small_2027_HK1.json",
+      "section_count": 3,
+      "teaching_part_count": 6,
+      "class_session_count": 58,
+      "assignment_gene_count": 3,
+      "schedule_gene_count": 6,
+      "dimension": 9,
+      "lecturer_count": 6,
+      "location_count": 5,
+      "total_required_periods": 210,
+      "total_lecturer_capacity": 720,
+      "load_pressure_ratio": 0.291667,
+      "snapshot_sha256": "d818feec41ddc525d8f102569a3705c404959b3041c65c077044fb3e4d7e99eb"
+    },
+    {
+      "profile": "medium",
+      "file": "timetable_scale_medium_2027_HK1.json",
+      "section_count": 7,
+      "teaching_part_count": 14,
+      "class_session_count": 132,
+      "assignment_gene_count": 7,
+      "schedule_gene_count": 14,
+      "dimension": 21,
+      "lecturer_count": 6,
+      "location_count": 5,
+      "total_required_periods": 480,
+      "total_lecturer_capacity": 720,
+      "load_pressure_ratio": 0.666667,
+      "snapshot_sha256": "febb4aea01f64c0c1ff827cdb2c779b868999156edc89d81b18ff99e4f323886"
+    },
+    {
+      "profile": "large",
+      "file": "timetable_scale_large_2027_HK1.json",
+      "section_count": 10,
+      "teaching_part_count": 20,
+      "class_session_count": 190,
+      "assignment_gene_count": 10,
+      "schedule_gene_count": 20,
+      "dimension": 30,
+      "lecturer_count": 6,
+      "location_count": 5,
+      "total_required_periods": 690,
+      "total_lecturer_capacity": 900,
+      "load_pressure_ratio": 0.766667,
+      "snapshot_sha256": "ae58271b37efd286ecbcca8509534e418092b7611194beb1bbdbf10391e5c88f"
+    }
+  ]
+}

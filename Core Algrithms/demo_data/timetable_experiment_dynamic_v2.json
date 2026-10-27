@@ -1,0 +1,18 @@
+{
+  "schema_version": "timetable-experiment.v1",
+  "experiment_id": "dynamic-assignment-hard-pilot-v2",
+  "base_request_path": "optimization_run_request.dynamic_v2.json",
+  "algorithms": [
+    "GA",
+    "PO",
+    "GA_PO"
+  ],
+  "seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "create_plots": true
+}
