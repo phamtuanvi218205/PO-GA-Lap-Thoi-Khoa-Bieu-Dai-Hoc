@@ -3,14 +3,14 @@
 import unittest
 from pathlib import Path
 
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.encoder import build_all_recurring_pattern_domains
-from gapo_timetabling.population import (
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.encoder import build_all_recurring_pattern_domains
+from gapo_timetabling.core.population import (
     CandidateEvaluationConfig,
     PopulationInitializationStatus,
     initialize_population,
 )
-from gapo_timetabling.snapshot import (
+from gapo_timetabling.core.snapshot import (
     SnapshotPreparationStatus,
     prepare_snapshot_for_optimization,
 )

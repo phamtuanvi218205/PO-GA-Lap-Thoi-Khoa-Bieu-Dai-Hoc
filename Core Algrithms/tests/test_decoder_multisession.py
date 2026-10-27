@@ -5,10 +5,10 @@ from datetime import timedelta
 import random
 import unittest
 
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.decoder import DecodeStatus, decode_vector
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.models import DateStatus, SessionOption, TeachingDate
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.decoder import DecodeStatus, decode_vector
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.core.models import DateStatus, SessionOption, TeachingDate
 from tests.decoder_scenarios import make_multisession_problem, make_stress_domains
 from tests.test_constraints import ConstraintFixture
 

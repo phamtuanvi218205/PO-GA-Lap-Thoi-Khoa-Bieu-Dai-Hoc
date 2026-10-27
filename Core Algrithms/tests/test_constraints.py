@@ -2,11 +2,11 @@ import unittest
 from dataclasses import replace
 from datetime import date, time
 
-from gapo_timetabling.constraints import (
+from gapo_timetabling.core.constraints import (
     HardViolationCode,
     validate_timetable,
 )
-from gapo_timetabling.models import (
+from gapo_timetabling.core.models import (
     AcademicTerm,
     AcademicTermStatus,
     AllowedPeriodBlock,
@@ -91,7 +91,7 @@ class ConstraintFixture(unittest.TestCase):
             active=True,
             campus_code="CS1",
             room_type=RoomType.LECTURE_ROOM,
-            capacity=10,
+            capacity=60,
             equipment_quantities=(("PROJECTOR", 1),),
         )
         self.room_cs2 = Room(
@@ -173,8 +173,7 @@ class ConstraintFixture(unittest.TestCase):
 
         self.problem = self.build_problem()
 
-        # Lịch cơ sở hợp lệ. Phòng F201 chỉ có 10 chỗ cho lớp dự kiến 60,
-        # nhưng capacity là mềm nên validator không được báo lỗi.
+        # Lịch cơ sở hợp lệ. Phòng F201 vừa đủ 60 chỗ cho lớp dự kiến 60.
         self.valid_options = (
             SessionOption(0, 0, self.tuesday.calendar_date, 1, 3),
             SessionOption(1, 1, self.tuesday.calendar_date, 7, 9),
@@ -252,13 +251,39 @@ class TestTimetableValidator(ConstraintFixture):
         self.assertTrue(result.is_valid)
         self.assertEqual(result.violations, ())
 
-    def test_soft_room_capacity_does_not_make_schedule_invalid(self) -> None:
-        self.assertEqual(self.room_cs1.capacity, 10)
+    def test_room_with_exact_capacity_is_valid(self) -> None:
+        self.assertEqual(self.room_cs1.capacity, 60)
         self.assertEqual(self.sections[0].expected_enrollment, 60)
 
         result = validate_timetable(self.problem, self.valid_options)
 
         self.assertTrue(result.is_valid)
+
+    def test_insufficient_room_capacity_is_reported(self) -> None:
+        small_room = replace(self.room_cs1, capacity=59)
+        problem = self.build_problem(
+            locations=(small_room, self.room_cs2, self.zoom),
+        )
+
+        result = validate_timetable(problem, self.valid_options)
+
+        self.assertIn(
+            HardViolationCode.INSUFFICIENT_ROOM_CAPACITY,
+            self.violation_codes(result),
+        )
+
+    def test_missing_room_capacity_is_reported(self) -> None:
+        room_without_capacity = replace(self.room_cs1, capacity=None)
+        problem = self.build_problem(
+            locations=(room_without_capacity, self.room_cs2, self.zoom),
+        )
+
+        result = validate_timetable(problem, self.valid_options)
+
+        self.assertIn(
+            HardViolationCode.ROOM_CAPACITY_UNKNOWN,
+            self.violation_codes(result),
+        )
 
     def test_missing_assignment_is_reported(self) -> None:
         result = validate_timetable(self.problem, self.valid_options[:-1])

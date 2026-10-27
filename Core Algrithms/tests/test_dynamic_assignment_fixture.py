@@ -4,9 +4,9 @@ import unittest
 from collections import defaultdict
 from pathlib import Path
 
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.decoder import DecodeStatus, decode_vector
-from gapo_timetabling.snapshot import prepare_snapshot_for_optimization
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.decoder import DecodeStatus, decode_vector
+from gapo_timetabling.core.snapshot import prepare_snapshot_for_optimization
 
 
 SNAPSHOT_PATH = (

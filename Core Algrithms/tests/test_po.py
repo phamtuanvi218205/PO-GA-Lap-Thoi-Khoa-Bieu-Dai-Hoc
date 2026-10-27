@@ -6,15 +6,15 @@ from dataclasses import FrozenInstanceError, replace
 from random import Random
 from unittest.mock import patch
 
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.metrics import (
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.core.metrics import (
     OptimizationMetrics,
     OptimizationResult,
     accumulate_candidate_evaluation,
 )
-from gapo_timetabling.models import OptimizationAlgorithm, SessionOption
-from gapo_timetabling.po import (
+from gapo_timetabling.core.models import OptimizationAlgorithm, SessionOption
+from gapo_timetabling.core.po import (
     PoBehavior,
     PoConfig,
     PoOffspringResult,
@@ -27,7 +27,7 @@ from gapo_timetabling.po import (
     levy_flight,
     run_po,
 )
-from gapo_timetabling.population import (
+from gapo_timetabling.core.population import (
     CandidateEvaluationConfig,
     CandidateEvaluationStatus,
     PopulationInitializationStatus,
@@ -670,11 +670,11 @@ class TestPoOffspringCreation(ConstraintFixture):
 
         with (
             patch(
-                "gapo_timetabling.po.create_po_position",
+                "gapo_timetabling.core.po.create_po_position",
                 return_value=proposed,
             ),
             patch(
-                "gapo_timetabling.po.evaluate_candidate",
+                "gapo_timetabling.core.po.evaluate_candidate",
                 wraps=evaluate_candidate,
             ) as evaluator,
         ):
@@ -723,11 +723,11 @@ class TestPoOffspringCreation(ConstraintFixture):
 
         with (
             patch(
-                "gapo_timetabling.po.create_po_position",
+                "gapo_timetabling.core.po.create_po_position",
                 side_effect=(vector, vector),
             ) as position_creator,
             patch(
-                "gapo_timetabling.po.evaluate_candidate",
+                "gapo_timetabling.core.po.evaluate_candidate",
                 side_effect=(failed, succeeded),
             ),
         ):
@@ -770,11 +770,11 @@ class TestPoOffspringCreation(ConstraintFixture):
 
         with (
             patch(
-                "gapo_timetabling.po.create_po_position",
+                "gapo_timetabling.core.po.create_po_position",
                 return_value=vector,
             ),
             patch(
-                "gapo_timetabling.po.evaluate_candidate",
+                "gapo_timetabling.core.po.evaluate_candidate",
                 return_value=failed,
             ) as evaluator,
         ):
@@ -802,7 +802,7 @@ class TestPoOffspringCreation(ConstraintFixture):
         domains_with_empty_item[0] = ()
 
         with patch(
-            "gapo_timetabling.po.create_po_position",
+            "gapo_timetabling.core.po.create_po_position",
             return_value=parent.vector,
         ):
             with self.assertRaisesRegex(ValueError, "NO_OPTION"):
@@ -823,7 +823,7 @@ class TestPoOffspringCreation(ConstraintFixture):
             fitness_evaluations=10,
         )
 
-        with patch("gapo_timetabling.po.create_po_position") as creator:
+        with patch("gapo_timetabling.core.po.create_po_position") as creator:
             with self.assertRaisesRegex(ValueError, "ngân sách"):
                 self.call_helper(
                     parent,
@@ -929,13 +929,12 @@ class TestPoRun(ConstraintFixture):
 
     @staticmethod
     def with_fitness_score(individual, score: float):
-        """Tạo cá thể fixture có ba tầng fitness bằng cùng một giá trị."""
+        """Tạo cá thể fixture có hai tầng fitness bằng cùng một giá trị."""
 
         return replace(
             individual,
             fitness=replace(
                 individual.fitness,
-                time_stability_score=score,
                 general_quality_score=score,
                 lecturer_preference_score=score,
             ),
@@ -1005,7 +1004,7 @@ class TestPoRun(ConstraintFixture):
             )
 
         with patch(
-            "gapo_timetabling.po._create_and_evaluate_po_offspring",
+            "gapo_timetabling.core.po._create_and_evaluate_po_offspring",
             side_effect=create_worse_child,
         ):
             result = run_po(
@@ -1050,7 +1049,7 @@ class TestPoRun(ConstraintFixture):
             )
 
         with patch(
-            "gapo_timetabling.po._create_and_evaluate_po_offspring",
+            "gapo_timetabling.core.po._create_and_evaluate_po_offspring",
             side_effect=create_better_child,
         ) as offspring_helper:
             result = run_po(
@@ -1062,7 +1061,7 @@ class TestPoRun(ConstraintFixture):
 
         calls = offspring_helper.call_args_list
         self.assertEqual(len(calls), len(initialization.individuals))
-        self.assertEqual(calls[0].kwargs["best_individual"].fitness_key, (10.0,) * 3)
+        self.assertEqual(calls[0].kwargs["best_individual"].fitness_key, (10.0,) * 2)
         self.assertIs(calls[1].kwargs["best_individual"], better_child)
         self.assertEqual(
             calls[0].kwargs["population_mean"],
@@ -1107,7 +1106,7 @@ class TestPoRun(ConstraintFixture):
             )
 
         with patch(
-            "gapo_timetabling.po._create_and_evaluate_po_offspring",
+            "gapo_timetabling.core.po._create_and_evaluate_po_offspring",
             side_effect=discard_child,
         ):
             result = run_po(
@@ -1168,6 +1167,28 @@ class TestPoRun(ConstraintFixture):
             first.best_individual.selected_options,
         )
         self.assertTrue(validation.is_valid)
+
+    def test_progress_callback_reports_initial_and_final_state(self) -> None:
+        initialization = self.make_initialization(population_size=3)
+        config = self.make_config(initialization, iterations=2)
+        updates = []
+
+        result = run_po(
+            self.problem,
+            self.domains,
+            initialization,
+            config,
+            progress_callback=updates.append,
+        )
+
+        self.assertGreaterEqual(len(updates), 3)
+        self.assertEqual(updates[0].iteration, 0)
+        self.assertEqual(
+            updates[-1].metrics.fitness_evaluations,
+            result.metrics.fitness_evaluations,
+        )
+        self.assertEqual(updates[-1].iteration, result.metrics.completed_iterations)
+        self.assertTrue(all(0.0 <= update.progress_ratio <= 1.0 for update in updates))
 
     def test_run_rejects_missing_or_misaligned_option_domain(self) -> None:
         """Miền option sai snapshot phải bị từ chối trước vòng tối ưu."""
@@ -1294,7 +1315,7 @@ class TestPoMath(unittest.TestCase):
         remaining = 1.0 - progress
 
         with patch(
-            "gapo_timetabling.po.levy_flight",
+            "gapo_timetabling.core.po.levy_flight",
             return_value=(0.2, -0.4),
         ):
             result = create_po_position(
@@ -1327,7 +1348,7 @@ class TestPoMath(unittest.TestCase):
         remaining = 1.0 - iteration / max_iterations
 
         with patch(
-            "gapo_timetabling.po.levy_flight",
+            "gapo_timetabling.core.po.levy_flight",
             return_value=(0.2, -0.4),
         ):
             result = create_po_position(

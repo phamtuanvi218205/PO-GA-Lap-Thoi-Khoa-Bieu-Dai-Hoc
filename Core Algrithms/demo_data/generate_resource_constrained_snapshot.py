@@ -124,9 +124,10 @@ def _build_time_periods() -> list[dict[str, object]]:
 def _build_locations() -> list[dict[str, object]]:
     """Create four rooms of which only a subset fits each teaching part.
 
-    Cả hai phòng của mỗi loại đều đủ thiết bị tối thiểu để lịch lặp toàn kỳ
-    có nghiệm. Tài nguyên vẫn khan hiếm vì 18 chuỗi buổi phải chia sẻ đúng hai
-    phòng lý thuyết và hai phòng máy; sức chứa tiếp tục là tiêu chí mềm.
+    Cả hai phòng của mỗi loại đều đủ thiết bị và sức chứa tối thiểu. Tài
+    nguyên vẫn khan hiếm vì 18 chuỗi buổi phải chia sẻ đúng hai phòng lý
+    thuyết và hai phòng máy; sức chứa là ràng buộc cứng từ D109 và được kiểm
+    thử riêng bằng các fixture biên.
     """
 
     return [
@@ -139,7 +140,7 @@ def _build_locations() -> list[dict[str, object]]:
             "active": True,
             "campus_code": "CS1",
             "room_type": "LECTURE_ROOM",
-            "capacity": 45,
+            "capacity": 80,
             "equipment_quantities": [
                 {"equipment_code": "PROJECTOR", "quantity": 1},
             ],
@@ -153,7 +154,7 @@ def _build_locations() -> list[dict[str, object]]:
             "active": True,
             "campus_code": "CS1",
             "room_type": "LECTURE_ROOM",
-            "capacity": 35,
+            "capacity": 80,
             "equipment_quantities": [
                 {"equipment_code": "PROJECTOR", "quantity": 1},
             ],
@@ -167,7 +168,7 @@ def _build_locations() -> list[dict[str, object]]:
             "active": True,
             "campus_code": "CS1",
             "room_type": "COMPUTER_LAB",
-            "capacity": 40,
+            "capacity": 80,
             "equipment_quantities": [
                 {"equipment_code": "PROJECTOR", "quantity": 1},
                 {"equipment_code": "COMPUTER", "quantity": 40},
@@ -182,7 +183,7 @@ def _build_locations() -> list[dict[str, object]]:
             "active": True,
             "campus_code": "CS1",
             "room_type": "COMPUTER_LAB",
-            "capacity": 30,
+            "capacity": 80,
             "equipment_quantities": [
                 {"equipment_code": "PROJECTOR", "quantity": 1},
                 {"equipment_code": "COMPUTER", "quantity": 40},
@@ -430,24 +431,24 @@ def build_snapshot() -> dict[str, object]:
                 "enabled": True,
             },
             {
-                "constraint_code": "SOFT_CAPACITY",
-                "constraint_type": "SOFT",
-                "priority_tier": 2,
-                "weight": 0.4500,
+                "constraint_code": "HARD_ROOM_CAPACITY",
+                "constraint_type": "HARD",
+                "priority_tier": 1,
+                "weight": None,
                 "enabled": True,
             },
             {
                 "constraint_code": "SOFT_LECTURER_GAP",
                 "constraint_type": "SOFT",
                 "priority_tier": 2,
-                "weight": 0.2500,
+                "weight": 0.4545,
                 "enabled": True,
             },
             {
                 "constraint_code": "SOFT_LECTURER_CONSECUTIVE",
                 "constraint_type": "SOFT",
                 "priority_tier": 2,
-                "weight": 0.1000,
+                "weight": 0.1818,
                 "enabled": True,
                 "threshold_value": 6,
             },
@@ -455,7 +456,7 @@ def build_snapshot() -> dict[str, object]:
                 "constraint_code": "SOFT_ROOM_DISCOURAGED",
                 "constraint_type": "SOFT",
                 "priority_tier": 2,
-                "weight": 0.2000,
+                "weight": 0.3637,
                 "enabled": True,
             },
         ],

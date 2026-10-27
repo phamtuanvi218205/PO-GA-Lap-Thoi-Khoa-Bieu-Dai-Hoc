@@ -1,0 +1,192 @@
+HƯỚNG DẪN CHẠY BENCHMARK PHÂN TÁN TRÊN 3 MÁY
+================================================
+
+1. CẤU HÌNH ĐÃ CHỐT
+
+- Dữ liệu: Small, Medium và Large.
+- Thuật toán: GA, PO, GA–PO và Greedy First Feasible.
+- Kích thước quần thể: 30.
+- Ngân sách tối đa: 630 FE.
+- Seed: từ 1 đến 10.
+- Người chạy GA: 30 run (3 bộ dữ liệu x 10 seed).
+- Người chạy PO: 30 run (3 bộ dữ liệu x 10 seed).
+- Người chạy GA–PO: 30 run và 3 lần Greedy.
+
+Do ba thuật toán chạy trên ba máy khác nhau, thời gian chạy chỉ được lưu để
+tham khảo. Không dùng thời gian để kết luận thuật toán nào nhanh hơn. So sánh
+chính dựa trên Q_general, Q_lecturer, tỷ lệ thành công, hội tụ theo FE, FE thực
+tế và sự thay đổi khi quy mô tăng.
+
+
+2. CHUẨN BỊ TRƯỚC KHI CHẠY
+
+Người chuẩn bị project phải commit và push toàn bộ code trước khi chia cho ba
+người. Cả ba máy phải pull đúng cùng một commit.
+
+Runner sẽ từ chối bắt đầu nếu source còn thay đổi chưa commit.
+
+Trên mỗi máy, mở PowerShell hoặc terminal VS Code tại thư mục:
+
+C:\Users\<tên người dùng>\Documents\KhoaLuan
+
+Khai báo đường dẫn source Python:
+
+$env:PYTHONPATH="Core Algrithms/src"
+
+Không chỉnh sửa snapshot, seed, population, FE hoặc file cấu hình sau khi đã
+chia việc.
+
+
+3. NGƯỜI 1 CHẠY GA
+
+$env:PYTHONPATH="Core Algrithms/src"
+
+python -m gapo_timetabling.application.distributed_benchmark run `
+  "Core Algrithms/benchmark_configs/distributed/timetable_scalability_suite_2027_HK1.json" `
+  --worker GA `
+  --output-root "Core Algrithms/distributed_results/GA"
+
+Kết quả được lưu tại:
+
+Core Algrithms/distributed_results/GA
+
+
+4. NGƯỜI 2 CHẠY PO
+
+$env:PYTHONPATH="Core Algrithms/src"
+
+python -m gapo_timetabling.application.distributed_benchmark run `
+  "Core Algrithms/benchmark_configs/distributed/timetable_scalability_suite_2027_HK1.json" `
+  --worker PO `
+  --output-root "Core Algrithms/distributed_results/PO"
+
+Kết quả được lưu tại:
+
+Core Algrithms/distributed_results/PO
+
+
+5. NGƯỜI 3 CHẠY GA–PO VÀ GREEDY
+
+$env:PYTHONPATH="Core Algrithms/src"
+
+python -m gapo_timetabling.application.distributed_benchmark run `
+  "Core Algrithms/benchmark_configs/distributed/timetable_scalability_suite_2027_HK1.json" `
+  --worker GA_PO `
+  --output-root "Core Algrithms/distributed_results/GA_PO"
+
+Kết quả được lưu tại:
+
+Core Algrithms/distributed_results/GA_PO
+
+
+6. NẾU MÁY BỊ TẮT HOẶC TERMINAL BỊ NGẮT
+
+Chạy lại đúng lệnh cũ và giữ nguyên output-root.
+
+Runner sẽ đọc kết quả đã có. Những run COMPLETED đúng thuật toán và checksum
+được tái sử dụng; chỉ phần còn thiếu hoặc lỗi mới được chạy lại.
+
+Không xóa, đổi tên hoặc chỉnh sửa thủ công các file JSON trong thư mục kết quả.
+
+
+7. KIỂM TRA ĐÃ CHẠY XONG
+
+Khi hoàn thành, terminal phải in sự kiện có:
+
+"event": "WORKER_COMPLETED"
+"status": "COMPLETED"
+
+Trong thư mục kết quả phải có file:
+
+worker_manifest.json
+
+Mỗi người nén và gửi nguyên thư mục GA, PO hoặc GA_PO. Không chỉ gửi riêng một
+số file JSON và không thay đổi cấu trúc thư mục.
+
+
+8. SẮP XẾP THƯ MỤC TRÊN MÁY HỢP NHẤT
+
+Sau khi nhận kết quả, giải nén để có cấu trúc:
+
+Core Algrithms/distributed_results/
+  GA/
+    worker_manifest.json
+    small/
+    medium/
+    large/
+  PO/
+    worker_manifest.json
+    small/
+    medium/
+    large/
+  GA_PO/
+    worker_manifest.json
+    small/
+    medium/
+    large/
+
+
+9. LỆNH HỢP NHẤT VÀ SINH ẢNH
+
+Mở terminal tại thư mục gốc KhoaLuan rồi chạy:
+
+$env:PYTHONPATH="Core Algrithms/src"
+
+python -m gapo_timetabling.application.distributed_benchmark merge `
+  "Core Algrithms/benchmark_configs/distributed/timetable_scalability_suite_2027_HK1.json" `
+  --part-root "Core Algrithms/distributed_results/GA" `
+  --part-root "Core Algrithms/distributed_results/PO" `
+  --part-root "Core Algrithms/distributed_results/GA_PO" `
+  --output-root "Core Algrithms/distributed_results/COMBINED"
+
+Lệnh merge không chạy lại GA, PO hoặc GA–PO. Nó chỉ kiểm tra, hợp nhất kết quả
+đã lưu và sinh CSV/ảnh.
+
+Nếu thành công, terminal sẽ in:
+
+"event": "MERGE_COMPLETED"
+
+
+10. KẾT QUẢ SAU KHI HỢP NHẤT
+
+Kết quả nằm tại:
+
+Core Algrithms/distributed_results/COMBINED
+
+Mỗi thư mục small, medium và large chứa:
+
+- raw_results.csv
+- summary.csv
+- convergence.csv
+- experiment_metadata.json
+- plot_manifest.json
+- Các biểu đồ 01 đến 08
+- Ảnh thời khóa biểu tốt nhất 09 của GA, PO, GA–PO và Greedy
+
+Thư mục COMBINED còn có:
+
+- scalability_summary.csv
+- 10_scalability_quality.png
+- 11_scalability_success_rate.png
+- 12_scalability_fitness_evaluations.png
+- merged_manifest.json
+
+
+11. CÁC TRƯỜNG HỢP LỆNH MERGE SẼ TỪ CHỐI
+
+- Thiếu kết quả GA, PO hoặc GA–PO.
+- Một worker chưa chạy đủ seed.
+- Ba máy không dùng cùng Git commit.
+- Snapshot hoặc checksum khác nhau.
+- Cấu hình population, FE hoặc seed khác nhau.
+- Kết quả đích đã có file JSON khác nội dung.
+- Một người chạy khi source còn thay đổi chưa commit.
+
+
+12. LƯU Ý VỀ GIT
+
+Thư mục Core Algrithms/distributed_results đã được thêm vào .gitignore.
+
+Không cần push kết quả benchmark dung lượng lớn lên Git. Sau khi chạy xong,
+mỗi người chỉ cần nén nguyên thư mục kết quả của mình thành ZIP rồi gửi cho
+người hợp nhất.

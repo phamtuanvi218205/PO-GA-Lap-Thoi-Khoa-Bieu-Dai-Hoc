@@ -270,7 +270,7 @@ def _build_lecturer_availabilities() -> list[dict[str, object]]:
 
 
 def _build_constraint_settings() -> list[dict[str, object]]:
-    """Cấu hình đủ ba tầng fitness của mô hình D093."""
+    """Cấu hình hard capacity và hai tầng fitness của mô hình D109."""
 
     return [
         {
@@ -288,24 +288,24 @@ def _build_constraint_settings() -> list[dict[str, object]]:
             "enabled": True,
         },
         {
-            "constraint_code": "SOFT_CAPACITY",
-            "constraint_type": "SOFT",
-            "priority_tier": 2,
-            "weight": 0.4010,
+            "constraint_code": "HARD_ROOM_CAPACITY",
+            "constraint_type": "HARD",
+            "priority_tier": 1,
+            "weight": None,
             "enabled": True,
         },
         {
             "constraint_code": "SOFT_LECTURER_GAP",
             "constraint_type": "SOFT",
             "priority_tier": 2,
-            "weight": 0.2228,
+            "weight": 0.3720,
             "enabled": True,
         },
         {
             "constraint_code": "SOFT_LECTURER_CONSECUTIVE",
             "constraint_type": "SOFT",
             "priority_tier": 2,
-            "weight": 0.0891,
+            "weight": 0.1487,
             "threshold_value": 6,
             "enabled": True,
         },
@@ -313,14 +313,14 @@ def _build_constraint_settings() -> list[dict[str, object]]:
             "constraint_code": "SOFT_ROOM_DISCOURAGED",
             "constraint_type": "SOFT",
             "priority_tier": 2,
-            "weight": 0.1782,
+            "weight": 0.2975,
             "enabled": True,
         },
         {
             "constraint_code": "SOFT_WORKLOAD_BALANCE",
             "constraint_type": "SOFT",
             "priority_tier": 2,
-            "weight": 0.1089,
+            "weight": 0.1818,
             "enabled": True,
         },
         {

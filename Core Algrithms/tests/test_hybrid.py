@@ -11,14 +11,16 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
-import gapo_timetabling.hybrid as hybrid_module
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.hybrid import HybridConfig, main, run_hybrid
-from gapo_timetabling.metrics import OptimizationResult
-from gapo_timetabling.models import OptimizationAlgorithm
-from gapo_timetabling.po import PoOffspringResult
-from gapo_timetabling.population import (
+import gapo_timetabling.core.hybrid as hybrid_module
+import gapo_timetabling.core.po as po_module
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.application.demo_cli import main
+from gapo_timetabling.core.hybrid import HybridConfig, run_hybrid
+from gapo_timetabling.core.metrics import OptimizationResult
+from gapo_timetabling.core.models import OptimizationAlgorithm
+from gapo_timetabling.core.po import PoOffspringResult
+from gapo_timetabling.core.population import (
     CandidateEvaluationConfig,
     CandidateEvaluationStatus,
     PopulationInitializationStatus,
@@ -199,13 +201,12 @@ class TestHybridRun(ConstraintFixture):
 
     @staticmethod
     def with_fitness_score(individual, score: float):
-        """Return a fixture individual with equal values in all score tiers."""
+        """Return a fixture individual with equal values in both score tiers."""
 
         return replace(
             individual,
             fitness=replace(
                 individual.fitness,
-                time_stability_score=score,
                 general_quality_score=score,
                 lecturer_preference_score=score,
             ),
@@ -235,10 +236,10 @@ class TestHybridRun(ConstraintFixture):
         config = self.make_config(initialization, iterations=1, ga_ratio=0.5)
 
         with patch(
-            "gapo_timetabling.hybrid._try_create_ga_offspring",
+            "gapo_timetabling.core.hybrid._try_create_ga_offspring",
             wraps=hybrid_module._try_create_ga_offspring,
         ) as ga_helper, patch(
-            "gapo_timetabling.hybrid._create_and_evaluate_po_offspring",
+            "gapo_timetabling.core.hybrid._create_and_evaluate_po_offspring",
             wraps=hybrid_module._create_and_evaluate_po_offspring,
         ) as po_helper:
             run_hybrid(
@@ -250,6 +251,31 @@ class TestHybridRun(ConstraintFixture):
 
         self.assertEqual(ga_helper.call_count, 2)
         self.assertEqual(po_helper.call_count, 2)
+
+    def test_both_branches_use_the_shared_candidate_evaluation_pipeline(self) -> None:
+        """GA và PO trong hybrid không được cài pipeline đánh giá riêng."""
+
+        initialization = self.make_initialization(population_size=4)
+        config = self.make_config(initialization, iterations=1, ga_ratio=0.5)
+
+        with patch.object(
+            hybrid_module,
+            "evaluate_candidate",
+            wraps=hybrid_module.evaluate_candidate,
+        ) as ga_evaluator, patch.object(
+            po_module,
+            "evaluate_candidate",
+            wraps=po_module.evaluate_candidate,
+        ) as po_evaluator:
+            run_hybrid(
+                self.problem,
+                self.domains,
+                initialization,
+                config,
+            )
+
+        self.assertGreater(ga_evaluator.call_count, 0)
+        self.assertGreater(po_evaluator.call_count, 0)
 
     def test_parent_union_rejects_valid_but_worse_offspring(self) -> None:
         initialization = self.make_initialization(population_size=4)
@@ -286,10 +312,10 @@ class TestHybridRun(ConstraintFixture):
             )
 
         with patch(
-            "gapo_timetabling.hybrid._try_create_ga_offspring",
+            "gapo_timetabling.core.hybrid._try_create_ga_offspring",
             side_effect=ga_child,
         ), patch(
-            "gapo_timetabling.hybrid._create_and_evaluate_po_offspring",
+            "gapo_timetabling.core.hybrid._create_and_evaluate_po_offspring",
             side_effect=po_child,
         ):
             result = run_hybrid(
@@ -337,10 +363,10 @@ class TestHybridRun(ConstraintFixture):
             )
 
         with patch(
-            "gapo_timetabling.hybrid._try_create_ga_offspring",
+            "gapo_timetabling.core.hybrid._try_create_ga_offspring",
             side_effect=failed_ga_child,
         ), patch(
-            "gapo_timetabling.hybrid._create_and_evaluate_po_offspring",
+            "gapo_timetabling.core.hybrid._create_and_evaluate_po_offspring",
             side_effect=failed_po_child,
         ):
             result = run_hybrid(
@@ -397,12 +423,48 @@ class TestHybridRun(ConstraintFixture):
             first.metrics.fitness_evaluations,
             config.max_fitness_evaluations,
         )
+        convergence_keys = tuple(
+            (
+                point.general_quality_score,
+                point.lecturer_preference_score,
+            )
+            for point in first.convergence_history
+        )
+        self.assertTrue(all(
+            next_key <= current_key
+            for current_key, next_key in zip(
+                convergence_keys,
+                convergence_keys[1:],
+            )
+        ))
 
         validation = validate_timetable(
             self.problem,
             first.best_individual.selected_options,
         )
         self.assertTrue(validation.is_valid)
+
+    def test_progress_callback_reports_initial_and_final_state(self) -> None:
+        initialization = self.make_initialization(population_size=4)
+        config = self.make_config(initialization, iterations=2)
+        updates = []
+
+        result = run_hybrid(
+            self.problem,
+            self.domains,
+            initialization,
+            config,
+            progress_callback=updates.append,
+        )
+
+        self.assertGreaterEqual(len(updates), 3)
+        self.assertEqual(updates[0].iteration, 0)
+        self.assertEqual(
+            updates[-1].metrics.fitness_evaluations,
+            result.metrics.fitness_evaluations,
+        )
+        self.assertEqual(updates[-1].iteration, result.metrics.completed_iterations)
+        self.assertTrue(all(0.0 <= update.progress_ratio <= 1.0 for update in updates))
 
     def test_run_rejects_a_ratio_that_creates_an_empty_branch(self) -> None:
         initialization = self.make_initialization(population_size=2)

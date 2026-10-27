@@ -4,15 +4,15 @@ import unittest
 from dataclasses import replace
 from unittest.mock import patch
 
-from gapo_timetabling.constraints import (
+from gapo_timetabling.core.constraints import (
     HardConstraintViolation,
     HardViolationCode,
     ValidationResult,
     validate_timetable,
 )
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.models import SessionOption
-from gapo_timetabling.population import (
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.core.models import SessionOption
+from gapo_timetabling.core.population import (
     CandidateEvaluationConfig,
     CandidateEvaluationStatus,
     PopulationInitializationStatus,
@@ -175,10 +175,10 @@ class TestPopulation(ConstraintFixture):
 
         with (
             patch(
-                "gapo_timetabling.population.validate_timetable",
+                "gapo_timetabling.core.population.validate_timetable",
                 return_value=rejected,
             ),
-            patch("gapo_timetabling.population.calculate_fitness") as fitness,
+            patch("gapo_timetabling.core.population.calculate_fitness") as fitness,
         ):
             result = evaluate_candidate(
                 self.problem,
@@ -226,6 +226,54 @@ class TestPopulation(ConstraintFixture):
                     individual.selected_options,
                 ).is_valid
             )
+
+    def test_initialization_reports_progress_from_first_checkpoint(self) -> None:
+        domains = build_option_domains(self.problem)
+        updates = []
+
+        result = initialize_population(
+            self.problem,
+            domains,
+            population_size=3,
+            max_initialization_attempts=10,
+            seed=42,
+            evaluation_config=CandidateEvaluationConfig(
+                max_decode_nodes=100,
+                enable_repair=False,
+                max_repair_attempts=0,
+            ),
+            progress_callback=updates.append,
+        )
+
+        self.assertEqual(updates[0].candidate_attempts, 0)
+        self.assertEqual(updates[0].accepted_individual_count, 0)
+        self.assertEqual(updates[-1].candidate_attempts, result.candidate_attempts)
+        self.assertEqual(updates[-1].fitness_evaluations, result.fitness_evaluations)
+        self.assertEqual(updates[-1].accepted_individual_count, 3)
+
+    def test_initialization_propagates_control_exception_before_first_decode(self) -> None:
+        domains = build_option_domains(self.problem)
+
+        def stop_run(_progress) -> None:
+            raise RuntimeError("stop requested")
+
+        with patch(
+            "gapo_timetabling.core.population.evaluate_candidate"
+        ) as evaluation:
+            with self.assertRaisesRegex(RuntimeError, "stop requested"):
+                initialize_population(
+                    self.problem,
+                    domains,
+                    population_size=3,
+                    max_initialization_attempts=10,
+                    seed=42,
+                    evaluation_config=CandidateEvaluationConfig(
+                        max_decode_nodes=100,
+                    ),
+                    progress_callback=stop_run,
+                )
+
+        evaluation.assert_not_called()
 
     def test_same_seed_recreates_same_initial_population(self) -> None:
         """Cùng snapshot, cấu hình và seed phải tái lập quần thể ban đầu."""
@@ -338,7 +386,7 @@ class TestPopulation(ConstraintFixture):
         self.assertEqual(repaired_evaluation.repair_result.attempts, 2)
 
         with patch(
-            "gapo_timetabling.population.evaluate_candidate",
+            "gapo_timetabling.core.population.evaluate_candidate",
             return_value=repaired_evaluation,
         ):
             result = initialize_population(
@@ -355,7 +403,7 @@ class TestPopulation(ConstraintFixture):
         self.assertEqual(result.failed_repair_count, 0)
         self.assertEqual(result.total_repair_attempts, 4)
 
-    def test_sort_uses_lexicographic_gate_f_order(self) -> None:
+    def test_sort_uses_lexicographic_fitness_order(self) -> None:
         """Khóa fitness vẫn phải giữ thứ tự lexicographic của hợp đồng."""
 
         config = CandidateEvaluationConfig(
@@ -372,31 +420,32 @@ class TestPopulation(ConstraintFixture):
         base = evaluated.individual
         self.assertIsNotNone(base)
 
-        stable = replace(
+        better_general = replace(
             base,
             vector=(0.9, 0.9, 0.9, 0.9),
             fitness=replace(
                 base.fitness,
-                time_stability_score=0.0,
-                general_quality_score=10.0,
+                general_quality_score=0.0,
                 lecturer_preference_score=10.0,
             ),
         )
-        unstable = replace(
+        better_preference = replace(
             base,
             vector=(0.1, 0.1, 0.1, 0.1),
             fitness=replace(
                 base.fitness,
-                time_stability_score=0.1,
-                general_quality_score=0.0,
+                general_quality_score=0.1,
                 lecturer_preference_score=0.0,
             ),
         )
 
-        ordered = sort_individuals((unstable, stable))
+        ordered = sort_individuals((better_preference, better_general))
 
-        self.assertIs(ordered[0], stable)
-        self.assertIs(best_individual((unstable, stable)), stable)
+        self.assertIs(ordered[0], better_general)
+        self.assertIs(
+            best_individual((better_preference, better_general)),
+            better_general,
+        )
 
     def test_invalid_configuration_is_rejected(self) -> None:
         """Các giới hạn sai phải bị phát hiện trước khi tạo quần thể."""

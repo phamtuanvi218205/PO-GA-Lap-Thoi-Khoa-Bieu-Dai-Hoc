@@ -9,6 +9,9 @@
 /.pptx-*/
 /.codex-finalizer/
 /.chart-data-*/
+/.codex-spreadsheet-runtime/
+/.docx-project-guide/
+/outputs/
 node_modules/
 *.pptx
 *.pptx.inspect.ndjson
@@ -52,6 +55,10 @@ venv/
 .ruff_cache/
 .coverage
 htmlcov/
+*.egg-info/
+/Core Algrithms/distributed_results/
+/Core Algrithms/test_results/
+/Core Algrithms/src/Core Algrithms/
 
 # IDE files
 .idea/

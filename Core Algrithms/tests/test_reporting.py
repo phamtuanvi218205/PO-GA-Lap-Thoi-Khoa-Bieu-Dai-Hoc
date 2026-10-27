@@ -5,7 +5,7 @@ from __future__ import annotations
 import unittest
 from datetime import date
 
-from gapo_timetabling.reporting import (
+from gapo_timetabling.application.reporting import (
     TimetableReportRow,
     _assign_parallel_lanes,
     _select_representative_week_rows,

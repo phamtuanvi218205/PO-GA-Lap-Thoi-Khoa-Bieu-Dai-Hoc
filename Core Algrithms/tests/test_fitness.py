@@ -4,13 +4,12 @@ import unittest
 from dataclasses import replace
 from datetime import date, time, timedelta
 
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.fitness import (
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.core.fitness import (
     DEFAULT_GENERAL_WEIGHTS,
     calculate_fitness,
-    calculate_time_stability,
 )
-from gapo_timetabling.models import (
+from gapo_timetabling.core.models import (
     AcademicTerm,
     AcademicTermStatus,
     AllowedPeriodBlock,
@@ -105,8 +104,8 @@ class FitnessFixture(unittest.TestCase):
             AllowedPeriodBlock(1, 6),
         )
 
-        # Lớp dự kiến 50 người. Phòng nhỏ 40 chỗ tạo shortage_ratio=0,2;
-        # phòng lớn 60 chỗ không bị phạt sức chứa.
+        # Cả hai phòng đều đủ chỗ cho lớp dự kiến 50 người. Từ D109, phòng
+        # thiếu chỗ bị loại bởi hard constraint trước khi tính fitness.
         self.small_room = Room(
             location_index=0,
             location_id=10,
@@ -115,7 +114,7 @@ class FitnessFixture(unittest.TestCase):
             active=True,
             campus_code="CS1",
             room_type=RoomType.LECTURE_ROOM,
-            capacity=40,
+            capacity=50,
             equipment_quantities=(('PROJECTOR', 1),),
         )
         self.large_room = Room(
@@ -261,154 +260,6 @@ class FitnessFixture(unittest.TestCase):
         )
 
 
-class TestTimeStability(FitnessFixture):
-    """Kiểm tra tầng ưu tiên cao nhất về thứ và tiết bắt đầu."""
-
-    def test_identical_weekly_pattern_has_zero_score(self) -> None:
-        result = calculate_time_stability(
-            self.problem,
-            self.stable_options,
-            self.domains,
-        )
-
-        self.assertEqual(result.score, 0.0)
-        self.assertEqual(result.comparable_session_count, 4)
-        self.assertEqual(result.weekday_change_count, 0)
-        self.assertEqual(result.start_period_change_count, 0)
-
-    def test_one_weekday_change_is_counted(self) -> None:
-        selected = list(self.stable_options)
-        selected[3] = self.option(3, weekday=2, start_period=1)
-
-        result = calculate_time_stability(
-            self.problem,
-            tuple(selected),
-            self.domains,
-        )
-
-        self.assertEqual(result.weekday_change_count, 1)
-        self.assertEqual(result.start_period_change_count, 0)
-        self.assertAlmostEqual(result.score, 1 / 8)
-
-    def test_one_start_period_change_is_counted(self) -> None:
-        selected = list(self.stable_options)
-        selected[3] = self.option(3, weekday=1, start_period=4)
-
-        result = calculate_time_stability(
-            self.problem,
-            tuple(selected),
-            self.domains,
-        )
-
-        self.assertEqual(result.weekday_change_count, 0)
-        self.assertEqual(result.start_period_change_count, 1)
-        self.assertAlmostEqual(result.score, 1 / 8)
-
-    def test_changing_both_weekday_and_start_counts_two_components(self) -> None:
-        selected = list(self.stable_options)
-        selected[3] = self.option(3, weekday=2, start_period=4)
-
-        result = calculate_time_stability(
-            self.problem,
-            tuple(selected),
-            self.domains,
-        )
-
-        self.assertEqual(result.weekday_change_count, 1)
-        self.assertEqual(result.start_period_change_count, 1)
-        self.assertAlmostEqual(result.score, 2 / 8)
-
-    def test_duration_change_with_same_start_is_not_a_time_change(self) -> None:
-        longer_session = replace(self.sessions[3], duration_periods=6)
-        sessions = self.sessions[:3] + (longer_session,)
-        part = replace(self.part, total_periods=15)
-        problem = self.build_problem(part=part, sessions=sessions)
-
-        selected = list(self.stable_options)
-        selected[3] = self.option(3, weekday=1, start_period=1, duration=6)
-        domains = list(self.domains)
-        domains[3] = (selected[3],)
-
-        result = calculate_time_stability(
-            problem,
-            tuple(selected),
-            tuple(domains),
-        )
-
-        self.assertEqual(result.score, 0.0)
-        self.assertEqual(result.start_period_change_count, 0)
-
-    def test_session_without_standard_option_is_a_valid_exception(self) -> None:
-        selected = list(self.stable_options)
-        selected[3] = self.option(3, weekday=2, start_period=1)
-        domains = list(self.domains)
-        domains[3] = (selected[3],)
-
-        result = calculate_time_stability(
-            self.problem,
-            tuple(selected),
-            tuple(domains),
-        )
-
-        self.assertEqual(result.score, 0.0)
-        self.assertEqual(result.valid_exception_count, 1)
-        self.assertEqual(result.comparable_session_count, 3)
-        self.assertEqual(result.exceptions[0].session_index, 3)
-
-    def test_change_is_not_exception_when_standard_option_still_exists(self) -> None:
-        selected = list(self.stable_options)
-        selected[3] = self.option(3, weekday=2, start_period=1)
-
-        result = calculate_time_stability(
-            self.problem,
-            tuple(selected),
-            self.domains,
-        )
-
-        self.assertEqual(result.valid_exception_count, 0)
-        self.assertEqual(result.weekday_change_count, 1)
-
-    def test_separate_stability_groups_are_not_compared_together(self) -> None:
-        sessions = (
-            replace(self.sessions[0], stability_group_no=1),
-            replace(self.sessions[1], stability_group_no=1),
-            replace(self.sessions[2], stability_group_no=2),
-            replace(self.sessions[3], stability_group_no=2),
-        )
-        problem = self.build_problem(sessions=sessions)
-        selected = (
-            self.option(0, weekday=1, start_period=1),
-            self.option(1, weekday=1, start_period=1),
-            self.option(2, weekday=2, start_period=4),
-            self.option(3, weekday=2, start_period=4),
-        )
-
-        result = calculate_time_stability(problem, selected, self.domains)
-
-        self.assertEqual(result.score, 0.0)
-        self.assertEqual(result.comparable_session_count, 4)
-
-    def test_tied_mode_is_deterministic(self) -> None:
-        selected = (
-            self.option(0, weekday=1, start_period=4),
-            self.option(1, weekday=2, start_period=1),
-            self.option(2, weekday=1, start_period=4),
-            self.option(3, weekday=2, start_period=1),
-        )
-
-        result = calculate_time_stability(
-            self.problem,
-            selected,
-            self.domains,
-        )
-
-        # Hai mẫu cùng tần suất. Mẫu thứ Hai, tiết 4 thắng tie-break;
-        # hai buổi thứ Ba, tiết 1 khác cả hai thành phần.
-        self.assertEqual(result.weekday_change_count, 2)
-        self.assertEqual(result.start_period_change_count, 2)
-        self.assertEqual(result.score, 0.5)
-
-
 class TestGeneralQuality(FitnessFixture):
     """Kiểm tra năm thành phần của ``Q_general``."""
 
@@ -417,15 +268,15 @@ class TestGeneralQuality(FitnessFixture):
 
         self.assertAlmostEqual(sum(DEFAULT_GENERAL_WEIGHTS.values()), 1.0)
 
-    def test_capacity_uses_duration_weighted_shortage_ratio(self) -> None:
+    def test_capacity_component_is_retained_as_zero_for_compatibility(self) -> None:
         result = calculate_fitness(
             self.problem,
             self.stable_options,
             self.domains,
         )
 
-        self.assertAlmostEqual(result.breakdown.capacity_component, 0.2)
-        self.assertAlmostEqual(result.general_quality_score, 0.45 * 0.2)
+        self.assertAlmostEqual(result.breakdown.capacity_component, 0.0)
+        self.assertAlmostEqual(result.general_quality_score, 0.0)
 
     def test_fitness_accepts_domains_generated_by_real_encoder(self) -> None:
         """Fitness phải nối được với output thật của encoder, không chỉ fixture."""
@@ -438,44 +289,7 @@ class TestGeneralQuality(FitnessFixture):
             encoder_domains,
         )
 
-        self.assertEqual(result.time_stability_score, 0.0)
-        self.assertAlmostEqual(result.breakdown.capacity_component, 0.2)
-
-    def test_time_stability_dominates_better_general_quality(self) -> None:
-        """Lịch ổn định phải thắng dù lịch kia dùng phòng đủ chỗ hơn."""
-
-        stable_result = calculate_fitness(
-            self.problem,
-            self.stable_options,
-            self.domains,
-        )
-
-        less_stable_options = tuple(
-            self.option(
-                index,
-                weekday=2 if index == 3 else 1,
-                start_period=1,
-                room_index=1,
-            )
-            for index in range(4)
-        )
-        less_stable_domains = list(self.domains)
-        less_stable_domains[3] = less_stable_domains[3] + (
-            less_stable_options[3],
-        )
-        less_stable_result = calculate_fitness(
-            self.problem,
-            less_stable_options,
-            tuple(less_stable_domains),
-        )
-
-        self.assertEqual(stable_result.time_stability_score, 0.0)
-        self.assertGreater(less_stable_result.time_stability_score, 0.0)
-        self.assertGreater(
-            stable_result.general_quality_score,
-            less_stable_result.general_quality_score,
-        )
-        self.assertLess(stable_result.fitness_key, less_stable_result.fitness_key)
+        self.assertAlmostEqual(result.breakdown.capacity_component, 0.0)
 
     def test_room_change_metric_is_retained_but_has_no_production_weight(self) -> None:
         selected = list(self.stable_options)
@@ -489,11 +303,10 @@ class TestGeneralQuality(FitnessFixture):
 
         self.assertEqual(result.breakdown.room_change_count, 1)
         self.assertAlmostEqual(result.breakdown.room_stability_component, 0.25)
-        # Ba buổi ở phòng nhỏ và một buổi ở phòng đủ chỗ: Q_capacity=0,15.
-        # Lịch lặp toàn kỳ đã cố định phòng bằng cấu trúc gene. Component cũ
-        # vẫn được tính để tương thích báo cáo, nhưng trọng số production là 0.
-        expected_general = 0.45 * 0.15
-        self.assertAlmostEqual(result.general_quality_score, expected_general)
+        # Capacity đã là hard constraint; component cũ chỉ còn trường tương
+        # thích và luôn bằng 0 nên việc đổi giữa hai phòng đủ chỗ không bị phạt.
+        self.assertAlmostEqual(result.breakdown.capacity_component, 0.0)
+        self.assertAlmostEqual(result.general_quality_score, 0.0)
 
     def test_lecturer_gap_counts_only_periods_between_same_day_sessions(self) -> None:
         sessions = (
@@ -606,7 +419,7 @@ class TestGeneralQuality(FitnessFixture):
         )
         self.assertAlmostEqual(
             result.general_quality_score,
-            0.45 * 0.2 + 0.10 * (3 / 9),
+            0.1818 * (3 / 9),
         )
 
     def test_lecturer_consecutive_threshold_is_read_from_configuration(

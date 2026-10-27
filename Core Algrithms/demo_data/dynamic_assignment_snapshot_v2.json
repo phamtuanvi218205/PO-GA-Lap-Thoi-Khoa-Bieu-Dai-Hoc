@@ -424,7 +424,7 @@
       "active": true,
       "campus_code": "CS1",
       "room_type": "LECTURE_ROOM",
-      "capacity": 45,
+      "capacity": 80,
       "equipment_quantities": [
         {
           "equipment_code": "PROJECTOR",
@@ -441,7 +441,7 @@
       "active": true,
       "campus_code": "CS1",
       "room_type": "LECTURE_ROOM",
-      "capacity": 35,
+      "capacity": 80,
       "equipment_quantities": [
         {
           "equipment_code": "PROJECTOR",
@@ -458,7 +458,7 @@
       "active": true,
       "campus_code": "CS1",
       "room_type": "COMPUTER_LAB",
-      "capacity": 40,
+      "capacity": 80,
       "equipment_quantities": [
         {
           "equipment_code": "PROJECTOR",
@@ -479,7 +479,7 @@
       "active": true,
       "campus_code": "CS1",
       "room_type": "COMPUTER_LAB",
-      "capacity": 30,
+      "capacity": 80,
       "equipment_quantities": [
         {
           "equipment_code": "PROJECTOR",
@@ -2767,24 +2767,24 @@
       "enabled": true
     },
     {
-      "constraint_code": "SOFT_CAPACITY",
-      "constraint_type": "SOFT",
-      "priority_tier": 2,
-      "weight": 0.401,
+      "constraint_code": "HARD_ROOM_CAPACITY",
+      "constraint_type": "HARD",
+      "priority_tier": 1,
+      "weight": null,
       "enabled": true
     },
     {
       "constraint_code": "SOFT_LECTURER_GAP",
       "constraint_type": "SOFT",
       "priority_tier": 2,
-      "weight": 0.2228,
+      "weight": 0.372,
       "enabled": true
     },
     {
       "constraint_code": "SOFT_LECTURER_CONSECUTIVE",
       "constraint_type": "SOFT",
       "priority_tier": 2,
-      "weight": 0.0891,
+      "weight": 0.1487,
       "threshold_value": 6,
       "enabled": true
     },
@@ -2792,14 +2792,14 @@
       "constraint_code": "SOFT_ROOM_DISCOURAGED",
       "constraint_type": "SOFT",
       "priority_tier": 2,
-      "weight": 0.1782,
+      "weight": 0.2975,
       "enabled": true
     },
     {
       "constraint_code": "SOFT_WORKLOAD_BALANCE",
       "constraint_type": "SOFT",
       "priority_tier": 2,
-      "weight": 0.1089,
+      "weight": 0.1818,
       "enabled": true
     },
     {

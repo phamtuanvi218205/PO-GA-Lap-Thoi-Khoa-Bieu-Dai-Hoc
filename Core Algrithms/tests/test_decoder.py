@@ -2,10 +2,10 @@ import unittest
 from dataclasses import replace
 from datetime import date
 
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.decoder import DecodeStatus, decode_vector
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.models import (
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.decoder import DecodeStatus, decode_vector
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.core.models import (
     AvailabilityScopeType,
     AvailabilityType,
     AvailabilityWindow,

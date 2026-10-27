@@ -17,9 +17,9 @@ import random
 from statistics import median
 from time import perf_counter
 
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.decoder import DecodeStatus, decode_vector
-from gapo_timetabling.encoder import build_option_domains
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.decoder import DecodeStatus, decode_vector
+from gapo_timetabling.core.encoder import build_option_domains
 from tests.decoder_scenarios import make_multisession_problem, make_stress_domains
 
 

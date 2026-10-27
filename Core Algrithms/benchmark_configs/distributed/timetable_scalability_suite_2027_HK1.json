@@ -1,0 +1,27 @@
+{
+  "schema_version": "distributed-benchmark-suite.v1",
+  "suite_id": "timetable-scalability-2027-hk1-30pop-20iterations-10seeds",
+  "cases": [
+    {
+      "case_id": "small",
+      "label": "Small",
+      "experiment_config_path": "experiment_small_2027_HK1.json",
+      "dimension": 9,
+      "class_session_count": 58
+    },
+    {
+      "case_id": "medium",
+      "label": "Medium",
+      "experiment_config_path": "experiment_medium_2027_HK1.json",
+      "dimension": 21,
+      "class_session_count": 132
+    },
+    {
+      "case_id": "large",
+      "label": "Large",
+      "experiment_config_path": "experiment_large_2027_HK1.json",
+      "dimension": 30,
+      "class_session_count": 190
+    }
+  ]
+}

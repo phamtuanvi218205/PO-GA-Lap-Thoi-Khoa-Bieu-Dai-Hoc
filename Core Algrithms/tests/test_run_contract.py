@@ -10,8 +10,8 @@ from io import StringIO
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from gapo_timetabling.run_cli import main
-from gapo_timetabling.run_contract import (
+from gapo_timetabling.application.run_cli import main
+from gapo_timetabling.application.run_contract import (
     REQUEST_SCHEMA_VERSION,
     RESULT_SCHEMA_VERSION,
     RunContractError,

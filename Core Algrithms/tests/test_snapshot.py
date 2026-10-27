@@ -13,7 +13,7 @@ if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
 
-from gapo_timetabling.snapshot import (  # noqa: E402
+from gapo_timetabling.core.snapshot import (  # noqa: E402
     MAPPING_SCHEMA_VERSION,
     SNAPSHOT_SCHEMA_VERSION,
     SnapshotContractError,
@@ -104,7 +104,7 @@ def make_snapshot_payload() -> dict:
                 "active": True,
                 "campus_code": "CS1",
                 "room_type": "LECTURE_ROOM",
-                "capacity": 50,
+                "capacity": 60,
                 "equipment_quantities": [
                     {"equipment_code": "PROJECTOR", "quantity": 1},
                 ],

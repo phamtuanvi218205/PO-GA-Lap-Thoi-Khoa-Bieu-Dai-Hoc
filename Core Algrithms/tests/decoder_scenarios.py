@@ -3,8 +3,8 @@
 from dataclasses import replace
 from datetime import timedelta
 
-from gapo_timetabling.encoder import build_option_domains
-from gapo_timetabling.models import (
+from gapo_timetabling.core.encoder import build_option_domains
+from gapo_timetabling.core.models import (
     DateStatus,
     LocationType,
     ProblemInstance,

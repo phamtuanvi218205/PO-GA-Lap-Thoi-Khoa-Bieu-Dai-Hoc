@@ -3,16 +3,17 @@
 import unittest
 from dataclasses import replace
 
-from gapo_timetabling.constraints import HardViolationCode, validate_timetable
-from gapo_timetabling.decoder import DecodeStatus, decode_vector
-from gapo_timetabling.encoder import (
+from gapo_timetabling.core.constraints import HardViolationCode, validate_timetable
+from gapo_timetabling.core.decoder import DecodeStatus, decode_vector
+from gapo_timetabling.core.encoder import (
     build_option_domains,
     build_recurring_patterns_for_group,
 )
-from gapo_timetabling.fitness import calculate_fitness
-from gapo_timetabling.ga import GAConfig, run_ga
-from gapo_timetabling.hybrid import HybridConfig, run_hybrid
-from gapo_timetabling.models import (
+from gapo_timetabling.core.fitness import calculate_fitness
+from gapo_timetabling.core.ga import GAConfig, run_ga
+from gapo_timetabling.core.greedy_baseline import run_greedy_first_feasible
+from gapo_timetabling.core.hybrid import HybridConfig, run_hybrid
+from gapo_timetabling.core.models import (
     AvailabilityScopeType,
     AvailabilityType,
     AvailabilityWindow,
@@ -26,13 +27,13 @@ from gapo_timetabling.models import (
     TeachingPart,
     TeachingPlan,
 )
-from gapo_timetabling.repair import _candidate_vectors
-from gapo_timetabling.po import PoConfig, run_po
-from gapo_timetabling.population import (
+from gapo_timetabling.core.repair import _candidate_vectors
+from gapo_timetabling.core.po import PoConfig, run_po
+from gapo_timetabling.core.population import (
     CandidateEvaluationConfig,
     initialize_population,
 )
-from gapo_timetabling.snapshot import build_gene_option_mapping
+from gapo_timetabling.core.snapshot import build_gene_option_mapping
 from tests.test_constraints import ConstraintFixture
 
 
@@ -133,6 +134,39 @@ class TestDynamicLecturerAssignment(unittest.TestCase):
             campus_travel_times=fixture.problem.campus_travel_times,
             constraint_settings=(),
             lecturer_course_capabilities=capabilities,
+        )
+
+    def test_greedy_baseline_uses_lecturer_with_recurring_patterns(self) -> None:
+        problem = self.build_problem(first_lecturer_unavailable=True)
+        domains = build_option_domains(problem)
+        evaluation_config = CandidateEvaluationConfig(
+            max_decode_nodes=1_000,
+            enable_repair=True,
+            max_repair_attempts=3,
+        )
+
+        first = run_greedy_first_feasible(
+            problem,
+            domains,
+            evaluation_config,
+        )
+        second = run_greedy_first_feasible(
+            problem,
+            domains,
+            evaluation_config,
+        )
+
+        self.assertTrue(first.is_success)
+        self.assertIsNotNone(first.individual)
+        self.assertEqual(first.metrics.fitness_evaluations, 1)
+        self.assertEqual(first.vector, second.vector)
+        self.assertEqual(
+            first.individual.selected_option_indices,
+            second.individual.selected_option_indices,
+        )
+        self.assertEqual(
+            {option.lecturer_index for option in first.individual.selected_options},
+            {1},
         )
 
     def test_vector_contains_assignment_gene_before_session_genes(self) -> None:

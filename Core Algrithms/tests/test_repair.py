@@ -3,10 +3,10 @@
 import unittest
 from dataclasses import replace
 
-from gapo_timetabling.constraints import validate_timetable
-from gapo_timetabling.decoder import DecodeStatus, decode_vector
-from gapo_timetabling.models import SessionOption
-from gapo_timetabling.repair import (
+from gapo_timetabling.core.constraints import validate_timetable
+from gapo_timetabling.core.decoder import DecodeStatus, decode_vector
+from gapo_timetabling.core.models import SessionOption
+from gapo_timetabling.core.repair import (
     RepairStatus,
     gene_for_option_index,
     repair_vector,

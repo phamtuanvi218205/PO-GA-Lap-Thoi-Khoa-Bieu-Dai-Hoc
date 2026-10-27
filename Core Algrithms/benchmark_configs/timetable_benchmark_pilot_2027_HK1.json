@@ -1,0 +1,17 @@
+{
+  "schema_version": "timetable-experiment.v1",
+  "experiment_id": "timetable-2027-hk1-pilot-light-30pop-20iterations",
+  "base_request_path": "benchmark_request_2027_HK1.json",
+  "algorithms": [
+    "GA",
+    "PO",
+    "GA_PO"
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "include_greedy_baseline": true,
+  "create_plots": true
+}

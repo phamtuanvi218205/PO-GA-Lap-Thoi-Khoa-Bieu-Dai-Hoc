@@ -1,8 +1,9 @@
-"""Kiểm định và trực quan hóa pilot phân công giảng viên động.
+"""Kiểm định và trực quan hóa thực nghiệm phân công giảng viên động.
 
 Script này đọc lại từng vector tốt nhất từ thư mục thí nghiệm, giải mã trên
-đúng snapshot ban đầu và chạy validator độc lập. Kết quả chỉ được dùng làm
-pilot kỹ thuật; năm seed chưa đủ để đưa ra kết luận thực nghiệm chính thức.
+đúng snapshot ban đầu và chạy validator độc lập. Việc một thực nghiệm có đủ
+điều kiện để kết luận hay không được xác định từ giao thức và số seed đã chạy,
+không được suy ra chỉ từ việc script tạo thành công các artifact.
 """
 
 from __future__ import annotations
@@ -23,14 +24,14 @@ SOURCE_DIRECTORY = CORE_DIRECTORY / "src"
 if str(SOURCE_DIRECTORY) not in sys.path:
     sys.path.insert(0, str(SOURCE_DIRECTORY))
 
-from gapo_timetabling.constraints import validate_timetable  # noqa: E402
-from gapo_timetabling.decoder import decode_vector  # noqa: E402
-from gapo_timetabling.reporting import (  # noqa: E402
+from gapo_timetabling.core.constraints import validate_timetable  # noqa: E402
+from gapo_timetabling.core.decoder import decode_vector  # noqa: E402
+from gapo_timetabling.application.reporting import (  # noqa: E402
     _plot_detailed_timetable,
     _write_timetable_csv,
     build_timetable_report_rows,
 )
-from gapo_timetabling.snapshot import prepare_snapshot_for_optimization  # noqa: E402
+from gapo_timetabling.core.snapshot import prepare_snapshot_for_optimization  # noqa: E402
 
 
 ALGORITHM_ORDER = {"GA": 0, "PO": 1, "GA_PO": 2}
@@ -173,7 +174,6 @@ def _analyze_runs(prepared, run_paths: list[Path], max_decode_nodes: int):
                 "is_valid": True,
                 "entry_count": len(decoded.selected_options),
                 "assigned_section_count": len(section_lecturers),
-                "time_stability_score": fitness["time_stability_score"],
                 "general_quality_score": fitness["general_quality_score"],
                 "lecturer_preference_score": fitness["lecturer_preference_score"],
                 "runtime_seconds": metrics["runtime_seconds"],
@@ -211,6 +211,7 @@ def _write_validation_summary(
     available_periods = sum(
         lecturer.max_teaching_periods for lecturer in problem.lecturers
     )
+    seed_count = len({int(item["seed"]) for item in run_summaries})
     payload = {
         "schema_version": "dynamic-assignment-pilot-validation.v1",
         "snapshot_checksum": prepared.snapshot_checksum,
@@ -248,7 +249,8 @@ def _write_validation_summary(
             ),
         },
         "experimental_caution": (
-            "Đây là pilot 5 seed. Số fitness evaluation thực tế không bằng nhau "
+            f"Thực nghiệm hiện có {seed_count} seed. Số fitness evaluation thực tế "
+            "không bằng nhau "
             "do cá thể giải mã thất bại không được tính là một lần đánh giá fitness; "
             "không dùng kết quả này để kết luận thuật toán tốt nhất."
         ),
@@ -350,7 +352,15 @@ def _plot_efficiency(path: Path, summaries: list[dict[str, object]]) -> None:
                 for row in summaries
                 if row["algorithm"] == algorithm
             ]
-            offsets = [-0.12, -0.06, 0.0, 0.06, 0.12]
+            # Tạo độ lệch đối xứng theo số run thực tế. Cách tính này hoạt động
+            # cho cả smoke test một seed lẫn benchmark nhiều seed, thay vì chỉ
+            # hỗ trợ cố định năm điểm như phiên bản pilot ban đầu.
+            if len(values) <= 1:
+                offsets = [0.0] * len(values)
+            else:
+                step = min(0.4 / (len(values) - 1), 0.06)
+                center = (len(values) - 1) / 2.0
+                offsets = [(index - center) * step for index in range(len(values))]
             axis.scatter(
                 [x_index + offsets[index] for index in range(len(values))],
                 values,
@@ -370,8 +380,9 @@ def _plot_efficiency(path: Path, summaries: list[dict[str, object]]) -> None:
         axis.set_xticks(range(3), ["GA", "PO", "GA–PO"])
         axis.set_title(title, fontsize=11, fontweight="bold")
         axis.grid(axis="y", alpha=0.25)
+    seed_count = len({int(row["seed"]) for row in summaries})
     figure.suptitle(
-        "Chi phí thực thi của pilot 5 seed\n"
+        f"Chi phí thực thi của thực nghiệm {seed_count} seed\n"
         "Mỗi chấm là một run; vạch đen là trung vị",
         fontsize=14,
         fontweight="bold",
@@ -387,7 +398,7 @@ def _export_best_timetable(
     run_paths: list[Path],
     max_decode_nodes: int,
 ) -> None:
-    """Xuất bảng và ảnh lịch của nghiệm tốt nhất theo ba tầng lexicographic."""
+    """Xuất bảng và ảnh lịch của nghiệm tốt nhất theo hai tầng lexicographic."""
 
     completed_payloads = []
     for path in run_paths:
@@ -397,10 +408,9 @@ def _export_best_timetable(
     if not completed_payloads:
         raise RuntimeError("Không có run hoàn thành để xuất thời khóa biểu.")
 
-    def fitness_key(item) -> tuple[float, float, float]:
+    def fitness_key(item) -> tuple[float, float]:
         fitness = item[1]["result"]["best_fitness"]
         return (
-            float(fitness["time_stability_score"]),
             float(fitness["general_quality_score"]),
             float(fitness["lecturer_preference_score"]),
         )
@@ -438,7 +448,7 @@ def _export_best_timetable(
     fitness = payload["result"]["best_fitness"]
     metadata = {
         "schema_version": "best-timetable-selection.v1",
-        "selection_rule": "LEXICOGRAPHIC_Q_TIME_Q_GENERAL_Q_LECTURER",
+        "selection_rule": "LEXICOGRAPHIC_Q_GENERAL_Q_LECTURER",
         "source_run": str(run_path.relative_to(experiment_directory)),
         "request_id": payload["request_id"],
         "algorithm": payload["algorithm"],
