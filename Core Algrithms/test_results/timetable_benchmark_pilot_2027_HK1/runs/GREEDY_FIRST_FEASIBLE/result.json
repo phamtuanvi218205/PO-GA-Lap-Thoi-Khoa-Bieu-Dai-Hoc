@@ -1,0 +1,19 @@
+{
+  "schema_version": "optimization-run-result.v2",
+  "request_id": "timetable-2027-hk1-pilot-3060fe-GREEDY_FIRST_FEASIBLE",
+  "status": "FAILED",
+  "algorithm": "GREEDY_FIRST_FEASIBLE",
+  "snapshot_checksum": "a91cd60ea6bf93a0648787d91fca3b28fb4005f75ae98bc065ed6bee418f073c",
+  "error": {
+    "code": "NO_FEASIBLE_SOLUTION_FOUND",
+    "message": "Lớp JAVA02 không còn giảng viên vừa có mẫu lịch khả dụng vừa không vượt tải tối đa.",
+    "details": {
+      "baseline_status": "NO_FEASIBLE_ASSIGNMENT",
+      "candidate_attempts": 0,
+      "fitness_evaluations": 0,
+      "decode_failed_count": 0,
+      "validation_failed_count": 0
+    }
+  },
+  "result": null
+}

@@ -14,7 +14,7 @@
       repeats throughout every active week of that group.
     - Holiday/makeup status is informational and does not alter optimization;
       lecturer and room UNAVAILABLE windows are still hard constraints.
-    - Room capacity is a SOFT criterion, never a hard filtering condition.
+    - Physical room capacity is a hard condition: capacity >= expected_enrollment.
 
     WARNING: rerunning this file drops and recreates all project tables.
     This file intentionally refactors the existing database directly; it does
@@ -34,6 +34,8 @@ USE testkhoaluan;
 GO
 
 /* Drop both current and legacy tables in dependency-safe order. */
+DROP TABLE IF EXISTS TimetableRevisionEntry;
+DROP TABLE IF EXISTS TimetableRevision;
 DROP TABLE IF EXISTS TimetableEntry;
 DROP TABLE IF EXISTS OptimizationRun;
 DROP TABLE IF EXISTS ConstraintSetting;
@@ -767,10 +769,41 @@ CREATE TABLE TimetableEntry
 );
 GO
 
+/* Bản điều chỉnh là dữ liệu dẫn xuất; kết quả optimizer gốc không bị ghi đè. */
+CREATE TABLE TimetableRevision(
+ revision_id BIGINT IDENTITY(1,1) PRIMARY KEY,
+ run_id BIGINT NOT NULL REFERENCES OptimizationRun(run_id),
+ parent_revision_id BIGINT NULL REFERENCES TimetableRevision(revision_id),
+ created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+ note NVARCHAR(500) NOT NULL,
+ general_quality_score FLOAT NOT NULL,
+ lecturer_preference_score FLOAT NOT NULL,
+ fitness_breakdown_json NVARCHAR(MAX) NOT NULL CHECK(ISJSON(fitness_breakdown_json)=1),
+ CONSTRAINT UQ_TimetableRevision_Id_Run UNIQUE(revision_id,run_id)
+);
+CREATE TABLE TimetableRevisionEntry(
+ revision_id BIGINT NOT NULL,
+ run_id BIGINT NOT NULL,
+ class_session_id BIGINT NOT NULL REFERENCES ClassSession(class_session_id),
+ lecturer_code VARCHAR(20) NOT NULL REFERENCES Lecturer(lecturer_code),
+ term_code VARCHAR(20) NOT NULL,
+ teaching_date DATE NOT NULL,
+ location_id BIGINT NOT NULL,
+ location_type VARCHAR(20) NOT NULL,
+ start_period TINYINT NOT NULL,
+ end_period TINYINT NOT NULL,
+ PRIMARY KEY(revision_id,class_session_id),
+ FOREIGN KEY(revision_id,run_id) REFERENCES TimetableRevision(revision_id,run_id),
+ FOREIGN KEY(term_code,teaching_date) REFERENCES TeachingDate(term_code,calendar_date),
+ FOREIGN KEY(location_id,location_type) REFERENCES TeachingLocation(location_id,location_type),
+ CHECK(start_period BETWEEN 1 AND 16 AND end_period BETWEEN start_period AND 16)
+);
+GO
+
 /* -------------------------------------------------------------------------
    SAMPLE DATA
    This small instance exercises weekly occurrences, physical/online locations,
-   soft capacity, different teaching-plan structures and lecturer preferences.
+   hard capacity, different teaching-plan structures and lecturer preferences.
    ------------------------------------------------------------------------- */
 INSERT INTO AcademicTerm(term_code, term_name, start_date, end_date, status)
 VALUES ('2026_HK1', N'Học kỳ 1 năm học 2026-2027', '2026-08-17', '2026-12-20', 'PLANNING');
@@ -1150,7 +1183,7 @@ FROM TeachingPart p
 JOIN TeachingPlan pl ON pl.teaching_part_id = p.teaching_part_id
 WHERE pl.plan_code IN ('KTDL01_STANDARD', 'LTWEB01_STANDARD', 'TTNT01_ONLINE');
 
--- Gate F uses three lexicographic soft tiers. Weights only combine components
+-- Gate F uses two lexicographic soft tiers. Weights only combine components
 -- inside one tier; they never allow a lower tier to compensate for a higher one.
 INSERT INTO ConstraintSetting
     (constraint_code, constraint_name, constraint_kind, priority_tier, weight,

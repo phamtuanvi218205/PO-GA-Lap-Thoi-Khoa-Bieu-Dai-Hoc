@@ -1,0 +1,102 @@
+{
+  "schema_version": "dynamic-assignment-pilot-validation.v1",
+  "snapshot_checksum": "0f43215dba11688e0dcc353a5758065a91924c3f785ab42ada7faa8a01aede6d",
+  "dataset": {
+    "course_count": 5,
+    "section_count": 9,
+    "teaching_part_count": 18,
+    "session_count": 108,
+    "lecturer_count": 5,
+    "location_count": 4,
+    "assignment_gene_count": 9,
+    "total_gene_count": 27,
+    "session_option_count": 5987,
+    "minimum_session_domain": 24,
+    "maximum_session_domain": 92,
+    "required_teaching_periods": 432,
+    "maximum_teaching_capacity": 480,
+    "capacity_slack_periods": 48
+  },
+  "validation": {
+    "run_count": 3,
+    "all_runs_completed_and_hard_valid": true,
+    "expected_entries_per_run": 108,
+    "runs": [
+      {
+        "algorithm": "GA",
+        "seed": 42,
+        "is_valid": true,
+        "entry_count": 108,
+        "assigned_section_count": 9,
+        "general_quality_score": 0.19442816399467724,
+        "lecturer_preference_score": 0.411825856246985,
+        "runtime_seconds": 55.02664560000085,
+        "fitness_evaluations": 220,
+        "candidate_attempts": 300,
+        "decode_failed_count": 80,
+        "max_lecturer_load": 96
+      },
+      {
+        "algorithm": "PO",
+        "seed": 42,
+        "is_valid": true,
+        "entry_count": 108,
+        "assigned_section_count": 9,
+        "general_quality_score": 0.1955106639946772,
+        "lecturer_preference_score": 0.3763699951760733,
+        "runtime_seconds": 33.5463034000004,
+        "fitness_evaluations": 139,
+        "candidate_attempts": 675,
+        "decode_failed_count": 536,
+        "max_lecturer_load": 96
+      },
+      {
+        "algorithm": "GA_PO",
+        "seed": 42,
+        "is_valid": true,
+        "entry_count": 108,
+        "assigned_section_count": 9,
+        "general_quality_score": 0.1955106639946772,
+        "lecturer_preference_score": 0.3401905451037144,
+        "runtime_seconds": 45.21806429999924,
+        "fitness_evaluations": 184,
+        "candidate_attempts": 469,
+        "decode_failed_count": 285,
+        "max_lecturer_load": 96
+      }
+    ]
+  },
+  "dynamic_assignment_evidence": {
+    "distinct_lecturers_selected_by_section": {
+      "AI01": [
+        "GV004"
+      ],
+      "AI02": [
+        "GV001"
+      ],
+      "CSDL01": [
+        "GV001"
+      ],
+      "CSDL02": [
+        "GV002"
+      ],
+      "JAVA01": [
+        "GV005"
+      ],
+      "JAVA02": [
+        "GV005"
+      ],
+      "MMT01": [
+        "GV002"
+      ],
+      "WEB01": [
+        "GV003"
+      ],
+      "WEB02": [
+        "GV004"
+      ]
+    },
+    "sections_with_more_than_one_selected_lecturer_across_runs": 0
+  },
+  "experimental_caution": "Thực nghiệm hiện có 1 seed. Số fitness evaluation thực tế không bằng nhau do cá thể giải mã thất bại không được tính là một lần đánh giá fitness; không dùng kết quả này để kết luận thuật toán tốt nhất."
+}

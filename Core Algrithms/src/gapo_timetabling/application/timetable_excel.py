@@ -262,6 +262,7 @@ def _information_sheet_xml(
     values = (
         ("THÔNG TIN XUẤT LỊCH", ""),
         ("Run ID", run_id),
+        ("Bản điều chỉnh", filters.revision_id or "Kết quả thuật toán gốc"),
         ("Số dòng", len(rows)),
         ("Thời điểm xuất UTC", exported_at.isoformat(timespec="seconds")),
         ("Mã học kỳ", filters.term_code or "Tất cả trong run"),

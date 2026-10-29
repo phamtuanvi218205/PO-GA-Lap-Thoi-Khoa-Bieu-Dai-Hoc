@@ -1,0 +1,69 @@
+{
+  "profile_name": "cec2022",
+  "dimensions": 20,
+  "population_size": 30,
+  "max_evaluations": 300000,
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "protocol": {
+    "version": "cec2022-only-official-native-v2-2026-09-24",
+    "objective": "minimize max(f_best - f_optimum, 0)",
+    "optimum_guard": "reject best below f_optimum beyond 1e-10 relative tolerance",
+    "boundary_control": "clip",
+    "initial_population": "same function/seed population for all algorithms",
+    "po_reference": {
+      "repository": "https://github.com/junbolian/PO",
+      "commit": "21621a3e709a4a9dd75f6eab7a5c1241e3109a93",
+      "file": "Parrot-optimizer-Algorithm-and-applications-to-medical-problems-main/PO.m",
+      "levy_beta": 1.5
+    },
+    "cec2022_reference": {
+      "repository": "https://github.com/P-N-Suganthan/2022-SO-BO",
+      "commit": "de20505283b76ec6bf17a2e8fc6052e655830691",
+      "archive_sha256": "dd46b9efcfe79253c1dc0cb0f09c7f0ed0e24d5eb235ee14ca09be29f7def626",
+      "implementation": "official C++ evaluator through ctypes"
+    },
+    "ga": {
+      "tournament_size": 3,
+      "sbx_probability": 0.9,
+      "sbx_eta": 15.0,
+      "mutation_probability": "1/D",
+      "mutation_eta": 20.0,
+      "elitism": "replace worst child with global best when better"
+    },
+    "hybrid": {
+      "ga_ratio": 0.5,
+      "survivor_selection": "P(t) union A' union B'; keep N best; shuffle"
+    }
+  }
+}

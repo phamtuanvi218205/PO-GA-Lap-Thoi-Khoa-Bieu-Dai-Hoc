@@ -166,6 +166,7 @@ async function loadManualBundle() {
   try {
     const payload = await apiJson(`/api/input-data/terms/${encodeURIComponent(state.selectedTerm)}`);
     $("#manual-json").value = JSON.stringify(payload, null, 2);
+    if (window.renderManualEditor) window.renderManualEditor();
     toast("Đã nạp dữ liệu học kỳ vào biểu mẫu.");
   } catch (error) {
     setResultBox($("#manual-result"), error.message, true);
@@ -190,7 +191,7 @@ async function submitManual(action) {
     setResultBox(box, error.message, true);
     return;
   }
-  setResultBox(box, "Đang kiểm tra dữ liệu JSON…");
+  setResultBox(box, "Đang kiểm tra dữ liệu nhập tay…");
   try {
     const payload = await apiJson(`/api/input-data/${action}`, {
       method: "POST",
@@ -510,10 +511,11 @@ async function loadSchedule() {
     toast("Hãy nhập run ID đã hoàn thành.", true);
     return;
   }
-  const params = scheduleQueryParams();
   const container = $("#schedule-container");
   container.innerHTML = '<div class="empty-state schedule-empty"><h3>Đang tải thời khóa biểu</h3></div>';
   try {
+    if (window.refreshScheduleRevisions) await window.refreshScheduleRevisions(runId);
+    const params = scheduleQueryParams();
     const payload = await apiJson(`/api/runs/${runId}/schedule?${params.toString()}`);
     state.currentRunId = runId;
     renderSchedule(payload.items || []);
@@ -532,6 +534,8 @@ function scheduleQueryParams() {
   if (section) params.set("section_code", section);
   params.set("week_number", String(state.scheduleWeek));
   if (state.selectedTerm) params.set("term_code", state.selectedTerm);
+  const revision = $("#schedule-revision").value;
+  if (revision) params.set("revision_id", revision);
   return params;
 }
 
@@ -566,6 +570,14 @@ function renderSchedule(items) {
   $("#schedule-count").textContent = items.length;
   $("#schedule-lecturer-count").textContent = lecturers.size;
   $("#schedule-section-count").textContent = sections.size;
+  container.querySelectorAll(".session-card").forEach((card) => {
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    const item = items.find((row) => row.part_code === card.dataset.part && String(row.stability_group_no) === card.dataset.group);
+    const open = () => window.openScheduleAdjustment && window.openScheduleAdjustment(item);
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); open(); } });
+  });
 }
 
 function assignScheduleLanes(items) {
@@ -599,7 +611,7 @@ function sessionCardHtml(item) {
   const typeClass = item.location_type === "ONLINE" ? "online" : item.part_type === "PRACTICE" ? "practice" : "lecture";
   const typeName = item.part_type === "PRACTICE" ? "Thực hành" : "Lý thuyết";
   return `
-    <article class="session-card ${typeClass}" style="top:${top}px;height:${height}px;left:calc(${left}% + 4px);width:calc(${width}% - 8px)" title="${escapeHtml(item.course_name)} · ${escapeHtml(item.lecturer_name)}">
+    <article class="session-card ${typeClass}" data-part="${escapeHtml(item.part_code)}" data-group="${item.stability_group_no}" style="top:${top}px;height:${height}px;left:calc(${left}% + 4px);width:calc(${width}% - 8px)" title="${escapeHtml(item.course_name)} · ${escapeHtml(item.lecturer_name)} · Bấm để điều chỉnh">
       <strong>${escapeHtml(item.section_code)} · ${typeName}</strong>
       <span class="course-name">${escapeHtml(item.course_name)}</span>
       <span>Tiết ${item.start_period}–${item.end_period} · ${escapeHtml(item.location_code)}</span>

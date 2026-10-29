@@ -481,6 +481,21 @@ button:disabled, .is-disabled {
 }
 .toast.error { border-color: #d8b5b5; border-left-color: var(--danger); }
 
+dialog { width: min(760px, calc(100vw - 32px)); max-height: 88vh; overflow: auto; border: 1px solid var(--line); padding: 24px; color: var(--ink); }
+dialog::backdrop { background: rgba(0,0,0,.25); }
+dialog label { display: grid; gap: 6px; margin-bottom: 12px; }
+.manual-records { max-height: 420px; overflow: auto; border-top: 1px solid var(--line); }
+.manual-record { display: flex; gap: 10px; padding: 10px 0; align-items: center; border-bottom: 1px solid var(--line); }
+.manual-record span { flex: 1; overflow-wrap: anywhere; }
+.manual-record button { flex-shrink: 0; }
+.advanced-json { margin-top: 18px; }
+.advanced-json summary { cursor: pointer; color: var(--muted); }
+.constraint-row { display: flex; align-items: end; gap: 20px; margin: 16px 0; }
+.constraint-row label { display: grid; gap: 6px; min-width: 240px; }
+.revision-picker { display: grid; gap: 6px; min-width: 280px; max-width: 650px; }
+.session-card { cursor: pointer; }
+.session-card:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+
 @media (max-width: 980px) {
   .site-header { gap: 20px; padding: 0 20px; }
   .site-name { display: none; }

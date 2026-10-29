@@ -1,0 +1,67 @@
+{
+  "schema_version": "timetable-experiment-metadata.v1",
+  "experiment_id": "timetable-scale-small-30pop-20iterations-10seeds-worker-PO",
+  "execution_mode": "SEQUENTIAL",
+  "resume_completed": true,
+  "base_request_path": "C:\\Users\\PC\\Documents\\Codex\\TranNgocTien\\KhoaLuan\\PO-GA-Lap-Thoi-Khoa-Bieu-Dai-Hoc\\Core Algrithms\\benchmark_configs\\distributed\\request_small_2027_HK1.json",
+  "base_request": {
+    "schema_version": "optimization-run-request.v1",
+    "request_id": "benchmark-scale-small-template",
+    "algorithm": "GA_PO",
+    "snapshot": {
+      "path": "../../demo_data/scalability/timetable_scale_small_2027_HK1.json",
+      "checksum": "d818feec41ddc525d8f102569a3705c404959b3041c65c077044fb3e4d7e99eb"
+    },
+    "population_size": 30,
+    "max_fitness_evaluations": 630,
+    "random_seed": 1,
+    "max_initialization_attempts": 30000,
+    "max_offspring_attempts": 5,
+    "evaluation": {
+      "max_decode_nodes": 20000,
+      "enable_repair": true,
+      "max_repair_attempts": 3,
+      "max_decode_nodes_per_repair_attempt": 20000
+    },
+    "ga": {
+      "tournament_size": 3,
+      "crossover_probability": 0.9,
+      "crossover_distribution_index": 15.0,
+      "mutation_probability": null,
+      "mutation_distribution_index": 20.0
+    },
+    "hybrid": {
+      "ga_ratio": 0.5
+    }
+  },
+  "algorithms": [
+    "PO"
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "include_greedy_baseline": false,
+  "runtime_comparison_valid": false,
+  "planned_optimizer_run_count": 10,
+  "planned_baseline_run_count": 0,
+  "planned_run_count": 10,
+  "completed_optimizer_run_count": 10,
+  "completed_baseline_run_count": 0,
+  "completed_run_count": 10,
+  "snapshot_checksums": [
+    "d818feec41ddc525d8f102569a3705c404959b3041c65c077044fb3e4d7e99eb"
+  ],
+  "started_at_utc": "2026-10-28T12:54:22.828088+00:00",
+  "finished_at_utc": "2026-10-28T12:54:22.967512+00:00",
+  "elapsed_seconds": 0.139424,
+  "fairness_note": "Ở cùng seed, GA, PO và GA_PO dùng cùng snapshot, cấu hình, quần thể khởi tạo, population size và số vòng xử lý quần thể. Do vector không hợp lệ bị loại trước Fitness, FE thực tế có thể khác nhau và được báo cáo như một chỉ số hiệu quả, không được mô tả là ngân sách FE bằng nhau. GREEDY_FIRST_FEASIBLE chỉ dựng một lịch xác định làm mốc tham khảo, không thuộc phép so sánh nhiều seed."
+}

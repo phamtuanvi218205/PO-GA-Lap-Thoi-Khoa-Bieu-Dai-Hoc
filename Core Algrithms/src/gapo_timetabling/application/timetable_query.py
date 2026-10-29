@@ -3,7 +3,9 @@
 Module này không chạy optimizer và không ghi dữ liệu. Kết quả chi tiết trong
 ``TimetableEntry`` được nối với dữ liệu nghiệp vụ rồi gom theo recurring group
 để một mẫu thứ–tiết–địa điểm xuất hiện đúng một lần cùng danh sách tuần hoạt
-động. CSV, Excel, API và giao diện sẽ sử dụng hợp đồng đọc này ở các bước sau.
+động. Bản điều chỉnh có ngoại lệ được tách theo mẫu và tập tuần thực tế;
+không nhân đôi buổi hoặc tự lặp ngoại lệ ra mọi tuần. CSV, Excel, API và giao
+diện dùng chung hợp đồng đọc này.
 """
 
 from __future__ import annotations
@@ -95,6 +97,7 @@ class TimetableQueryFilters:
     section_code: str | None = None
     term_code: str | None = None
     week_number: int | None = None
+    revision_id: int | None = None
 
     def __post_init__(self) -> None:
         for field_name in (
@@ -107,13 +110,16 @@ class TimetableQueryFilters:
                 raise ValueError(f"{field_name} phải là chuỗi không rỗng hoặc None.")
             object.__setattr__(self, field_name, value.strip())
 
-        if self.week_number is not None:
+        for field_name in ("week_number", "revision_id"):
+            value = getattr(self, field_name)
+            if value is None:
+                continue
             if (
-                isinstance(self.week_number, bool)
-                or not isinstance(self.week_number, int)
-                or self.week_number < 1
+                isinstance(value, bool)
+                or not isinstance(value, int)
+                or value < 1
             ):
-                raise ValueError("week_number phải là số nguyên dương hoặc None.")
+                raise ValueError(f"{field_name} phải là số nguyên dương hoặc None.")
 
     @property
     def is_empty(self) -> bool:
@@ -189,6 +195,17 @@ class TimetableQueryService:
             "optimization_run.status = 'COMPLETED'",
         ]
         parameters: list[Any] = [run_id]
+        entry_table = "TimetableEntry"
+        if actual_filters.revision_id is not None:
+            revision = fetch_one_dict(cursor.execute(
+                "SELECT revision_id FROM TimetableRevision WHERE revision_id=? AND run_id=?",
+                actual_filters.revision_id, run_id,
+            ))
+            if revision is None:
+                raise TimetableDataIntegrityError("Bản điều chỉnh không tồn tại hoặc không thuộc run này.")
+            entry_table = "TimetableRevisionEntry"
+            where_clauses.append("entry.revision_id = ?")
+            parameters.append(actual_filters.revision_id)
         if actual_filters.lecturer_code is not None:
             where_clauses.append("entry.lecturer_code = ?")
             parameters.append(actual_filters.lecturer_code)
@@ -236,7 +253,7 @@ class TimetableQueryService:
                 location.location_code,
                 location.location_name,
                 location.location_type
-            FROM TimetableEntry AS entry
+            FROM {entry_table} AS entry
             INNER JOIN OptimizationRun AS optimization_run
                 ON optimization_run.run_id = entry.run_id
             INNER JOIN ClassSession AS class_session
@@ -268,7 +285,7 @@ class TimetableQueryService:
                 teaching_part.part_type,
                 class_session.stability_group_no,
                 class_session.week_number
-            """.format(where_clause="\n              AND ".join(where_clauses))
+            """.format(entry_table=entry_table, where_clause="\n              AND ".join(where_clauses))
         records = fetch_all_dicts(cursor.execute(query, *parameters))
         if not records:
             if not actual_filters.is_empty:
@@ -278,16 +295,26 @@ class TimetableQueryService:
                 "TimetableEntry."
             )
 
-        return self._group_recurring_records(run_id, records)
+        return self._group_recurring_records(
+            run_id, records,
+            allow_occurrence_exceptions=actual_filters.revision_id is not None,
+        )
 
     @staticmethod
     def _group_recurring_records(
         run_id: int,
         records: list[dict[str, Any]],
+        *, allow_occurrence_exceptions: bool = False,
     ) -> tuple[TimetableScheduleRow, ...]:
-        """Gom occurrence tuần và kiểm tra pattern không thay đổi giữa kỳ."""
+        """Bản gốc phải lặp cố định; revision tách riêng từng mẫu và tập tuần.
 
-        grouped: dict[tuple[int, int], _RecurringScheduleAccumulator] = {}
+        Không nới lỏng bất biến giảng viên/dữ liệu môn hoặc cho phép hai buổi
+        cùng nhóm trong một tuần. JSON, CSV và Excel dùng chung kết quả này.
+        """
+
+        grouped: dict[tuple[Any, ...], _RecurringScheduleAccumulator] = {}
+        identities: dict[tuple[int, int], tuple[Any, ...]] = {}
+        seen_weeks: set[tuple[int, int, int]] = set()
         for record in records:
             teaching_part_id = _required_int(record, "teaching_part_id")
             stability_group_no = _required_int(record, "stability_group_no")
@@ -314,9 +341,8 @@ class TimetableQueryService:
                     f"{record.get('class_session_id')}."
                 )
 
-            # Mọi trường trong signature phải bất biến giữa các occurrence của
-            # cùng part/group. Nếu khác, dữ liệu đã lưu không còn biểu diễn một
-            # recurring pattern cố định và không được âm thầm tách thành hai dòng.
+            # Bản gốc không được đổi pattern giữa tuần. Chỉ revision cho phép
+            # tách mẫu thứ/tiết/phòng, nhưng vẫn giữ nguyên định danh giảng dạy.
             signature = (
                 _required_str(record, "term_code"),
                 _required_str(record, "term_name"),
@@ -337,6 +363,22 @@ class TimetableQueryService:
                 end_period,
             )
             key = (teaching_part_id, stability_group_no)
+            group_week = (*key, week_number)
+            if group_week in seen_weeks:
+                raise TimetableDataIntegrityError(
+                    "Recurring group có nhiều TimetableEntry trong cùng tuần: "
+                    f"teaching_part_id={teaching_part_id}, "
+                    f"stability_group_no={stability_group_no}, week={week_number}."
+                )
+            seen_weeks.add(group_week)
+            if allow_occurrence_exceptions:
+                identity = signature[:10]  # môn, lớp, loại phần và giảng viên
+                if key in identities and identities[key] != identity:
+                    raise TimetableDataIntegrityError(
+                        "Bản điều chỉnh không được thay đổi thông tin lớp/môn hoặc giảng viên giữa các tuần."
+                    )
+                identities[key] = identity
+                key = (*key, signature)
             accumulator = grouped.get(key)
             if accumulator is None:
                 grouped[key] = _RecurringScheduleAccumulator(
@@ -350,12 +392,6 @@ class TimetableQueryService:
                     "Recurring group thay đổi giảng viên, thứ, tiết hoặc địa điểm: "
                     f"teaching_part_id={teaching_part_id}, "
                     f"stability_group_no={stability_group_no}."
-                )
-            if week_number in accumulator.week_numbers:
-                raise TimetableDataIntegrityError(
-                    "Recurring group có nhiều TimetableEntry trong cùng tuần: "
-                    f"teaching_part_id={teaching_part_id}, "
-                    f"stability_group_no={stability_group_no}, week={week_number}."
                 )
             accumulator.week_numbers.add(week_number)
 

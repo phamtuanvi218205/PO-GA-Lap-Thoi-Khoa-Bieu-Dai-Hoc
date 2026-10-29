@@ -1,0 +1,88 @@
+{
+  "schema_version": "distributed-benchmark-worker.v1",
+  "suite_id": "timetable-scalability-2027-hk1-30pop-20iterations-10seeds",
+  "worker": "PO",
+  "includes_greedy_baseline": false,
+  "status": "COMPLETED",
+  "runtime_comparison_valid": false,
+  "runtime_note": "Các worker có thể dùng phần cứng khác nhau; runtime chỉ để truy vết, không dùng để kết luận thuật toán nào nhanh hơn.",
+  "environment": {
+    "python": "3.15.2 (tags/v3.15.2:5e58eaa, Oct 25 2026, 17:27:03) [MSC v.1951 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "node": "DESKTOP-04T9U83",
+    "git_revision": "8acd6b45335343bbd7b41b0c81cd223e7302bcc3",
+    "git_dirty": false
+  },
+  "started_at_utc": "2026-10-28T12:54:22.821281+00:00",
+  "finished_at_utc": "2026-10-28T16:44:50.750390+00:00",
+  "cases": [
+    {
+      "case_id": "small",
+      "experiment_id": "timetable-scale-small-30pop-20iterations-10seeds",
+      "protocol_fingerprint": "1bec6bcaa5fba84eb58b0a1100f4f67af04a0d6aedea8c0d266626763fc58d1b",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "snapshot_checksum": "d818feec41ddc525d8f102569a3705c404959b3041c65c077044fb3e4d7e99eb",
+      "status": "COMPLETED",
+      "output_directory": "C:\\Users\\PC\\Documents\\Codex\\TranNgocTien\\KhoaLuan\\PO-GA-Lap-Thoi-Khoa-Bieu-Dai-Hoc\\Core Algrithms\\distributed_results\\PO\\small",
+      "completed_run_count": 10,
+      "planned_run_count": 10
+    },
+    {
+      "case_id": "medium",
+      "experiment_id": "timetable-scale-medium-30pop-20iterations-10seeds",
+      "protocol_fingerprint": "aca50fba610ab4f0497bf77557c2e15b480f902c1118c17fcc487d7183123727",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "snapshot_checksum": "febb4aea01f64c0c1ff827cdb2c779b868999156edc89d81b18ff99e4f323886",
+      "status": "COMPLETED",
+      "output_directory": "C:\\Users\\PC\\Documents\\Codex\\TranNgocTien\\KhoaLuan\\PO-GA-Lap-Thoi-Khoa-Bieu-Dai-Hoc\\Core Algrithms\\distributed_results\\PO\\medium",
+      "completed_run_count": 10,
+      "planned_run_count": 10
+    },
+    {
+      "case_id": "large",
+      "experiment_id": "timetable-scale-large-30pop-20iterations-10seeds",
+      "protocol_fingerprint": "849c7cda487a7f48877742e1e42d2dc3b8f3e260aaf6fc0e5fe42088f8e5af15",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "snapshot_checksum": "ae58271b37efd286ecbcca8509534e418092b7611194beb1bbdbf10391e5c88f",
+      "status": "COMPLETED",
+      "output_directory": "C:\\Users\\PC\\Documents\\Codex\\TranNgocTien\\KhoaLuan\\PO-GA-Lap-Thoi-Khoa-Bieu-Dai-Hoc\\Core Algrithms\\distributed_results\\PO\\large",
+      "completed_run_count": 10,
+      "planned_run_count": 10
+    }
+  ]
+}

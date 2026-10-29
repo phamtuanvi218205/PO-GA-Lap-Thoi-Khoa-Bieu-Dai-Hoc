@@ -17,6 +17,7 @@ module đều dùng quy ước: điểm nhỏ hơn tốt hơn.
 from collections import Counter
 from dataclasses import dataclass
 from datetime import date
+from typing import Literal
 
 from .constraints import validate_timetable
 from .encoder import build_recurring_patterns_for_group
@@ -651,6 +652,7 @@ def _calculate_lecturer_preference_from_validated_input(
     problem: ProblemInstance,
     selected_by_session: dict[int, SessionOption],
     option_domains: tuple[tuple[SessionOption, ...], ...],
+    *, preference_domain_mode: Literal["RECURRING", "OCCURRENCE"] = "RECURRING",
 ) -> LecturerPreferenceResult:
     """Tính ``Q_lecturer`` so với preference tốt nhất có thể đạt trong miền.
 
@@ -677,6 +679,15 @@ def _calculate_lecturer_preference_from_validated_input(
         selected_lecturer = problem.option_lecturer_index(
             selected_by_session[session_indices[0]]
         )
+        if preference_domain_mode == "OCCURRENCE":
+            # Chỉ dùng khi đánh giá bản điều chỉnh thủ công có ngoại lệ.
+            # Các optimizer không truyền chế độ này, giữ nguyên miền mẫu lặp.
+            for index in session_indices:
+                recurring_options_by_session[index].extend(
+                    option for option in option_domains[index]
+                    if problem.option_lecturer_index(option) == selected_lecturer
+                )
+            continue
         patterns = build_recurring_patterns_for_group(
             problem,
             option_domains,
@@ -828,14 +839,19 @@ def calculate_fitness(
     problem: ProblemInstance,
     selected_options: tuple[SessionOption, ...],
     option_domains: tuple[tuple[SessionOption, ...], ...],
+    *, preference_domain_mode: Literal["RECURRING", "OCCURRENCE"] = "RECURRING",
 ) -> FitnessResult:
     """Tính đầy đủ hai tầng fitness cho một lịch hợp lệ.
 
-    Đây là hàm công khai mà GA, PO và pipeline lai sẽ gọi sau khi decoder và
-    validator tạo được một lịch hoàn chỉnh. Thuộc tính ``fitness_key`` của kết
-    quả phải được dùng để so sánh hai lịch theo thứ tự mục tiêu nghiêm ngặt.
+    GA, PO và pipeline lai dùng mặc định RECURRING, so mong muốn trong miền
+    mẫu lặp toàn kỳ. OCCURRENCE chỉ dành cho revision thủ công có thể chứa
+    ngoại lệ tuần: so mong muốn trong miền nguyên tử của từng buổi, giữ cùng
+    giảng viên. Điểm revision này không dùng so sánh với điểm benchmark.
+    ``fitness_key`` so hai lịch trong cùng chế độ theo thứ tự mục tiêu.
     """
 
+    if preference_domain_mode not in ("RECURRING", "OCCURRENCE"):
+        raise ValueError("preference_domain_mode không hợp lệ.")
     selected_by_session = _validate_fitness_inputs(
         problem,
         selected_options,
@@ -849,6 +865,7 @@ def calculate_fitness(
         problem,
         selected_by_session,
         option_domains,
+        preference_domain_mode=preference_domain_mode,
     )
 
     breakdown = FitnessBreakdown(

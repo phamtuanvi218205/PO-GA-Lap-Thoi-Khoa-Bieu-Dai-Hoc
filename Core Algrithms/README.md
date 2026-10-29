@@ -89,7 +89,7 @@ POST /api/input-data/terms/{term_code}/prepare
 ```
 
 Workbook nhập liệu gồm các sheet học kỳ, cơ sở, môn, giảng viên, năng lực
-giảng dạy, phòng/lớp trực tuyến, thiết bị, lớp học phần, phần giảng dạy và lịch
+giảng dạy, phòng/lớp trực tuyến, thiết bị, lớp học phần, cấu trúc môn học và lịch
 khả dụng. Endpoint `preview` không ghi database. Endpoint `apply` chỉ ghi sau
 khi toàn bộ workbook hợp lệ; lỗi giữa chừng làm rollback toàn bộ transaction.
 Học kỳ đã có scenario `LOCKED` không được sửa dữ liệu nguồn. Workbook không
@@ -123,6 +123,77 @@ lease cùng chu kỳ quét. Khi tăng đồng thời M và N phải tính tài n
 
 `--max-fe` phải bao gồm chi phí khởi tạo quần thể và phần còn lại phải chia
 hết cho `--population-size`, đúng hợp đồng FE dùng chung của ba optimizer.
+
+## Nhập tay, cấu hình và điều chỉnh lịch
+
+Database đang tồn tại cần chạy một lần
+`Script/migrate_2026_10_28_complete_demo_workflow.sql` bằng SQL Server trước
+khi mở giao diện mới. Migration không xóa run hoặc lịch gốc; nên sao lưu
+database trước khi áp dụng. Schema tạo mới trong `Script/script.sql` đã có
+hai bảng revision, không cần tạo thêm schema song song.
+
+Trang Dữ liệu có biểu mẫu nhập tay theo nhóm: học kỳ, môn, giảng viên, năng
+lực, phòng, lớp mở, cấu trúc môn, thiết bị và availability. Các nhãn tiếng Việt
+được ánh xạ vào cùng `SemesterInputBundle` như Excel. Nút Đồng ý trong hộp
+nhập chỉ sửa gói trên trình duyệt; Kiểm tra và Lưu dữ liệu mới gọi API.
+“Bỏ khỏi gói” không xóa bản ghi đã lưu. Ngừng mở một lớp bằng trạng thái
+`CANCELLED`, ngừng dùng tài nguyên bằng `is_active=false`. JSON nâng cao được
+giữ trong mục thu gọn, không phải cách nhập tay bắt buộc.
+
+Trang Ràng buộc đọc/lưu sáu tiêu chí mềm qua `GET/PUT /api/constraint-settings`.
+Tổng trọng số mỗi tầng phải bằng 1; ngưỡng dạy liên tục là số nguyên 1–16.
+Checksum ngăn ghi đè một cấu hình vừa bị sửa ở tab khác. Đây là cấu hình
+dùng chung của các snapshot mới; run/snapshot đã lưu không thay đổi. Hard
+constraints không có tùy chọn tắt. Các bộ benchmark dùng snapshot riêng nên
+không đọc các thay đổi cấu hình web.
+
+Trên trang Thời khóa biểu, bấm một buổi để đổi thứ, tiết hoặc phòng. Có hai
+phạm vi: **Chỉ buổi này** đổi đúng occurrence của tuần đang xem (trong cùng
+tuần), và **Toàn bộ các tuần hoạt động** đổi cùng pattern cho cả nhóm, kể cả
+buổi đã có ngoại lệ. Hệ thống giữ nguyên giảng viên, plan và số tiết.
+Chỉ cho chọn option từ snapshot gốc; Validator
+kiểm tra toàn lịch trước khi lưu. Không gọi decoder để tự dời buổi khác và
+không chạy lại thuật toán. Lịch nguồn cũ vi phạm hard capacity phải chạy lại
+bài toán trước, không được âm thầm sửa hoặc coi là hợp lệ.
+
+Mỗi lần lưu tạo `TimetableRevision` và đầy đủ `TimetableRevisionEntry`, có
+parent, ghi chú và điểm fitness tính lại. `OptimizationRun`/`TimetableEntry`
+gốc luôn giữ nguyên. Chọn bản gốc hoặc bản điều chỉnh bằng ô Phiên bản lịch;
+JSON/CSV/XLSX cùng nhận `revision_id`. Đặt lại học kỳ xóa cả revision theo đúng
+phạm vi, giữ nguyên dữ liệu nguồn như trước.
+
+API điều chỉnh nhận `scope=ALL_WEEKS` (mặc định tương thích cũ) hoặc
+`scope=SINGLE_SESSION` kèm `week_number`. Phương án riêng buổi lấy từ miền
+nguyên tử của buổi và cùng giảng viên; phương án cả nhóm lấy giao toàn kỳ.
+Menu chưa loại mọi xung đột với các buổi khác; kiểm tra toàn lịch ở lúc lưu.
+Query chỉ cho phép tách mẫu theo tuần ở revision, bản gốc vẫn kiểm tra lặp
+cố định. CSV/XLSX ghi đúng từng mẫu với tập tuần tương ứng, không nhân bản
+ngoại lệ ra các tuần khác. Không cần thêm migration database.
+
+Điểm revision mới dùng `preference_domain_mode=OCCURRENCE`: mong muốn tính
+trong miền từng buổi, vì sửa tay không bị giới hạn bởi giao toàn kỳ. Metadata
+lưu trong `fitness_breakdown_json`. Optimizer vẫn dùng mặc định `RECURRING`;
+không dùng điểm revision chỉnh tay để so sánh benchmark.
+
+Kiểm tra logic giao diện bằng Node (không cần cài thêm thư viện):
+
+```bash
+node --test "Core Algrithms/tests/web/schedule_adjustment.test.cjs"
+```
+
+SQL smoke tự dựng đề bài nhỏ rồi rollback, bật `GAPO_SQL_SMOKE=1` và chạy
+`python -m pytest "Core Algrithms/tests/test_occurrence_adjustment_sqlserver.py" -q`.
+
+Endpoint bổ sung:
+
+```text
+GET  /api/input-data/form-schema
+GET  /api/constraint-settings
+PUT  /api/constraint-settings
+GET  /api/runs/{run_id}/schedule-revisions
+GET  /api/runs/{run_id}/adjustment-options
+POST /api/runs/{run_id}/schedule-revisions
+```
 
 ## Benchmark thời khóa biểu
 

@@ -393,3 +393,76 @@ def test_rejects_unknown_filter_object() -> None:
         TimetableQueryService(connection).get_run_schedule(7, object())  # type: ignore[arg-type]
 
     assert connection.fake_cursor.executions == []
+
+
+def exception_records():
+    return [
+        make_entry(class_session_id=1, week_number=1, teaching_date=date(2026, 8, 17)),
+        make_entry(class_session_id=2, week_number=2, teaching_date=date(2026, 8, 26),
+                   iso_weekday=3, start_period=4, end_period=6, location_id=12, location_code="A202"),
+        make_entry(class_session_id=3, week_number=3, teaching_date=date(2026, 8, 31)),
+    ]
+
+
+def test_revision_groups_exception_separately_without_duplicating_other_weeks():
+    rows = TimetableQueryService._group_recurring_records(7, exception_records(), allow_occurrence_exceptions=True)
+    assert len(rows) == 2
+    original, exception = rows
+    assert original.active_week_numbers == (1, 3)
+    assert exception.active_week_numbers == (2,)
+    assert exception.iso_weekday == 3 and exception.start_period == 4
+    assert exception.location_code == "A202"
+    assert sum(len(row.active_week_numbers) for row in rows) == 3
+
+
+@pytest.mark.parametrize("change", [{"lecturer_code": "OTHER"}, {"course_code": "OTHER"}])
+def test_revision_still_rejects_identity_change(change):
+    records = exception_records()
+    records[1].update(change)
+    with pytest.raises(TimetableDataIntegrityError, match="không được thay đổi"):
+        TimetableQueryService._group_recurring_records(7, records, allow_occurrence_exceptions=True)
+
+
+def test_revision_still_rejects_two_occurrences_in_same_group_week():
+    records = exception_records()
+    records[1]["week_number"] = 1
+    with pytest.raises(TimetableDataIntegrityError, match="trong cùng tuần"):
+        TimetableQueryService._group_recurring_records(7, records, allow_occurrence_exceptions=True)
+
+
+def test_original_optimizer_schedule_still_rejects_occurrence_exception():
+    with pytest.raises(TimetableDataIntegrityError, match="Recurring group thay đổi"):
+        TimetableQueryService._group_recurring_records(7, exception_records())
+
+
+def test_exception_csv_and_excel_keep_week_numbers_and_slots_in_sync(tmp_path):
+    import csv
+    from xml.etree import ElementTree as ET
+    from zipfile import ZipFile
+    from gapo_timetabling.application.timetable_export import TimetableExportService
+    from gapo_timetabling.application.timetable_excel import TimetableExcelExportService
+    rows = TimetableQueryService._group_recurring_records(7, exception_records(), allow_occurrence_exceptions=True)
+
+    class RevisionQuery(TimetableQueryService):
+        def __init__(self):
+            pass
+
+        def get_run_schedule(self, run_id, filters=None):
+            assert run_id == 7 and filters.revision_id == 8
+            return rows
+
+    filters = TimetableQueryFilters(revision_id=8)
+    query = RevisionQuery()
+    csv_path, xlsx_path = tmp_path / "revision.csv", tmp_path / "revision.xlsx"
+    TimetableExportService(query).export_run_csv(7, csv_path, filters)
+    TimetableExcelExportService(query).export_run_xlsx(7, xlsx_path, filters)
+    with csv_path.open(encoding="utf-8-sig", newline="") as stream:
+        csv_rows = list(csv.DictReader(stream))
+    assert [row["Tuần hoạt động"] for row in csv_rows] == ["1, 3", "2"]
+    assert csv_rows[1]["Thứ"] == "Thứ Tư" and csv_rows[1]["Tiết bắt đầu"] == "4"
+    with ZipFile(xlsx_path) as archive:
+        root = ET.fromstring(archive.read("xl/worksheets/sheet1.xml"))
+    ns = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+    values = {cell.attrib["r"]: "".join(cell.itertext()) for cell in root.findall(".//m:c", ns)}
+    assert values["R5"] == "1, 3" and values["R6"] == "2"
+    assert values["J6"] == "Thứ Tư" and values["K6"] == "4"

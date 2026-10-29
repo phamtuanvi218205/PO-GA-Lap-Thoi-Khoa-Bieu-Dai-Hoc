@@ -1,0 +1,79 @@
+{
+  "schema_version": "timetable-experiment-metadata.v1",
+  "experiment_id": "timetable-2027-hk1-pilot-3060fe",
+  "execution_mode": "SEQUENTIAL",
+  "base_request_path": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\benchmark_configs\\benchmark_request_2027_HK1.json",
+  "base_request": {
+    "schema_version": "optimization-run-request.v1",
+    "request_id": "benchmark-2027-hk1-template",
+    "algorithm": "GA_PO",
+    "snapshot": {
+      "path": "../demo_data/benchmark_snapshot_2027_HK1.json",
+      "checksum": "a91cd60ea6bf93a0648787d91fca3b28fb4005f75ae98bc065ed6bee418f073c"
+    },
+    "population_size": 60,
+    "max_fitness_evaluations": 3060,
+    "random_seed": 1,
+    "max_initialization_attempts": 30000,
+    "max_offspring_attempts": 5,
+    "evaluation": {
+      "max_decode_nodes": 20000,
+      "enable_repair": true,
+      "max_repair_attempts": 3,
+      "max_decode_nodes_per_repair_attempt": 20000
+    },
+    "ga": {
+      "tournament_size": 3,
+      "crossover_probability": 0.9,
+      "crossover_distribution_index": 15.0,
+      "mutation_probability": null,
+      "mutation_distribution_index": 20.0
+    },
+    "hybrid": {
+      "ga_ratio": 0.5
+    }
+  },
+  "algorithms": [
+    "GA",
+    "PO",
+    "GA_PO"
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "include_greedy_baseline": true,
+  "planned_optimizer_run_count": 9,
+  "planned_baseline_run_count": 1,
+  "planned_run_count": 10,
+  "completed_optimizer_run_count": 9,
+  "completed_baseline_run_count": 0,
+  "completed_run_count": 9,
+  "snapshot_checksums": [
+    "a91cd60ea6bf93a0648787d91fca3b28fb4005f75ae98bc065ed6bee418f073c"
+  ],
+  "started_at_utc": "2026-10-24T09:06:32.932471+00:00",
+  "finished_at_utc": "2026-10-24T14:53:33.108727+00:00",
+  "elapsed_seconds": 20820.176256,
+  "fairness_note": "Ở cùng seed, GA, PO và GA_PO dùng cùng snapshot, cấu hình, quần thể khởi tạo và ngân sách FE. GREEDY_FIRST_FEASIBLE chỉ dựng một lịch xác định làm mốc tham khảo, không thuộc phép so sánh thống kê có cùng ngân sách.",
+  "generated_plot_files": [
+    "01_convergence.png",
+    "02_fitness_comparison.png",
+    "03_runtime_and_fe.png",
+    "04_search_diagnostics.png",
+    "05_rank_and_wins.png",
+    "06_objective_space.png",
+    "07_per_seed_scores.png",
+    "08_success_rate.png",
+    "09_best_timetable_GA.png",
+    "09_best_timetable_PO.png",
+    "09_best_timetable_GA_PO.png"
+  ],
+  "plot_failures": [
+    {
+      "file": "09_best_timetable_GREEDY_FIRST_FEASIBLE.png",
+      "error": "Không có run hoàn thành của phương pháp này."
+    }
+  ]
+}

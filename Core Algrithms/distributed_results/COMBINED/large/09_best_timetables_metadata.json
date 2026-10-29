@@ -1,0 +1,250 @@
+{
+  "schema_version": "best-timetables-by-algorithm.v1",
+  "selection_rule": "LEXICOGRAPHIC_Q_GENERAL_Q_LECTURER",
+  "timetables": [
+    {
+      "algorithm": "GA",
+      "source_run": "runs\\GA\\seed_7.json",
+      "request_id": "timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-7",
+      "image": "09_best_timetable_GA.png",
+      "csv": "09_best_timetable_GA.csv",
+      "entry_count": 190,
+      "best_fitness": {
+        "general_quality_score": 0.021078260869565216,
+        "lecturer_preference_score": 0.26630053394355435,
+        "breakdown": {
+          "room_change_count": 0,
+          "comparable_physical_session_count": 190,
+          "capacity_component": 0.0,
+          "gap_component": 0.0,
+          "room_discouraged_component": 0.0,
+          "room_stability_component": 0.0,
+          "lecturer_breakdown": [
+            {
+              "lecturer_index": 0,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 0.0,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 1,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 83.99999999999997,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 2,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 94.50000000000004,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 3,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 89.25,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 4,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 67.5,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 5,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 89.24999999999997,
+              "discouraged_overlap_penalty": 0.0
+            }
+          ],
+          "lecturer_consecutive_component": 0.0,
+          "workload_balance_component": 0.11594202898550725,
+          "course_suitability_component": 0.10086956521739132
+        }
+      }
+    },
+    {
+      "algorithm": "PO",
+      "source_run": "runs\\PO\\seed_7.json",
+      "request_id": "timetable-scale-large-30pop-20iterations-10seeds-worker-PO-PO-seed-7",
+      "image": "09_best_timetable_PO.png",
+      "csv": "09_best_timetable_PO.csv",
+      "entry_count": 190,
+      "best_fitness": {
+        "general_quality_score": 0.021078260869565216,
+        "lecturer_preference_score": 0.3184913723331924,
+        "breakdown": {
+          "room_change_count": 0,
+          "comparable_physical_session_count": 190,
+          "capacity_component": 0.0,
+          "gap_component": 0.0,
+          "room_discouraged_component": 0.0,
+          "room_stability_component": 0.0,
+          "lecturer_breakdown": [
+            {
+              "lecturer_index": 0,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 40.50000000000001,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 1,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 108.00000000000004,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 2,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 94.50000000000004,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 3,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 114.74999999999997,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 4,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 67.5,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 5,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 114.74999999999997,
+              "discouraged_overlap_penalty": 0.0
+            }
+          ],
+          "lecturer_consecutive_component": 0.0,
+          "workload_balance_component": 0.11594202898550725,
+          "course_suitability_component": 0.10086956521739134
+        }
+      }
+    },
+    {
+      "algorithm": "GA_PO",
+      "source_run": "runs\\GA_PO\\seed_7.json",
+      "request_id": "timetable-scale-large-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-7",
+      "image": "09_best_timetable_GA_PO.png",
+      "csv": "09_best_timetable_GA_PO.csv",
+      "entry_count": 190,
+      "best_fitness": {
+        "general_quality_score": 0.021078260869565216,
+        "lecturer_preference_score": 0.285728900255754,
+        "breakdown": {
+          "room_change_count": 0,
+          "comparable_physical_session_count": 190,
+          "capacity_component": 0.0,
+          "gap_component": 0.0,
+          "room_discouraged_component": 0.0,
+          "room_stability_component": 0.0,
+          "lecturer_breakdown": [
+            {
+              "lecturer_index": 0,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 0.0,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 1,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 108.00000000000004,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 2,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 94.50000000000004,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 3,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 114.74999999999997,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 4,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 67.5,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 5,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 89.24999999999997,
+              "discouraged_overlap_penalty": 0.0
+            }
+          ],
+          "lecturer_consecutive_component": 0.0,
+          "workload_balance_component": 0.11594202898550725,
+          "course_suitability_component": 0.10086956521739134
+        }
+      }
+    },
+    {
+      "algorithm": "GREEDY_FIRST_FEASIBLE",
+      "source_run": "runs\\GREEDY_FIRST_FEASIBLE\\result.json",
+      "request_id": "timetable-scale-large-30pop-20iterations-10seeds-worker-GA_PO-GREEDY_FIRST_FEASIBLE",
+      "image": "09_best_timetable_GREEDY_FIRST_FEASIBLE.png",
+      "csv": "09_best_timetable_GREEDY_FIRST_FEASIBLE.csv",
+      "entry_count": 190,
+      "best_fitness": {
+        "general_quality_score": 0.06979254658385094,
+        "lecturer_preference_score": 0.3112442899865252,
+        "breakdown": {
+          "room_change_count": 0,
+          "comparable_physical_session_count": 190,
+          "capacity_component": 0.0,
+          "gap_component": 0.13095238095238096,
+          "room_discouraged_component": 0.0,
+          "room_stability_component": 0.0,
+          "lecturer_breakdown": [
+            {
+              "lecturer_index": 0,
+              "evaluated_session_count": 42,
+              "missed_preferred_penalty": 108.00000000000004,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 1,
+              "evaluated_session_count": 32,
+              "missed_preferred_penalty": 48.0,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 2,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 121.50000000000004,
+              "discouraged_overlap_penalty": 15.0
+            },
+            {
+              "lecturer_index": 3,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 63.75,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 4,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 67.5,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 5,
+              "evaluated_session_count": 37,
+              "missed_preferred_penalty": 114.74999999999996,
+              "discouraged_overlap_penalty": 0.0
+            }
+          ],
+          "lecturer_consecutive_component": 0.0,
+          "workload_balance_component": 0.11594202898550725,
+          "course_suitability_component": 0.07978260869565221
+        }
+      }
+    }
+  ]
+}

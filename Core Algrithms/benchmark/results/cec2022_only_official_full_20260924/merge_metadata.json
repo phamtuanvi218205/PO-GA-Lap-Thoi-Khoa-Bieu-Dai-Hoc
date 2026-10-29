@@ -1,0 +1,10 @@
+{
+  "execution": "parallel independent seed shards",
+  "inputs": [
+    "results\\cec2022_only_20260924_shard_01_08",
+    "results\\cec2022_only_20260924_shard_09_16",
+    "results\\cec2022_only_20260924_shard_17_23",
+    "results\\cec2022_only_20260924_shard_24_30"
+  ],
+  "runtime_warning": "Wall-clock runtimes were measured while shards competed for CPU; do not treat them as isolated single-process timings."
+}

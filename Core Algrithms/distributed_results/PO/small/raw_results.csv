@@ -1,0 +1,11 @@
+﻿request_id,algorithm,seed,status,q_general,q_lecturer,runtime_seconds,fitness_evaluations,completed_iterations,candidate_attempts,decode_failed_count,validation_failed_count,repaired_individual_count,failed_repair_count,total_repair_attempts,discarded_offspring_count,total_decode_nodes,total_decode_backtracks,hard_violation_count,timetable_entry_count,rank,error_code,error_message
+timetable-scale-small-30pop-20iterations-10seeds-worker-PO-PO-seed-1,PO,1,COMPLETED,0.0909,0.20881267989698538,80.0220946999998,630,20,630,0,0,184,0,342,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-PO-PO-seed-2,PO,2,COMPLETED,0.0909,0.13762717965125587,90.22992680000016,630,20,630,0,0,220,0,383,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-PO-PO-seed-3,PO,3,COMPLETED,0.0909,0.17467136150234747,79.52060649999976,630,20,630,0,0,177,0,312,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-PO-PO-seed-4,PO,4,COMPLETED,0.0909,0.17258620689655188,88.86859449999974,630,20,630,0,0,206,0,380,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-PO-PO-seed-5,PO,5,COMPLETED,0.0909,0.13476525821596247,88.29832960000022,630,20,630,0,0,144,0,254,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-PO-PO-seed-6,PO,6,COMPLETED,0.0909,0.18395801205663825,56.508889400000044,630,20,630,0,0,187,0,330,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-PO-PO-seed-7,PO,7,COMPLETED,0.0909,0.1614233722604384,95.01312050000024,630,20,630,0,0,174,0,308,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-PO-PO-seed-8,PO,8,COMPLETED,0.0909,0.20881267989698532,101.30794360000027,630,20,630,0,0,158,0,289,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-PO-PO-seed-9,PO,9,COMPLETED,0.0909,0.10977832512315282,101.22218530000009,630,20,630,0,0,143,0,253,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-PO-PO-seed-10,PO,10,COMPLETED,0.0909,0.17467136150234747,101.90884040000037,630,20,630,0,0,153,0,269,0,3780,0,0,58,1.0,,

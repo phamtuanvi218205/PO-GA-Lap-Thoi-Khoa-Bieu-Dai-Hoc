@@ -1,0 +1,11 @@
+﻿request_id,algorithm,seed,status,q_general,q_lecturer,runtime_seconds,fitness_evaluations,completed_iterations,candidate_attempts,decode_failed_count,validation_failed_count,repaired_individual_count,failed_repair_count,total_repair_attempts,discarded_offspring_count,total_decode_nodes,total_decode_backtracks,hard_violation_count,timetable_entry_count,rank,error_code,error_message
+timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-1,GA,1,COMPLETED,0.021078260869565216,0.28292993225406315,1002.5708317919634,630,20,688,58,0,28,58,239,0,12600,0,0,190,1.0,,
+timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-2,GA,2,COMPLETED,0.03201943734015345,0.2745768838936537,1012.5462357089855,630,20,700,70,0,20,70,248,0,12600,0,0,190,1.0,,
+timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-3,GA,3,COMPLETED,0.021078260869565216,0.3279189593206323,1025.5036305421963,630,20,684,54,0,21,54,206,0,12600,0,0,190,1.0,,
+timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-4,GA,4,COMPLETED,0.021078260869565216,0.31167739997997956,1045.8422322501428,630,20,668,38,0,30,38,170,0,12600,0,0,190,1.0,,
+timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-5,GA,5,COMPLETED,0.03348498023715415,0.30647218791485314,1011.1663280839566,630,20,694,64,0,27,64,244,0,12600,0,0,190,1.0,,
+timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-6,GA,6,COMPLETED,0.021078260869565216,0.30323359232931074,983.0905482079834,630,20,681,51,0,45,51,246,0,12600,0,0,190,1.0,,
+timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-7,GA,7,COMPLETED,0.021078260869565216,0.26630053394355435,998.3028361247852,630,20,686,56,0,22,56,208,0,12600,0,0,190,1.0,,
+timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-8,GA,8,COMPLETED,0.021078260869565216,0.29097963267809246,1004.0432191661093,630,20,660,30,0,31,30,142,0,12600,0,0,190,1.0,,
+timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-9,GA,9,COMPLETED,0.04443260869565217,0.31779777308074714,1021.261200542096,630,20,695,65,0,18,65,227,0,12600,0,0,190,1.0,,
+timetable-scale-large-30pop-20iterations-10seeds-worker-GA-GA-seed-10,GA,10,COMPLETED,0.021078260869565216,0.31186256864041184,1010.9631694999989,630,20,707,77,0,48,77,300,0,12600,0,0,190,1.0,,

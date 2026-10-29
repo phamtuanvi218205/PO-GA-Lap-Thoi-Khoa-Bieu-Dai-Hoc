@@ -1,0 +1,4 @@
+﻿request_id,algorithm,seed,status,q_general,q_lecturer,runtime_seconds,fitness_evaluations,completed_iterations,candidate_attempts,decode_failed_count,validation_failed_count,repaired_individual_count,failed_repair_count,total_repair_attempts,discarded_offspring_count,total_decode_nodes,total_decode_backtracks,hard_violation_count,timetable_entry_count,rank,error_code,error_message
+recurring-dynamic-assignment-smoke-GA-seed-42,GA,42,COMPLETED,0.19442816399467724,0.411825856246985,55.02664560000085,220,10,300,80,0,17,80,277,0,3960,0,0,108,1.0,,
+recurring-dynamic-assignment-smoke-PO-seed-42,PO,42,COMPLETED,0.1955106639946772,0.3763699951760733,33.5463034000004,139,10,675,536,0,33,536,1672,81,2502,0,0,108,3.0,,
+recurring-dynamic-assignment-smoke-GA_PO-seed-42,GA_PO,42,COMPLETED,0.1955106639946772,0.3401905451037144,45.21806429999924,184,10,469,285,0,21,285,893,36,3312,0,0,108,2.0,,

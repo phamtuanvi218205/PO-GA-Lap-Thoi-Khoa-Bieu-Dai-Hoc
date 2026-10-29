@@ -1,0 +1,189 @@
+{
+  "schema_version": "best-timetables-by-algorithm.v1",
+  "selection_rule": "LEXICOGRAPHIC_Q_GENERAL_Q_LECTURER",
+  "timetables": [
+    {
+      "algorithm": "GA",
+      "source_run": "runs\\GA\\seed_2.json",
+      "request_id": "timetable-2027-hk1-pilot-3060fe-GA-seed-2",
+      "image": "09_best_timetable_GA.png",
+      "csv": "09_best_timetable_GA.csv",
+      "entry_count": 132,
+      "best_fitness": {
+        "general_quality_score": 0.019855063770016217,
+        "lecturer_preference_score": 0.3113652700759907,
+        "breakdown": {
+          "room_change_count": 0,
+          "comparable_physical_session_count": 132,
+          "capacity_component": 0.031292043554271814,
+          "gap_component": 0.0,
+          "room_discouraged_component": 0.0,
+          "room_stability_component": 0.0,
+          "lecturer_breakdown": [
+            {
+              "lecturer_index": 0,
+              "evaluated_session_count": 32,
+              "missed_preferred_penalty": 108.00000000000003,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 1,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 59.99999999999999,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 2,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 40.50000000000001,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 3,
+              "evaluated_session_count": 16,
+              "missed_preferred_penalty": 25.5,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 4,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 67.5,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 5,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 25.5,
+              "discouraged_overlap_penalty": 0.0
+            }
+          ],
+          "lecturer_consecutive_component": 0.0,
+          "workload_balance_component": 0.08333333333333333,
+          "course_suitability_component": 0.17499999999999996
+        }
+      }
+    },
+    {
+      "algorithm": "PO",
+      "source_run": "runs\\PO\\seed_1.json",
+      "request_id": "timetable-2027-hk1-pilot-3060fe-PO-seed-1",
+      "image": "09_best_timetable_PO.png",
+      "csv": "09_best_timetable_PO.csv",
+      "entry_count": 132,
+      "best_fitness": {
+        "general_quality_score": 0.02334803252001622,
+        "lecturer_preference_score": 0.3163054310877621,
+        "breakdown": {
+          "room_change_count": 0,
+          "comparable_physical_session_count": 132,
+          "capacity_component": 0.040778650697128965,
+          "gap_component": 0.0,
+          "room_discouraged_component": 0.0,
+          "room_stability_component": 0.0,
+          "lecturer_breakdown": [
+            {
+              "lecturer_index": 0,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 67.5,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 1,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 59.99999999999999,
+              "discouraged_overlap_penalty": 8.4
+            },
+            {
+              "lecturer_index": 2,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 40.50000000000001,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 3,
+              "evaluated_session_count": 16,
+              "missed_preferred_penalty": 25.5,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 4,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 67.5,
+              "discouraged_overlap_penalty": 7.2
+            },
+            {
+              "lecturer_index": 5,
+              "evaluated_session_count": 32,
+              "missed_preferred_penalty": 76.5,
+              "discouraged_overlap_penalty": 24.0
+            }
+          ],
+          "lecturer_consecutive_component": 0.0,
+          "workload_balance_component": 0.08333333333333333,
+          "course_suitability_component": 0.11468750000000003
+        }
+      }
+    },
+    {
+      "algorithm": "GA_PO",
+      "source_run": "runs\\GA_PO\\seed_2.json",
+      "request_id": "timetable-2027-hk1-pilot-3060fe-GA_PO-seed-2",
+      "image": "09_best_timetable_GA_PO.png",
+      "csv": "09_best_timetable_GA_PO.csv",
+      "entry_count": 132,
+      "best_fitness": {
+        "general_quality_score": 0.019855063770016217,
+        "lecturer_preference_score": 0.28363883754364333,
+        "breakdown": {
+          "room_change_count": 0,
+          "comparable_physical_session_count": 132,
+          "capacity_component": 0.031292043554271814,
+          "gap_component": 0.0,
+          "room_discouraged_component": 0.0,
+          "room_stability_component": 0.0,
+          "lecturer_breakdown": [
+            {
+              "lecturer_index": 0,
+              "evaluated_session_count": 32,
+              "missed_preferred_penalty": 108.00000000000003,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 1,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 59.99999999999999,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 2,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 40.50000000000001,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 3,
+              "evaluated_session_count": 16,
+              "missed_preferred_penalty": 25.5,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 4,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 27.0,
+              "discouraged_overlap_penalty": 0.0
+            },
+            {
+              "lecturer_index": 5,
+              "evaluated_session_count": 21,
+              "missed_preferred_penalty": 25.5,
+              "discouraged_overlap_penalty": 0.0
+            }
+          ],
+          "lecturer_consecutive_component": 0.0,
+          "workload_balance_component": 0.08333333333333333,
+          "course_suitability_component": 0.17499999999999996
+        }
+      }
+    }
+  ]
+}

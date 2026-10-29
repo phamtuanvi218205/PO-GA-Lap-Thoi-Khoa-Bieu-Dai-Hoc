@@ -56,8 +56,17 @@ venv/
 .coverage
 htmlcov/
 *.egg-info/
-/Core Algrithms/distributed_results/
-/Core Algrithms/test_results/
+# Keep the completed experiment artifacts reproducible in Git; ignore new runs
+# until they are explicitly selected for publication.
+/Core Algrithms/distributed_results/*
+!/Core Algrithms/distributed_results/GA/
+!/Core Algrithms/distributed_results/PO/
+!/Core Algrithms/distributed_results/GA_PO/
+!/Core Algrithms/distributed_results/COMBINED/
+/Core Algrithms/test_results/*
+!/Core Algrithms/test_results/timetable_benchmark_pilot_2027_HK1/
+!/Core Algrithms/test_results/timetable_experiment_smoke_latest/
+!/Core Algrithms/test_results/timetable_main_latest/
 /Core Algrithms/src/Core Algrithms/
 
 # IDE files

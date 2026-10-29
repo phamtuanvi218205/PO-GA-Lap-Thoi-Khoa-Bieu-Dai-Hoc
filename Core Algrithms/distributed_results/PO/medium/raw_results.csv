@@ -1,0 +1,11 @@
+﻿request_id,algorithm,seed,status,q_general,q_lecturer,runtime_seconds,fitness_evaluations,completed_iterations,candidate_attempts,decode_failed_count,validation_failed_count,repaired_individual_count,failed_repair_count,total_repair_attempts,discarded_offspring_count,total_decode_nodes,total_decode_backtracks,hard_violation_count,timetable_entry_count,rank,error_code,error_message
+timetable-scale-medium-30pop-20iterations-10seeds-worker-PO-PO-seed-1,PO,1,COMPLETED,0.015149999999999999,0.2966155315344601,354.9088856000003,352,20,2615,2263,0,59,2263,6925,278,4928,0,0,132,1.0,,
+timetable-scale-medium-30pop-20iterations-10seeds-worker-PO-PO-seed-2,PO,2,COMPLETED,0.015149999999999999,0.3022505553749455,279.73894930000006,376,20,2683,2307,0,115,2307,7128,254,5264,0,0,132,1.0,,
+timetable-scale-medium-30pop-20iterations-10seeds-worker-PO-PO-seed-3,PO,3,COMPLETED,0.015149999999999999,0.24241007434745393,181.64230619999944,343,20,2912,2569,0,70,2569,7863,287,4802,0,0,132,1.0,,
+timetable-scale-medium-30pop-20iterations-10seeds-worker-PO-PO-seed-4,PO,4,COMPLETED,0.015149999999999999,0.22269414475162938,247.89219989999947,352,20,2786,2434,0,36,2434,7381,278,4928,0,0,132,1.0,,
+timetable-scale-medium-30pop-20iterations-10seeds-worker-PO-PO-seed-5,PO,5,COMPLETED,0.015149999999999999,0.34403488874486904,303.61914010000146,360,20,2672,2312,0,76,2312,7109,270,5040,0,0,132,1.0,,
+timetable-scale-medium-30pop-20iterations-10seeds-worker-PO-PO-seed-6,PO,6,COMPLETED,0.015149999999999999,0.31958050934483456,313.3724356999992,371,20,2507,2136,0,68,2136,6565,259,5194,0,0,132,1.0,,
+timetable-scale-medium-30pop-20iterations-10seeds-worker-PO-PO-seed-7,PO,7,COMPLETED,0.015149999999999999,0.336524440336825,355.5408548000014,403,20,2490,2087,0,87,2087,6471,227,5642,0,0,132,1.0,,
+timetable-scale-medium-30pop-20iterations-10seeds-worker-PO-PO-seed-8,PO,8,COMPLETED,0.015149999999999999,0.27515909460338056,320.2890196999997,374,20,2617,2243,0,88,2243,6910,256,5236,0,0,132,1.0,,
+timetable-scale-medium-30pop-20iterations-10seeds-worker-PO-PO-seed-9,PO,9,COMPLETED,0.015149999999999999,0.27270538323218696,296.44218080000064,346,20,2552,2206,0,71,2206,6759,284,4844,0,0,132,1.0,,
+timetable-scale-medium-30pop-20iterations-10seeds-worker-PO-PO-seed-10,PO,10,COMPLETED,0.015149999999999999,0.2946649463589073,314.0662321,370,20,2636,2266,0,70,2266,6957,260,5180,0,0,132,1.0,,

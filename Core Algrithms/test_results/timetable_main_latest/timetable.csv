@@ -1,0 +1,109 @@
+﻿tuan,ngay,thu,tiet_bat_dau,tiet_ket_thuc,ma_lop_hoc_phan,ma_hoc_phan,ten_hoc_phan,hinh_thuc,ma_giang_vien,ten_giang_vien,phong,session_index
+1,2026-09-07,Thứ Hai,1,5,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,90
+1,2026-09-07,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV002,Trần Minh Anh,LAB-B,102
+1,2026-09-07,Thứ Hai,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,48
+1,2026-09-07,Thứ Hai,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,6
+1,2026-09-07,Thứ Hai,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,84
+1,2026-09-08,Thứ Ba,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV004,Phạm Thu Hà,A201,72
+1,2026-09-08,Thứ Ba,4,6,WEB02,WEB,Phát triển Web,Lý thuyết,GV004,Phạm Thu Hà,A201,36
+1,2026-09-08,Thứ Ba,7,11,CSDL02,CSDL,Cơ sở dữ liệu,Thực hành,GV002,Trần Minh Anh,LAB-A,66
+1,2026-09-08,Thứ Ba,7,9,WEB01,WEB,Phát triển Web,Lý thuyết,GV003,Lê Hoàng Nam,A202,24
+1,2026-09-09,Thứ Tư,1,5,WEB02,WEB,Phát triển Web,Thực hành,GV004,Phạm Thu Hà,LAB-B,42
+1,2026-09-09,Thứ Tư,4,6,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A201,0
+1,2026-09-09,Thứ Tư,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,54
+1,2026-09-09,Thứ Tư,7,11,JAVA02,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,18
+1,2026-09-10,Thứ Năm,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV004,Phạm Thu Hà,LAB-A,78
+1,2026-09-10,Thứ Năm,7,9,CSDL02,CSDL,Cơ sở dữ liệu,Lý thuyết,GV002,Trần Minh Anh,A201,60
+1,2026-09-10,Thứ Năm,10,12,MMT01,MMT,Mạng máy tính,Lý thuyết,GV002,Trần Minh Anh,A201,96
+1,2026-09-11,Thứ Sáu,1,5,WEB01,WEB,Phát triển Web,Thực hành,GV003,Lê Hoàng Nam,LAB-B,30
+1,2026-09-11,Thứ Sáu,4,6,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A202,12
+2,2026-09-14,Thứ Hai,1,5,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,91
+2,2026-09-14,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV002,Trần Minh Anh,LAB-B,103
+2,2026-09-14,Thứ Hai,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,49
+2,2026-09-14,Thứ Hai,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,7
+2,2026-09-14,Thứ Hai,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,85
+2,2026-09-15,Thứ Ba,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV004,Phạm Thu Hà,A201,73
+2,2026-09-15,Thứ Ba,4,6,WEB02,WEB,Phát triển Web,Lý thuyết,GV004,Phạm Thu Hà,A201,37
+2,2026-09-15,Thứ Ba,7,11,CSDL02,CSDL,Cơ sở dữ liệu,Thực hành,GV002,Trần Minh Anh,LAB-A,67
+2,2026-09-15,Thứ Ba,7,9,WEB01,WEB,Phát triển Web,Lý thuyết,GV003,Lê Hoàng Nam,A202,25
+2,2026-09-16,Thứ Tư,1,5,WEB02,WEB,Phát triển Web,Thực hành,GV004,Phạm Thu Hà,LAB-B,43
+2,2026-09-16,Thứ Tư,4,6,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A201,1
+2,2026-09-16,Thứ Tư,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,55
+2,2026-09-16,Thứ Tư,7,11,JAVA02,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,19
+2,2026-09-17,Thứ Năm,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV004,Phạm Thu Hà,LAB-A,79
+2,2026-09-17,Thứ Năm,7,9,CSDL02,CSDL,Cơ sở dữ liệu,Lý thuyết,GV002,Trần Minh Anh,A201,61
+2,2026-09-17,Thứ Năm,10,12,MMT01,MMT,Mạng máy tính,Lý thuyết,GV002,Trần Minh Anh,A201,97
+2,2026-09-18,Thứ Sáu,1,5,WEB01,WEB,Phát triển Web,Thực hành,GV003,Lê Hoàng Nam,LAB-B,31
+2,2026-09-18,Thứ Sáu,4,6,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A202,13
+3,2026-09-21,Thứ Hai,1,5,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,92
+3,2026-09-21,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV002,Trần Minh Anh,LAB-B,104
+3,2026-09-21,Thứ Hai,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,50
+3,2026-09-21,Thứ Hai,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,8
+3,2026-09-21,Thứ Hai,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,86
+3,2026-09-22,Thứ Ba,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV004,Phạm Thu Hà,A201,74
+3,2026-09-22,Thứ Ba,4,6,WEB02,WEB,Phát triển Web,Lý thuyết,GV004,Phạm Thu Hà,A201,38
+3,2026-09-22,Thứ Ba,7,11,CSDL02,CSDL,Cơ sở dữ liệu,Thực hành,GV002,Trần Minh Anh,LAB-A,68
+3,2026-09-22,Thứ Ba,7,9,WEB01,WEB,Phát triển Web,Lý thuyết,GV003,Lê Hoàng Nam,A202,26
+3,2026-09-23,Thứ Tư,1,5,WEB02,WEB,Phát triển Web,Thực hành,GV004,Phạm Thu Hà,LAB-B,44
+3,2026-09-23,Thứ Tư,4,6,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A201,2
+3,2026-09-23,Thứ Tư,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,56
+3,2026-09-23,Thứ Tư,7,11,JAVA02,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,20
+3,2026-09-24,Thứ Năm,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV004,Phạm Thu Hà,LAB-A,80
+3,2026-09-24,Thứ Năm,7,9,CSDL02,CSDL,Cơ sở dữ liệu,Lý thuyết,GV002,Trần Minh Anh,A201,62
+3,2026-09-24,Thứ Năm,10,12,MMT01,MMT,Mạng máy tính,Lý thuyết,GV002,Trần Minh Anh,A201,98
+3,2026-09-25,Thứ Sáu,1,5,WEB01,WEB,Phát triển Web,Thực hành,GV003,Lê Hoàng Nam,LAB-B,32
+3,2026-09-25,Thứ Sáu,4,6,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A202,14
+4,2026-09-28,Thứ Hai,1,5,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,93
+4,2026-09-28,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV002,Trần Minh Anh,LAB-B,105
+4,2026-09-28,Thứ Hai,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,51
+4,2026-09-28,Thứ Hai,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,9
+4,2026-09-28,Thứ Hai,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,87
+4,2026-09-29,Thứ Ba,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV004,Phạm Thu Hà,A201,75
+4,2026-09-29,Thứ Ba,4,6,WEB02,WEB,Phát triển Web,Lý thuyết,GV004,Phạm Thu Hà,A201,39
+4,2026-09-29,Thứ Ba,7,11,CSDL02,CSDL,Cơ sở dữ liệu,Thực hành,GV002,Trần Minh Anh,LAB-A,69
+4,2026-09-29,Thứ Ba,7,9,WEB01,WEB,Phát triển Web,Lý thuyết,GV003,Lê Hoàng Nam,A202,27
+4,2026-09-30,Thứ Tư,1,5,WEB02,WEB,Phát triển Web,Thực hành,GV004,Phạm Thu Hà,LAB-B,45
+4,2026-09-30,Thứ Tư,4,6,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A201,3
+4,2026-09-30,Thứ Tư,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,57
+4,2026-09-30,Thứ Tư,7,11,JAVA02,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,21
+4,2026-10-01,Thứ Năm,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV004,Phạm Thu Hà,LAB-A,81
+4,2026-10-01,Thứ Năm,7,9,CSDL02,CSDL,Cơ sở dữ liệu,Lý thuyết,GV002,Trần Minh Anh,A201,63
+4,2026-10-01,Thứ Năm,10,12,MMT01,MMT,Mạng máy tính,Lý thuyết,GV002,Trần Minh Anh,A201,99
+4,2026-10-02,Thứ Sáu,1,5,WEB01,WEB,Phát triển Web,Thực hành,GV003,Lê Hoàng Nam,LAB-B,33
+4,2026-10-02,Thứ Sáu,4,6,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A202,15
+5,2026-10-05,Thứ Hai,1,5,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,94
+5,2026-10-05,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV002,Trần Minh Anh,LAB-B,106
+5,2026-10-05,Thứ Hai,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,52
+5,2026-10-05,Thứ Hai,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,10
+5,2026-10-05,Thứ Hai,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,88
+5,2026-10-06,Thứ Ba,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV004,Phạm Thu Hà,A201,76
+5,2026-10-06,Thứ Ba,4,6,WEB02,WEB,Phát triển Web,Lý thuyết,GV004,Phạm Thu Hà,A201,40
+5,2026-10-06,Thứ Ba,7,11,CSDL02,CSDL,Cơ sở dữ liệu,Thực hành,GV002,Trần Minh Anh,LAB-A,70
+5,2026-10-06,Thứ Ba,7,9,WEB01,WEB,Phát triển Web,Lý thuyết,GV003,Lê Hoàng Nam,A202,28
+5,2026-10-07,Thứ Tư,1,5,WEB02,WEB,Phát triển Web,Thực hành,GV004,Phạm Thu Hà,LAB-B,46
+5,2026-10-07,Thứ Tư,4,6,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A201,4
+5,2026-10-07,Thứ Tư,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,58
+5,2026-10-07,Thứ Tư,7,11,JAVA02,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,22
+5,2026-10-08,Thứ Năm,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV004,Phạm Thu Hà,LAB-A,82
+5,2026-10-08,Thứ Năm,7,9,CSDL02,CSDL,Cơ sở dữ liệu,Lý thuyết,GV002,Trần Minh Anh,A201,64
+5,2026-10-08,Thứ Năm,10,12,MMT01,MMT,Mạng máy tính,Lý thuyết,GV002,Trần Minh Anh,A201,100
+5,2026-10-09,Thứ Sáu,1,5,WEB01,WEB,Phát triển Web,Thực hành,GV003,Lê Hoàng Nam,LAB-B,34
+5,2026-10-09,Thứ Sáu,4,6,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A202,16
+6,2026-10-12,Thứ Hai,1,5,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-A,95
+6,2026-10-12,Thứ Hai,1,5,MMT01,MMT,Mạng máy tính,Thực hành,GV002,Trần Minh Anh,LAB-B,107
+6,2026-10-12,Thứ Hai,7,9,CSDL01,CSDL,Cơ sở dữ liệu,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,53
+6,2026-10-12,Thứ Hai,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,11
+6,2026-10-12,Thứ Hai,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV001,Nguyễn Trọng Nghĩa,A201,89
+6,2026-10-13,Thứ Ba,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV004,Phạm Thu Hà,A201,77
+6,2026-10-13,Thứ Ba,4,6,WEB02,WEB,Phát triển Web,Lý thuyết,GV004,Phạm Thu Hà,A201,41
+6,2026-10-13,Thứ Ba,7,11,CSDL02,CSDL,Cơ sở dữ liệu,Thực hành,GV002,Trần Minh Anh,LAB-A,71
+6,2026-10-13,Thứ Ba,7,9,WEB01,WEB,Phát triển Web,Lý thuyết,GV003,Lê Hoàng Nam,A202,29
+6,2026-10-14,Thứ Tư,1,5,WEB02,WEB,Phát triển Web,Thực hành,GV004,Phạm Thu Hà,LAB-B,47
+6,2026-10-14,Thứ Tư,4,6,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A201,5
+6,2026-10-14,Thứ Tư,7,11,CSDL01,CSDL,Cơ sở dữ liệu,Thực hành,GV001,Nguyễn Trọng Nghĩa,LAB-B,59
+6,2026-10-14,Thứ Tư,7,11,JAVA02,JAVA,Lập trình Java,Thực hành,GV005,Võ Thanh Bình,LAB-A,23
+6,2026-10-15,Thứ Năm,1,5,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV004,Phạm Thu Hà,LAB-A,83
+6,2026-10-15,Thứ Năm,7,9,CSDL02,CSDL,Cơ sở dữ liệu,Lý thuyết,GV002,Trần Minh Anh,A201,65
+6,2026-10-15,Thứ Năm,10,12,MMT01,MMT,Mạng máy tính,Lý thuyết,GV002,Trần Minh Anh,A201,101
+6,2026-10-16,Thứ Sáu,1,5,WEB01,WEB,Phát triển Web,Thực hành,GV003,Lê Hoàng Nam,LAB-B,35
+6,2026-10-16,Thứ Sáu,4,6,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV005,Võ Thanh Bình,A202,17

@@ -1,0 +1,191 @@
+﻿tuan,ngay,thu,tiet_bat_dau,tiet_ket_thuc,ma_lop_hoc_phan,ma_hoc_phan,ten_hoc_phan,hinh_thuc,ma_giang_vien,ten_giang_vien,phong,session_index
+1,2027-08-16,Thứ Hai,13,15,DB02,DB,Cơ sở dữ liệu,Lý thuyết,GV102,Trần Quốc Bình,A202,153
+1,2027-08-16,Thứ Hai,13,15,WEB01,WEB,Lập trình Web,Lý thuyết,GV106,Đỗ Anh Tuấn,A201,100
+1,2027-08-17,Thứ Ba,1,3,WEB02,WEB,Lập trình Web,Lý thuyết,GV103,Lê Thu Hà,A202,116
+1,2027-08-18,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,37
+1,2027-08-18,Thứ Tư,7,11,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV104,Phạm Hoàng Nam,LAB02,15
+1,2027-08-19,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,0
+1,2027-08-19,Thứ Năm,1,5,JAVA02,JAVA,Lập trình Java,Thực hành,GV102,Trần Quốc Bình,LAB01,73
+1,2027-08-19,Thứ Năm,7,11,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV103,Lê Thu Hà,LAB03,147
+1,2027-08-19,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,79
+1,2027-08-19,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,169
+1,2027-08-20,Thứ Sáu,1,5,DB02,DB,Cơ sở dữ liệu,Thực hành,GV102,Trần Quốc Bình,LAB02,163
+1,2027-08-20,Thứ Sáu,1,5,WEB01,WEB,Lập trình Web,Thực hành,GV106,Đỗ Anh Tuấn,LAB01,110
+1,2027-08-20,Thứ Sáu,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV101,Nguyễn Minh An,LAB01,52
+1,2027-08-20,Thứ Sáu,13,15,DB01,DB,Cơ sở dữ liệu,Lý thuyết,GV104,Phạm Hoàng Nam,A201,21
+1,2027-08-21,Thứ Bảy,1,5,NET02,NET,Mạng máy tính,Thực hành,GV105,Võ Ngọc Lan,LAB03,184
+1,2027-08-21,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,58
+1,2027-08-21,Thứ Bảy,7,11,WEB02,WEB,Lập trình Web,Thực hành,GV103,Lê Thu Hà,LAB02,126
+1,2027-08-22,Chủ Nhật,1,5,NET01,NET,Mạng máy tính,Thực hành,GV106,Đỗ Anh Tuấn,LAB02,94
+1,2027-08-22,Chủ Nhật,7,11,DB01,DB,Cơ sở dữ liệu,Thực hành,GV104,Phạm Hoàng Nam,LAB01,31
+1,2027-08-22,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,132
+2,2027-08-23,Thứ Hai,13,15,DB02,DB,Cơ sở dữ liệu,Lý thuyết,GV102,Trần Quốc Bình,A202,154
+2,2027-08-23,Thứ Hai,13,15,WEB01,WEB,Lập trình Web,Lý thuyết,GV106,Đỗ Anh Tuấn,A201,101
+2,2027-08-24,Thứ Ba,1,3,WEB02,WEB,Lập trình Web,Lý thuyết,GV103,Lê Thu Hà,A202,117
+2,2027-08-25,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,38
+2,2027-08-25,Thứ Tư,7,11,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV104,Phạm Hoàng Nam,LAB02,16
+2,2027-08-26,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,1
+2,2027-08-26,Thứ Năm,1,5,JAVA02,JAVA,Lập trình Java,Thực hành,GV102,Trần Quốc Bình,LAB01,74
+2,2027-08-26,Thứ Năm,7,11,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV103,Lê Thu Hà,LAB03,148
+2,2027-08-26,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,80
+2,2027-08-26,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,170
+2,2027-08-27,Thứ Sáu,1,5,DB02,DB,Cơ sở dữ liệu,Thực hành,GV102,Trần Quốc Bình,LAB02,164
+2,2027-08-27,Thứ Sáu,1,5,WEB01,WEB,Lập trình Web,Thực hành,GV106,Đỗ Anh Tuấn,LAB01,111
+2,2027-08-27,Thứ Sáu,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV101,Nguyễn Minh An,LAB01,53
+2,2027-08-27,Thứ Sáu,13,15,DB01,DB,Cơ sở dữ liệu,Lý thuyết,GV104,Phạm Hoàng Nam,A201,22
+2,2027-08-28,Thứ Bảy,1,5,NET02,NET,Mạng máy tính,Thực hành,GV105,Võ Ngọc Lan,LAB03,185
+2,2027-08-28,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,59
+2,2027-08-28,Thứ Bảy,7,11,WEB02,WEB,Lập trình Web,Thực hành,GV103,Lê Thu Hà,LAB02,127
+2,2027-08-29,Chủ Nhật,1,5,NET01,NET,Mạng máy tính,Thực hành,GV106,Đỗ Anh Tuấn,LAB02,95
+2,2027-08-29,Chủ Nhật,7,11,DB01,DB,Cơ sở dữ liệu,Thực hành,GV104,Phạm Hoàng Nam,LAB01,32
+2,2027-08-29,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,133
+3,2027-08-30,Thứ Hai,13,15,DB02,DB,Cơ sở dữ liệu,Lý thuyết,GV102,Trần Quốc Bình,A202,155
+3,2027-08-30,Thứ Hai,13,15,WEB01,WEB,Lập trình Web,Lý thuyết,GV106,Đỗ Anh Tuấn,A201,102
+3,2027-08-31,Thứ Ba,1,3,WEB02,WEB,Lập trình Web,Lý thuyết,GV103,Lê Thu Hà,A202,118
+3,2027-09-01,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,39
+3,2027-09-01,Thứ Tư,7,11,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV104,Phạm Hoàng Nam,LAB02,17
+3,2027-09-02,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,2
+3,2027-09-02,Thứ Năm,1,5,JAVA02,JAVA,Lập trình Java,Thực hành,GV102,Trần Quốc Bình,LAB01,75
+3,2027-09-02,Thứ Năm,7,11,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV103,Lê Thu Hà,LAB03,149
+3,2027-09-02,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,81
+3,2027-09-02,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,171
+3,2027-09-03,Thứ Sáu,1,5,DB02,DB,Cơ sở dữ liệu,Thực hành,GV102,Trần Quốc Bình,LAB02,165
+3,2027-09-03,Thứ Sáu,1,5,WEB01,WEB,Lập trình Web,Thực hành,GV106,Đỗ Anh Tuấn,LAB01,112
+3,2027-09-03,Thứ Sáu,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV101,Nguyễn Minh An,LAB01,54
+3,2027-09-03,Thứ Sáu,13,15,DB01,DB,Cơ sở dữ liệu,Lý thuyết,GV104,Phạm Hoàng Nam,A201,23
+3,2027-09-04,Thứ Bảy,1,5,NET02,NET,Mạng máy tính,Thực hành,GV105,Võ Ngọc Lan,LAB03,186
+3,2027-09-04,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,60
+3,2027-09-04,Thứ Bảy,7,11,WEB02,WEB,Lập trình Web,Thực hành,GV103,Lê Thu Hà,LAB02,128
+3,2027-09-05,Chủ Nhật,1,5,NET01,NET,Mạng máy tính,Thực hành,GV106,Đỗ Anh Tuấn,LAB02,96
+3,2027-09-05,Chủ Nhật,7,11,DB01,DB,Cơ sở dữ liệu,Thực hành,GV104,Phạm Hoàng Nam,LAB01,33
+3,2027-09-05,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,134
+4,2027-09-06,Thứ Hai,13,15,DB02,DB,Cơ sở dữ liệu,Lý thuyết,GV102,Trần Quốc Bình,A202,156
+4,2027-09-06,Thứ Hai,13,15,WEB01,WEB,Lập trình Web,Lý thuyết,GV106,Đỗ Anh Tuấn,A201,103
+4,2027-09-07,Thứ Ba,1,3,WEB02,WEB,Lập trình Web,Lý thuyết,GV103,Lê Thu Hà,A202,119
+4,2027-09-08,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,40
+4,2027-09-08,Thứ Tư,7,11,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV104,Phạm Hoàng Nam,LAB02,18
+4,2027-09-09,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,3
+4,2027-09-09,Thứ Năm,1,5,JAVA02,JAVA,Lập trình Java,Thực hành,GV102,Trần Quốc Bình,LAB01,76
+4,2027-09-09,Thứ Năm,7,11,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV103,Lê Thu Hà,LAB03,150
+4,2027-09-09,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,82
+4,2027-09-09,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,172
+4,2027-09-10,Thứ Sáu,1,5,DB02,DB,Cơ sở dữ liệu,Thực hành,GV102,Trần Quốc Bình,LAB02,166
+4,2027-09-10,Thứ Sáu,1,5,WEB01,WEB,Lập trình Web,Thực hành,GV106,Đỗ Anh Tuấn,LAB01,113
+4,2027-09-10,Thứ Sáu,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV101,Nguyễn Minh An,LAB01,55
+4,2027-09-10,Thứ Sáu,13,15,DB01,DB,Cơ sở dữ liệu,Lý thuyết,GV104,Phạm Hoàng Nam,A201,24
+4,2027-09-11,Thứ Bảy,1,5,NET02,NET,Mạng máy tính,Thực hành,GV105,Võ Ngọc Lan,LAB03,187
+4,2027-09-11,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,61
+4,2027-09-11,Thứ Bảy,7,11,WEB02,WEB,Lập trình Web,Thực hành,GV103,Lê Thu Hà,LAB02,129
+4,2027-09-12,Chủ Nhật,1,5,NET01,NET,Mạng máy tính,Thực hành,GV106,Đỗ Anh Tuấn,LAB02,97
+4,2027-09-12,Chủ Nhật,7,11,DB01,DB,Cơ sở dữ liệu,Thực hành,GV104,Phạm Hoàng Nam,LAB01,34
+4,2027-09-12,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,135
+5,2027-09-13,Thứ Hai,13,15,DB02,DB,Cơ sở dữ liệu,Lý thuyết,GV102,Trần Quốc Bình,A202,157
+5,2027-09-13,Thứ Hai,13,15,WEB01,WEB,Lập trình Web,Lý thuyết,GV106,Đỗ Anh Tuấn,A201,104
+5,2027-09-14,Thứ Ba,1,3,WEB02,WEB,Lập trình Web,Lý thuyết,GV103,Lê Thu Hà,A202,120
+5,2027-09-15,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,41
+5,2027-09-15,Thứ Tư,7,11,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV104,Phạm Hoàng Nam,LAB02,19
+5,2027-09-16,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,4
+5,2027-09-16,Thứ Năm,1,5,JAVA02,JAVA,Lập trình Java,Thực hành,GV102,Trần Quốc Bình,LAB01,77
+5,2027-09-16,Thứ Năm,7,11,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV103,Lê Thu Hà,LAB03,151
+5,2027-09-16,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,83
+5,2027-09-16,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,173
+5,2027-09-17,Thứ Sáu,1,5,DB02,DB,Cơ sở dữ liệu,Thực hành,GV102,Trần Quốc Bình,LAB02,167
+5,2027-09-17,Thứ Sáu,1,5,WEB01,WEB,Lập trình Web,Thực hành,GV106,Đỗ Anh Tuấn,LAB01,114
+5,2027-09-17,Thứ Sáu,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV101,Nguyễn Minh An,LAB01,56
+5,2027-09-17,Thứ Sáu,13,15,DB01,DB,Cơ sở dữ liệu,Lý thuyết,GV104,Phạm Hoàng Nam,A201,25
+5,2027-09-18,Thứ Bảy,1,5,NET02,NET,Mạng máy tính,Thực hành,GV105,Võ Ngọc Lan,LAB03,188
+5,2027-09-18,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,62
+5,2027-09-18,Thứ Bảy,7,11,WEB02,WEB,Lập trình Web,Thực hành,GV103,Lê Thu Hà,LAB02,130
+5,2027-09-19,Chủ Nhật,1,5,NET01,NET,Mạng máy tính,Thực hành,GV106,Đỗ Anh Tuấn,LAB02,98
+5,2027-09-19,Chủ Nhật,7,11,DB01,DB,Cơ sở dữ liệu,Thực hành,GV104,Phạm Hoàng Nam,LAB01,35
+5,2027-09-19,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,136
+6,2027-09-20,Thứ Hai,13,15,DB02,DB,Cơ sở dữ liệu,Lý thuyết,GV102,Trần Quốc Bình,A202,158
+6,2027-09-20,Thứ Hai,13,15,WEB01,WEB,Lập trình Web,Lý thuyết,GV106,Đỗ Anh Tuấn,A201,105
+6,2027-09-21,Thứ Ba,1,3,WEB02,WEB,Lập trình Web,Lý thuyết,GV103,Lê Thu Hà,A202,121
+6,2027-09-22,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,42
+6,2027-09-22,Thứ Tư,7,11,AI01,AI,Trí tuệ nhân tạo,Thực hành,GV104,Phạm Hoàng Nam,LAB02,20
+6,2027-09-23,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,5
+6,2027-09-23,Thứ Năm,1,5,JAVA02,JAVA,Lập trình Java,Thực hành,GV102,Trần Quốc Bình,LAB01,78
+6,2027-09-23,Thứ Năm,7,11,AI02,AI,Trí tuệ nhân tạo,Thực hành,GV103,Lê Thu Hà,LAB03,152
+6,2027-09-23,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,84
+6,2027-09-23,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,174
+6,2027-09-24,Thứ Sáu,1,5,DB02,DB,Cơ sở dữ liệu,Thực hành,GV102,Trần Quốc Bình,LAB02,168
+6,2027-09-24,Thứ Sáu,1,5,WEB01,WEB,Lập trình Web,Thực hành,GV106,Đỗ Anh Tuấn,LAB01,115
+6,2027-09-24,Thứ Sáu,7,11,JAVA01,JAVA,Lập trình Java,Thực hành,GV101,Nguyễn Minh An,LAB01,57
+6,2027-09-24,Thứ Sáu,13,15,DB01,DB,Cơ sở dữ liệu,Lý thuyết,GV104,Phạm Hoàng Nam,A201,26
+6,2027-09-25,Thứ Bảy,1,5,NET02,NET,Mạng máy tính,Thực hành,GV105,Võ Ngọc Lan,LAB03,189
+6,2027-09-25,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,63
+6,2027-09-25,Thứ Bảy,7,11,WEB02,WEB,Lập trình Web,Thực hành,GV103,Lê Thu Hà,LAB02,131
+6,2027-09-26,Chủ Nhật,1,5,NET01,NET,Mạng máy tính,Thực hành,GV106,Đỗ Anh Tuấn,LAB02,99
+6,2027-09-26,Chủ Nhật,7,11,DB01,DB,Cơ sở dữ liệu,Thực hành,GV104,Phạm Hoàng Nam,LAB01,36
+6,2027-09-26,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,137
+7,2027-09-27,Thứ Hai,13,15,DB02,DB,Cơ sở dữ liệu,Lý thuyết,GV102,Trần Quốc Bình,A202,159
+7,2027-09-27,Thứ Hai,13,15,WEB01,WEB,Lập trình Web,Lý thuyết,GV106,Đỗ Anh Tuấn,A201,106
+7,2027-09-28,Thứ Ba,1,3,WEB02,WEB,Lập trình Web,Lý thuyết,GV103,Lê Thu Hà,A202,122
+7,2027-09-29,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,43
+7,2027-09-30,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,6
+7,2027-09-30,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,85
+7,2027-09-30,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,175
+7,2027-10-01,Thứ Sáu,13,15,DB01,DB,Cơ sở dữ liệu,Lý thuyết,GV104,Phạm Hoàng Nam,A201,27
+7,2027-10-02,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,64
+7,2027-10-03,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,138
+8,2027-10-04,Thứ Hai,13,15,DB02,DB,Cơ sở dữ liệu,Lý thuyết,GV102,Trần Quốc Bình,A202,160
+8,2027-10-04,Thứ Hai,13,15,WEB01,WEB,Lập trình Web,Lý thuyết,GV106,Đỗ Anh Tuấn,A201,107
+8,2027-10-05,Thứ Ba,1,3,WEB02,WEB,Lập trình Web,Lý thuyết,GV103,Lê Thu Hà,A202,123
+8,2027-10-06,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,44
+8,2027-10-07,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,7
+8,2027-10-07,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,86
+8,2027-10-07,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,176
+8,2027-10-08,Thứ Sáu,13,15,DB01,DB,Cơ sở dữ liệu,Lý thuyết,GV104,Phạm Hoàng Nam,A201,28
+8,2027-10-09,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,65
+8,2027-10-10,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,139
+9,2027-10-11,Thứ Hai,13,15,DB02,DB,Cơ sở dữ liệu,Lý thuyết,GV102,Trần Quốc Bình,A202,161
+9,2027-10-11,Thứ Hai,13,15,WEB01,WEB,Lập trình Web,Lý thuyết,GV106,Đỗ Anh Tuấn,A201,108
+9,2027-10-12,Thứ Ba,1,3,WEB02,WEB,Lập trình Web,Lý thuyết,GV103,Lê Thu Hà,A202,124
+9,2027-10-13,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,45
+9,2027-10-14,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,8
+9,2027-10-14,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,87
+9,2027-10-14,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,177
+9,2027-10-15,Thứ Sáu,13,15,DB01,DB,Cơ sở dữ liệu,Lý thuyết,GV104,Phạm Hoàng Nam,A201,29
+9,2027-10-16,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,66
+9,2027-10-17,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,140
+10,2027-10-18,Thứ Hai,13,15,DB02,DB,Cơ sở dữ liệu,Lý thuyết,GV102,Trần Quốc Bình,A202,162
+10,2027-10-18,Thứ Hai,13,15,WEB01,WEB,Lập trình Web,Lý thuyết,GV106,Đỗ Anh Tuấn,A201,109
+10,2027-10-19,Thứ Ba,1,3,WEB02,WEB,Lập trình Web,Lý thuyết,GV103,Lê Thu Hà,A202,125
+10,2027-10-20,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,46
+10,2027-10-21,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,9
+10,2027-10-21,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,88
+10,2027-10-21,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,178
+10,2027-10-22,Thứ Sáu,13,15,DB01,DB,Cơ sở dữ liệu,Lý thuyết,GV104,Phạm Hoàng Nam,A201,30
+10,2027-10-23,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,67
+10,2027-10-24,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,141
+11,2027-10-27,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,47
+11,2027-10-28,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,10
+11,2027-10-28,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,89
+11,2027-10-28,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,179
+11,2027-10-30,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,68
+11,2027-10-31,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,142
+12,2027-11-03,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,48
+12,2027-11-04,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,11
+12,2027-11-04,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,90
+12,2027-11-04,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,180
+12,2027-11-06,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,69
+12,2027-11-07,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,143
+13,2027-11-10,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,49
+13,2027-11-11,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,12
+13,2027-11-11,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,91
+13,2027-11-11,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,181
+13,2027-11-13,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,70
+13,2027-11-14,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,144
+14,2027-11-17,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,50
+14,2027-11-18,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,13
+14,2027-11-18,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,92
+14,2027-11-18,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,182
+14,2027-11-20,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,71
+14,2027-11-21,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,145
+15,2027-11-24,Thứ Tư,1,3,JAVA01,JAVA,Lập trình Java,Lý thuyết,GV101,Nguyễn Minh An,A201,51
+15,2027-11-25,Thứ Năm,1,3,AI01,AI,Trí tuệ nhân tạo,Lý thuyết,GV104,Phạm Hoàng Nam,A202,14
+15,2027-11-25,Thứ Năm,10,12,NET01,NET,Mạng máy tính,Lý thuyết,GV106,Đỗ Anh Tuấn,A202,93
+15,2027-11-25,Thứ Năm,13,15,NET02,NET,Mạng máy tính,Lý thuyết,GV105,Võ Ngọc Lan,A201,183
+15,2027-11-27,Thứ Bảy,7,9,JAVA02,JAVA,Lập trình Java,Lý thuyết,GV102,Trần Quốc Bình,A202,72
+15,2027-11-28,Chủ Nhật,10,12,AI02,AI,Trí tuệ nhân tạo,Lý thuyết,GV103,Lê Thu Hà,A201,146
