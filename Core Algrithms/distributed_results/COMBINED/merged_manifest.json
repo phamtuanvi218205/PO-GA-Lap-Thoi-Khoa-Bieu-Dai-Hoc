@@ -1,0 +1,80 @@
+{
+  "schema_version": "distributed-benchmark-merged.v1",
+  "suite_id": "timetable-scalability-2027-hk1-30pop-20iterations-10seeds",
+  "status": "COMPLETED",
+  "runtime_comparison_valid": false,
+  "merged_at_utc": "2026-10-29T08:23:44.312186+00:00",
+  "part_roots": [
+    "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\distributed_results\\GA",
+    "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\distributed_results\\PO",
+    "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\distributed_results\\GA_PO"
+  ],
+  "cases": [
+    {
+      "case_id": "small",
+      "completed_run_count": 31,
+      "planned_run_count": 31,
+      "output_directory": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\distributed_results\\COMBINED\\small",
+      "plot_files": [
+        "01_convergence.png",
+        "02_fitness_comparison.png",
+        "03_runtime_and_fe.png",
+        "04_search_diagnostics.png",
+        "05_rank_and_wins.png",
+        "06_objective_space.png",
+        "07_per_seed_scores.png",
+        "08_success_rate.png",
+        "09_best_timetable_GA.png",
+        "09_best_timetable_PO.png",
+        "09_best_timetable_GA_PO.png",
+        "09_best_timetable_GREEDY_FIRST_FEASIBLE.png"
+      ]
+    },
+    {
+      "case_id": "medium",
+      "completed_run_count": 31,
+      "planned_run_count": 31,
+      "output_directory": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\distributed_results\\COMBINED\\medium",
+      "plot_files": [
+        "01_convergence.png",
+        "02_fitness_comparison.png",
+        "03_runtime_and_fe.png",
+        "04_search_diagnostics.png",
+        "05_rank_and_wins.png",
+        "06_objective_space.png",
+        "07_per_seed_scores.png",
+        "08_success_rate.png",
+        "09_best_timetable_GA.png",
+        "09_best_timetable_PO.png",
+        "09_best_timetable_GA_PO.png",
+        "09_best_timetable_GREEDY_FIRST_FEASIBLE.png"
+      ]
+    },
+    {
+      "case_id": "large",
+      "completed_run_count": 31,
+      "planned_run_count": 31,
+      "output_directory": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\distributed_results\\COMBINED\\large",
+      "plot_files": [
+        "01_convergence.png",
+        "02_fitness_comparison.png",
+        "03_runtime_and_fe.png",
+        "04_search_diagnostics.png",
+        "05_rank_and_wins.png",
+        "06_objective_space.png",
+        "07_per_seed_scores.png",
+        "08_success_rate.png",
+        "09_best_timetable_GA.png",
+        "09_best_timetable_PO.png",
+        "09_best_timetable_GA_PO.png",
+        "09_best_timetable_GREEDY_FIRST_FEASIBLE.png"
+      ]
+    }
+  ],
+  "scalability_summary": "scalability_summary.csv",
+  "scalability_images": [
+    "10_scalability_quality.png",
+    "11_scalability_success_rate.png",
+    "12_scalability_fitness_evaluations.png"
+  ]
+}

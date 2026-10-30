@@ -35,6 +35,18 @@ class SemesterResetService:
     """Xóa nguyên tử dữ liệu phát sinh sau bước nhập của một học kỳ."""
 
     _COUNT_QUERIES = {
+        "revision_entries": """
+            SELECT COUNT_BIG(*) AS row_count FROM TimetableRevisionEntry entry
+            JOIN OptimizationRun run ON run.run_id=entry.run_id
+            JOIN PlanningScenario scenario ON scenario.scenario_id=run.scenario_id
+            WHERE scenario.term_code=?
+        """,
+        "schedule_revisions": """
+            SELECT COUNT_BIG(*) AS row_count FROM TimetableRevision revision
+            JOIN OptimizationRun run ON run.run_id=revision.run_id
+            JOIN PlanningScenario scenario ON scenario.scenario_id=run.scenario_id
+            WHERE scenario.term_code=?
+        """,
         "timetable_entries": """
             SELECT COUNT_BIG(*) AS row_count
             FROM TimetableEntry entry
@@ -88,6 +100,18 @@ class SemesterResetService:
     }
 
     _DELETE_QUERIES = (
+        """
+        DELETE entry FROM TimetableRevisionEntry entry
+        JOIN OptimizationRun run ON run.run_id=entry.run_id
+        JOIN PlanningScenario scenario ON scenario.scenario_id=run.scenario_id
+        WHERE scenario.term_code=?
+        """,
+        """
+        DELETE revision FROM TimetableRevision revision
+        JOIN OptimizationRun run ON run.run_id=revision.run_id
+        JOIN PlanningScenario scenario ON scenario.scenario_id=run.scenario_id
+        WHERE scenario.term_code=?
+        """,
         """
         DELETE entry
         FROM TimetableEntry entry

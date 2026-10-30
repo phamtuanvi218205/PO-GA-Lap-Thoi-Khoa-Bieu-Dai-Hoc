@@ -1,0 +1,53 @@
+{
+  "schema_version": "timetable-experiment-metadata.v1",
+  "experiment_id": "recurring-dynamic-assignment-smoke",
+  "execution_mode": "SEQUENTIAL",
+  "base_request_path": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\demo_data\\optimization_run_request.dynamic_v2.json",
+  "base_request": {
+    "schema_version": "optimization-run-request.v1",
+    "request_id": "dynamic-assignment-pilot",
+    "algorithm": "GA_PO",
+    "snapshot": {
+      "path": "dynamic_assignment_snapshot_v2.json",
+      "checksum": null
+    },
+    "population_size": 20,
+    "max_fitness_evaluations": 220,
+    "random_seed": 42,
+    "max_initialization_attempts": 10000,
+    "max_offspring_attempts": 5,
+    "evaluation": {
+      "max_decode_nodes": 20000,
+      "enable_repair": true,
+      "max_repair_attempts": 3,
+      "max_decode_nodes_per_repair_attempt": 20000
+    },
+    "ga": {
+      "tournament_size": 3,
+      "crossover_probability": 0.9,
+      "crossover_distribution_index": 15.0,
+      "mutation_probability": null,
+      "mutation_distribution_index": 20.0
+    },
+    "hybrid": {
+      "ga_ratio": 0.5
+    }
+  },
+  "algorithms": [
+    "GA",
+    "PO",
+    "GA_PO"
+  ],
+  "seeds": [
+    42
+  ],
+  "planned_run_count": 3,
+  "completed_run_count": 3,
+  "snapshot_checksums": [
+    "0f43215dba11688e0dcc353a5758065a91924c3f785ab42ada7faa8a01aede6d"
+  ],
+  "started_at_utc": "2026-10-21T04:26:43.606009+00:00",
+  "finished_at_utc": "2026-10-21T04:29:14.548343+00:00",
+  "elapsed_seconds": 150.942334,
+  "fairness_note": "Ở cùng seed, ba optimizer dùng cùng snapshot, cấu hình, quần thể khởi tạo và ngân sách FE lý thuyết."
+}

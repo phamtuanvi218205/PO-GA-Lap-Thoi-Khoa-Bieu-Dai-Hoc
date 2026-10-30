@@ -1,0 +1,5 @@
+﻿test,comparison,statistic,p_value,holm_adjusted_p
+Friedman on per-function median errors,GA vs PO V2 vs GA-PO,2.666666666666657,0.2635971381157279,
+Wilcoxon on per-function median errors,GA vs PO V2,25.0,0.30126953125,0.4072265625
+Wilcoxon on per-function median errors,GA vs GA-PO,22.0,0.20361328125,0.4072265625
+Wilcoxon on per-function median errors,PO V2 vs GA-PO,19.0,0.12939453125,0.38818359375

@@ -81,7 +81,7 @@ class ResetConnection:
         pass
 
 
-def test_reset_removes_only_seven_derived_groups_in_one_transaction() -> None:
+def test_reset_removes_derived_groups_and_schedule_revisions_in_one_transaction() -> None:
     cursor = ResetCursor()
     connection = ResetConnection(cursor)
 
@@ -89,6 +89,8 @@ def test_reset_removes_only_seven_derived_groups_in_one_transaction() -> None:
 
     assert result.term_code == "2027_HK1"
     assert result.deleted_counts == {
+        "revision_entries": 2,
+        "schedule_revisions": 2,
         "timetable_entries": 2,
         "optimization_runs": 2,
         "scenario_items": 2,
@@ -97,7 +99,7 @@ def test_reset_removes_only_seven_derived_groups_in_one_transaction() -> None:
         "plan_items": 2,
         "teaching_plans": 2,
     }
-    assert cursor.delete_count == 7
+    assert cursor.delete_count == 9
     assert connection.committed is True
     assert connection.rolled_back is False
     delete_sql = " ".join(sql for sql, _ in cursor.executed if sql.startswith("DELETE"))

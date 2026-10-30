@@ -1,0 +1,2 @@
+﻿algorithm,total_runs,completed_runs,success_rate,median_q_general,mean_q_general,stdev_q_general,median_q_lecturer,mean_q_lecturer,stdev_q_lecturer,median_runtime_seconds,mean_runtime_seconds,median_fitness_evaluations,average_rank
+PO,10,10,1.0,0.015149999999999999,0.01515,0.0,0.2956402389466837,0.2906639568629492,0.03870792253351067,308.4957879000003,296.75122042000015,365.0,1.0

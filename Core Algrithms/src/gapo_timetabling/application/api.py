@@ -62,7 +62,17 @@ from .semester_reset import (
     SemesterResetService,
 )
 from ..core.models import OptimizationAlgorithm
-
+from .constraint_settings import (
+    ConstraintSettingsService,
+    ConstraintSettingsUpdate,
+    ConstraintSettingsConflictError,
+)
+from .schedule_adjustment import (
+    ScheduleAdjustmentService,
+    ScheduleAdjustmentInput,
+    ScheduleAdjustmentConflictError,
+    ScheduleRevisionNotFoundError,
+)
 
 WEB_DIRECTORY = Path(__file__).with_name("web")
 
@@ -74,7 +84,9 @@ class OptimizationRunStartRequest(BaseModel):
     population_size: int = Field(default=60, ge=2)
     max_fitness_evaluations: int = Field(default=30_060, ge=2)
     random_seed: int = 42
-    algorithm_version: str = Field(default="python-unified-v1", min_length=1, max_length=50)
+    algorithm_version: str = Field(
+        default="python-unified-v1", min_length=1, max_length=50
+    )
     max_initialization_attempts: int = Field(default=6_000, ge=1)
     max_offspring_attempts: int = Field(default=5, ge=1)
     timeout_seconds: int | None = Field(default=None, ge=1)
@@ -89,9 +101,7 @@ class OptimizationRunStartRequest(BaseModel):
             )
         remaining = self.max_fitness_evaluations - self.population_size
         if remaining % self.population_size != 0:
-            raise ValueError(
-                "Phần FE sau khởi tạo phải chia hết cho population_size."
-            )
+            raise ValueError("Phần FE sau khởi tạo phải chia hết cho population_size.")
         if self.max_initialization_attempts < self.population_size:
             raise ValueError(
                 "max_initialization_attempts phải lớn hơn hoặc bằng population_size."
@@ -109,7 +119,9 @@ def create_app(
     *,
     connection_factory: Callable[[], ConnectionProtocol] = connect_sql_server,
     run_manager: OptimizationRunManager | None = None,
-    input_service_factory: Callable[[ConnectionProtocol], SemesterInputService] = SemesterInputService,
+    input_service_factory: Callable[
+        [ConnectionProtocol], SemesterInputService
+    ] = SemesterInputService,
     readiness_service_factory: Callable[
         [ConnectionProtocol], SemesterReadinessService
     ] = SemesterReadinessService,
@@ -187,8 +199,7 @@ def create_app(
         return Response(
             content=workbook_service.create_template(),
             media_type=(
-                "application/vnd.openxmlformats-officedocument."
-                "spreadsheetml.sheet"
+                "application/vnd.openxmlformats-officedocument." "spreadsheetml.sheet"
             ),
             headers={
                 "Content-Disposition": (
@@ -196,6 +207,30 @@ def create_app(
                 )
             },
         )
+
+    @app.get("/api/input-data/form-schema")
+    def input_form_schema() -> dict:
+        """Biểu mẫu web sử dụng cùng schema với JSON/Excel, không tạo bộ rule khác."""
+        return SemesterInputBundle.model_json_schema()
+
+    @app.get("/api/constraint-settings")
+    def get_constraint_settings(
+        connection: ConnectionProtocol = Depends(connection_dependency),
+    ) -> dict:
+        try:
+            return ConstraintSettingsService(connection).get()
+        except ConstraintSettingsConflictError as error:
+            raise HTTPException(status_code=409, detail=str(error)) from error
+
+    @app.put("/api/constraint-settings")
+    def update_constraint_settings(
+        request: ConstraintSettingsUpdate,
+        connection: ConnectionProtocol = Depends(connection_dependency),
+    ) -> dict:
+        try:
+            return ConstraintSettingsService(connection).update(request)
+        except ConstraintSettingsConflictError as error:
+            raise HTTPException(status_code=409, detail=str(error)) from error
 
     @app.get("/api/input-data/terms")
     def list_input_terms(
@@ -364,8 +399,9 @@ def create_app(
         run_id: int = ApiPath(ge=1),
         connection: ConnectionProtocol = Depends(connection_dependency),
     ) -> dict[str, object]:
-        row = fetch_one_dict(connection.cursor().execute(
-            """
+        row = fetch_one_dict(
+            connection.cursor().execute(
+                """
             SELECT run_id, scenario_id, algorithm_name, status,
                    population_size, max_fitness_evaluations,
                    current_fitness_evaluations, completed_iterations,
@@ -375,8 +411,9 @@ def create_app(
             FROM OptimizationRun
             WHERE run_id = ?
             """,
-            run_id,
-        ))
+                run_id,
+            )
+        )
         if row is None:
             raise HTTPException(status_code=404, detail="Không tồn tại run.")
         return row
@@ -389,18 +426,23 @@ def create_app(
         section_code: str | None = None,
         term_code: str | None = None,
         week_number: int | None = Query(default=None, ge=1),
+        revision_id: int | None = Query(default=None, ge=1),
         service: TimetableQueryService = Depends(query_service_dependency),
     ) -> dict[str, object]:
         filters = _build_filters(
-            lecturer_code, lecturer_query, section_code, term_code, week_number
+            lecturer_code,
+            lecturer_query,
+            section_code,
+            term_code,
+            week_number,
+            revision_id,
         )
         rows = _query_rows(service, run_id, filters)
         return {
             "run_id": run_id,
             "row_count": len(rows),
             "items": [
-                {**asdict(row), "weekday_name": row.weekday_name}
-                for row in rows
+                {**asdict(row), "weekday_name": row.weekday_name} for row in rows
             ],
         }
 
@@ -412,10 +454,16 @@ def create_app(
         section_code: str | None = None,
         term_code: str | None = None,
         week_number: int | None = Query(default=None, ge=1),
+        revision_id: int | None = Query(default=None, ge=1),
         service: TimetableQueryService = Depends(query_service_dependency),
     ) -> Response:
         filters = _build_filters(
-            lecturer_code, lecturer_query, section_code, term_code, week_number
+            lecturer_code,
+            lecturer_query,
+            section_code,
+            term_code,
+            week_number,
+            revision_id,
         )
         with TemporaryDirectory(prefix="gapo-csv-") as directory:
             path = Path(directory) / f"timetable-run-{run_id}.csv"
@@ -429,7 +477,7 @@ def create_app(
             media_type="text/csv; charset=utf-8",
             headers={
                 "Content-Disposition": (
-                    f'attachment; filename="timetable-run-{run_id}.csv"'
+                    f'attachment; filename="timetable-run-{run_id}{f"-revision-{revision_id}" if revision_id else ""}.csv"'
                 )
             },
         )
@@ -442,10 +490,16 @@ def create_app(
         section_code: str | None = None,
         term_code: str | None = None,
         week_number: int | None = Query(default=None, ge=1),
+        revision_id: int | None = Query(default=None, ge=1),
         service: TimetableQueryService = Depends(query_service_dependency),
     ) -> Response:
         filters = _build_filters(
-            lecturer_code, lecturer_query, section_code, term_code, week_number
+            lecturer_code,
+            lecturer_query,
+            section_code,
+            term_code,
+            week_number,
+            revision_id,
         )
         with TemporaryDirectory(prefix="gapo-xlsx-") as directory:
             path = Path(directory) / f"timetable-run-{run_id}.xlsx"
@@ -461,15 +515,59 @@ def create_app(
         return Response(
             content=content,
             media_type=(
-                "application/vnd.openxmlformats-officedocument."
-                "spreadsheetml.sheet"
+                "application/vnd.openxmlformats-officedocument." "spreadsheetml.sheet"
             ),
             headers={
                 "Content-Disposition": (
-                    f'attachment; filename="timetable-run-{run_id}.xlsx"'
+                    f'attachment; filename="timetable-run-{run_id}{f"-revision-{revision_id}" if revision_id else ""}.xlsx"'
                 )
             },
         )
+
+    @app.get("/api/runs/{run_id}/schedule-revisions")
+    def list_schedule_revisions(
+        run_id: int = ApiPath(ge=1),
+        connection: ConnectionProtocol = Depends(connection_dependency),
+    ) -> dict:
+        try:
+            return {
+                "items": ScheduleAdjustmentService(connection).list_revisions(run_id)
+            }
+        except _QUERY_ERRORS as error:
+            raise _query_http_exception(error) from error
+
+    @app.get("/api/runs/{run_id}/adjustment-options")
+    def schedule_adjustment_options(
+        run_id: int = ApiPath(ge=1),
+        part_code: str = Query(min_length=1, max_length=50),
+        stability_group_no: int = Query(ge=1),
+        revision_id: int | None = Query(default=None, ge=1),
+        scope: Literal["ALL_WEEKS", "SINGLE_SESSION"] = "ALL_WEEKS",
+        week_number: int | None = Query(default=None, ge=1),
+        connection: ConnectionProtocol = Depends(connection_dependency),
+    ) -> dict:
+        try:
+            return ScheduleAdjustmentService(connection).options(
+                run_id, part_code, stability_group_no, revision_id,
+                scope=scope, week_number=week_number,
+            )
+        except ScheduleRevisionNotFoundError as error:
+            raise HTTPException(status_code=404, detail=str(error)) from error
+        except (ScheduleAdjustmentConflictError, *_QUERY_ERRORS) as error:
+            raise HTTPException(status_code=409, detail=str(error)) from error
+
+    @app.post("/api/runs/{run_id}/schedule-revisions", status_code=201)
+    def create_schedule_revision(
+        request: ScheduleAdjustmentInput,
+        run_id: int = ApiPath(ge=1),
+        connection: ConnectionProtocol = Depends(connection_dependency),
+    ) -> dict:
+        try:
+            return ScheduleAdjustmentService(connection).create(run_id, request)
+        except ScheduleRevisionNotFoundError as error:
+            raise HTTPException(status_code=404, detail=str(error)) from error
+        except (ScheduleAdjustmentConflictError, *_QUERY_ERRORS) as error:
+            raise HTTPException(status_code=409, detail=str(error)) from error
 
     @app.post(
         "/api/scenarios/{scenario_id}/optimization-jobs",
@@ -521,6 +619,7 @@ def _build_filters(
     section_code: str | None,
     term_code: str | None,
     week_number: int | None,
+    revision_id: int | None = None,
 ) -> TimetableQueryFilters:
     """Chuyển lỗi dữ liệu lọc thành phản hồi HTTP 422 nhất quán."""
 
@@ -531,6 +630,7 @@ def _build_filters(
             section_code=section_code,
             term_code=term_code,
             week_number=week_number,
+            revision_id=revision_id,
         )
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
@@ -585,9 +685,7 @@ def _input_bundle_payload(
         "valid": True,
         "source": source,
         "term_code": bundle.term.term_code,
-        "entity_counts": {
-            field: len(getattr(bundle, field)) for field in list_fields
-        },
+        "entity_counts": {field: len(getattr(bundle, field)) for field in list_fields},
     }
 
 
@@ -618,7 +716,9 @@ async def _parse_excel_upload(
         raise HTTPException(status_code=422, detail="Chỉ chấp nhận tệp .xlsx.")
     content = await file.read(10 * 1024 * 1024 + 1)
     if len(content) > 10 * 1024 * 1024:
-        raise HTTPException(status_code=413, detail="Tệp Excel vượt quá giới hạn 10 MB.")
+        raise HTTPException(
+            status_code=413, detail="Tệp Excel vượt quá giới hạn 10 MB."
+        )
     try:
         return service.parse(content)
     except SemesterExcelValidationError as error:

@@ -1,0 +1,11 @@
+﻿request_id,algorithm,seed,status,q_general,q_lecturer,runtime_seconds,fitness_evaluations,completed_iterations,candidate_attempts,decode_failed_count,validation_failed_count,repaired_individual_count,failed_repair_count,total_repair_attempts,discarded_offspring_count,total_decode_nodes,total_decode_backtracks,hard_violation_count,timetable_entry_count,rank,error_code,error_message
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA-GA-seed-1,GA,1,COMPLETED,0.0909,0.13762717965125587,57.40504812519066,630,20,630,0,0,20,0,23,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA-GA-seed-2,GA,2,COMPLETED,0.0909,0.1762807881773401,57.01239045895636,630,20,630,0,0,42,0,61,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA-GA-seed-3,GA,3,COMPLETED,0.0909,0.20481179027057353,56.29615516704507,630,20,630,0,0,13,0,17,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA-GA-seed-4,GA,4,COMPLETED,0.0909,0.2038704318936878,54.42002895800397,630,20,630,0,0,11,0,15,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA-GA-seed-5,GA,5,COMPLETED,0.0909,0.2180985915492959,58.76975745894015,630,20,630,0,0,7,0,10,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA-GA-seed-6,GA,6,COMPLETED,0.0909,0.1824200127979524,53.54401974985376,630,20,630,0,0,24,0,27,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA-GA-seed-7,GA,7,COMPLETED,0.0909,0.15471830985915497,55.53596591600217,630,20,630,0,0,9,0,16,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA-GA-seed-8,GA,8,COMPLETED,0.0909,0.22061576354679827,55.15416850009933,630,20,630,0,0,22,0,26,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA-GA-seed-9,GA,9,COMPLETED,0.0909,0.10977832512315278,54.52450104197487,630,20,630,0,0,10,0,10,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA-GA-seed-10,GA,10,COMPLETED,0.0909,0.13071428571428584,55.273437374969944,630,20,630,0,0,17,0,22,0,3780,0,0,58,1.0,,

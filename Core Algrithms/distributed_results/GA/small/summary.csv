@@ -1,0 +1,2 @@
+﻿algorithm,total_runs,completed_runs,success_rate,median_q_general,mean_q_general,stdev_q_general,median_q_lecturer,mean_q_lecturer,stdev_q_lecturer,median_runtime_seconds,mean_runtime_seconds,median_fitness_evaluations,average_rank
+GA,10,10,1.0,0.0909,0.0909,0.0,0.17935040048764625,0.17389354785834973,0.03905573200005399,55.40470164548606,55.79354727510363,630.0,1.0

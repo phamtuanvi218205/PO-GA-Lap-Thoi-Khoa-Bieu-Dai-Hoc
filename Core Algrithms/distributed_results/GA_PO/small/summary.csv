@@ -1,0 +1,3 @@
+﻿algorithm,total_runs,completed_runs,success_rate,median_q_general,mean_q_general,stdev_q_general,median_q_lecturer,mean_q_lecturer,stdev_q_lecturer,median_runtime_seconds,mean_runtime_seconds,median_fitness_evaluations,average_rank
+GA_PO,10,10,1.0,0.0909,0.0909,0.0,0.16334975369458143,0.16107820379178797,0.031111025565672492,152.9199289000003,153.19680076000003,630.0,1.0
+GREEDY_FIRST_FEASIBLE,1,1,1.0,0.1322333333333333,0.1322333333333333,,0.30805418719211847,0.30805418719211847,,0.2787499000005482,0.2787499000005482,1,

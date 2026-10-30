@@ -1,0 +1,12 @@
+﻿request_id,algorithm,seed,status,q_general,q_lecturer,runtime_seconds,fitness_evaluations,completed_iterations,candidate_attempts,decode_failed_count,validation_failed_count,repaired_individual_count,failed_repair_count,total_repair_attempts,discarded_offspring_count,total_decode_nodes,total_decode_backtracks,hard_violation_count,timetable_entry_count,rank,error_code,error_message
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-1,GA_PO,1,COMPLETED,0.0909,0.17628078817734005,153.24466500000017,630,20,630,0,0,140,0,255,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-2,GA_PO,2,COMPLETED,0.0909,0.1307142857142858,164.1898999999994,630,20,630,0,0,98,0,180,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-3,GA_PO,3,COMPLETED,0.0909,0.20481179027057353,154.25399560000005,630,20,630,0,0,99,0,174,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-4,GA_PO,4,COMPLETED,0.0909,0.2038704318936878,152.5951928000004,630,20,630,0,0,86,0,161,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-5,GA_PO,5,COMPLETED,0.0909,0.13071428571428584,152.34894470000017,630,20,630,0,0,105,0,193,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-6,GA_PO,6,COMPLETED,0.0909,0.1824200127979524,154.9276522,630,20,630,0,0,91,0,166,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-7,GA_PO,7,COMPLETED,0.0909,0.12455665024630547,148.05966750000061,630,20,630,0,0,118,0,219,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-8,GA_PO,8,COMPLETED,0.0909,0.154113300492611,154.53216429999975,630,20,630,0,0,130,0,233,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-9,GA_PO,9,COMPLETED,0.0909,0.17258620689655188,151.96065889999954,630,20,630,0,0,96,0,178,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GA_PO-seed-10,GA_PO,10,COMPLETED,0.0909,0.13071428571428584,145.8551666000003,630,20,630,0,0,110,0,209,0,3780,0,0,58,1.0,,
+timetable-scale-small-30pop-20iterations-10seeds-worker-GA_PO-GREEDY_FIRST_FEASIBLE,GREEDY_FIRST_FEASIBLE,DETERMINISTIC,COMPLETED,0.1322333333333333,0.30805418719211847,0.2787499000005482,1,0,1,0,0,0,0,0,0,6,0,0,58,,,

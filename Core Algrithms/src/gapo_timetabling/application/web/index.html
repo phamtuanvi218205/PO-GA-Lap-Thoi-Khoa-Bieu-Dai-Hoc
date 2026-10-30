@@ -13,6 +13,7 @@
     <nav class="nav-list" aria-label="Điều hướng chính">
       <button class="nav-item is-active" data-view="input">Dữ liệu</button>
       <button class="nav-item" data-view="prepare">Chuẩn bị</button>
+      <button class="nav-item" data-view="constraints">Ràng buộc</button>
       <button class="nav-item" data-view="optimize">Thuật toán</button>
       <button class="nav-item" data-view="schedule">Thời khóa biểu</button>
     </nav>
@@ -55,13 +56,17 @@
         </section>
 
         <section class="plain-section">
-          <h3>Nhập bằng JSON</h3>
+          <h3>Nhập tay</h3>
           <div class="button-row compact-row">
+            <button class="secondary-button" id="new-manual">Học kỳ mới</button>
             <button class="secondary-button" id="load-manual">Nạp học kỳ đang chọn</button>
-            <button class="text-button" id="format-json">Định dạng JSON</button>
           </div>
-          <label class="field-label" for="manual-json">Dữ liệu học kỳ</label>
-          <textarea id="manual-json" class="json-editor" spellcheck="false" placeholder="Dữ liệu JSON"></textarea>
+          <div id="manual-editor">Đang tải biểu mẫu…</div>
+          <details class="advanced-json">
+            <summary>JSON nâng cao</summary>
+            <button class="text-button" id="format-json" type="button">Định dạng JSON</button>
+            <textarea id="manual-json" class="json-editor" spellcheck="false" placeholder="Dữ liệu JSON"></textarea>
+          </details>
           <div class="button-row">
             <button class="secondary-button" id="validate-manual">Kiểm tra</button>
             <button class="primary-button" id="apply-manual">Lưu dữ liệu</button>
@@ -69,6 +74,20 @@
           <div class="result-box is-hidden" id="manual-result"></div>
         </section>
       </div>
+    </section>
+
+    <section class="view" id="view-constraints" data-title="Thiết lập ràng buộc">
+      <section class="plain-section">
+        <h3>Tiêu chí mềm</h3>
+        <p class="section-note">Cấu hình dùng chung cho các học kỳ, áp dụng cho snapshot của lần chạy mới. Kết quả và snapshot cũ không thay đổi. Tổng trọng số mỗi nhóm bằng 1.</p>
+        <div id="constraint-editor"></div>
+        <div class="button-row">
+          <button class="secondary-button" id="reload-constraints">Tải lại</button>
+          <button class="primary-button" id="save-constraints">Lưu cấu hình</button>
+        </div>
+        <div class="result-box is-hidden" id="constraint-result"></div>
+        <p class="section-note">Điều kiện bắt buộc không thể tắt: đủ sức chứa, đúng phòng và thiết bị, đúng năng lực, không trùng tài nguyên, không vướng lịch bận, đủ thời gian di chuyển và không quá tải.</p>
+      </section>
     </section>
 
     <section class="view" id="view-prepare" data-title="Chuẩn bị bài toán">
@@ -183,6 +202,13 @@
         <strong id="current-week-label">Tuần 1</strong>
         <button class="secondary-button" id="next-week" type="button">Tuần sau</button>
       </div>
+      <div class="button-row">
+        <label class="revision-picker">Phiên bản lịch
+          <select id="schedule-revision"><option value="">Kết quả thuật toán gốc</option></select>
+        </label>
+        <button class="secondary-button" id="reload-revisions">Tải phiên bản</button>
+      </div>
+      <p class="section-note" id="revision-description">Chọn buổi học để sửa riêng buổi đó hoặc toàn bộ các tuần hoạt động.</p>
 
       <div class="schedule-summary is-hidden" id="schedule-summary">
         <div><span>Học kỳ</span><strong id="schedule-term">—</strong></div>
@@ -205,7 +231,29 @@
     </section>
   </main>
 
+  <dialog id="manual-row-dialog">
+    <form id="manual-row-form">
+      <h3 id="manual-dialog-title">Nhập dữ liệu</h3>
+      <div id="manual-row-fields" class="field-grid"></div>
+      <div class="button-row"><button type="button" class="secondary-button" id="manual-row-cancel">Hủy</button><button class="primary-button" type="submit">Đồng ý</button></div>
+    </form>
+  </dialog>
+  <dialog id="adjustment-dialog">
+    <form id="adjustment-form">
+      <h3 id="adjustment-title">Điều chỉnh buổi học</h3>
+      <label>Phạm vi điều chỉnh<select id="adjustment-scope"><option value="SINGLE_SESSION">Chỉ buổi này</option><option value="ALL_WEEKS">Toàn bộ các tuần hoạt động</option></select></label>
+      <p class="section-note" id="adjustment-scope-description"></p>
+      <p class="section-note">Giữ nguyên giảng viên và số tiết. Phương án được kiểm tra xung đột với toàn bộ lịch khi lưu.</p>
+      <label>Phương án mới<select id="adjustment-option" required></select></label>
+      <label>Lý do điều chỉnh<input id="adjustment-note" maxlength="500" required></label>
+      <div class="result-box is-hidden" id="adjustment-result"></div>
+      <div class="button-row"><button type="button" class="secondary-button" id="adjustment-cancel">Hủy</button><button type="submit" class="primary-button" id="save-adjustment">Kiểm tra và lưu bản điều chỉnh</button></div>
+    </form>
+  </dialog>
+
   <div class="toast-region" id="toast-region" aria-live="polite"></div>
-  <script src="/ui-assets/app.js?v=20261024-d106" defer></script>
+  <script src="/ui-assets/app.js?v=20261028-occurrence" defer></script>
+  <script src="/ui-assets/data_forms.js?v=20261028" defer></script>
+  <script src="/ui-assets/schedule_adjustment.js?v=20261028-occurrence" defer></script>
 </body>
 </html>

@@ -1,0 +1,23 @@
+{
+  "schema_version": "timetable-experiment-plots.v1",
+  "generated": [
+    "01_convergence.png",
+    "02_fitness_comparison.png",
+    "03_runtime_and_fe.png",
+    "04_search_diagnostics.png",
+    "05_rank_and_wins.png",
+    "06_objective_space.png",
+    "07_per_seed_scores.png",
+    "08_success_rate.png",
+    "09_best_timetable_GA.png",
+    "09_best_timetable_PO.png",
+    "09_best_timetable_GA_PO.png"
+  ],
+  "failed": [
+    {
+      "file": "09_best_timetable_GREEDY_FIRST_FEASIBLE.png",
+      "error": "Không có run hoàn thành của phương pháp này."
+    }
+  ],
+  "regeneration_note": "Dùng lại file cấu hình ban đầu, cùng output-directory và thêm --plots-only; optimizer sẽ không chạy lại."
+}

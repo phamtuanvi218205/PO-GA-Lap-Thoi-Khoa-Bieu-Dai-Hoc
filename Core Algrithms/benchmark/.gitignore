@@ -1,3 +1,4 @@
 # Ket qua co the rat lon; giu local, khong dua nham CSV hang tram MB len Git.
-results/
+results/*
+!results/cec2022_only_official_full_20260924/
 .cache/

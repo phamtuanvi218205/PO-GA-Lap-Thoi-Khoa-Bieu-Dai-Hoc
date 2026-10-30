@@ -1,0 +1,65 @@
+
+
+1. NHÓM HỌC KỲ
+
+Mã học kỳ: DEMO_NHO
+Tên học kỳ: Demo nhập tay
+Ngày bắt đầu: 16/08/2027 (thứ Hai)
+Số tuần: 2
+Trạng thái: Dự kiến
+
+2. NHÓM CƠ SỞ
+
+Mã cơ sở: CS1
+Tên cơ sở: Cơ sở 1
+
+3. NHÓM MÔN HỌC
+
+Mã môn học: JAVA
+Tên môn học: Lập trình Java
+
+4. NHÓM GIẢNG VIÊN
+
+Mã giảng viên: GV01
+Họ tên: Nguyễn Văn An
+Cơ sở chính: CS1
+Tổng tiết tối đa trong kỳ: 12
+
+5. NHÓM NĂNG LỰC GIẢNG DẠY
+
+Mã giảng viên: GV01
+Mã môn học: JAVA
+Có thể dạy lý thuyết: Có
+Có thể dạy thực hành: Không
+Mức phù hợp (0–1): 1
+
+Ý nghĩa: thầy An dạy được môn Java; không gán cứng vào lớp JAVA01.
+
+6. NHÓM PHÒNG HỌC
+
+Mã phòng: A101
+Tên phòng: Phòng A101
+Mã cơ sở: CS1
+Loại phòng: Phòng lý thuyết
+Sức chứa: 40
+
+7. NHÓM CẤU TRÚC MÔN HỌC
+
+Mã môn học: JAVA
+Loại phần: Lý thuyết
+Tổng số tiết: 6
+Hình thức học: Tại phòng
+Loại phòng yêu cầu: Phòng lý thuyết
+Số buổi tối đa mỗi tuần: 1
+Cho phép học tập trung: Không
+Số phương án tổ chức tối đa: giữ mặc định 200
+
+Kỳ vọng: 2 buổi x 3 tiết, mỗi tuần một buổi.
+
+8. NHÓM LỚP HỌC PHẦN MỞ
+
+Mã lớp học phần: JAVA01
+Mã môn học: JAVA
+Tên lớp học phần: Lớp Java 01
+Sĩ số dự kiến: 30
+Trạng thái: Đưa vào xếp lịch

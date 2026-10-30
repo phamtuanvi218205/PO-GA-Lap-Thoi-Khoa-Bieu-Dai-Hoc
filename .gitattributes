@@ -1,0 +1,4 @@
+# Preserve published experiment artifacts byte-for-byte on every platform.
+"Core Algrithms/distributed_results/**" -text whitespace=cr-at-eol
+"Core Algrithms/test_results/**" -text whitespace=cr-at-eol
+"Core Algrithms/benchmark/results/**" -text whitespace=cr-at-eol

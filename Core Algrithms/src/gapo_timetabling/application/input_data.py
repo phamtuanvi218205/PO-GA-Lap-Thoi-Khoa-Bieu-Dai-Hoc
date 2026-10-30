@@ -85,7 +85,7 @@ class RoomInput(BaseModel):
     room_code: Code30
     room_name: str = Field(min_length=1, max_length=150)
     campus_code: Code20
-    room_type: str = Field(min_length=1, max_length=30)
+    room_type: Literal["LECTURE_ROOM", "COMPUTER_LAB"]
     capacity: int | None = Field(default=None, gt=0)
     is_active: bool = True
 
@@ -122,7 +122,7 @@ class CourseTeachingStructureInput(BaseModel):
     part_type: Literal["LECTURE", "PRACTICE"]
     total_periods: int = Field(gt=0)
     required_location_type: Literal["PHYSICAL_ROOM", "ONLINE"] = "PHYSICAL_ROOM"
-    required_room_type: str | None = Field(default=None, min_length=1, max_length=30)
+    required_room_type: Literal["LECTURE_ROOM", "COMPUTER_LAB"] | None = None
     max_sessions_per_week: int = Field(ge=1, le=7)
     allows_intensive: bool = False
     max_candidate_plans: int = Field(default=200, ge=1, le=200)
