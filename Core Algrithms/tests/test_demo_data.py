@@ -48,7 +48,7 @@ class TestResourceConstrainedDemoData(unittest.TestCase):
         # lặp toàn kỳ chỉ cần 18 gene lịch: một gene cho mỗi chuỗi buổi.
         self.assertEqual(problem.session_dimension, 108)
         self.assertEqual(problem.schedule_dimension, 18)
-        self.assertEqual(problem.dimension, 18)
+        self.assertEqual(problem.dimension, 36)
         self.assertEqual(len(problem.course_sections), 9)
         self.assertEqual(len(problem.lecturers), 4)
         self.assertEqual(len(problem.rooms), 4)

@@ -12,6 +12,7 @@ from gapo_timetabling.core.repair import (
     repair_vector,
 )
 from tests.test_constraints import ConstraintFixture
+from tests.priority_scenarios import make_priority_repair_case
 
 
 class TestRepair(ConstraintFixture):
@@ -23,44 +24,15 @@ class TestRepair(ConstraintFixture):
         return tuple((option,) for option in self.valid_options)
 
     def make_backtracking_case(self):
-        """Tạo trường hợp một điểm bắt đầu tốt giúp decoder dùng ít node hơn.
+        """Thứ tự priority ban đầu bị kẹt, đổi một khóa giúp xếp trong bốn node."""
 
-        Ba session đầu dùng cùng giảng viên và cùng phòng. Nếu session 0 ưu
-        tiên tiết 4-6, decoder đi vào nhánh cụt và không kịp quay lui trong bốn
-        node. Nếu đổi gene của session 0 để ưu tiên tiết 1-3, decoder tìm được
-        lịch hợp lệ đúng trong cùng ngân sách bốn node.
-        """
-
-        same_lecturer_part = replace(self.parts[2], lecturer_index=0)
-        problem = replace(
-            self.problem,
-            teaching_parts=(
-                self.parts[0],
-                self.parts[1],
-                same_lecturer_part,
-                self.parts[3],
-            ),
-        )
-
-        option_0_early = SessionOption(0, 0, self.tuesday.calendar_date, 1, 3)
-        option_0_middle = SessionOption(0, 0, self.tuesday.calendar_date, 4, 6)
-        option_1_middle = SessionOption(1, 0, self.tuesday.calendar_date, 4, 6)
-        option_1_late = SessionOption(1, 0, self.tuesday.calendar_date, 7, 9)
-        option_2_middle = SessionOption(2, 0, self.tuesday.calendar_date, 4, 6)
-        option_2_late = SessionOption(2, 0, self.tuesday.calendar_date, 7, 9)
-        domains = (
-            (option_0_early, option_0_middle),
-            (option_1_middle, option_1_late),
-            (option_2_middle, option_2_late),
-            (self.valid_options[3],),
-        )
-        vector = (0.75, 0.25, 0.25, 0.0)
-        return problem, domains, vector
+        problem, domains, priority = make_priority_repair_case(self)
+        return problem, domains, priority + (0.0,) * problem.schedule_dimension
 
     def test_valid_decode_does_not_need_repair(self) -> None:
         """Không sửa một vector vốn đã tạo được lịch hợp lệ."""
 
-        vector = (0.0, 0.0, 0.0, 0.0)
+        vector = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         decoded = decode_vector(
             self.problem,
             self.singleton_domains(),
@@ -89,7 +61,7 @@ class TestRepair(ConstraintFixture):
         domains = list(self.singleton_domains())
         domains[2] = ()
         domains = tuple(domains)
-        vector = (0.0, 0.0, 0.0, 0.0)
+        vector = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         decoded = decode_vector(
             self.problem,
             domains,
@@ -131,9 +103,9 @@ class TestRepair(ConstraintFixture):
         self.assertTrue(result.was_repaired)
         self.assertEqual(result.attempts, 2)
         self.assertEqual(result.changed_session_index, 0)
-        self.assertEqual(result.requested_option_index, 0)
-        self.assertEqual(result.decode_result.selected_option_indices, (0, 0, 1, 0))
-        self.assertEqual(result.decode_result.repaired_vector[0], 0.25)
+        self.assertIsNone(result.requested_option_index)
+        self.assertEqual(result.decode_result.selected_option_indices, (1, 0, 1, 0))
+        self.assertEqual(result.decode_result.repaired_vector[0], 0.75)
         self.assertTrue(
             validate_timetable(
                 problem,
@@ -178,13 +150,13 @@ class TestRepair(ConstraintFixture):
 
         self.assertEqual(result.status, RepairStatus.FAILED)
         self.assertEqual(result.attempts, 1)
-        self.assertEqual(result.changed_session_index, 1)
+        self.assertEqual(result.changed_session_index, 2)
         self.assertFalse(result.is_success)
 
     def test_singleton_domains_have_no_legal_repair_move(self) -> None:
         """Không có option thay thế thì repair thất bại mà không gọi decoder."""
 
-        vector = (0.0, 0.0, 0.0, 0.0)
+        vector = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         decoded = decode_vector(
             self.problem,
             self.singleton_domains(),
@@ -236,7 +208,7 @@ class TestRepair(ConstraintFixture):
     def test_invalid_repair_budget_is_rejected(self) -> None:
         """Hai giới hạn phải dương để hành vi repair luôn rõ ràng."""
 
-        vector = (0.0, 0.0, 0.0, 0.0)
+        vector = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         decoded = decode_vector(
             self.problem,
             self.singleton_domains(),

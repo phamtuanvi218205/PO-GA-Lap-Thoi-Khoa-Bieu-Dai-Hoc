@@ -13,6 +13,8 @@ from typing import Any
 from .database import ConnectionProtocol, fetch_one_dict
 from ..core.models import OptimizationAlgorithm
 from ..core.population import CandidateEvaluationConfig
+from ..core.decoder import DEFAULT_ENCODING
+from ..core.hybrid import HYBRID_MECHANISM, validate_island_sizes
 from .run_contract import (
     RunRequest,
     SnapshotReference,
@@ -47,7 +49,7 @@ class OptimizationRunConfig:
     crossover_distribution_index: float = 15.0
     mutation_probability: float | None = None
     mutation_distribution_index: float = 20.0
-    ga_ratio: float = 0.5
+    ga_ratio: float = 0.8
     timeout_seconds: int | None = None
 
     def __post_init__(self) -> None:
@@ -94,6 +96,8 @@ class OptimizationRunConfig:
             )
         ):
             raise ValueError("timeout_seconds phải là số nguyên dương hoặc None.")
+        if self.algorithm == OptimizationAlgorithm.GA_PO:
+            validate_island_sizes(self.population_size, self.ga_ratio)
 
 
 @dataclass(frozen=True, slots=True)
@@ -110,6 +114,8 @@ def _optimization_config_payload(config: OptimizationRunConfig) -> dict[str, Any
 
     return {
         "schema_version": "optimization-run-config.v1",
+        "solver_pipeline": DEFAULT_ENCODING,
+        "hybrid_mechanism": HYBRID_MECHANISM if config.algorithm == OptimizationAlgorithm.GA_PO else None,
         "algorithm": config.algorithm.value,
         "population_size": config.population_size,
         "max_fitness_evaluations": config.max_fitness_evaluations,
@@ -134,6 +140,13 @@ def optimization_config_from_json(raw_json: str) -> OptimizationRunConfig:
     payload = json.loads(raw_json)
     if payload.get("schema_version") != "optimization-run-config.v1":
         raise ValueError("Phiên bản request_config_json không được hỗ trợ.")
+    if payload.get("solver_pipeline") != DEFAULT_ENCODING:
+        raise ValueError(
+            "Run chờ thuộc encode/decode cũ. Hãy tạo run mới; không phục hồi "
+            "cấu hình cũ bằng Priority + Placement để tránh thay đổi thí nghiệm."
+        )
+    if payload.get("algorithm") == OptimizationAlgorithm.GA_PO.value and payload.get("hybrid_mechanism") != HYBRID_MECHANISM:
+        raise ValueError("Run chờ thuộc cơ chế lai cũ. Hãy tạo run mới, không tự đổi 50/50 sang islands.")
     evaluation_payload = payload.get("evaluation_config")
     if not isinstance(evaluation_payload, dict):
         raise ValueError("request_config_json thiếu evaluation_config hợp lệ.")
@@ -344,7 +357,8 @@ class OptimizationRunService:
                 mapping_json = prepared.gene_option_mapping_json
             else:
                 mapping_json = canonical_json({
-                    "schema_version": "gene-option-mapping.v3",
+                    "schema_version": "gene-option-mapping.v5",
+                    "vector_encoding": DEFAULT_ENCODING,
                     "status": "NO_OPTION",
                     "issues": [
                         {

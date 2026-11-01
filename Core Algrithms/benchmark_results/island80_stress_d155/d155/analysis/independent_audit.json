@@ -1,0 +1,254 @@
+{
+  "results": 120,
+  "checkpoints": 123,
+  "cohorts": 30,
+  "baseline_replays": 3,
+  "full_replay_hard0": true,
+  "full_coverage": true,
+  "soft_queries": 0,
+  "source_unchanged": true,
+  "mechanism_matches_pilot": true,
+  "optimizer_reruns": 0,
+  "totals": {
+    "GA": {
+      "fitness_evaluations": 18900,
+      "candidate_attempts": 21543,
+      "decode_failed_count": 2643,
+      "total_decode_backtracks": 67132867,
+      "improved": 30,
+      "q_general_improved": 29,
+      "fe_min": 630,
+      "fe_max": 630
+    },
+    "PO": {
+      "fitness_evaluations": 12886,
+      "candidate_attempts": 52012,
+      "decode_failed_count": 39126,
+      "total_decode_backtracks": 149882493,
+      "improved": 30,
+      "q_general_improved": 30,
+      "fe_min": 329,
+      "fe_max": 499
+    },
+    "HYBRID50": {
+      "fitness_evaluations": 16032,
+      "candidate_attempts": 35717,
+      "decode_failed_count": 19685,
+      "total_decode_backtracks": 85852199,
+      "improved": 29,
+      "q_general_improved": 29,
+      "fe_min": 490,
+      "fe_max": 576
+    },
+    "ISLAND80": {
+      "fitness_evaluations": 17717,
+      "candidate_attempts": 27513,
+      "decode_failed_count": 9796,
+      "total_decode_backtracks": 80045399,
+      "improved": 30,
+      "q_general_improved": 30,
+      "fe_min": 566,
+      "fe_max": 606
+    }
+  },
+  "ranks_final": {
+    "GA": {
+      "average_rank": 2.4,
+      "best_cohorts": 8,
+      "pair_wins": 48
+    },
+    "PO": {
+      "average_rank": 2.6,
+      "best_cohorts": 8,
+      "pair_wins": 42
+    },
+    "HYBRID50": {
+      "average_rank": 2.6,
+      "best_cohorts": 5,
+      "pair_wins": 42
+    },
+    "ISLAND80": {
+      "average_rank": 2.4,
+      "best_cohorts": 9,
+      "pair_wins": 48
+    }
+  },
+  "comparisons": {
+    "final": {
+      "GA": {
+        "small": [
+          6,
+          0,
+          4
+        ],
+        "medium": [
+          3,
+          0,
+          7
+        ],
+        "large": [
+          7,
+          0,
+          3
+        ],
+        "all": [
+          16,
+          0,
+          14
+        ]
+      },
+      "PO": {
+        "small": [
+          4,
+          0,
+          6
+        ],
+        "medium": [
+          6,
+          0,
+          4
+        ],
+        "large": [
+          7,
+          0,
+          3
+        ],
+        "all": [
+          17,
+          0,
+          13
+        ]
+      },
+      "HYBRID50": {
+        "small": [
+          6,
+          0,
+          4
+        ],
+        "medium": [
+          3,
+          0,
+          7
+        ],
+        "large": [
+          6,
+          0,
+          4
+        ],
+        "all": [
+          15,
+          0,
+          15
+        ]
+      }
+    },
+    "common": {
+      "GA": {
+        "small": [
+          6,
+          0,
+          4
+        ],
+        "medium": [
+          3,
+          0,
+          7
+        ],
+        "large": [
+          8,
+          0,
+          2
+        ],
+        "all": [
+          17,
+          0,
+          13
+        ]
+      },
+      "PO": {
+        "small": [
+          4,
+          0,
+          6
+        ],
+        "medium": [
+          5,
+          0,
+          5
+        ],
+        "large": [
+          4,
+          0,
+          6
+        ],
+        "all": [
+          13,
+          0,
+          17
+        ]
+      },
+      "HYBRID50": {
+        "small": [
+          6,
+          0,
+          4
+        ],
+        "medium": [
+          3,
+          0,
+          7
+        ],
+        "large": [
+          6,
+          0,
+          4
+        ],
+        "all": [
+          15,
+          0,
+          15
+        ]
+      }
+    }
+  },
+  "contributions": {
+    "ga_slots": 14400,
+    "po_slots": 3600,
+    "ga_success": 14400,
+    "po_success": 2417,
+    "ga_global_improvements": 625,
+    "po_global_improvements": 30,
+    "ga_meaningful_improvements": 180,
+    "po_meaningful_improvements": 13,
+    "po_valid_worse_accepted": 1179,
+    "ga_to_po": 265,
+    "po_to_ga": 270,
+    "po_discovered_to_ga": 141,
+    "ga_parent_po_discovered": 573,
+    "ga_novel_vectors": 13805,
+    "po_novel_vectors": 2263,
+    "ga_novel_phenotypes": 5250,
+    "po_novel_phenotypes": 1972,
+    "po_formula_calls": 9740
+  },
+  "behaviors": {
+    "FORAGING": 906,
+    "STAYING": 947,
+    "COMMUNICATING": 856,
+    "FEAR_OF_STRANGERS": 891
+  },
+  "initial_qg_std_range": [
+    0.011246364642420306,
+    0.04089899601345926
+  ],
+  "initial_ql_std_range": [
+    0.011923464754375071,
+    0.032564311304384586
+  ],
+  "initial_unique_phenotypes_range": [
+    30,
+    30
+  ],
+  "peak_cpu_percent": 100.0,
+  "minimum_available_ram_bytes": 3697676288
+}

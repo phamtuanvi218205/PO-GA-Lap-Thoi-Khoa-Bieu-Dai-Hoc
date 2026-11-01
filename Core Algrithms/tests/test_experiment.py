@@ -174,7 +174,7 @@ class TestExperimentExecution(unittest.TestCase):
                 self.assertEqual(result["algorithm"], algorithm)
                 self.assertEqual(
                     result["result"]["metrics"]["fitness_evaluations"],
-                    4,
+                    20,
                 )
 
             self.assertIsNotNone(paths.baseline_result_json)
@@ -234,7 +234,7 @@ class TestExperimentExecution(unittest.TestCase):
         self.assertEqual(metadata["planned_baseline_run_count"], 1)
         self.assertEqual(metadata["planned_run_count"], 4)
         self.assertEqual(metadata["completed_run_count"], 4)
-        self.assertEqual(metadata["base_request"]["population_size"], 2)
+        self.assertEqual(metadata["base_request"]["population_size"], 10)
         self.assertEqual(len(metadata["snapshot_checksums"]), 1)
 
 

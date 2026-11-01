@@ -1,0 +1,30 @@
+{
+  "schema_version": "optimization-run-request.v1",
+  "request_id": "stress-island80-medium",
+  "algorithm": "GA_PO",
+  "snapshot": {
+    "path": "data/medium.json",
+    "checksum": "0dbdbe0380498ee22be94af6c43a03e72d21a364d9fc892ca1ebff9f6ded0fbf"
+  },
+  "population_size": 30,
+  "max_fitness_evaluations": 630,
+  "random_seed": 1,
+  "max_initialization_attempts": 30000,
+  "max_offspring_attempts": 5,
+  "evaluation": {
+    "max_decode_nodes": 20000,
+    "enable_repair": true,
+    "max_repair_attempts": 3,
+    "max_decode_nodes_per_repair_attempt": 20000
+  },
+  "ga": {
+    "tournament_size": 3,
+    "crossover_probability": 0.9,
+    "crossover_distribution_index": 15,
+    "mutation_probability": null,
+    "mutation_distribution_index": 20
+  },
+  "hybrid": {
+    "ga_ratio": 0.8
+  }
+}

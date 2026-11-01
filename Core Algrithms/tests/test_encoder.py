@@ -659,7 +659,7 @@ class TestBuildOptionsForSession(EncoderFixture):
 
         domains = build_option_domains(problem)
 
-        self.assertEqual(len(domains), problem.dimension)
+        self.assertEqual(len(domains), problem.session_dimension)
         self.assertTrue(all(option.session_index == 0 for option in domains[0]))
         self.assertTrue(all(option.session_index == 1 for option in domains[1]))
 

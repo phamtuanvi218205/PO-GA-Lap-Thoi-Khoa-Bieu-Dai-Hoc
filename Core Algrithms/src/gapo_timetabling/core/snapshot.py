@@ -20,7 +20,7 @@ import json
 from pathlib import Path
 from typing import Any, Mapping
 
-from .decoder import explain_empty_domain, explain_empty_recurring_group
+from .decoder import DEFAULT_ENCODING, explain_empty_domain, explain_empty_recurring_group
 from .encoder import build_all_recurring_pattern_domains, build_option_domains
 from .models import (
     AcademicTerm,
@@ -62,7 +62,7 @@ from .models import (
 
 SNAPSHOT_SCHEMA_VERSION = "problem-instance.v2"
 LEGACY_SNAPSHOT_SCHEMA_VERSION = "problem-instance.v1"
-MAPPING_SCHEMA_VERSION = "gene-option-mapping.v3"
+MAPPING_SCHEMA_VERSION = "gene-option-mapping.v5"
 
 
 class SnapshotContractError(ValueError):
@@ -472,10 +472,11 @@ def build_gene_option_mapping(
     option_domains: tuple[tuple[SessionOption, ...], ...],
     snapshot_checksum: str,
 ) -> dict[str, Any]:
-    """Tạo bảng giải thích chính xác mỗi gene có những option nào.
+    """Giải thích gene phân công, gene ưu tiên và miền mẫu lịch khả dụng.
 
-    Option được ghi theo đúng thứ tự encoder. Vì vậy ``option_index`` là chỉ
-    số mà random-key và decoder sử dụng, không phải ID tự phát trong database.
+    ``options`` là miền để decoder kiến tạo lựa chọn, không phải các khoảng
+    PriorityKey không ánh xạ sang miền tĩnh. PlacementKey chọn hạng trong tập
+    mẫu đang khả thi khi đến lượt khối; tập đó phụ thuộc các khối đã xếp.
     """
 
     if len(option_domains) != problem.session_dimension:
@@ -538,7 +539,12 @@ def build_gene_option_mapping(
         genes.append(
             {
                 "gene_index": problem.schedule_gene_offset + group_index,
-                "gene_type": "RECURRING_SCHEDULE",
+                "placement_gene_index": problem.placement_gene_offset + group_index,
+                "gene_type": "RECURRING_PRIORITY",
+                "priority_tie_break_session_id": min(
+                    problem.class_sessions[i].class_session_id
+                    for i in problem.schedule_groups[group_index]
+                ),
                 "teaching_plan_id": plan_id,
                 "stability_group_no": stability_group_no,
                 "session_indices": list(problem.schedule_groups[group_index]),
@@ -553,14 +559,26 @@ def build_gene_option_mapping(
         "assignment_dimension": problem.assignment_dimension,
         "session_dimension": problem.session_dimension,
         "schedule_dimension": problem.schedule_dimension,
+        "placement_dimension": problem.schedule_dimension,
+        "placement_gene_offset": problem.placement_gene_offset,
+        "vector_encoding": DEFAULT_ENCODING,
         "encoding_rule": (
             "Mỗi gene phân công chọn một lecturer_index cho CourseSection; "
-            "mỗi gene lịch chọn một mẫu thứ-tiết-địa điểm lặp ở mọi tuần "
-            "hoạt động của một stability group. Mẫu được lọc theo đúng giảng "
-            "viên đã chọn trước khi random-key được ánh xạ."
+            "gene lịch được sắp tăng dần để quyết định thứ tự xếp khối lặp, "
+            "bằng khóa thì sắp theo ClassSession ID nhỏ nhất của khối. "
+            "PlacementKey chọn min(floor(key*m),m-1) trong m mẫu hiện khả thi "
+            "đã sắp theo thứ–tiết–phòng–chỉ số; không phải miền option tĩnh. "
+            "Nếu bế tắc, quay lui thử hạng gần nhất, ưu tiên phía tăng khi bằng "
+            "khoảng cách. Không chấm mềm; giữ cùng mẫu ở mọi tuần hoạt động."
         ),
         "assignment_genes": assignment_genes,
         "genes": genes,
+        "placement_genes": [
+            {"gene_index": problem.placement_gene_offset + group,
+             "gene_type": "RECURRING_PLACEMENT", "group_index": group,
+             "priority_gene_index": problem.schedule_gene_offset + group}
+            for group in range(problem.schedule_dimension)
+        ],
     }
 
 

@@ -173,17 +173,17 @@ class TestDynamicLecturerAssignment(unittest.TestCase):
         problem = self.build_problem()
         self.assertEqual(problem.assignment_dimension, 1)
         self.assertEqual(problem.session_dimension, 2)
-        self.assertEqual(problem.dimension, 3)
+        self.assertEqual(problem.dimension, 5)
         self.assertEqual(problem.assignment_section_codes, ("KTDL01",))
 
     def test_assignment_gene_selects_one_lecturer_for_both_parts(self) -> None:
         problem = self.build_problem()
         domains = build_option_domains(problem)
 
-        failed = decode_vector(problem, domains, (0.1, 0.1, 0.1), 100)
+        failed = decode_vector(problem, domains, (0.1, 0.1, 0.1, 0.0, 0.0), 100)
         self.assertEqual(failed.status, DecodeStatus.DECODE_FAILED)
 
-        result = decode_vector(problem, domains, (0.9, 0.1, 0.1), 100)
+        result = decode_vector(problem, domains, (0.9, 0.1, 0.1, 0.0, 0.0), 100)
         self.assertEqual(result.status, DecodeStatus.SUCCESS)
         self.assertEqual(result.selected_lecturer_indices, (1,))
         self.assertEqual(
@@ -195,7 +195,7 @@ class TestDynamicLecturerAssignment(unittest.TestCase):
     def test_fitness_exposes_workload_and_course_suitability(self) -> None:
         problem = self.build_problem()
         domains = build_option_domains(problem)
-        result = decode_vector(problem, domains, (0.9, 0.1, 0.1), 100)
+        result = decode_vector(problem, domains, (0.9, 0.1, 0.1, 0.0, 0.0), 100)
         fitness = calculate_fitness(problem, result.selected_options, domains)
 
         self.assertAlmostEqual(fitness.breakdown.workload_balance_component, 0.5)
@@ -205,7 +205,7 @@ class TestDynamicLecturerAssignment(unittest.TestCase):
     def test_hard_maximum_load_is_validated_after_assignment(self) -> None:
         problem = self.build_problem(second_lecturer_max=5)
         domains = build_option_domains(problem)
-        result = decode_vector(problem, domains, (0.9, 0.1, 0.1), 100)
+        result = decode_vector(problem, domains, (0.9, 0.1, 0.1, 0.0, 0.0), 100)
 
         self.assertEqual(result.status, DecodeStatus.DECODE_FAILED)
         # Tải phụ thuộc hoàn toàn vào gene phân công và tổng tiết của part.
@@ -228,7 +228,7 @@ class TestDynamicLecturerAssignment(unittest.TestCase):
 
         problem = self.build_problem(first_lecturer_unavailable=False)
         domains = build_option_domains(problem)
-        vector = (0.9, 0.1, 0.1)
+        vector = (0.9, 0.1, 0.1, 0.0, 0.0)
 
         candidates = tuple(
             _candidate_vectors(problem, domains, vector, failed_session_index=0)
@@ -330,6 +330,7 @@ class TestDynamicLecturerAssignment(unittest.TestCase):
                 domains,
                 initialization,
                 HybridConfig(
+                    ga_ratio=0.5,  # Tiny fixture: two individuals per island.
                     max_fitness_evaluations=budget,
                     max_offspring_attempts=3,
                     seed=7,

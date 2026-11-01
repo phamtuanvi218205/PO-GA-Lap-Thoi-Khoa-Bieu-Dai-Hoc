@@ -257,7 +257,7 @@ class TestPoRunInputValidation(ConstraintFixture):
             vector=(0.5,),
         )
 
-        with self.assertRaisesRegex(ValueError, "đúng 4 gene"):
+        with self.assertRaisesRegex(ValueError, "đúng 8 gene"):
             _validate_po_run_inputs(
                 self.problem,
                 replace(
@@ -390,33 +390,9 @@ class TestCandidateMetricAccumulation(ConstraintFixture):
     def make_repair_case(self):
         """Tạo vector cần đúng hai lần thử repair để giải mã thành công."""
 
-        same_lecturer_part = replace(self.parts[2], lecturer_index=0)
-        problem = replace(
-            self.problem,
-            teaching_parts=(
-                self.parts[0],
-                self.parts[1],
-                same_lecturer_part,
-                self.parts[3],
-            ),
-        )
-        domains = (
-            (
-                SessionOption(0, 0, self.tuesday.calendar_date, 1, 3),
-                SessionOption(0, 0, self.tuesday.calendar_date, 4, 6),
-            ),
-            (
-                SessionOption(1, 0, self.tuesday.calendar_date, 4, 6),
-                SessionOption(1, 0, self.tuesday.calendar_date, 7, 9),
-            ),
-            (
-                SessionOption(2, 0, self.tuesday.calendar_date, 4, 6),
-                SessionOption(2, 0, self.tuesday.calendar_date, 7, 9),
-            ),
-            (self.valid_options[3],),
-        )
-        vector = (0.75, 0.25, 0.25, 0.0)
-        return problem, domains, vector
+        from tests.priority_scenarios import make_priority_repair_case
+        problem, domains, priority = make_priority_repair_case(self)
+        return problem, domains, priority + (0.0,) * problem.schedule_dimension
 
     def test_success_adds_one_attempt_one_fe_and_decode_cost(self) -> None:
         """Ứng viên hợp lệ phải tăng attempt, FE, node và backtrack thực tế."""
@@ -424,7 +400,7 @@ class TestCandidateMetricAccumulation(ConstraintFixture):
         evaluation = evaluate_candidate(
             self.problem,
             self.singleton_domains(),
-            (0.0, 0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
             CandidateEvaluationConfig(
                 max_decode_nodes=20,
                 enable_repair=False,
@@ -459,7 +435,7 @@ class TestCandidateMetricAccumulation(ConstraintFixture):
         decode_failed = evaluate_candidate(
             self.problem,
             self.singleton_domains(),
-            (0.0, 0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
             CandidateEvaluationConfig(
                 max_decode_nodes=1,
                 enable_repair=False,
@@ -562,7 +538,7 @@ class TestCandidateMetricAccumulation(ConstraintFixture):
         evaluation = evaluate_candidate(
             self.problem,
             tuple(domains),
-            (0.0, 0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
             CandidateEvaluationConfig(max_decode_nodes=20),
         )
 
@@ -666,7 +642,7 @@ class TestPoOffspringCreation(ConstraintFixture):
 
         parent, domains = self.make_parent_and_domains()
         before = self.empty_metrics()
-        proposed = (-0.25, 0.25, 1.25, 0.75)
+        proposed = (-0.25, 0.25, 1.25, 0.75, 0.0, 0.0, 0.0, 0.0)
 
         with (
             patch(
@@ -694,7 +670,7 @@ class TestPoOffspringCreation(ConstraintFixture):
 
         # Đối số thứ ba của evaluate_candidate là vector sau boundary control.
         evaluated_vector = evaluator.call_args.args[2]
-        self.assertEqual(evaluated_vector, (0.0, 0.25, 1.0, 0.75))
+        self.assertEqual(evaluated_vector, (0.0, 0.25, 1.0, 0.75, 0.0, 0.0, 0.0, 0.0))
 
         # Helper trả metrics mới thay vì sửa ảnh chụp đầu vào.
         self.assertEqual(before.candidate_attempts, 0)
@@ -705,7 +681,7 @@ class TestPoOffspringCreation(ConstraintFixture):
 
         parent, _ = self.make_parent_and_domains()
         domains = tuple((option,) for option in self.valid_options)
-        vector = (0.0, 0.0, 0.0, 0.0)
+        vector = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         failed = evaluate_candidate(
             self.problem,
             domains,
@@ -759,7 +735,7 @@ class TestPoOffspringCreation(ConstraintFixture):
 
         parent, _ = self.make_parent_and_domains()
         domains = tuple((option,) for option in self.valid_options)
-        vector = (0.0, 0.0, 0.0, 0.0)
+        vector = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         failed = evaluate_candidate(
             self.problem,
             domains,

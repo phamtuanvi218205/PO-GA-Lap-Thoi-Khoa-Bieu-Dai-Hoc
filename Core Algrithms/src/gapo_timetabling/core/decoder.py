@@ -1,15 +1,16 @@
 """Giải mã vector random-key thành phân công và lịch cố định theo học kỳ.
 
-Nhóm gene đầu chọn đúng một giảng viên cho mỗi ``CourseSection``. Mỗi gene
-lịch còn lại tương ứng một chuỗi buổi lặp, không phải một tuần riêng lẻ. Gene
-đó ưu tiên một mẫu ``(thứ, tiết bắt đầu, địa điểm)`` dùng được ở tất cả tuần
-hoạt động của chuỗi. Decoder chỉ thử mẫu khác khi cần tránh vi phạm cứng; nó
-không đánh đổi điều kiện sức chứa hoặc tự tối ưu các tiêu chí mềm thay GA/PO.
+Nhóm gene đầu chọn giảng viên cho mỗi ``CourseSection``. Các gene lịch là
+PriorityKey cho thứ tự xếp và PlacementKey cho hạng vị trí đang khả thi.
+Bộ giải mã có quay lui giới hạn chỉ để tìm
+lịch hợp lệ. Điểm mềm được tính sau khi hoàn tất lịch, không dùng để chọn mẫu.
+``decode_direct_vector`` chỉ giữ để đọc kết quả DIRECT_OPTION lịch sử.
 """
 
 from dataclasses import dataclass
 from enum import Enum
 from math import floor, isfinite
+from threading import local
 
 from .constraints import HardViolationCode, ValidationResult, validate_timetable
 from .encoder import (
@@ -53,6 +54,105 @@ def preferred_option_index(gene: float, option_count: int) -> int:
     """Ánh xạ random-key ``x`` sang ``min(floor(x*m), m-1)``."""
 
     return min(floor(gene * option_count), option_count - 1)
+
+
+PRIORITY_ENCODING = "RECURRING_PRIORITY_FEASIBILITY.v1"
+SOFT_PRIORITY_ENCODING = "RECURRING_PRIORITY_SOFT.v1"
+PLACEMENT_ENCODING = "RECURRING_PRIORITY_PLACEMENT.v1"
+DEFAULT_ENCODING = PLACEMENT_ENCODING
+DIRECT_ENCODING = "DIRECT_OPTION"
+_PRIORITY_LOCAL = local()
+
+
+class _HistoricalProblem(ProblemInstance):
+    """Chỉ dùng để replay vector cũ L+B, không đổi snapshot nghiệp vụ."""
+
+    __slots__ = ()
+
+    @property
+    def dimension(self) -> int:
+        return self.assignment_dimension + self.schedule_dimension
+
+
+def historical_problem(problem: ProblemInstance) -> ProblemInstance:
+    """Giữ số chiều lịch sử mà không cắt hoặc tự bổ sung gene đã lưu."""
+
+    from dataclasses import fields
+
+    if isinstance(problem, _HistoricalProblem):
+        return problem
+    cached = getattr(_PRIORITY_LOCAL, "historical_problem", None)
+    if cached is None or cached[0] is not problem:
+        view = _HistoricalProblem(**{f.name: getattr(problem, f.name)
+                                    for f in fields(ProblemInstance)})
+        cached = (problem, view)
+        _PRIORITY_LOCAL.historical_problem = cached
+    return cached[1]
+
+
+def clear_decode_cache() -> None:
+    """Giải phóng dữ liệu dẫn xuất của snapshot trên thread hiện tại."""
+
+    _PRIORITY_LOCAL.decoder = None
+    _PRIORITY_LOCAL.soft_decoder = None
+    _PRIORITY_LOCAL.historical_decoder = None
+    _PRIORITY_LOCAL.historical_problem = None
+
+
+def decode_vector(
+    problem: ProblemInstance,
+    option_domains: tuple[tuple[SessionOption, ...], ...],
+    vector: tuple[float, ...],
+    max_decode_nodes: int,
+) -> DecodeResult:
+    """Giải mã Priority + Placement, giữ nguyên toàn bộ chromosome.
+
+    Cache chỉ chứa dữ liệu của một snapshot trên mỗi thread. Không chia sẻ
+    trạng thái tìm kiếm giữa hai run hoặc hai worker của ứng dụng.
+    """
+
+    from .placement_decoder import PlacementDecoder
+
+    decoder = getattr(_PRIORITY_LOCAL, "decoder", None)
+    if decoder is None:
+        decoder = PlacementDecoder()
+        _PRIORITY_LOCAL.decoder = decoder
+    return decoder(problem, option_domains, vector, max_decode_nodes)
+
+
+def decode_saved_vector(
+    problem: ProblemInstance,
+    option_domains: tuple[tuple[SessionOption, ...], ...],
+    vector: tuple[float, ...],
+    max_decode_nodes: int,
+    *,
+    encoding: str = DIRECT_ENCODING,
+) -> DecodeResult:
+    """Replay theo nhãn lưu kèm; dữ liệu cũ thiếu nhãn là DIRECT_OPTION."""
+
+    if encoding == PLACEMENT_ENCODING:
+        return decode_vector(problem, option_domains, vector, max_decode_nodes)
+    if encoding == PRIORITY_ENCODING:
+        from .priority_decoder import PriorityDecoder
+
+        decoder = getattr(_PRIORITY_LOCAL, "historical_decoder", None)
+        if decoder is None:
+            decoder = PriorityDecoder()
+            _PRIORITY_LOCAL.historical_decoder = decoder
+        return decoder(historical_problem(problem), option_domains, vector, max_decode_nodes)
+    if encoding == SOFT_PRIORITY_ENCODING:
+        # Giữ nguyên ngữ nghĩa kết quả đã lưu trước khi đổi chính sách decoder.
+        # Nhánh này chỉ dành cho replay/đối chứng, không phải mặc định run mới.
+        from .priority_decoder import PriorityDecoder
+
+        decoder = getattr(_PRIORITY_LOCAL, "soft_decoder", None)
+        if decoder is None:
+            decoder = PriorityDecoder(soft=True)
+            _PRIORITY_LOCAL.soft_decoder = decoder
+        return decoder(historical_problem(problem), option_domains, vector, max_decode_nodes)
+    if encoding == DIRECT_ENCODING:
+        return decode_direct_vector(historical_problem(problem), option_domains, vector, max_decode_nodes)
+    raise ValueError(f"Không hỗ trợ biểu diễn vector: {encoding}.")
 
 
 def _ordered_option_indices(preferred_index: int, option_count: int) -> tuple[int, ...]:
@@ -142,7 +242,7 @@ def _validate_decode_inputs(
     if len(option_domains) != problem.session_dimension:
         raise ValueError("Số miền option phải bằng số ClassSession.")
     if len(vector) != problem.dimension:
-        raise ValueError("Số gene phải bằng gene phân công cộng gene nhóm lịch lặp.")
+        raise ValueError(f"Số gene phải bằng {problem.dimension} theo biểu diễn của bài toán.")
     for session_index, domain in enumerate(option_domains):
         if any(option.session_index != session_index for option in domain):
             raise ValueError("Option phải nằm trong miền của đúng session_index.")
@@ -216,14 +316,18 @@ def _part_for_group(problem: ProblemInstance, group_index: int):
     return problem.teaching_parts[plan.teaching_part_index]
 
 
-def decode_vector(
+def decode_direct_vector(
     problem: ProblemInstance,
     option_domains: tuple[tuple[SessionOption, ...], ...],
     vector: tuple[float, ...],
     max_decode_nodes: int,
 ) -> DecodeResult:
-    """Ghép các mẫu lịch lặp thành lịch hợp lệ bằng MRV và backtracking."""
+    """Giải mã biểu diễn DIRECT_OPTION lịch sử, không dùng cho optimizer mới."""
 
+    # Empty-domain diagnostics from the new decoder can carry L+2B keys;
+    # no gene is interpreted in that branch. Historical schedules use L+B.
+    if len(vector) == problem.assignment_dimension + problem.schedule_dimension:
+        problem = historical_problem(problem)
     _validate_decode_inputs(problem, option_domains, vector, max_decode_nodes)
     for session_index, domain in enumerate(option_domains):
         if not domain:
@@ -234,6 +338,8 @@ def decode_vector(
                 f"{explain_empty_domain(problem, session)}",
             )
 
+    if problem.dimension != problem.assignment_dimension + problem.schedule_dimension:
+        raise ValueError("DIRECT_OPTION lịch sử yêu cầu vector L+B, không phải L+2B.")
     lecturer_by_section, selected_lecturers, failure = _select_lecturers(
         problem, vector
     )

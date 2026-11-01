@@ -78,6 +78,7 @@ class FakeConnection:
 
 def make_config() -> OptimizationRunConfig:
     return OptimizationRunConfig(
+        ga_ratio=0.5,  # Tiny fixture, two members per island.
         algorithm=OptimizationAlgorithm.GA_PO,
         population_size=4,
         max_fitness_evaluations=20,

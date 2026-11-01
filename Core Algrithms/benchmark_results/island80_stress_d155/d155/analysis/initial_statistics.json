@@ -1,0 +1,392 @@
+[
+  {
+    "case": "small",
+    "seed": 1,
+    "initial_sha": "2be7526152904e671beec5f9e2f1e327d11b06f3220e8503b956d8cb3bc5064f",
+    "dimension": 60,
+    "best": [
+      0.06717967032967033,
+      0.28386201610289874
+    ],
+    "q_general_std": 0.0341483471570358,
+    "q_lecturer_std": 0.032564311304384586,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "small",
+    "seed": 2,
+    "initial_sha": "1e9ae8450ceec731a581cdc47cb323899694777bc682d57299408825a57ac75e",
+    "dimension": 60,
+    "best": [
+      0.04682857142857143,
+      0.34618554691759096
+    ],
+    "q_general_std": 0.038117082279517864,
+    "q_lecturer_std": 0.022765495473706637,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "small",
+    "seed": 3,
+    "initial_sha": "1a3b79d3bdc46653544f0049d9a4e06c0eeac6de6ab1bbb3121f752c9fc1ce32",
+    "dimension": 60,
+    "best": [
+      0.06977153361344537,
+      0.34797993672993666
+    ],
+    "q_general_std": 0.04089899601345926,
+    "q_lecturer_std": 0.025035480300122034,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "small",
+    "seed": 4,
+    "initial_sha": "35bf6b44ab5fad9f07c08a9e52b00ccd285b6cd8a213ee84c7d53a7f4fee759f",
+    "dimension": 60,
+    "best": [
+      0.06829321428571429,
+      0.3314738129592352
+    ],
+    "q_general_std": 0.03254206894962693,
+    "q_lecturer_std": 0.021640521808623078,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "small",
+    "seed": 5,
+    "initial_sha": "7fc902ab18da0d0140ae62d630f65f60ac79a4e498fec08fdd44cfdc9d9c76bf",
+    "dimension": 60,
+    "best": [
+      0.07263571428571428,
+      0.36582959767392276
+    ],
+    "q_general_std": 0.03599290494220947,
+    "q_lecturer_std": 0.027011893761698248,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "small",
+    "seed": 6,
+    "initial_sha": "698bd28f6c93a40553facf878701e6ec7c894a385499a04ab1fcd12fd80a96a6",
+    "dimension": 60,
+    "best": [
+      0.05804107142857143,
+      0.3455885193253534
+    ],
+    "q_general_std": 0.036724405600430776,
+    "q_lecturer_std": 0.027166984369906593,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "small",
+    "seed": 7,
+    "initial_sha": "d499f056001792721a0be4ca3c76f578af8072647c19d8512963257ef01841de",
+    "dimension": 60,
+    "best": [
+      0.06884403361344538,
+      0.3146544960772484
+    ],
+    "q_general_std": 0.03772995226346966,
+    "q_lecturer_std": 0.029140862940755963,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "small",
+    "seed": 8,
+    "initial_sha": "a1fd0e9620e5c35e852437f7304d2abe02595a9252b8c582c02643ee130ae71c",
+    "dimension": 60,
+    "best": [
+      0.06988983516483516,
+      0.3219578509566521
+    ],
+    "q_general_std": 0.03610479792726992,
+    "q_lecturer_std": 0.02141678553646961,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "small",
+    "seed": 9,
+    "initial_sha": "19399d8f1aa4ec8a7a319a4589250c56d872450d99543dc6ac9d91291b3d3d89",
+    "dimension": 60,
+    "best": [
+      0.06859428571428572,
+      0.3238952498839551
+    ],
+    "q_general_std": 0.03105880290609882,
+    "q_lecturer_std": 0.027220292931701005,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "small",
+    "seed": 10,
+    "initial_sha": "cd5d835ab857e7c947543ad23898c63f13d81b8a7e7ff5cdfdc5cba789489333",
+    "dimension": 60,
+    "best": [
+      0.030891071428571427,
+      0.32472498452252024
+    ],
+    "q_general_std": 0.03502214707939103,
+    "q_lecturer_std": 0.031157955466171665,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "medium",
+    "seed": 1,
+    "initial_sha": "baae91fced8a4df246b19438cdd126a10fb23e5925692aa8a37f2898e95c627b",
+    "dimension": 90,
+    "best": [
+      0.08202685025817555,
+      0.3622451863651508
+    ],
+    "q_general_std": 0.019932582704301788,
+    "q_lecturer_std": 0.024713967508924066,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "medium",
+    "seed": 2,
+    "initial_sha": "f0fd392ab6f8021e849f72e8e62a4a392494e75e89eb0a72f4264800167689bf",
+    "dimension": 90,
+    "best": [
+      0.07631739130434782,
+      0.33971920288660784
+    ],
+    "q_general_std": 0.021068466005526976,
+    "q_lecturer_std": 0.027573372835317037,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "medium",
+    "seed": 3,
+    "initial_sha": "d00042cc243476ed29afce4d56031a2d042777d46b1f6959fb4998d1bbf20437",
+    "dimension": 90,
+    "best": [
+      0.050914526678141135,
+      0.3552070479792192
+    ],
+    "q_general_std": 0.029877013885002898,
+    "q_lecturer_std": 0.024748080047777357,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "medium",
+    "seed": 4,
+    "initial_sha": "9c3800f74e2328384f5e39feb4e00a3342ffcae1a69385bbe1471c1359525253",
+    "dimension": 90,
+    "best": [
+      0.07473955514365152,
+      0.3561476292704141
+    ],
+    "q_general_std": 0.02415639469152146,
+    "q_lecturer_std": 0.02495028424189979,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "medium",
+    "seed": 5,
+    "initial_sha": "c247ac056033bc636b71cacc3a6aec57a7bd189b1a2a66faf72e9b6ff3b41290",
+    "dimension": 90,
+    "best": [
+      0.08913753963221306,
+      0.34641057681839155
+    ],
+    "q_general_std": 0.020598712590251166,
+    "q_lecturer_std": 0.020257747970139104,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "medium",
+    "seed": 6,
+    "initial_sha": "c4654011297a2672341613ba480a63003719435b374fb311b0f5276797e1fe01",
+    "dimension": 90,
+    "best": [
+      0.08889013316423588,
+      0.34634226857021666
+    ],
+    "q_general_std": 0.02250833474483032,
+    "q_lecturer_std": 0.018544377176192915,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "medium",
+    "seed": 7,
+    "initial_sha": "76b3d7bb244c6d55584b61582b56f140c2f33fce7c93a0562aef7345af5660eb",
+    "dimension": 90,
+    "best": [
+      0.07551429164935604,
+      0.34124527698391105
+    ],
+    "q_general_std": 0.0245065801764285,
+    "q_lecturer_std": 0.01901696288329674,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "medium",
+    "seed": 8,
+    "initial_sha": "41b3d5de1b3ba40dfd3e753a3668879f32d8e9ad7eee2dca1221167805c09107",
+    "dimension": 90,
+    "best": [
+      0.05971423821869757,
+      0.3706021586606806
+    ],
+    "q_general_std": 0.02294249240438373,
+    "q_lecturer_std": 0.022775923649775556,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "medium",
+    "seed": 9,
+    "initial_sha": "792834e0dc40f6a8d6a243790e65e89863dd9c6cd820f3345aaf2d5399eaea19",
+    "dimension": 90,
+    "best": [
+      0.0930306139687903,
+      0.3165608621661686
+    ],
+    "q_general_std": 0.023503445490253426,
+    "q_lecturer_std": 0.022723649906560454,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "medium",
+    "seed": 10,
+    "initial_sha": "e0a48000735f718ffab508d05a15e40cfee2139ae4243fb1975f8da953590c7c",
+    "dimension": 90,
+    "best": [
+      0.06144874948068134,
+      0.3303620344774458
+    ],
+    "q_general_std": 0.023137348075645863,
+    "q_lecturer_std": 0.022260459336607828,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "large",
+    "seed": 1,
+    "initial_sha": "8efc29c0e73d9b419618001036b060ec072a3c638159b7ec55d6b8d1b5f41a7b",
+    "dimension": 120,
+    "best": [
+      0.07728971786833855,
+      0.344421248768507
+    ],
+    "q_general_std": 0.01418640609137475,
+    "q_lecturer_std": 0.01686187960316622,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "large",
+    "seed": 2,
+    "initial_sha": "767e7a42b30198ad24b23e30150d6aea3f5e47a21ca29753244cc66b35f7e6cc",
+    "dimension": 120,
+    "best": [
+      0.08205152153110047,
+      0.33502150179150936
+    ],
+    "q_general_std": 0.01135162681683872,
+    "q_lecturer_std": 0.015678968156872617,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "large",
+    "seed": 3,
+    "initial_sha": "0138fbe2ecfffa3d24d2906a8cad851724d7a4f6f12a5d58d4bfb3b6568a8ee4",
+    "dimension": 120,
+    "best": [
+      0.08341415780445968,
+      0.3463752690708578
+    ],
+    "q_general_std": 0.012705464032185565,
+    "q_lecturer_std": 0.013552708560734832,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "large",
+    "seed": 4,
+    "initial_sha": "4089ab3cb9a44a732fa3f9923286e929ec7e31dedafb87add0505920bdf2313b",
+    "dimension": 120,
+    "best": [
+      0.08307813076578593,
+      0.33503861130079704
+    ],
+    "q_general_std": 0.011246364642420306,
+    "q_lecturer_std": 0.021852864436263827,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "large",
+    "seed": 5,
+    "initial_sha": "437650701be4ebeaecfe5d0509904fc5111f9a5e1a20f31f2f28e751f223bb98",
+    "dimension": 120,
+    "best": [
+      0.08017285314685314,
+      0.3445956664268002
+    ],
+    "q_general_std": 0.014355639745238246,
+    "q_lecturer_std": 0.017994134113178774,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "large",
+    "seed": 6,
+    "initial_sha": "41893dde096f27218b27e9934d1321997237da24ad3d32ce9cf7b1e26e8f6345",
+    "dimension": 120,
+    "best": [
+      0.07736315560513107,
+      0.33579804106926997
+    ],
+    "q_general_std": 0.01478368020101565,
+    "q_lecturer_std": 0.016519376708244236,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "large",
+    "seed": 7,
+    "initial_sha": "033654b409dfd071322be13535fc7b44c1d430fdf9b4388f034ef85d2f707259",
+    "dimension": 120,
+    "best": [
+      0.08765703448275862,
+      0.3496249333589227
+    ],
+    "q_general_std": 0.01673822150681465,
+    "q_lecturer_std": 0.013427344587762218,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "large",
+    "seed": 8,
+    "initial_sha": "0b2a38d666c7afa73f30bb418175e7a26c3f87e61f05b95e74e0cbbfab2fb534",
+    "dimension": 120,
+    "best": [
+      0.07657349762432689,
+      0.35313547086168046
+    ],
+    "q_general_std": 0.016542569191954324,
+    "q_lecturer_std": 0.01467926936418004,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "large",
+    "seed": 9,
+    "initial_sha": "3c01c5092fbf45a1641a0e6389f7286c9e1c66aa236c31a757fbe4795334e6b8",
+    "dimension": 120,
+    "best": [
+      0.07809485714285713,
+      0.33916567442200224
+    ],
+    "q_general_std": 0.016007249746144737,
+    "q_lecturer_std": 0.011923464754375071,
+    "unique_phenotypes": 30
+  },
+  {
+    "case": "large",
+    "seed": 10,
+    "initial_sha": "6eaac813a1f0b6a7d6709c6867c2dd1cc059eab47f9ed4a72e18c5403c1d8747",
+    "dimension": 120,
+    "best": [
+      0.07627843411311816,
+      0.34713926838260895
+    ],
+    "q_general_std": 0.01835910957638386,
+    "q_lecturer_std": 0.015673180580345183,
+    "unique_phenotypes": 30
+  }
+]

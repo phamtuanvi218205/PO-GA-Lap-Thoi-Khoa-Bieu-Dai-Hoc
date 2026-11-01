@@ -1,5 +1,15 @@
 # Cấu hình benchmark thời khóa biểu
 
+**D158 — bộ nặng hiện hành:** xem `stress/README.md` và
+`stress/timetable_stress_suite.json` (Small12/Medium18/Large24 lớp,
+Priority+Placement, GA_PO islands80/20). Các cấu hình bên dưới và thư mục
+`distributed/` là bộ cũ, giữ để truy nguyên; không ghi đè dữ liệu/kết quả cũ.
+Không diễn giải kết quả cũ như đã được chạy bằng cơ chế lai hiện tại.
+
+Kết quả được chọn đã đồng bộ tại [../benchmark_results/README.md](../benchmark_results/README.md),
+gồm đủ D155120run+3Greedy và D1593run xác nhận. Hướng dẫn chạy mới trên3máy:
+[stress/README.md](stress/README.md). Các phần bên dưới là hướng dẫn lịch sử.
+
 Thư mục này khóa cấu hình thực nghiệm của học kỳ `2027_HK1`:
 
 - Greedy First Feasible chạy một lần làm mốc tham khảo xác định.

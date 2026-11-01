@@ -1,17 +1,18 @@
 """Repair mỏng cho vector random-key sau một lần decode thất bại.
 
-Decoder vẫn là thành phần chính chịu trách nhiệm ghép các ``SessionOption``
-thành lịch hợp lệ bằng MRV và quay lui có giới hạn. Module này không lặp lại
+Decoder kiến tạo theo thứ tự ưu tiên, có quay lui giới hạn. Module này không lặp lại
 logic xếp lịch, không tự kiểm tra xung đột và không thay đổi cấu trúc bài toán.
 
 Repair chỉ làm đúng ba việc:
 
 1. Chọn một gene để thử lại.
-2. Đưa gene đó vào giữa khoảng của một lựa chọn khác trong cùng miền cố định.
+2. Thử giá trị giữa các khoảng chia theo số lựa chọn của miền cố định.
 3. Gọi lại decoder và nhận kết quả đã được decoder/validator kiểm tra.
 
 Repair có thể đổi gene phân công sang giảng viên đủ năng lực khác hoặc đổi
-gene lịch sang option khác. Nó không tạo giảng viên/option mới, không đổi plan,
+khóa ưu tiên lịch. Với gene lịch, các giá trị chia khoảng chỉ là lưới thử
+khóa, không bảo đảm chọn option có chỉ số tương ứng. Giữ lưới thử và ngân
+sách đã kiểm chứng; không thêm local search theo fitness. Không đổi plan,
 tuần, thời lượng, số buổi, tổng số tiết hoặc loại phần giảng dạy.
 """
 
@@ -312,7 +313,7 @@ def repair_vector(
                 total_nodes_explored=total_nodes_explored,
                 total_backtracks=total_backtracks,
                 changed_session_index=session_index,
-                requested_option_index=requested_index,
+            requested_option_index=(requested_index if session_index is None else None),
                 reason="Đổi một gene đã giúp decoder tìm được lịch hợp lệ.",
             )
 
@@ -334,6 +335,6 @@ def repair_vector(
         total_nodes_explored=total_nodes_explored,
         total_backtracks=total_backtracks,
         changed_session_index=last_session_index,
-        requested_option_index=last_requested_index,
+        requested_option_index=(last_requested_index if last_session_index is None else None),
         reason=reason,
     )

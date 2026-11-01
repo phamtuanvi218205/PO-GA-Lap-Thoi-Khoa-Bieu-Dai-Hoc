@@ -1,17 +1,7 @@
-"""Thuật toán lai GA–PO cho bài toán thời khóa biểu dùng random-key.
+"""GA–PO islands: independent populations, full chromosomes, periodic migration.
 
-Mỗi iteration chia quần thể hiện tại thành hai nhóm không rỗng. Nhóm thứ nhất
-sinh cá thể con bằng các toán tử của Genetic Algorithm; nhóm thứ hai sinh cá
-thể con bằng các hành vi của Parrot Optimizer V2. Hai nhánh dùng chung pipeline
-đánh giá ứng viên:
-
-``random-key vector -> decoder -> optional repair -> validator -> fitness``
-
-Các cá thể con hợp lệ của hai nhánh được hợp với toàn bộ quần thể cha. Thuật
-toán giữ ``N`` cá thể tốt nhất theo thứ tự mục tiêu lexicographic của thời khóa
-biểu rồi xáo trộn trước lần chia nhóm tiếp theo. Việc giữ cha trong tập chọn
-lọc bảo toàn quần thể khi một cá thể con không thể giải mã, đồng thời không cần
-gán điểm phạt giả cho lịch không hợp lệ.
+Default ISLAND80 matches D154/D155: 24 GA / 6 PO for N30; archive6;
+migration every two generations except the last. No PHENO80 selection.
 """
 
 from __future__ import annotations
@@ -26,6 +16,7 @@ from .ga import (
     GAConfig,
     _create_offspring_vector,
     _validate_ga_run_inputs,
+    select_survivors,
 )
 from .metrics import (
     ConvergencePoint,
@@ -52,7 +43,6 @@ from .population import (
     TimetableIndividual,
     best_individual,
     evaluate_candidate,
-    sort_individuals,
 )
 
 
@@ -60,10 +50,9 @@ from .population import (
 class HybridConfig:
     """Cấu hình cho một lần chạy thuật toán lai GA–PO.
 
-    ``max_fitness_evaluations`` bao gồm cả số lần đánh giá đã dùng để tạo quần
-    thể ban đầu. ``ga_ratio`` quy định số vị trí được giao cho nhánh GA trong
-    mỗi iteration; các vị trí còn lại thuộc nhánh PO. Mỗi nhánh phải nhận ít
-    nhất một vị trí để lần chạy thực sự là thuật toán lai.
+    ``max_fitness_evaluations`` bao gồm cả khởi tạo. ``ga_ratio`` mặc định 0.8
+    quyết định kích thước hai quần thể độc lập, mỗi bên ít nhất hai cá thể.
+    Chỉ cấu hình 80/20 được đo trong D155; tỷ lệ tùy chỉnh là thử nghiệm khác.
 
     Các tham số toán tử GA có cùng ý nghĩa và giá trị mặc định với
     :class:`gapo_timetabling.core.ga.GAConfig`. Hai nhánh dùng chung giới hạn giải
@@ -74,7 +63,7 @@ class HybridConfig:
     max_offspring_attempts: int
     seed: int
     evaluation_config: CandidateEvaluationConfig
-    ga_ratio: float = 0.5
+    ga_ratio: float = 0.8
     tournament_size: int = 3
     crossover_probability: float = 0.9
     crossover_distribution_index: float = 15.0
@@ -246,201 +235,155 @@ def _try_create_ga_offspring(
     return None, updated_metrics
 
 
+
+HYBRID_MECHANISM = "GA_PO_ISLANDS.v1"
+DEFAULT_GA_RATIO = 0.8
+PO_ARCHIVE_SIZE = 6
+MIGRATION_INTERVAL = 2
+
+
+def validate_island_sizes(population_size: int, ga_ratio: float) -> int:
+    """Reject unsupported splits; never silently clamp the benchmark ratio."""
+    if not isfinite(ga_ratio):
+        raise ValueError("ga_ratio must be finite.")
+    if not 0.0 < ga_ratio < 1.0:
+        raise ValueError("ga_ratio must be in the open interval (0, 1).")
+    n_ga = round(population_size * ga_ratio)
+    if min(n_ga, population_size - n_ga) < 2:
+        raise ValueError("Each island needs at least two individuals.")
+    return n_ga
+
+
+def _unique_best(items, limit: int) -> tuple[TimetableIndividual, ...]:
+    """Archive only; GA survivors still use the original GA selection."""
+    result = []
+    seen = set()
+    for item in sorted(items, key=_individual_order_key):
+        if item.selected_options not in seen:
+            result.append(item)
+            seen.add(item.selected_options)
+            if len(result) == limit:
+                break
+    return tuple(result)
+
+
+def _migrate(source, destination):
+    """One novel schedule replaces the worst non-elite without another FE."""
+    existing = {item.selected_options for item in destination}
+    migrant = next((item for item in sorted(source, key=_individual_order_key)
+                    if item.selected_options not in existing), None)
+    if migrant is None:
+        return destination, None
+    protected = min(range(len(destination)), key=lambda i: _individual_order_key(destination[i]))
+    worst = max((i for i in range(len(destination)) if i != protected),
+                key=lambda i: _individual_order_key(destination[i]))
+    updated = list(destination)
+    updated[worst] = migrant
+    return tuple(updated), migrant
+
+
 def run_hybrid(
     problem: ProblemInstance,
     option_domains: tuple[tuple[SessionOption, ...], ...],
     initialization: PopulationInitializationResult,
     config: HybridConfig,
-    *,
-    progress_callback: OptimizationProgressCallback | None = None,
+    *, progress_callback: OptimizationProgressCallback | None = None,
 ) -> OptimizationResult:
-    """Chạy hybrid GA–PO từ một quần thể ban đầu hợp lệ.
+    """Run D155 ISLAND80 (default), preserving its operator and RNG order.
 
-    Đầu mỗi iteration, thuật toán chụp mean của toàn bộ quần thể cha và nghiệm
-    tốt nhất toàn cục. Chỉ số quần thể được xáo trộn rồi chia thành nhánh GA và
-    PO. Mỗi nhánh tạo tối đa một cá thể con hợp lệ cho từng vị trí được giao.
-
-    Quần thể kế tiếp được chọn từ ``parents + valid_offspring``. Cách chọn từ
-    hợp cha–con này khác PO thuần, nơi một con PO hợp lệ thay trực tiếp vị trí
-    cha. Trong hybrid, cha đã có sẵn trong hợp nên bước survivor selection có
-    thể so sánh nhất quán toàn bộ ứng viên hợp lệ.
+    Other explicit ratios are configurable experiments, not measured ISLAND80.
+    No global monkeypatching: concurrent API jobs remain isolated. Progress
+    callbacks consume no RNG and can cancel after each offspring slot.
     """
-
     started_at = perf_counter()
-    ga_config = config.create_ga_config()
-    po_config = config.create_po_config()
-
-    # GA và hybrid dùng cùng bất biến đầu vào: quần thể khởi tạo SUCCESS, miền
-    # option không rỗng và đúng thứ tự, random-key hữu hạn, cùng ngân sách FE
-    # biểu diễn được một số nguyên iteration đầy đủ.
-    max_iterations = _validate_ga_run_inputs(
-        problem=problem,
-        option_domains=option_domains,
-        initialization=initialization,
-        config=ga_config,
-    )
-
-    population = tuple(initialization.individuals)
-    population_size = len(population)
-    number_of_ga_agents = int(round(population_size * config.ga_ratio))
-
-    if (
-        number_of_ga_agents <= 0
-        or number_of_ga_agents >= population_size
-    ):
-        raise ValueError(
-            "ga_ratio must assign at least one individual to each branch."
-        )
-
-    best_so_far = best_individual(population)
+    ga_config, po_config = config.create_ga_config(), config.create_po_config()
+    max_iterations = _validate_ga_run_inputs(problem, option_domains, initialization, ga_config)
+    population_size = len(initialization.individuals)
+    n_ga = validate_island_sizes(population_size, config.ga_ratio)
+    indices = list(range(population_size))
+    Random(config.seed ^ 0x1548020).shuffle(indices)
+    ga_pool = tuple(initialization.individuals[i] for i in indices[:n_ga])
+    po_pool = tuple(initialization.individuals[i] for i in indices[n_ga:])
+    po_archive = _unique_best(po_pool, PO_ARCHIVE_SIZE)
+    po_best = best_individual(po_pool)
+    best_so_far = best_individual(initialization.individuals)
     metrics = _initial_metrics(initialization)
-    convergence_history: list[ConvergencePoint] = [
-        _create_convergence_point(
-            iteration=0,
-            metrics=metrics,
-            best_so_far=best_so_far,
-        )
-    ]
+    history = [_create_convergence_point(0, metrics, best_so_far)]
     rng = Random(config.seed)
 
+    def accept(item: TimetableIndividual) -> None:
+        nonlocal best_so_far
+        if _individual_order_key(item) < _individual_order_key(best_so_far):
+            best_so_far = item
+
     def report_progress(iteration: int) -> None:
-        if progress_callback is None:
-            return
-        progress_callback(OptimizationProgress(
-            algorithm=OptimizationAlgorithm.GA_PO,
-            iteration=iteration,
-            max_iterations=max_iterations,
-            max_fitness_evaluations=config.max_fitness_evaluations,
-            metrics=metrics,
-            best_general_quality_score=best_so_far.fitness.general_quality_score,
-            best_lecturer_preference_score=(
-                best_so_far.fitness.lecturer_preference_score
-            ),
-        ))
+        if progress_callback is not None:
+            progress_callback(OptimizationProgress(
+                algorithm=OptimizationAlgorithm.GA_PO,
+                iteration=iteration, max_iterations=max_iterations,
+                max_fitness_evaluations=config.max_fitness_evaluations, metrics=metrics,
+                best_general_quality_score=best_so_far.fitness.general_quality_score,
+                best_lecturer_preference_score=best_so_far.fitness.lecturer_preference_score,
+            ))
 
     report_progress(0)
-
-    for iteration in range(1, max_iterations + 1):
-        # Mean được giữ cố định trong khi sinh toàn bộ con PO của iteration;
-        # không tính lại từ dữ liệu đã được cập nhật một phần.
-        population_mean = calculate_population_mean(
-            tuple(individual.vector for individual in population)
-        )
-
-        # Toàn bộ con PO trong iteration dùng chung best tham chiếu, alpha và
-        # theta để giữ đúng cấu trúc cập nhật theo iteration.
-        po_best_reference = best_so_far
-        alpha = rng.random() / 5.0
-        theta = rng.random() * math.pi
-
-        shuffled_indices = list(range(population_size))
-        rng.shuffle(shuffled_indices)
-        ga_indices = tuple(shuffled_indices[:number_of_ga_agents])
-        po_indices = tuple(shuffled_indices[number_of_ga_agents:])
-        ga_population = tuple(population[index] for index in ga_indices)
-        valid_offspring: list[TimetableIndividual] = []
-
-        # Nhánh GA tạo một vị trí offspring cho mỗi cá thể được giao. Tournament
-        # selection chỉ chọn cha mẹ trong nhóm GA hiện tại.
-        for _offspring_index in range(len(ga_indices)):
-            ga_offspring, metrics = _try_create_ga_offspring(
-                problem=problem,
-                option_domains=option_domains,
-                ga_population=ga_population,
-                ga_config=ga_config,
-                rng=rng,
-                metrics=metrics,
+    for generation in range(1, max_iterations + 1):
+        children = []
+        for _ in range(n_ga):
+            child, metrics = _try_create_ga_offspring(
+                problem=problem, option_domains=option_domains, ga_population=ga_pool,
+                ga_config=ga_config, rng=rng, metrics=metrics,
             )
-            report_progress(iteration - 1)
+            if child is not None:
+                children.append(child)
+                accept(child)
+            report_progress(generation - 1)
+        ga_pool = select_survivors(ga_pool, tuple(children), n_ga)
 
-            if ga_offspring is not None:
-                valid_offspring.append(ga_offspring)
-
-        # Mỗi vị trí nhánh PO bốc độc lập một hành vi, nhưng vẫn dùng các tham
-        # chiếu đã cố định ở cấp iteration.
-        for population_index in po_indices:
-            current_individual = population[population_index]
-            behavior = PoBehavior(
-                rng.randint(
-                    PoBehavior.FORAGING.value,
-                    PoBehavior.FEAR_OF_STRANGERS.value,
-                )
+        mean = calculate_population_mean(tuple(item.vector for item in po_pool))
+        alpha, theta = rng.random() / 5.0, rng.random() * math.pi
+        next_po = list(po_pool)
+        for index, parent in enumerate(po_pool):
+            behavior = PoBehavior(rng.randint(1, 4))
+            outcome = _create_and_evaluate_po_offspring(
+                problem=problem, option_domains=option_domains,
+                current_individual=parent, current_index=index, behavior=behavior,
+                best_individual=po_best, population_mean=mean,
+                iteration=generation, max_iterations=max_iterations,
+                alpha=alpha, theta=theta, rng=rng, config=po_config, metrics=metrics,
             )
+            metrics = outcome.metrics
+            child = outcome.individual
+            if child is not None:
+                # Valid PO children replace parents even if worse.
+                next_po[index] = child
+                accept(child)
+                po_archive = _unique_best(po_archive + (child,), PO_ARCHIVE_SIZE)
+                if _individual_order_key(child) < _individual_order_key(po_best):
+                    po_best = child
+            report_progress(generation - 1)
+        po_pool = tuple(next_po)
 
-            po_result = _create_and_evaluate_po_offspring(
-                problem=problem,
-                option_domains=option_domains,
-                current_individual=current_individual,
-                current_index=population_index,
-                behavior=behavior,
-                best_individual=po_best_reference,
-                population_mean=population_mean,
-                iteration=iteration,
-                max_iterations=max_iterations,
-                alpha=alpha,
-                theta=theta,
-                rng=rng,
-                config=po_config,
-                metrics=metrics,
-            )
-            metrics = po_result.metrics
-            report_progress(iteration - 1)
+        if generation % MIGRATION_INTERVAL == 0 and generation < max_iterations:
+            # Both directions use PRE-migration sources (no ping-pong copy).
+            old_ga, old_po = ga_pool, po_pool
+            ga_pool, _ = _migrate(po_archive + old_po, old_ga)
+            po_pool, from_ga = _migrate(old_ga, old_po)
+            if from_ga is not None:
+                po_archive = _unique_best(po_archive + (from_ga,), PO_ARCHIVE_SIZE)
+                if _individual_order_key(from_ga) < _individual_order_key(po_best):
+                    po_best = from_ga
 
-            if po_result.is_success:
-                if po_result.individual is None:
-                    raise RuntimeError(
-                        "A successful PO result must return an individual."
-                    )
-                valid_offspring.append(po_result.individual)
-
-        # Cha luôn nằm trong tập ứng viên. Một offspring thất bại chỉ làm giảm
-        # mức khám phá trong iteration, không làm quần thể mất tính hợp lệ hoặc
-        # thay đổi kích thước yêu cầu.
-        candidate_population = population + tuple(valid_offspring)
-        population = sort_individuals(
-            candidate_population
-        )[:population_size]
-
-        if len(population) != population_size:
-            raise RuntimeError(
-                "Hybrid survivor selection must preserve population size."
-            )
-
-        generation_best = best_individual(population)
-        if (
-            _individual_order_key(generation_best)
-            < _individual_order_key(best_so_far)
-        ):
-            best_so_far = generation_best
-
-        # Chỉ xáo trộn sau survivor selection để bước chọn lọc vẫn xác định,
-        # đồng thời tránh một vị trí luôn thuộc cố định cùng một nhánh.
-        shuffled_population = list(population)
-        rng.shuffle(shuffled_population)
-        population = tuple(shuffled_population)
-
-        metrics = replace(
-            metrics,
-            completed_iterations=iteration,
-        )
-        convergence_history.append(
-            _create_convergence_point(
-                iteration=iteration,
-                metrics=metrics,
-                best_so_far=best_so_far,
-            )
-        )
-        report_progress(iteration)
-
-    final_metrics = replace(
-        metrics,
-        runtime_seconds=perf_counter() - started_at,
-    )
+        if len(ga_pool) != n_ga or len(po_pool) != population_size - n_ga:
+            raise RuntimeError("Hybrid migration must preserve island sizes.")
+        if metrics.fitness_evaluations > config.max_fitness_evaluations:
+            raise RuntimeError("Hybrid exceeded its shared FE cap.")
+        metrics = replace(metrics, completed_iterations=generation)
+        history.append(_create_convergence_point(generation, metrics, best_so_far))
+        report_progress(generation)
 
     return OptimizationResult(
-        algorithm=OptimizationAlgorithm.GA_PO,
-        best_individual=best_so_far,
-        final_population=population,
-        convergence_history=tuple(convergence_history),
-        metrics=final_metrics,
+        algorithm=OptimizationAlgorithm.GA_PO, best_individual=best_so_far,
+        final_population=ga_pool + po_pool, convergence_history=tuple(history),
+        metrics=replace(metrics, runtime_seconds=perf_counter() - started_at),
     )

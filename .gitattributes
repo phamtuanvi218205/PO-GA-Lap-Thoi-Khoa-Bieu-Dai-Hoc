@@ -2,3 +2,6 @@
 "Core Algrithms/distributed_results/**" -text whitespace=cr-at-eol
 "Core Algrithms/test_results/**" -text whitespace=cr-at-eol
 "Core Algrithms/benchmark/results/**" -text whitespace=cr-at-eol
+"Core Algrithms/benchmark_configs/stress/**" -text whitespace=cr-at-eol
+"Core Algrithms/tests/reference_island80.py" -text whitespace=cr-at-eol
+"Core Algrithms/benchmark_results/**" -text whitespace=cr-at-eol,-blank-at-eof

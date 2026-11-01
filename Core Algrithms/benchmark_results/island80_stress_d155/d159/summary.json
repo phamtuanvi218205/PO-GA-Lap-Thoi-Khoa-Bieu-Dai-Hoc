@@ -1,0 +1,102 @@
+{
+  "passed": true,
+  "new_optimizer_runs": 3,
+  "cases": [
+    {
+      "case": "small",
+      "seed": 1,
+      "passed": true,
+      "differences": [],
+      "fresh_initial_sha": "2be7526152904e671beec5f9e2f1e327d11b06f3220e8503b956d8cb3bc5064f",
+      "old_initial_sha": "2be7526152904e671beec5f9e2f1e327d11b06f3220e8503b956d8cb3bc5064f",
+      "exact_fe_records": 600,
+      "exact_history_points": 21,
+      "quality": [
+        0.014953571428571427,
+        0.34882471187349184
+      ],
+      "metrics": {
+        "completed_iterations": 20,
+        "candidate_attempts": 835,
+        "fitness_evaluations": 600,
+        "decode_failed_count": 235,
+        "validation_failed_count": 0,
+        "repaired_individual_count": 51,
+        "failed_repair_count": 235,
+        "total_repair_attempts": 840,
+        "discarded_offspring_count": 30,
+        "total_decode_nodes": 14420,
+        "total_decode_backtracks": 20,
+        "runtime_seconds": 36.74349720000009
+      },
+      "hard_violations": 0,
+      "soft_queries": 0,
+      "wall_seconds": 40.37340469999981,
+      "result_sha": "b002aa6e79e8c842f5cb938fd4c45db0d655376d754b97efda0b88e1b3502919"
+    },
+    {
+      "case": "medium",
+      "seed": 1,
+      "passed": true,
+      "differences": [],
+      "fresh_initial_sha": "baae91fced8a4df246b19438cdd126a10fb23e5925692aa8a37f2898e95c627b",
+      "old_initial_sha": "baae91fced8a4df246b19438cdd126a10fb23e5925692aa8a37f2898e95c627b",
+      "exact_fe_records": 599,
+      "exact_history_points": 21,
+      "quality": [
+        0.05215208068227968,
+        0.3520852717475224
+      ],
+      "metrics": {
+        "completed_iterations": 20,
+        "candidate_attempts": 849,
+        "fitness_evaluations": 599,
+        "decode_failed_count": 250,
+        "validation_failed_count": 0,
+        "repaired_individual_count": 50,
+        "failed_repair_count": 250,
+        "total_repair_attempts": 858,
+        "discarded_offspring_count": 31,
+        "total_decode_nodes": 455432,
+        "total_decode_backtracks": 433868,
+        "runtime_seconds": 164.76159219999954
+      },
+      "hard_violations": 0,
+      "soft_queries": 0,
+      "wall_seconds": 202.3984218000005,
+      "result_sha": "35c02b3a4f129e45d63956e233ae478af1f514a8f2462c454aac718cd8c20377"
+    },
+    {
+      "case": "large",
+      "seed": 1,
+      "passed": true,
+      "differences": [],
+      "fresh_initial_sha": "8efc29c0e73d9b419618001036b060ec072a3c638159b7ec55d6b8d1b5f41a7b",
+      "old_initial_sha": "8efc29c0e73d9b419618001036b060ec072a3c638159b7ec55d6b8d1b5f41a7b",
+      "exact_fe_records": 575,
+      "exact_history_points": 21,
+      "quality": [
+        0.05027526946107784,
+        0.32078006625069505
+      ],
+      "metrics": {
+        "completed_iterations": 20,
+        "candidate_attempts": 1100,
+        "fitness_evaluations": 575,
+        "decode_failed_count": 525,
+        "validation_failed_count": 0,
+        "repaired_individual_count": 71,
+        "failed_repair_count": 525,
+        "total_repair_attempts": 1724,
+        "discarded_offspring_count": 55,
+        "total_decode_nodes": 6744891,
+        "total_decode_backtracks": 6717291,
+        "runtime_seconds": 792.0669642000003
+      },
+      "hard_violations": 0,
+      "soft_queries": 0,
+      "wall_seconds": 1101.3115777000012,
+      "result_sha": "5226fcb52bcaf6fa842c61cd1ba1af80a7664b0c7a86041d10cb5a4ba193e685"
+    }
+  ]
+}

@@ -24,7 +24,7 @@ class TestDecoderMultisession(ConstraintFixture):
 
         self.assertEqual(problem.session_dimension, 12)
         self.assertEqual(problem.schedule_dimension, 4)
-        self.assertEqual(problem.dimension, 4)
+        self.assertEqual(problem.dimension, 8)
         self.assertTrue(all(domains))
         self.assertEqual(result.status, DecodeStatus.SUCCESS)
         self.assertTrue(validate_timetable(problem, result.selected_options).is_valid)
@@ -96,13 +96,13 @@ class TestDecoderMultisession(ConstraintFixture):
         result = decode_vector(
             self.problem,
             domains,
-            (0.0, 0.25, 0.0, 0.0),
+            (0.0, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
             max_decode_nodes=20,
         )
 
         self.assertEqual(result.status, DecodeStatus.SUCCESS)
         self.assertEqual(result.selected_option_indices[1], 1)
-        self.assertEqual(result.repaired_vector[1], 0.75)
+        self.assertEqual(result.repaired_vector[1], 0.25)
         self.assertTrue(validate_timetable(self.problem, result.selected_options).is_valid)
 
     def test_room_collision_forces_other_period(self) -> None:
@@ -118,7 +118,7 @@ class TestDecoderMultisession(ConstraintFixture):
         result = decode_vector(
             self.problem,
             domains,
-            (0.0, 0.0, 0.25, 0.0),
+            (0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0),
             max_decode_nodes=20,
         )
 
@@ -147,13 +147,13 @@ class TestDecoderMultisession(ConstraintFixture):
         result = decode_vector(
             problem,
             domains,
-            (0.0, 0.25, 0.0, 0.0),
+            (0.0, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
             max_decode_nodes=20,
         )
 
         self.assertEqual(result.status, DecodeStatus.SUCCESS)
         self.assertEqual(result.selected_options[1].teaching_date, thursday_date)
-        self.assertEqual(result.repaired_vector[1], 0.75)
+        self.assertEqual(result.repaired_vector[1], 0.25)
         self.assertTrue(validate_timetable(problem, result.selected_options).is_valid)
 
     def test_online_still_occupies_lecturer_time(self) -> None:
@@ -174,7 +174,7 @@ class TestDecoderMultisession(ConstraintFixture):
         result = decode_vector(
             problem,
             domains,
-            (0.0, 0.0, 0.0, 0.25),
+            (0.0, 0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 0.0),
             max_decode_nodes=20,
         )
 

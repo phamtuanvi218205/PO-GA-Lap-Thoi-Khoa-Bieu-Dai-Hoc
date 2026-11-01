@@ -28,7 +28,8 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, Mapping, Sequence
 
-from ..core.decoder import decode_vector
+from ..core.decoder import DIRECT_ENCODING, DEFAULT_ENCODING, decode_saved_vector
+from ..core.hybrid import HYBRID_MECHANISM
 from ..core.greedy_baseline import GREEDY_BASELINE_NAME
 from ..core.models import OptimizationAlgorithm
 from ..core.snapshot import prepare_snapshot_for_optimization
@@ -868,11 +869,14 @@ def _export_best_timetable_images(
                 float(value)
                 for value in payload["result"]["best_solution"]["vector"]
             )
-            decoded = decode_vector(
+            decoded = decode_saved_vector(
                 prepared.problem,
                 prepared.option_domains,
                 vector,
                 max_decode_nodes=request.evaluation_config.max_decode_nodes,
+                encoding=payload["result"]["best_solution"].get(
+                    "vector_encoding", DIRECT_ENCODING
+                ),
             )
             if not decoded.is_success:
                 raise RuntimeError(
@@ -1013,6 +1017,19 @@ def run_experiment(
     output_directory.mkdir(parents=True, exist_ok=True)
     runs_directory = output_directory / "runs"
     runs_directory.mkdir(parents=True, exist_ok=True)
+    # Không âm thầm resume hoặc ghi đè kết quả DIRECT bằng pipeline priority.
+    # plots-only vẫn replay được các file lịch sử theo nhãn của từng vector.
+    for existing_path in runs_directory.rglob("*.json"):
+        existing = json.loads(existing_path.read_text(encoding="utf-8"))
+        if existing.get("solver_pipeline") != DEFAULT_ENCODING:
+            raise ExperimentContractError(
+                f"Kết quả {existing_path} thuộc pipeline cũ/khác. "
+                "Hãy dùng thư mục đầu ra mới; kết quả cũ được giữ nguyên."
+            )
+        if existing.get("algorithm") == "GA_PO" and existing.get("hybrid_mechanism") != HYBRID_MECHANISM:
+            raise ExperimentContractError(
+                f"Kết quả {existing_path} thuộc cơ chế lai cũ. Dùng thư mục mới, không trộn kết quả."
+            )
     base_payload = _load_base_request(config.base_request_path)
 
     rows: list[dict[str, Any]] = []
@@ -1129,8 +1146,10 @@ def run_experiment(
     finished_at = datetime.now(timezone.utc)
     metadata = {
         "schema_version": EXPERIMENT_METADATA_SCHEMA_VERSION,
+        "solver_pipeline": DEFAULT_ENCODING,
         "experiment_id": config.experiment_id,
         "execution_mode": "SEQUENTIAL",
+        "hybrid_mechanism": HYBRID_MECHANISM,
         "resume_completed": resume_completed,
         "base_request_path": str(config.base_request_path),
         # Lưu nguyên template request để kết quả vẫn tái lập được ngay cả khi
@@ -1172,7 +1191,9 @@ def run_experiment(
             "khác nhau và được báo cáo như một chỉ số hiệu quả, không được "
             "mô tả là ngân sách FE bằng nhau. GREEDY_FIRST_FEASIBLE chỉ dựng "
             "một lịch xác định làm mốc tham khảo, không thuộc phép so sánh "
-            "nhiều seed."
+            "nhiều seed. Decoder Priority + Placement không chấm mềm; "
+            "FE không bao gồm chi phí decode/repair thất bại, vì vậy cùng FE "
+            "không có nghĩa cùng tổng chi phí tính toán."
         ),
     }
     metadata_json.write_text(

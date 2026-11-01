@@ -1,0 +1,62 @@
+[
+  {
+    "a": "ISLAND80",
+    "b": "GA",
+    "endpoint": "final",
+    "wins": 16,
+    "ties": 0,
+    "losses": 14,
+    "p_raw": 0.8555355519056321,
+    "p_holm": 1.0
+  },
+  {
+    "a": "ISLAND80",
+    "b": "PO",
+    "endpoint": "final",
+    "wins": 17,
+    "ties": 0,
+    "losses": 13,
+    "p_raw": 0.5846647117286922,
+    "p_holm": 1.0
+  },
+  {
+    "a": "ISLAND80",
+    "b": "HYBRID50",
+    "endpoint": "final",
+    "wins": 15,
+    "ties": 0,
+    "losses": 15,
+    "p_raw": 1.0,
+    "p_holm": 1.0
+  },
+  {
+    "a": "ISLAND80",
+    "b": "GA",
+    "endpoint": "common",
+    "wins": 17,
+    "ties": 0,
+    "losses": 13,
+    "p_raw": 0.5846647117286922,
+    "p_holm": 1.0
+  },
+  {
+    "a": "ISLAND80",
+    "b": "PO",
+    "endpoint": "common",
+    "wins": 13,
+    "ties": 0,
+    "losses": 17,
+    "p_raw": 0.5846647117286922,
+    "p_holm": 1.0
+  },
+  {
+    "a": "ISLAND80",
+    "b": "HYBRID50",
+    "endpoint": "common",
+    "wins": 15,
+    "ties": 0,
+    "losses": 15,
+    "p_raw": 1.0,
+    "p_holm": 1.0
+  }
+]

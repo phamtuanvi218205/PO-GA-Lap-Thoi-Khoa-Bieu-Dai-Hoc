@@ -92,9 +92,9 @@ class CandidateEvaluationConfig:
 class TimetableIndividual:
     """Một cá thể hợp lệ mà GA, PO và GA–PO có thể sử dụng.
 
-    ``vector`` là vector đã được decoder/repair đồng bộ với option thực sự
-    được chọn. Nhờ vậy thuật toán ở thế hệ sau không tiếp tục giữ một gene
-    biểu diễn khác với lịch nằm trong chính cá thể đó.
+    ``vector`` giữ gene giảng viên và khóa ưu tiên xếp khối lặp. Decoder không
+    ghi đè khóa ưu tiên bằng chỉ số option; replay cùng snapshot/domain sẽ
+    tạo lại đúng lịch. Repair thành công lưu vector đã sửa khóa/phân công.
     """
 
     vector: tuple[float, ...]
@@ -558,7 +558,7 @@ def sort_individuals(
 ) -> tuple[TimetableIndividual, ...]:
     """Sắp xếp cá thể theo thứ tự mục tiêu và tie-break xác định.
 
-    Vector chỉ được dùng khi ba score bằng nhau hoàn toàn. Nó không thay đổi
+    Vector chỉ được dùng khi hai score bằng nhau hoàn toàn. Nó không thay đổi
     thứ tự ưu tiên nghiệp vụ, mà chỉ giúp cùng dữ liệu luôn có cùng thứ tự để
     kiểm thử và tái lập kết quả.
     """

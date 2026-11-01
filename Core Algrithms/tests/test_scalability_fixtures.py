@@ -96,7 +96,9 @@ def test_scalability_snapshot_is_d109_ready_and_checksum_matches(
     prepared = prepare_snapshot_for_optimization(path)
     assert prepared.status == SnapshotPreparationStatus.READY
     assert prepared.no_option_issues == ()
-    assert prepared.problem.dimension == EXPECTED_PROFILES[profile]["dimension"]
+    assert prepared.problem.dimension == (EXPECTED_PROFILES[profile]["dimension"]
+                                          + prepared.problem.schedule_dimension)
+    # The saved historical dataset manifest retains its original L+B size.
 
 
 @pytest.mark.parametrize("profile", ["small", "medium", "large"])

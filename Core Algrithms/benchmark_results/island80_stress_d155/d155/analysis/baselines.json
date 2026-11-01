@@ -1,0 +1,71 @@
+[
+  {
+    "case": "small",
+    "status": "COMPLETED",
+    "quality": [
+      0.05468761083743842,
+      0.2982133468059227
+    ],
+    "metrics": {
+      "completed_iterations": 0,
+      "candidate_attempts": 1,
+      "fitness_evaluations": 1,
+      "decode_failed_count": 0,
+      "validation_failed_count": 0,
+      "repaired_individual_count": 0,
+      "failed_repair_count": 0,
+      "total_repair_attempts": 0,
+      "discarded_offspring_count": 0,
+      "total_decode_nodes": 24,
+      "total_decode_backtracks": 0,
+      "runtime_seconds": 0.3777295999998387
+    },
+    "reason": null
+  },
+  {
+    "case": "medium",
+    "status": "COMPLETED",
+    "quality": [
+      0.04661175368139224,
+      0.30479348913540005
+    ],
+    "metrics": {
+      "completed_iterations": 0,
+      "candidate_attempts": 1,
+      "fitness_evaluations": 1,
+      "decode_failed_count": 0,
+      "validation_failed_count": 0,
+      "repaired_individual_count": 0,
+      "failed_repair_count": 0,
+      "total_repair_attempts": 0,
+      "discarded_offspring_count": 0,
+      "total_decode_nodes": 36,
+      "total_decode_backtracks": 0,
+      "runtime_seconds": 0.7743808000000172
+    },
+    "reason": null
+  },
+  {
+    "case": "large",
+    "status": "COMPLETED",
+    "quality": [
+      0.06103392649903288,
+      0.30817024528157655
+    ],
+    "metrics": {
+      "completed_iterations": 0,
+      "candidate_attempts": 1,
+      "fitness_evaluations": 1,
+      "decode_failed_count": 0,
+      "validation_failed_count": 0,
+      "repaired_individual_count": 1,
+      "failed_repair_count": 0,
+      "total_repair_attempts": 2,
+      "discarded_offspring_count": 0,
+      "total_decode_nodes": 43796,
+      "total_decode_backtracks": 43748,
+      "runtime_seconds": 14.408955700000206
+    },
+    "reason": null
+  }
+]

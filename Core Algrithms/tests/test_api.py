@@ -240,6 +240,29 @@ def test_web_interface_and_local_assets_are_served_by_fastapi() -> None:
     assert "renderSchedule" in script.text
 
 
+def test_demo_has_four_pages_without_constraint_tab_or_settings_requests() -> None:
+    """Bỏ hẳn trang Ràng buộc, giữ nguyên luồng nhập/chạy/xem lịch."""
+
+    client, _, connections = make_client()
+    page = client.get("/")
+    forms = client.get("/ui-assets/data_forms.js")
+    assert 'data-view="constraints"' not in page.text
+    assert 'id="view-constraints"' not in page.text
+    assert 'data-go="constraints"' not in page.text
+    assert page.text.count('data-view="') == 4
+    for view in ("input", "prepare", "optimize", "schedule"):
+        assert f'data-view="{view}"' in page.text
+        assert f'id="view-{view}"' in page.text
+    for removed in ("save-constraints", "reload-constraints", "criterion-weight"):
+        assert removed not in page.text
+        assert removed not in forms.text
+    assert forms.status_code == 200
+    assert "/api/constraint-settings" not in forms.text
+    assert "/api/input-data/form-schema" in forms.text
+    assert "Không cần nhập điểm chất lượng mục tiêu" in page.text
+    assert not connections  # Đọc trang/tệp tĩnh không mở kết nối SQL.
+
+
 def test_schedule_query_supports_filters_and_returns_vietnamese_weekday() -> None:
     client, _, _ = make_client()
 

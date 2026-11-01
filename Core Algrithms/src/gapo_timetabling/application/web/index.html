@@ -13,7 +13,6 @@
     <nav class="nav-list" aria-label="Điều hướng chính">
       <button class="nav-item is-active" data-view="input">Dữ liệu</button>
       <button class="nav-item" data-view="prepare">Chuẩn bị</button>
-      <button class="nav-item" data-view="constraints">Ràng buộc</button>
       <button class="nav-item" data-view="optimize">Thuật toán</button>
       <button class="nav-item" data-view="schedule">Thời khóa biểu</button>
     </nav>
@@ -76,20 +75,6 @@
       </div>
     </section>
 
-    <section class="view" id="view-constraints" data-title="Thiết lập ràng buộc">
-      <section class="plain-section">
-        <h3>Tiêu chí mềm</h3>
-        <p class="section-note">Cấu hình dùng chung cho các học kỳ, áp dụng cho snapshot của lần chạy mới. Kết quả và snapshot cũ không thay đổi. Tổng trọng số mỗi nhóm bằng 1.</p>
-        <div id="constraint-editor"></div>
-        <div class="button-row">
-          <button class="secondary-button" id="reload-constraints">Tải lại</button>
-          <button class="primary-button" id="save-constraints">Lưu cấu hình</button>
-        </div>
-        <div class="result-box is-hidden" id="constraint-result"></div>
-        <p class="section-note">Điều kiện bắt buộc không thể tắt: đủ sức chứa, đúng phòng và thiết bị, đúng năng lực, không trùng tài nguyên, không vướng lịch bận, đủ thời gian di chuyển và không quá tải.</p>
-      </section>
-    </section>
-
     <section class="view" id="view-prepare" data-title="Chuẩn bị bài toán">
       <div class="action-row">
         <div>
@@ -146,6 +131,7 @@
               <input id="timeout-seconds" type="number" min="1" placeholder="Không giới hạn">
             </label>
           </div>
+          <p class="section-note">Không cần nhập điểm chất lượng mục tiêu. Thuật toán tìm lịch tốt nhất trong ngân sách chạy, không chờ đến khi điểm bằng 0.</p>
           <button class="primary-button full-width" id="start-run">Chạy thuật toán</button>
         </section>
 

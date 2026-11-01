@@ -1,0 +1,61 @@
+{
+  "schema_version": "island-stress-official.v1",
+  "experiment_id": "d155-island80-stress-30pop-20gen-10seed",
+  "population": 30,
+  "generations": 20,
+  "fe_cap": 630,
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "methods": [
+    "GA",
+    "PO",
+    "HYBRID50",
+    "ISLAND80"
+  ],
+  "planned_optimizer_runs": 120,
+  "baseline": "GREEDY_FIRST_FEASIBLE",
+  "baseline_runs": 3,
+  "cases": {
+    "small": {
+      "sections": 12,
+      "blocks": 24,
+      "occurrences": 232,
+      "dimension": 60
+    },
+    "medium": {
+      "sections": 18,
+      "blocks": 36,
+      "occurrences": 343,
+      "dimension": 90
+    },
+    "large": {
+      "sections": 24,
+      "blocks": 48,
+      "occurrences": 454,
+      "dimension": 120
+    }
+  },
+  "snapshot_source": "scalability_stress_20261101/data",
+  "encoding": "RECURRING_PRIORITY_PLACEMENT.v1",
+  "ga_size": 24,
+  "po_size": 6,
+  "migration_interval": 2,
+  "archive_size": 6,
+  "max_offspring_attempts": 5,
+  "max_decode_nodes": 20000,
+  "max_repair_attempts": 3,
+  "max_initialization_attempts": 30000,
+  "runtime_comparison_valid": false,
+  "change_production_hybrid": false,
+  "change_dataset": false
+}

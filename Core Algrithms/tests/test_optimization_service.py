@@ -103,6 +103,7 @@ class FailingSnapshotBuilder:
 
 def make_config() -> OptimizationRunConfig:
     return OptimizationRunConfig(
+        ga_ratio=0.5,  # Tiny fixture, not the official ISLAND80 configuration.
         algorithm=OptimizationAlgorithm.GA_PO,
         population_size=4,
         max_fitness_evaluations=20,
