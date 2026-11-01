@@ -48,14 +48,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("#manual-row-cancel").addEventListener("click", () => $("#manual-row-dialog").close());
   $("#manual-row-form").addEventListener("submit", saveManualRow);
   $("#format-json").addEventListener("click", renderManualEditor);
-  $("#reload-constraints").addEventListener("click", loadConstraintSettings);
-  $("#save-constraints").addEventListener("click", saveConstraintSettings);
   try {
     manualEditor.schema = await apiJson("/api/input-data/form-schema");
     if (!$("#manual-json").value.trim()) $("#manual-json").value = JSON.stringify({term: {term_code: "", term_name: "", start_date: "", number_of_weeks: 15, status: "PLANNING"}});
     renderManualEditor();
   } catch (error) { $("#manual-editor").textContent = error.message; }
-  await loadConstraintSettings();
 });
 
 window.renderManualEditor = renderManualEditor;
@@ -125,22 +122,4 @@ function saveManualRow(event) {
   }
   $("#manual-json").value = JSON.stringify(bundle,null,2);
   $("#manual-row-dialog").close(); renderManualEditor();
-}
-
-let constraintChecksum = null;
-async function loadConstraintSettings() {
-  try {
-    const payload = await apiJson("/api/constraint-settings");
-    constraintChecksum = payload.checksum;
-    $("#constraint-editor").innerHTML = [2,3].map(tier=>`<h3>${tier===2?"Q_general — chất lượng chung":"Q_lecturer — mong muốn và phù hợp giảng viên"}</h3>${payload.settings.filter(item=>item.priority_tier===tier).map(item=>`<div class="constraint-row" data-code="${item.constraint_code}"><label>${escapeHtml(item.name)}<input class="criterion-weight" type="number" min="0.0001" max="1" step="0.0001" value="${item.weight}"></label>${item.threshold_value!==null?`<label>Ngưỡng tiết liên tục<input class="criterion-threshold" type="number" min="1" max="16" step="1" value="${item.threshold_value}"></label>`:""}</div>`).join("")}`).join("");
-  } catch(error) { setResultBox($("#constraint-result"),error.message,true); }
-}
-async function saveConstraintSettings() {
-  if (!constraintChecksum) return;
-  const settings = $$(".constraint-row").map(row=>({constraint_code:row.dataset.code,weight:Number(row.querySelector(".criterion-weight").value),threshold_value:row.querySelector(".criterion-threshold")?Number(row.querySelector(".criterion-threshold").value):null}));
-  try {
-    const payload = await apiJson("/api/constraint-settings",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({expected_checksum:constraintChecksum,settings})});
-    constraintChecksum = payload.checksum;
-    setResultBox($("#constraint-result"),"Đã lưu. Các snapshot được tạo từ lần chạy tiếp theo sử dụng cấu hình này; kết quả cũ được giữ nguyên.");
-  } catch(error) { setResultBox($("#constraint-result"),error.message,true); }
 }

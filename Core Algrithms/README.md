@@ -191,12 +191,17 @@ nhập chỉ sửa gói trên trình duyệt; Kiểm tra và Lưu dữ liệu m�
 `CANCELLED`, ngừng dùng tài nguyên bằng `is_active=false`. JSON nâng cao được
 giữ trong mục thu gọn, không phải cách nhập tay bắt buộc.
 
-Trang Ràng buộc đọc/lưu sáu tiêu chí mềm qua `GET/PUT /api/constraint-settings`.
-Tổng trọng số mỗi tầng phải bằng 1; ngưỡng dạy liên tục là số nguyên 1–16.
-Checksum ngăn ghi đè một cấu hình vừa bị sửa ở tab khác. Đây là cấu hình
-dùng chung của các snapshot mới; run/snapshot đã lưu không thay đổi. Hard
-constraints không có tùy chọn tắt. Các bộ benchmark dùng snapshot riêng nên
-không đọc các thay đổi cấu hình web.
+Giao diện demo chỉ có bốn trang: Dữ liệu, Chuẩn bị, Thuật toán và Thời khóa biểu.
+Đã bỏ hẳn tab/trang Ràng buộc, không chỉ ẩn các ô nhập trọng số/ngưỡng hoặc
+nút Lưu. Người dùng không cần biết hệ số Fitness để chạy xếp lịch. Các ràng
+buộc vẫn được áp dụng bên trong hệ thống, không bị xóa khỏi thuật toán.
+Điểm mềm dùng để xếp hạng lịch hợp lệ, không phải điểm đích phải đạt mới dừng.
+
+Cấu hình đang lưu, Fitness và hard constraints giữ nguyên. API kỹ thuật
+`GET/PUT /api/constraint-settings` vẫn được giữ để tương thích, nhưng không
+được giao diện demo gọi. Nếu điều chỉnh qua API, vẫn kiểm đủ sáu tiêu chí,
+tổng trọng số mỗi tầng bằng1, ngưỡng nguyên1–16 và checksum chống ghi đè.
+Snapshot/run cũ bất biến. Benchmark dùng snapshot riêng, không đổi theo web.
 
 Trên trang Thời khóa biểu, bấm một buổi để đổi thứ, tiết hoặc phòng. Có hai
 phạm vi: **Chỉ buổi này** đổi đúng occurrence của tuần đang xem (trong cùng
@@ -229,7 +234,7 @@ không dùng điểm revision chỉnh tay để so sánh benchmark.
 Kiểm tra logic giao diện bằng Node (không cần cài thêm thư viện):
 
 ```bash
-node --test "Core Algrithms/tests/web/schedule_adjustment.test.cjs"
+node --test "Core Algrithms/tests/web/schedule_adjustment.test.cjs" "Core Algrithms/tests/web/constraint_overview.test.cjs"
 ```
 
 SQL smoke tự dựng đề bài nhỏ rồi rollback, bật `GAPO_SQL_SMOKE=1` và chạy
