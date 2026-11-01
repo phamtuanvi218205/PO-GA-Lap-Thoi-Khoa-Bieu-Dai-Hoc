@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Sequence
 
 from ..core.constraints import validate_timetable
-from ..core.hybrid import HybridConfig, run_hybrid
+from ..core.hybrid import HybridConfig, run_hybrid, validate_island_sizes
 from ..core.metrics import OptimizationResult
 from ..core.models import ProblemInstance
 from ..core.population import (
@@ -84,8 +84,8 @@ def _build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--ga-ratio",
         type=_ratio,
-        default=0.5,
-        help="Tỉ lệ quần thể giao cho nhánh GA (mặc định: 0.5).",
+        default=0.8,
+        help="Tỉ lệ quần thể GA trong cơ chế islands (mặc định: 0.8).",
     )
     parser.add_argument(
         "--max-initialization-attempts",
@@ -258,6 +258,12 @@ def main(argv: Sequence[str] | None = None) -> int:
                 file=sys.stderr,
             )
         return 3
+
+    try:
+        validate_island_sizes(args.population_size, args.ga_ratio)
+    except ValueError as error:
+        print(str(error), file=sys.stderr)
+        return 2
 
     evaluation_config = CandidateEvaluationConfig(
         max_decode_nodes=args.max_decode_nodes,

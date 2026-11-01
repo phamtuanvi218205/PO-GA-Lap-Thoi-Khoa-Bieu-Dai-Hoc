@@ -1,0 +1,6970 @@
+[
+  {
+    "at": "2026-11-01T14:12:59.192605",
+    "active_workers": 1,
+    "cpu_percent": 25.9,
+    "available_memory": 5930651648,
+    "worker_rss_max": 0,
+    "worker_estimate": 268435456
+  },
+  {
+    "at": "2026-11-01T14:13:09.386897",
+    "active_workers": 2,
+    "cpu_percent": 23.0,
+    "available_memory": 5812092928,
+    "worker_rss_max": 53317632,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:13:19.685621",
+    "active_workers": 7,
+    "cpu_percent": 34.9,
+    "available_memory": 5902036992,
+    "worker_rss_max": 51441664,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:13:30.053345",
+    "active_workers": 12,
+    "cpu_percent": 63.2,
+    "available_memory": 5709766656,
+    "worker_rss_max": 53469184,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:13:40.541031",
+    "active_workers": 16,
+    "cpu_percent": 96.9,
+    "available_memory": 5471588352,
+    "worker_rss_max": 57995264,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:13:51.224329",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5449523200,
+    "worker_rss_max": 54460416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:14:01.700718",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5443969024,
+    "worker_rss_max": 55332864,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:14:12.277359",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5425750016,
+    "worker_rss_max": 56188928,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:14:22.849050",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5416644608,
+    "worker_rss_max": 58818560,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:14:33.484617",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5407244288,
+    "worker_rss_max": 59027456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:14:44.091636",
+    "active_workers": 15,
+    "cpu_percent": 99.4,
+    "available_memory": 5498806272,
+    "worker_rss_max": 55398400,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:14:54.881034",
+    "active_workers": 15,
+    "cpu_percent": 99.4,
+    "available_memory": 5491011584,
+    "worker_rss_max": 56057856,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:15:05.513444",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5391097856,
+    "worker_rss_max": 56602624,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:15:16.289504",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5397434368,
+    "worker_rss_max": 58036224,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:15:27.064680",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5374750720,
+    "worker_rss_max": 59027456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:15:37.681413",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5335515136,
+    "worker_rss_max": 59346944,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:15:48.734459",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5307625472,
+    "worker_rss_max": 59027456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:15:59.324222",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5296222208,
+    "worker_rss_max": 59293696,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:16:10.100867",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5222051840,
+    "worker_rss_max": 56819712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:16:20.483256",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5284331520,
+    "worker_rss_max": 59518976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:16:31.139102",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5275332608,
+    "worker_rss_max": 59367424,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:16:41.774307",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5262565376,
+    "worker_rss_max": 59707392,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:16:52.528571",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5270224896,
+    "worker_rss_max": 59904000,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:17:03.095698",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5267509248,
+    "worker_rss_max": 59265024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:17:13.668682",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5251072000,
+    "worker_rss_max": 60755968,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:17:24.272952",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5246181376,
+    "worker_rss_max": 60289024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:17:34.906301",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5241581568,
+    "worker_rss_max": 61878272,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:17:45.419422",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5236977664,
+    "worker_rss_max": 61267968,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:17:56.071593",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5258756096,
+    "worker_rss_max": 61911040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:18:06.746759",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5269221376,
+    "worker_rss_max": 62504960,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:18:17.534145",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5265010688,
+    "worker_rss_max": 60100608,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:18:28.155658",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5249638400,
+    "worker_rss_max": 59977728,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:18:38.715097",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5201453056,
+    "worker_rss_max": 60411904,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:18:49.461565",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5253672960,
+    "worker_rss_max": 60440576,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:19:00.050624",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5247217664,
+    "worker_rss_max": 62087168,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:19:10.705328",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5236727808,
+    "worker_rss_max": 62849024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:19:21.270932",
+    "active_workers": 16,
+    "cpu_percent": 99.9,
+    "available_memory": 5344063488,
+    "worker_rss_max": 59711488,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:19:31.970538",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5297324032,
+    "worker_rss_max": 63057920,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:19:42.713922",
+    "active_workers": 16,
+    "cpu_percent": 99.8,
+    "available_memory": 5308710912,
+    "worker_rss_max": 59326464,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:19:53.383016",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5310939136,
+    "worker_rss_max": 60534784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:20:03.992196",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5296508928,
+    "worker_rss_max": 59326464,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:20:14.743652",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5267320832,
+    "worker_rss_max": 59326464,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:20:25.500025",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5228781568,
+    "worker_rss_max": 60841984,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:20:36.290067",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5218164736,
+    "worker_rss_max": 59445248,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:20:46.952702",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5286076416,
+    "worker_rss_max": 60903424,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:20:57.752440",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5269397504,
+    "worker_rss_max": 62676992,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:21:08.439758",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5296644096,
+    "worker_rss_max": 59326464,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:21:19.156862",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5287018496,
+    "worker_rss_max": 61706240,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:21:29.893364",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5298106368,
+    "worker_rss_max": 60874752,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:21:40.576595",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5285691392,
+    "worker_rss_max": 62201856,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:21:51.236974",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5300183040,
+    "worker_rss_max": 62644224,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:22:01.956814",
+    "active_workers": 16,
+    "cpu_percent": 99.8,
+    "available_memory": 5304819712,
+    "worker_rss_max": 60727296,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:22:12.621806",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5277360128,
+    "worker_rss_max": 60887040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:22:23.430508",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5274853376,
+    "worker_rss_max": 61292544,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:22:34.182345",
+    "active_workers": 16,
+    "cpu_percent": 99.9,
+    "available_memory": 5256839168,
+    "worker_rss_max": 62005248,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:22:44.813609",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5274488832,
+    "worker_rss_max": 61136896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:22:55.473865",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5278670848,
+    "worker_rss_max": 62181376,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:23:06.192506",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5273526272,
+    "worker_rss_max": 61726720,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:23:16.914058",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5276815360,
+    "worker_rss_max": 61116416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:23:27.549124",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5243592704,
+    "worker_rss_max": 61116416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:23:38.139605",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5253562368,
+    "worker_rss_max": 61480960,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:23:48.919003",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5259317248,
+    "worker_rss_max": 61587456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:23:59.587967",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5243899904,
+    "worker_rss_max": 61833216,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:24:10.352209",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5242925056,
+    "worker_rss_max": 62189568,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:24:21.088721",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5267677184,
+    "worker_rss_max": 62914560,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:24:31.798560",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5291847680,
+    "worker_rss_max": 60116992,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:24:42.677189",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5262471168,
+    "worker_rss_max": 60792832,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:24:53.334625",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5265543168,
+    "worker_rss_max": 62943232,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:25:04.028262",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5205561344,
+    "worker_rss_max": 61349888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:25:14.731074",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5205495808,
+    "worker_rss_max": 60944384,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:25:25.564889",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5225574400,
+    "worker_rss_max": 59174912,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:25:36.712609",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5186461696,
+    "worker_rss_max": 60207104,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:25:47.397598",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5172260864,
+    "worker_rss_max": 61054976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:25:57.998285",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5156376576,
+    "worker_rss_max": 61722624,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:26:08.568119",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5171572736,
+    "worker_rss_max": 61005824,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:26:19.274473",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5158567936,
+    "worker_rss_max": 62111744,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:26:29.872021",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5221376000,
+    "worker_rss_max": 60993536,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:26:40.532698",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5248806912,
+    "worker_rss_max": 59568128,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:26:51.130864",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5225136128,
+    "worker_rss_max": 61603840,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:27:02.076173",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4994973696,
+    "worker_rss_max": 60579840,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:27:12.736764",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5025837056,
+    "worker_rss_max": 59518976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:27:23.631654",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4971970560,
+    "worker_rss_max": 59617280,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:27:34.444195",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5025345536,
+    "worker_rss_max": 61448192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:27:45.176401",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 3697676288,
+    "worker_rss_max": 61448192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:27:56.105379",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4783226880,
+    "worker_rss_max": 61329408,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:28:07.189776",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4931039232,
+    "worker_rss_max": 61329408,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:28:17.687658",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4919820288,
+    "worker_rss_max": 61480960,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:28:28.474203",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4948283392,
+    "worker_rss_max": 62447616,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:28:39.516586",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4966768640,
+    "worker_rss_max": 62447616,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:28:50.302493",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4981948416,
+    "worker_rss_max": 59920384,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:29:00.974875",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4999528448,
+    "worker_rss_max": 60002304,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:29:11.597778",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4993851392,
+    "worker_rss_max": 61894656,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:29:22.254449",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4980822016,
+    "worker_rss_max": 62726144,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:29:32.830638",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4988284928,
+    "worker_rss_max": 61825024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:29:43.523508",
+    "active_workers": 16,
+    "cpu_percent": 99.9,
+    "available_memory": 5011468288,
+    "worker_rss_max": 60436480,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:29:54.179426",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4981899264,
+    "worker_rss_max": 63074304,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:30:05.019821",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4980563968,
+    "worker_rss_max": 61648896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:30:15.816751",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4982816768,
+    "worker_rss_max": 63500288,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:30:26.513333",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4963700736,
+    "worker_rss_max": 62476288,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:30:37.166889",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4934901760,
+    "worker_rss_max": 62476288,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:30:47.886983",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4931694592,
+    "worker_rss_max": 63074304,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:30:58.493480",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4910022656,
+    "worker_rss_max": 61001728,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:31:09.340376",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4905816064,
+    "worker_rss_max": 61030400,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:31:20.042963",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4955848704,
+    "worker_rss_max": 63262720,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:31:30.719235",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4969267200,
+    "worker_rss_max": 63262720,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:31:41.466087",
+    "active_workers": 16,
+    "cpu_percent": 99.9,
+    "available_memory": 4993060864,
+    "worker_rss_max": 63258624,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:31:52.121213",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5011673088,
+    "worker_rss_max": 63262720,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:32:02.743778",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5001347072,
+    "worker_rss_max": 63258624,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:32:13.654485",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4991057920,
+    "worker_rss_max": 63262720,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:32:24.283590",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4990410752,
+    "worker_rss_max": 63262720,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:32:34.941052",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4971212800,
+    "worker_rss_max": 62795776,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:32:46.041606",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4944351232,
+    "worker_rss_max": 63356928,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:32:56.728120",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4942413824,
+    "worker_rss_max": 62115840,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:33:07.238222",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4912963584,
+    "worker_rss_max": 61927424,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:33:18.000587",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4891701248,
+    "worker_rss_max": 61931520,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:33:28.785877",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5232087040,
+    "worker_rss_max": 61607936,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:33:38.822627",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5209722880,
+    "worker_rss_max": 62472192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:33:49.542418",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5194616832,
+    "worker_rss_max": 60071936,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:34:00.188546",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5016821760,
+    "worker_rss_max": 61734912,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:34:10.824708",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5116768256,
+    "worker_rss_max": 61734912,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:34:21.695165",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5132226560,
+    "worker_rss_max": 60264448,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:34:32.297009",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5117530112,
+    "worker_rss_max": 60448768,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:34:42.926102",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5105979392,
+    "worker_rss_max": 61685760,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:34:53.612340",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5077307392,
+    "worker_rss_max": 61698048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:35:04.348734",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5041614848,
+    "worker_rss_max": 60784640,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:35:15.026640",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5072515072,
+    "worker_rss_max": 60538880,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:35:25.490601",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5075480576,
+    "worker_rss_max": 62963712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:35:36.064885",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5067997184,
+    "worker_rss_max": 63561728,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:35:46.845278",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5074366464,
+    "worker_rss_max": 63131648,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:35:57.465924",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5058875392,
+    "worker_rss_max": 63500288,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:36:08.035189",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5074423808,
+    "worker_rss_max": 61607936,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:36:18.672114",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5073780736,
+    "worker_rss_max": 61685760,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:36:29.234224",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5072330752,
+    "worker_rss_max": 65331200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:36:39.844214",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5118038016,
+    "worker_rss_max": 62050304,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:36:50.420684",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5109555200,
+    "worker_rss_max": 61616128,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:37:00.965171",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5090758656,
+    "worker_rss_max": 63549440,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:37:11.608949",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5095407616,
+    "worker_rss_max": 64094208,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:37:22.363477",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5116575744,
+    "worker_rss_max": 64094208,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:37:32.992919",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5135269888,
+    "worker_rss_max": 61517824,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:37:43.662989",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5133070336,
+    "worker_rss_max": 64217088,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:37:54.334478",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5133946880,
+    "worker_rss_max": 61984768,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:38:04.987979",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5151059968,
+    "worker_rss_max": 63930368,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:38:15.646090",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5138927616,
+    "worker_rss_max": 61341696,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:38:26.325951",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5110288384,
+    "worker_rss_max": 63553536,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:38:36.922770",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5114155008,
+    "worker_rss_max": 63549440,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:38:47.607944",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5094739968,
+    "worker_rss_max": 62791680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:38:58.173816",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5106950144,
+    "worker_rss_max": 62791680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:39:08.684158",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5115121664,
+    "worker_rss_max": 62795776,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:39:19.202873",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5068922880,
+    "worker_rss_max": 62791680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:39:29.860827",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5130395648,
+    "worker_rss_max": 62799872,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:39:40.419442",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5100482560,
+    "worker_rss_max": 63090688,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:39:51.180157",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4954345472,
+    "worker_rss_max": 62795776,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:40:01.638311",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5035986944,
+    "worker_rss_max": 64290816,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:40:12.215208",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5011472384,
+    "worker_rss_max": 62128128,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:40:22.896744",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4973178880,
+    "worker_rss_max": 63496192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:40:33.536987",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5002940416,
+    "worker_rss_max": 62386176,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:40:44.155231",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5022646272,
+    "worker_rss_max": 64053248,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:40:54.848512",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5035732992,
+    "worker_rss_max": 64057344,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:41:04.875322",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4997095424,
+    "worker_rss_max": 64057344,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:41:15.419749",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5000450048,
+    "worker_rss_max": 63582208,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:41:26.013021",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5000847360,
+    "worker_rss_max": 63582208,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:41:36.597690",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5017567232,
+    "worker_rss_max": 64020480,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:41:47.277390",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5033897984,
+    "worker_rss_max": 62103552,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:41:57.907429",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5033820160,
+    "worker_rss_max": 63193088,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:42:08.458246",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5034008576,
+    "worker_rss_max": 63188992,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:42:19.068062",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5103284224,
+    "worker_rss_max": 62451712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:42:29.615059",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5079232512,
+    "worker_rss_max": 62603264,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:42:40.219544",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5085945856,
+    "worker_rss_max": 64942080,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:42:50.816560",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5085917184,
+    "worker_rss_max": 64937984,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:43:01.326917",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5086564352,
+    "worker_rss_max": 60915712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:43:11.897219",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5094825984,
+    "worker_rss_max": 63737856,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:43:22.426457",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5071433728,
+    "worker_rss_max": 63737856,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:43:33.089861",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5078048768,
+    "worker_rss_max": 63680512,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:43:43.867113",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5011218432,
+    "worker_rss_max": 64311296,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:43:54.855277",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4978642944,
+    "worker_rss_max": 64307200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:44:05.459593",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4946202624,
+    "worker_rss_max": 63598592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:44:15.963473",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4952231936,
+    "worker_rss_max": 63700992,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:44:26.615214",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4949123072,
+    "worker_rss_max": 63746048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:44:37.590509",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4941578240,
+    "worker_rss_max": 63614976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:44:47.597454",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4912009216,
+    "worker_rss_max": 63844352,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:44:58.431771",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4876931072,
+    "worker_rss_max": 63651840,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:45:09.322299",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4978225152,
+    "worker_rss_max": 63717376,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:45:20.074446",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5049470976,
+    "worker_rss_max": 62660608,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:45:30.805109",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5011169280,
+    "worker_rss_max": 62136320,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:45:41.358523",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5002178560,
+    "worker_rss_max": 63852544,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:45:51.987385",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4987633664,
+    "worker_rss_max": 65007616,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:46:02.740917",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 4991508480,
+    "worker_rss_max": 65011712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:46:13.503367",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5022388224,
+    "worker_rss_max": 65007616,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:46:24.406393",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5013299200,
+    "worker_rss_max": 65007616,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:46:35.080464",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5016887296,
+    "worker_rss_max": 65003520,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:46:45.818868",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5032554496,
+    "worker_rss_max": 61743104,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:46:56.408146",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5057036288,
+    "worker_rss_max": 62554112,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:47:07.136036",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5057945600,
+    "worker_rss_max": 63483904,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:47:17.824599",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5062762496,
+    "worker_rss_max": 63483904,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:47:28.788545",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5071949824,
+    "worker_rss_max": 62582784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:47:39.297440",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5095194624,
+    "worker_rss_max": 65351680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:47:49.979917",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5105213440,
+    "worker_rss_max": 64307200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:48:00.770232",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5105856512,
+    "worker_rss_max": 63705088,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:48:11.400122",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5096173568,
+    "worker_rss_max": 63811584,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:48:22.092901",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5093806080,
+    "worker_rss_max": 64229376,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:48:32.839101",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5103710208,
+    "worker_rss_max": 63557632,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:48:43.607603",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5089173504,
+    "worker_rss_max": 62709760,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:48:54.559904",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5074108416,
+    "worker_rss_max": 64528384,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:49:04.653307",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5074497536,
+    "worker_rss_max": 64528384,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:49:15.576405",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5089656832,
+    "worker_rss_max": 63164416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:49:26.428034",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5204463616,
+    "worker_rss_max": 61542400,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:49:37.234682",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5246263296,
+    "worker_rss_max": 63942656,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:49:47.419762",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5211004928,
+    "worker_rss_max": 62763008,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:49:57.492372",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5191020544,
+    "worker_rss_max": 63176704,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:50:08.285621",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5176012800,
+    "worker_rss_max": 62763008,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:50:19.119089",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5221036032,
+    "worker_rss_max": 64794624,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:50:29.973379",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5208543232,
+    "worker_rss_max": 64790528,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:50:40.647830",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5215531008,
+    "worker_rss_max": 64933888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:50:51.324284",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5231517696,
+    "worker_rss_max": 61702144,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:51:01.998743",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5212344320,
+    "worker_rss_max": 61890560,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:51:12.831015",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5217558528,
+    "worker_rss_max": 63602688,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:51:23.575082",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5219868672,
+    "worker_rss_max": 63242240,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:51:34.574166",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5222629376,
+    "worker_rss_max": 63348736,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:51:45.352979",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5214818304,
+    "worker_rss_max": 63512576,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:51:56.121246",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5216620544,
+    "worker_rss_max": 63758336,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:52:06.876237",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5114925056,
+    "worker_rss_max": 63819776,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:52:17.527600",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5169946624,
+    "worker_rss_max": 64372736,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:52:28.103082",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5167083520,
+    "worker_rss_max": 66109440,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:52:38.450466",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5172801536,
+    "worker_rss_max": 66142208,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:52:48.998739",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5188595712,
+    "worker_rss_max": 66170880,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:52:59.501161",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5183602688,
+    "worker_rss_max": 66166784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:53:10.101426",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5179265024,
+    "worker_rss_max": 65851392,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:53:20.709363",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5210857472,
+    "worker_rss_max": 65900544,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:53:31.448039",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5222043648,
+    "worker_rss_max": 63393792,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:53:42.363782",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5214371840,
+    "worker_rss_max": 64909312,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:53:53.282163",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5216808960,
+    "worker_rss_max": 64909312,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:54:04.309522",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5225451520,
+    "worker_rss_max": 63537152,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:54:15.404054",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5196681216,
+    "worker_rss_max": 63832064,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:54:26.517524",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5230133248,
+    "worker_rss_max": 63766528,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:54:36.639334",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5230788608,
+    "worker_rss_max": 63877120,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:54:46.951826",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5226635264,
+    "worker_rss_max": 64073728,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:54:57.058681",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5196546048,
+    "worker_rss_max": 66818048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:55:07.001133",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5204754432,
+    "worker_rss_max": 64012288,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:55:17.452485",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5181161472,
+    "worker_rss_max": 64131072,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:55:27.415580",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5218439168,
+    "worker_rss_max": 63569920,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:55:38.326703",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5225349120,
+    "worker_rss_max": 63324160,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:55:49.486329",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5223047168,
+    "worker_rss_max": 63340544,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:56:00.248431",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5220507648,
+    "worker_rss_max": 64638976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:56:10.923540",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5215649792,
+    "worker_rss_max": 67596288,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:56:21.032642",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5090398208,
+    "worker_rss_max": 65372160,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:56:31.312434",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5216337920,
+    "worker_rss_max": 65372160,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:56:41.276570",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5232005120,
+    "worker_rss_max": 65101824,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:56:52.500106",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5222404096,
+    "worker_rss_max": 65105920,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:57:02.631795",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5227528192,
+    "worker_rss_max": 67481600,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:57:13.382293",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5225738240,
+    "worker_rss_max": 64143360,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:57:24.110595",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5214277632,
+    "worker_rss_max": 64208896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:57:34.883474",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5235568640,
+    "worker_rss_max": 64913408,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:57:45.876934",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5247119360,
+    "worker_rss_max": 64512000,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:57:56.927531",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5254742016,
+    "worker_rss_max": 62676992,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:58:07.868466",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5248450560,
+    "worker_rss_max": 64806912,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:58:18.538157",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5240455168,
+    "worker_rss_max": 64528384,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:58:29.198534",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5235863552,
+    "worker_rss_max": 64561152,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:58:39.776992",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5237219328,
+    "worker_rss_max": 64585728,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:58:50.829251",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5226201088,
+    "worker_rss_max": 65806336,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:59:01.821295",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5230157824,
+    "worker_rss_max": 65806336,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:59:12.684580",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5227028480,
+    "worker_rss_max": 64720896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:59:23.576872",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5239656448,
+    "worker_rss_max": 64720896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:59:34.701612",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5222092800,
+    "worker_rss_max": 64720896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:59:45.957502",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5215371264,
+    "worker_rss_max": 65949696,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T14:59:56.919616",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5203742720,
+    "worker_rss_max": 64028672,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:00:07.816487",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5232816128,
+    "worker_rss_max": 64028672,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:00:18.467890",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5226196992,
+    "worker_rss_max": 64028672,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:00:29.466780",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5206003712,
+    "worker_rss_max": 64057344,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:00:40.160152",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5198614528,
+    "worker_rss_max": 65200128,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:00:51.060762",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5198970880,
+    "worker_rss_max": 64811008,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:01:02.095993",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5206020096,
+    "worker_rss_max": 64028672,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:01:13.113567",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5205975040,
+    "worker_rss_max": 64032768,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:01:24.002028",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5257330688,
+    "worker_rss_max": 63086592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:01:35.074708",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5227118592,
+    "worker_rss_max": 63639552,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:01:45.350002",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5270515712,
+    "worker_rss_max": 63086592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:01:55.434967",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5249998848,
+    "worker_rss_max": 64184320,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:02:05.549012",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5256077312,
+    "worker_rss_max": 64503808,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:02:16.554931",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5274296320,
+    "worker_rss_max": 64622592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:02:26.879107",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5278674944,
+    "worker_rss_max": 65900544,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:02:37.493401",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5283655680,
+    "worker_rss_max": 64749568,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:02:48.166971",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5283078144,
+    "worker_rss_max": 64790528,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:02:58.207144",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5290180608,
+    "worker_rss_max": 64860160,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:03:08.981561",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5298221056,
+    "worker_rss_max": 64864256,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:03:20.201938",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5280583680,
+    "worker_rss_max": 64917504,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:03:30.547603",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5267243008,
+    "worker_rss_max": 64991232,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:03:41.479771",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5272678400,
+    "worker_rss_max": 64999424,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:03:52.464886",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5269553152,
+    "worker_rss_max": 64999424,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:04:03.306697",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5259010048,
+    "worker_rss_max": 64999424,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:04:14.455456",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5272612864,
+    "worker_rss_max": 65003520,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:04:25.075818",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5274013696,
+    "worker_rss_max": 65163264,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:04:36.064304",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5267742720,
+    "worker_rss_max": 64053248,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:04:46.906222",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5224738816,
+    "worker_rss_max": 64049152,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:04:57.566609",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5234524160,
+    "worker_rss_max": 64118784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:05:07.661695",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5236170752,
+    "worker_rss_max": 64413696,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:05:18.680326",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5234778112,
+    "worker_rss_max": 64565248,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:05:29.680655",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5215768576,
+    "worker_rss_max": 65036288,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:05:40.509263",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5182722048,
+    "worker_rss_max": 65073152,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:05:51.657002",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5143093248,
+    "worker_rss_max": 65310720,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:06:01.648483",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5201203200,
+    "worker_rss_max": 64049152,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:06:12.532286",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5193060352,
+    "worker_rss_max": 64045056,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:06:23.322273",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5212430336,
+    "worker_rss_max": 64110592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:06:33.948563",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5219270656,
+    "worker_rss_max": 64045056,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:06:44.516411",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5230534656,
+    "worker_rss_max": 64049152,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:06:55.306832",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5225459712,
+    "worker_rss_max": 64049152,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:07:05.642301",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5228998656,
+    "worker_rss_max": 64049152,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:07:15.936206",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5227454464,
+    "worker_rss_max": 65052672,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:07:26.070063",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5223448576,
+    "worker_rss_max": 65646592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:07:36.828947",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5235929088,
+    "worker_rss_max": 62828544,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:07:46.786699",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5249441792,
+    "worker_rss_max": 63393792,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:07:57.921028",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5224873984,
+    "worker_rss_max": 64028672,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:08:08.835968",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5253169152,
+    "worker_rss_max": 63660032,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:08:18.968713",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5246373888,
+    "worker_rss_max": 63660032,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:08:29.211631",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5245116416,
+    "worker_rss_max": 64405504,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:08:40.463108",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5248307200,
+    "worker_rss_max": 63655936,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:08:51.136197",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5243281408,
+    "worker_rss_max": 63651840,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:09:01.276490",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5208154112,
+    "worker_rss_max": 62992384,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:09:12.341097",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5248004096,
+    "worker_rss_max": 62791680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:09:22.367417",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5223923712,
+    "worker_rss_max": 64114688,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:09:33.350408",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5152739328,
+    "worker_rss_max": 64118784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:09:43.335272",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5122834432,
+    "worker_rss_max": 63635456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:09:53.376421",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5134163968,
+    "worker_rss_max": 62885888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:10:04.038573",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5087809536,
+    "worker_rss_max": 64114688,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:10:14.722079",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5068390400,
+    "worker_rss_max": 64176128,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:10:25.466127",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5043798016,
+    "worker_rss_max": 66793472,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:10:35.630287",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5063602176,
+    "worker_rss_max": 67112960,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:10:46.319648",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5182926848,
+    "worker_rss_max": 65150976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:10:57.245750",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5220294656,
+    "worker_rss_max": 64503808,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:11:08.343415",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5221449728,
+    "worker_rss_max": 64765952,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:11:19.246815",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5218607104,
+    "worker_rss_max": 64995328,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:11:29.873788",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5186306048,
+    "worker_rss_max": 67624960,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:11:41.712333",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5403025408,
+    "worker_rss_max": 62898176,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:11:52.773373",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5362184192,
+    "worker_rss_max": 63197184,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:12:03.023257",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5375471616,
+    "worker_rss_max": 63340544,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:12:13.906715",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5373022208,
+    "worker_rss_max": 65556480,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:12:23.873442",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5379817472,
+    "worker_rss_max": 65556480,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:12:34.020848",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5386727424,
+    "worker_rss_max": 65179648,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:12:44.971782",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5347500032,
+    "worker_rss_max": 67358720,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:12:55.916292",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5378166784,
+    "worker_rss_max": 64229376,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:13:06.948545",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5381390336,
+    "worker_rss_max": 64344064,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:13:17.272789",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5390749696,
+    "worker_rss_max": 65069056,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:13:28.520435",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5377781760,
+    "worker_rss_max": 65069056,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:13:38.432756",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5389459456,
+    "worker_rss_max": 64806912,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:13:49.483226",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5389955072,
+    "worker_rss_max": 66437120,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:14:00.438094",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5402075136,
+    "worker_rss_max": 66441216,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:14:11.314872",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5393211392,
+    "worker_rss_max": 63942656,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:14:21.619113",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5315424256,
+    "worker_rss_max": 64045056,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:14:31.563748",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5306576896,
+    "worker_rss_max": 64184320,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:14:42.659402",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5337550848,
+    "worker_rss_max": 65495040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:14:53.566935",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5294776320,
+    "worker_rss_max": 63336448,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:15:04.306087",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5287432192,
+    "worker_rss_max": 63356928,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:15:14.639694",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5346308096,
+    "worker_rss_max": 63668224,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:15:25.123395",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5318864896,
+    "worker_rss_max": 63668224,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:15:36.146339",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5308686336,
+    "worker_rss_max": 64819200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:15:47.162648",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5312000000,
+    "worker_rss_max": 64819200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:15:57.914674",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5305942016,
+    "worker_rss_max": 64819200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:16:08.530020",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5323612160,
+    "worker_rss_max": 66080768,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:16:19.325444",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5325709312,
+    "worker_rss_max": 66080768,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:16:30.386782",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5324922880,
+    "worker_rss_max": 64577536,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:16:41.751015",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5414596608,
+    "worker_rss_max": 64577536,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:16:52.296751",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5383294976,
+    "worker_rss_max": 64577536,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:17:02.774519",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5409415168,
+    "worker_rss_max": 64577536,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:17:13.163346",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5409648640,
+    "worker_rss_max": 63565824,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:17:23.635191",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5412421632,
+    "worker_rss_max": 63569920,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:17:33.805140",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5432582144,
+    "worker_rss_max": 63574016,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:17:44.030838",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5431922688,
+    "worker_rss_max": 63938560,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:17:55.162469",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5449080832,
+    "worker_rss_max": 63651840,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:18:06.329571",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5449625600,
+    "worker_rss_max": 63655936,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:18:16.651074",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5410635776,
+    "worker_rss_max": 63655936,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:18:27.393114",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5400219648,
+    "worker_rss_max": 63660032,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:18:37.849161",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5378052096,
+    "worker_rss_max": 65224704,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:18:48.560877",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5395804160,
+    "worker_rss_max": 63070208,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:18:59.386480",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5366464512,
+    "worker_rss_max": 63614976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:19:10.427242",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5387014144,
+    "worker_rss_max": 63594496,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:19:21.220030",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5375115264,
+    "worker_rss_max": 61931520,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:19:31.990514",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5374042112,
+    "worker_rss_max": 62935040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:19:43.141105",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5368967168,
+    "worker_rss_max": 63012864,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:19:53.983689",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5271793664,
+    "worker_rss_max": 63512576,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:20:04.149346",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5352902656,
+    "worker_rss_max": 61931520,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:20:15.282989",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5354344448,
+    "worker_rss_max": 62619648,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:20:25.251489",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5350952960,
+    "worker_rss_max": 63500288,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:20:35.796576",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5351931904,
+    "worker_rss_max": 64032768,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:20:46.278775",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5400109056,
+    "worker_rss_max": 64143360,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:20:56.998683",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5403365376,
+    "worker_rss_max": 64147456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:21:07.507141",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5391155200,
+    "worker_rss_max": 64147456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:21:18.174480",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5406543872,
+    "worker_rss_max": 64077824,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:21:28.795752",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5411610624,
+    "worker_rss_max": 64077824,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:21:39.557035",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5417746432,
+    "worker_rss_max": 63676416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:21:50.328327",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5425352704,
+    "worker_rss_max": 63680512,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:22:00.812552",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5419237376,
+    "worker_rss_max": 63926272,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:22:11.420823",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5412376576,
+    "worker_rss_max": 64503808,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:22:22.023341",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5415550976,
+    "worker_rss_max": 63778816,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:22:32.862617",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5419388928,
+    "worker_rss_max": 64421888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:22:43.970682",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5397622784,
+    "worker_rss_max": 64823296,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:22:54.768849",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5396381696,
+    "worker_rss_max": 64937984,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:23:05.618090",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5392400384,
+    "worker_rss_max": 63287296,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:23:16.180420",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5409366016,
+    "worker_rss_max": 63975424,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:23:26.903207",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5412704256,
+    "worker_rss_max": 62242816,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:23:37.739546",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5421391872,
+    "worker_rss_max": 62410752,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:23:47.962977",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5422608384,
+    "worker_rss_max": 64159744,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:23:58.013339",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5439950848,
+    "worker_rss_max": 62529536,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:24:08.720558",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5441437696,
+    "worker_rss_max": 64438272,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:24:19.618351",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5471547392,
+    "worker_rss_max": 64421888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:24:30.671704",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5495054336,
+    "worker_rss_max": 62648320,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:24:40.671245",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5511626752,
+    "worker_rss_max": 62320640,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:24:51.572345",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5490053120,
+    "worker_rss_max": 64602112,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:25:02.259716",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5476876288,
+    "worker_rss_max": 64098304,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:25:12.777153",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5468975104,
+    "worker_rss_max": 62451712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:25:23.524153",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5465456640,
+    "worker_rss_max": 63135744,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:25:34.031011",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5466935296,
+    "worker_rss_max": 65032192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:25:44.734013",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5454438400,
+    "worker_rss_max": 65470464,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:25:55.324170",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5461372928,
+    "worker_rss_max": 65060864,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:26:05.507305",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5466894336,
+    "worker_rss_max": 62775296,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:26:15.855045",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5451427840,
+    "worker_rss_max": 65028096,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:26:26.739277",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5472448512,
+    "worker_rss_max": 65290240,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:26:37.496541",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5457752064,
+    "worker_rss_max": 66179072,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:26:48.440302",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5445304320,
+    "worker_rss_max": 66134016,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:26:58.640020",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5423607808,
+    "worker_rss_max": 66301952,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:27:09.795070",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5429620736,
+    "worker_rss_max": 66314240,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:27:19.847750",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5402746880,
+    "worker_rss_max": 66805760,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:27:29.932659",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5360607232,
+    "worker_rss_max": 66916352,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:27:41.185053",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5387096064,
+    "worker_rss_max": 66920448,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:27:51.181855",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5431513088,
+    "worker_rss_max": 66908160,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:28:01.838611",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5421932544,
+    "worker_rss_max": 63447040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:28:11.909363",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5436342272,
+    "worker_rss_max": 63946752,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:28:22.683766",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5441699840,
+    "worker_rss_max": 63549440,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:28:33.408223",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5452402688,
+    "worker_rss_max": 63639552,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:28:43.950992",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5319278592,
+    "worker_rss_max": 66207744,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:28:54.553951",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5280665600,
+    "worker_rss_max": 66211840,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:29:05.062696",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5354901504,
+    "worker_rss_max": 65925120,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:29:15.646561",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5450932224,
+    "worker_rss_max": 64659456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:29:26.168629",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5407698944,
+    "worker_rss_max": 64659456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:29:36.743403",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5440393216,
+    "worker_rss_max": 65306624,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:29:47.410051",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5423063040,
+    "worker_rss_max": 64667648,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:29:58.120336",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5410271232,
+    "worker_rss_max": 65064960,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:30:09.030381",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5407109120,
+    "worker_rss_max": 64319488,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:30:19.308495",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5398704128,
+    "worker_rss_max": 64589824,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:30:30.307436",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5411987456,
+    "worker_rss_max": 64749568,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:30:41.237390",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5407653888,
+    "worker_rss_max": 67473408,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:30:51.231354",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5412671488,
+    "worker_rss_max": 63660032,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:31:01.928459",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5414256640,
+    "worker_rss_max": 65568768,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:31:12.716216",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5424308224,
+    "worker_rss_max": 65642496,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:31:24.179132",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5416697856,
+    "worker_rss_max": 65183744,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:31:34.431080",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5411926016,
+    "worker_rss_max": 64413696,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:31:44.464064",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5417648128,
+    "worker_rss_max": 64409600,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:31:55.263622",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5394202624,
+    "worker_rss_max": 63971328,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:32:06.059662",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5399207936,
+    "worker_rss_max": 63971328,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:32:16.703264",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5453836288,
+    "worker_rss_max": 63971328,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:32:27.624710",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5467213824,
+    "worker_rss_max": 63524864,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:32:38.501776",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5469966336,
+    "worker_rss_max": 62472192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:32:49.047524",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5493628928,
+    "worker_rss_max": 63246336,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:32:59.847214",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5513064448,
+    "worker_rss_max": 63152128,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:33:10.536339",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5483048960,
+    "worker_rss_max": 62521344,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:33:21.193752",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5490999296,
+    "worker_rss_max": 64344064,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:33:31.403504",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5488898048,
+    "worker_rss_max": 62431232,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:33:41.951429",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5470347264,
+    "worker_rss_max": 63221760,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:33:52.947705",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5491372032,
+    "worker_rss_max": 63606784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:34:03.644993",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5497344000,
+    "worker_rss_max": 63606784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:34:14.693776",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5500526592,
+    "worker_rss_max": 62550016,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:34:25.311771",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5511073792,
+    "worker_rss_max": 62791680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:34:36.263034",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5505048576,
+    "worker_rss_max": 62791680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:34:46.257915",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5480185856,
+    "worker_rss_max": 62042112,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:34:57.303382",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5450473472,
+    "worker_rss_max": 64147456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:35:07.995572",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5445115904,
+    "worker_rss_max": 64147456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:35:18.686444",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5417529344,
+    "worker_rss_max": 65142784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:35:29.462977",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5383987200,
+    "worker_rss_max": 63807488,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:35:40.012513",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5388124160,
+    "worker_rss_max": 63447040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:35:51.000815",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5383999488,
+    "worker_rss_max": 63209472,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:36:00.976591",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5358796800,
+    "worker_rss_max": 64098304,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:36:11.038403",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5355450368,
+    "worker_rss_max": 64094208,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:36:21.368698",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5381529600,
+    "worker_rss_max": 64081920,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:36:31.527594",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5384228864,
+    "worker_rss_max": 65495040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:36:41.679445",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5416271872,
+    "worker_rss_max": 64323584,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:36:52.724228",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5403414528,
+    "worker_rss_max": 61771776,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:37:02.959953",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5389705216,
+    "worker_rss_max": 63844352,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:37:13.382986",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5394870272,
+    "worker_rss_max": 63094784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:37:24.396356",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5385080832,
+    "worker_rss_max": 63102976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:37:35.085861",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5392363520,
+    "worker_rss_max": 64118784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:37:45.895479",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5387427840,
+    "worker_rss_max": 64344064,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:37:56.865280",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5389524992,
+    "worker_rss_max": 64352256,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:38:07.844027",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5374771200,
+    "worker_rss_max": 64356352,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:38:17.929789",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5391704064,
+    "worker_rss_max": 62312448,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:38:28.648983",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5384843264,
+    "worker_rss_max": 63201280,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:38:38.755849",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5378981888,
+    "worker_rss_max": 63496192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:38:48.825656",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5386313728,
+    "worker_rss_max": 64217088,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:38:59.748492",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5448200192,
+    "worker_rss_max": 63172608,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:39:10.611373",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5419114496,
+    "worker_rss_max": 63774720,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:39:20.798286",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5416189952,
+    "worker_rss_max": 63741952,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:39:31.372176",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5429858304,
+    "worker_rss_max": 63746048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:39:41.961298",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5435318272,
+    "worker_rss_max": 63807488,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:39:53.082276",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5315530752,
+    "worker_rss_max": 63815680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:40:03.048489",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5408047104,
+    "worker_rss_max": 63840256,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:40:14.104110",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5397168128,
+    "worker_rss_max": 63836160,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:40:24.325880",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5394935808,
+    "worker_rss_max": 62435328,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:40:34.948817",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5394952192,
+    "worker_rss_max": 62910464,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:40:45.571465",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5379342336,
+    "worker_rss_max": 63860736,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:40:56.145849",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5379932160,
+    "worker_rss_max": 65400832,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:41:06.759993",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5383524352,
+    "worker_rss_max": 64192512,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:41:17.646433",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5402599424,
+    "worker_rss_max": 64360448,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:41:27.633058",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5435338752,
+    "worker_rss_max": 64499712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:41:37.916650",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5437321216,
+    "worker_rss_max": 65536000,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:41:49.065748",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5442015232,
+    "worker_rss_max": 65323008,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:41:59.061429",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5441462272,
+    "worker_rss_max": 65232896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:42:10.109159",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5438803968,
+    "worker_rss_max": 65990656,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:42:20.771017",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5449469952,
+    "worker_rss_max": 64823296,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:42:31.411766",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5456924672,
+    "worker_rss_max": 64823296,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:42:41.892566",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5518852096,
+    "worker_rss_max": 64823296,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:42:52.025101",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5493243904,
+    "worker_rss_max": 66011136,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:43:02.479001",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5501366272,
+    "worker_rss_max": 66007040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:43:13.268753",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5502832640,
+    "worker_rss_max": 63877120,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:43:23.566463",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5506002944,
+    "worker_rss_max": 63676416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:43:34.455314",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5533655040,
+    "worker_rss_max": 63676416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:43:45.221580",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5499764736,
+    "worker_rss_max": 65937408,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:43:56.309102",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5508255744,
+    "worker_rss_max": 64565248,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:44:06.731502",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5499551744,
+    "worker_rss_max": 63680512,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:44:17.654456",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5495799808,
+    "worker_rss_max": 63959040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:44:28.423725",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5488361472,
+    "worker_rss_max": 63860736,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:44:38.726470",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5476007936,
+    "worker_rss_max": 64270336,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:44:49.451840",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5448597504,
+    "worker_rss_max": 64270336,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:44:59.575966",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5405380608,
+    "worker_rss_max": 64262144,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:45:09.582292",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5417836544,
+    "worker_rss_max": 64700416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:45:19.694457",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5435371520,
+    "worker_rss_max": 65409024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:45:29.915612",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5439201280,
+    "worker_rss_max": 65482752,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:45:39.902522",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5443325952,
+    "worker_rss_max": 64700416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:45:50.045191",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5437960192,
+    "worker_rss_max": 67444736,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:46:00.575583",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5456396288,
+    "worker_rss_max": 63311872,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:46:11.663098",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5453152256,
+    "worker_rss_max": 63582208,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:46:22.359557",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5465743360,
+    "worker_rss_max": 65134592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:46:32.898046",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5465604096,
+    "worker_rss_max": 65134592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:46:43.441418",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5651853312,
+    "worker_rss_max": 64528384,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:46:54.038398",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5646331904,
+    "worker_rss_max": 64528384,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:47:04.698229",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5634068480,
+    "worker_rss_max": 64847872,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:47:15.217287",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5636460544,
+    "worker_rss_max": 64876544,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:47:25.817430",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5635026944,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:47:36.482982",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5628538880,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:47:47.608727",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5627371520,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:47:58.053471",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5622579200,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:48:08.371208",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5622685696,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:48:19.379604",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5597048832,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:48:30.194846",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5613084672,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:48:40.383653",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5604401152,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:48:51.509693",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5609517056,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:49:02.553505",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5615742976,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:49:13.241236",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5604491264,
+    "worker_rss_max": 64897024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:49:23.533287",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5573107712,
+    "worker_rss_max": 63983616,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:49:33.498634",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5604827136,
+    "worker_rss_max": 63954944,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:49:43.597633",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5619580928,
+    "worker_rss_max": 62578688,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:49:54.236556",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5550653440,
+    "worker_rss_max": 64499712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:50:04.481383",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5537177600,
+    "worker_rss_max": 65191936,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:50:14.709923",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5524787200,
+    "worker_rss_max": 63954944,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:50:24.967258",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5517774848,
+    "worker_rss_max": 64495616,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:50:35.101819",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5535535104,
+    "worker_rss_max": 63987712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:50:46.138843",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5533323264,
+    "worker_rss_max": 65159168,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:50:56.200472",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5532057600,
+    "worker_rss_max": 65150976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:51:07.195254",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5544775680,
+    "worker_rss_max": 64045056,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:51:17.556190",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5558079488,
+    "worker_rss_max": 64045056,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:51:28.494192",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5545492480,
+    "worker_rss_max": 64040960,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:51:39.440343",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5535690752,
+    "worker_rss_max": 64319488,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:51:49.410083",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5546147840,
+    "worker_rss_max": 64860160,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:52:00.461042",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5538222080,
+    "worker_rss_max": 64700416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:52:11.123076",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5537140736,
+    "worker_rss_max": 64700416,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:52:22.005344",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5567594496,
+    "worker_rss_max": 64299008,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:52:32.075123",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5568671744,
+    "worker_rss_max": 64303104,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:52:42.758704",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5577416704,
+    "worker_rss_max": 64299008,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:52:52.814193",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5580451840,
+    "worker_rss_max": 64299008,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:53:03.642014",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5573992448,
+    "worker_rss_max": 65134592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:53:14.713989",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5582458880,
+    "worker_rss_max": 64593920,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:53:25.305336",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5583601664,
+    "worker_rss_max": 64258048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:53:35.781252",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5558476800,
+    "worker_rss_max": 64266240,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:53:46.359393",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5579464704,
+    "worker_rss_max": 63758336,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:53:56.856653",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5587959808,
+    "worker_rss_max": 63754240,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:54:07.614571",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5591359488,
+    "worker_rss_max": 63754240,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:54:17.981424",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5586526208,
+    "worker_rss_max": 64139264,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:54:28.748505",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5588455424,
+    "worker_rss_max": 63033344,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:54:39.826876",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5554421760,
+    "worker_rss_max": 63033344,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:54:50.980347",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5493800960,
+    "worker_rss_max": 64319488,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:55:01.381752",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5562179584,
+    "worker_rss_max": 64319488,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:55:11.608351",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5508120576,
+    "worker_rss_max": 62246912,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:55:22.530793",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5486686208,
+    "worker_rss_max": 65044480,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:55:32.917542",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5452578816,
+    "worker_rss_max": 65839104,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:55:43.136908",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5439320064,
+    "worker_rss_max": 63610880,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:55:53.941756",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5457059840,
+    "worker_rss_max": 63610880,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:56:04.905595",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5462396928,
+    "worker_rss_max": 64380928,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:56:15.140107",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5474054144,
+    "worker_rss_max": 64073728,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:56:26.314403",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5485883392,
+    "worker_rss_max": 63938560,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:56:36.371723",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5482061824,
+    "worker_rss_max": 64974848,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:56:47.493455",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5484781568,
+    "worker_rss_max": 63610880,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:56:57.466755",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5482786816,
+    "worker_rss_max": 64651264,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:57:08.528563",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5170380800,
+    "worker_rss_max": 66076672,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:57:18.576774",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5249355776,
+    "worker_rss_max": 64905216,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:57:29.744313",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5163286528,
+    "worker_rss_max": 65064960,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:57:40.090511",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5286113280,
+    "worker_rss_max": 65433600,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:57:50.123620",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5232906240,
+    "worker_rss_max": 65466368,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:58:00.980607",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5277622272,
+    "worker_rss_max": 65458176,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:58:11.718737",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5329850368,
+    "worker_rss_max": 65540096,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:58:22.973432",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5323350016,
+    "worker_rss_max": 65531904,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:58:32.946658",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5320396800,
+    "worker_rss_max": 65941504,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:58:43.646357",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5306839040,
+    "worker_rss_max": 66514944,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:58:54.408123",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5293240320,
+    "worker_rss_max": 66666496,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:59:05.145155",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5325901824,
+    "worker_rss_max": 66666496,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:59:15.668323",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5339090944,
+    "worker_rss_max": 66740224,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:59:26.655052",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5341589504,
+    "worker_rss_max": 66789376,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:59:37.570921",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5344833536,
+    "worker_rss_max": 66945024,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:59:48.480623",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5344370688,
+    "worker_rss_max": 64122880,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T15:59:58.444984",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5317877760,
+    "worker_rss_max": 63918080,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:00:09.017701",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5317562368,
+    "worker_rss_max": 63918080,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:00:19.612120",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5320249344,
+    "worker_rss_max": 63918080,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:00:30.456737",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5312741376,
+    "worker_rss_max": 64737280,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:00:40.653436",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5313556480,
+    "worker_rss_max": 64393216,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:00:51.342110",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5306355712,
+    "worker_rss_max": 63377408,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:01:02.004670",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5325406208,
+    "worker_rss_max": 63291392,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:01:12.548290",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5316501504,
+    "worker_rss_max": 64421888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:01:23.083080",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5312446464,
+    "worker_rss_max": 64294912,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:01:34.013532",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5312172032,
+    "worker_rss_max": 67039232,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:01:44.110747",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5322117120,
+    "worker_rss_max": 64167936,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:01:55.030022",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5326958592,
+    "worker_rss_max": 64675840,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:02:05.727673",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5323030528,
+    "worker_rss_max": 64675840,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:02:15.905220",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5319004160,
+    "worker_rss_max": 64892928,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:02:26.916983",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5299351552,
+    "worker_rss_max": 66646016,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:02:37.644563",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5301874688,
+    "worker_rss_max": 64221184,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:02:48.185170",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5276041216,
+    "worker_rss_max": 65527808,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:02:58.884483",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5273817088,
+    "worker_rss_max": 65351680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:03:09.606318",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5350404096,
+    "worker_rss_max": 65351680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:03:20.386413",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5346004992,
+    "worker_rss_max": 67264512,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:03:31.461335",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5344137216,
+    "worker_rss_max": 67264512,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:03:42.412988",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5332606976,
+    "worker_rss_max": 67375104,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:03:52.399664",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5343096832,
+    "worker_rss_max": 65351680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:04:03.146011",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5350256640,
+    "worker_rss_max": 65351680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:04:13.555718",
+    "active_workers": 16,
+    "cpu_percent": 100.0,
+    "available_memory": 5326905344,
+    "worker_rss_max": 65351680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:04:23.711018",
+    "active_workers": 15,
+    "cpu_percent": 100.0,
+    "available_memory": 5300801536,
+    "worker_rss_max": 65351680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:04:34.652434",
+    "active_workers": 15,
+    "cpu_percent": 100.0,
+    "available_memory": 5308223488,
+    "worker_rss_max": 64823296,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:04:45.492934",
+    "active_workers": 15,
+    "cpu_percent": 100.0,
+    "available_memory": 5262508032,
+    "worker_rss_max": 67915776,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:04:56.270312",
+    "active_workers": 15,
+    "cpu_percent": 100.0,
+    "available_memory": 5212442624,
+    "worker_rss_max": 65396736,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:05:06.992078",
+    "active_workers": 15,
+    "cpu_percent": 100.0,
+    "available_memory": 5221847040,
+    "worker_rss_max": 65851392,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:05:17.596440",
+    "active_workers": 15,
+    "cpu_percent": 100.0,
+    "available_memory": 5243772928,
+    "worker_rss_max": 64389120,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:05:28.278448",
+    "active_workers": 15,
+    "cpu_percent": 100.0,
+    "available_memory": 5251792896,
+    "worker_rss_max": 65228800,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:05:38.859627",
+    "active_workers": 15,
+    "cpu_percent": 100.0,
+    "available_memory": 5210574848,
+    "worker_rss_max": 65232896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:05:49.478904",
+    "active_workers": 15,
+    "cpu_percent": 100.0,
+    "available_memory": 5254733824,
+    "worker_rss_max": 64520192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:06:00.064932",
+    "active_workers": 14,
+    "cpu_percent": 100.0,
+    "available_memory": 5384609792,
+    "worker_rss_max": 65368064,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:06:10.790758",
+    "active_workers": 14,
+    "cpu_percent": 99.7,
+    "available_memory": 5314932736,
+    "worker_rss_max": 65433600,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:06:21.208693",
+    "active_workers": 14,
+    "cpu_percent": 98.8,
+    "available_memory": 5366136832,
+    "worker_rss_max": 68050944,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:06:31.672560",
+    "active_workers": 14,
+    "cpu_percent": 98.8,
+    "available_memory": 5356670976,
+    "worker_rss_max": 67371008,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:06:42.148244",
+    "active_workers": 14,
+    "cpu_percent": 98.3,
+    "available_memory": 5381488640,
+    "worker_rss_max": 65413120,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:06:52.661374",
+    "active_workers": 14,
+    "cpu_percent": 98.1,
+    "available_memory": 5362417664,
+    "worker_rss_max": 65417216,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:07:03.221159",
+    "active_workers": 14,
+    "cpu_percent": 99.5,
+    "available_memory": 5312884736,
+    "worker_rss_max": 65544192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:07:13.820305",
+    "active_workers": 14,
+    "cpu_percent": 99.8,
+    "available_memory": 5278425088,
+    "worker_rss_max": 68186112,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:07:24.350794",
+    "active_workers": 14,
+    "cpu_percent": 99.6,
+    "available_memory": 5306429440,
+    "worker_rss_max": 64991232,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:07:34.772031",
+    "active_workers": 13,
+    "cpu_percent": 95.7,
+    "available_memory": 5373251584,
+    "worker_rss_max": 65003520,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:07:45.298519",
+    "active_workers": 12,
+    "cpu_percent": 91.7,
+    "available_memory": 5383790592,
+    "worker_rss_max": 65540096,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:07:55.788392",
+    "active_workers": 12,
+    "cpu_percent": 92.6,
+    "available_memory": 5408841728,
+    "worker_rss_max": 65544192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:08:06.152530",
+    "active_workers": 12,
+    "cpu_percent": 91.2,
+    "available_memory": 5427126272,
+    "worker_rss_max": 65540096,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:08:16.572507",
+    "active_workers": 12,
+    "cpu_percent": 96.4,
+    "available_memory": 4791468032,
+    "worker_rss_max": 65540096,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:08:26.891207",
+    "active_workers": 11,
+    "cpu_percent": 91.4,
+    "available_memory": 5059301376,
+    "worker_rss_max": 64417792,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:08:37.327380",
+    "active_workers": 11,
+    "cpu_percent": 86.6,
+    "available_memory": 4935626752,
+    "worker_rss_max": 64368640,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:08:47.783340",
+    "active_workers": 11,
+    "cpu_percent": 85.8,
+    "available_memory": 4843339776,
+    "worker_rss_max": 61874176,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:08:58.122829",
+    "active_workers": 11,
+    "cpu_percent": 82.3,
+    "available_memory": 4831576064,
+    "worker_rss_max": 64208896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:09:08.504095",
+    "active_workers": 11,
+    "cpu_percent": 83.8,
+    "available_memory": 4951646208,
+    "worker_rss_max": 61800448,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:09:18.855871",
+    "active_workers": 11,
+    "cpu_percent": 89.5,
+    "available_memory": 4672827392,
+    "worker_rss_max": 63275008,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:09:29.204903",
+    "active_workers": 11,
+    "cpu_percent": 87.9,
+    "available_memory": 4888395776,
+    "worker_rss_max": 63741952,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:09:39.691546",
+    "active_workers": 11,
+    "cpu_percent": 87.7,
+    "available_memory": 4957433856,
+    "worker_rss_max": 64380928,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:09:50.001987",
+    "active_workers": 11,
+    "cpu_percent": 84.6,
+    "available_memory": 4969328640,
+    "worker_rss_max": 65351680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:10:00.480139",
+    "active_workers": 11,
+    "cpu_percent": 82.9,
+    "available_memory": 4966682624,
+    "worker_rss_max": 63328256,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:10:10.823854",
+    "active_workers": 11,
+    "cpu_percent": 81.7,
+    "available_memory": 4912922624,
+    "worker_rss_max": 64450560,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:10:21.169176",
+    "active_workers": 11,
+    "cpu_percent": 80.5,
+    "available_memory": 4917882880,
+    "worker_rss_max": 65593344,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:10:31.525156",
+    "active_workers": 11,
+    "cpu_percent": 82.3,
+    "available_memory": 4916400128,
+    "worker_rss_max": 64225280,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:10:41.863235",
+    "active_workers": 11,
+    "cpu_percent": 83.2,
+    "available_memory": 4785545216,
+    "worker_rss_max": 64155648,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:10:52.305005",
+    "active_workers": 11,
+    "cpu_percent": 92.4,
+    "available_memory": 4846174208,
+    "worker_rss_max": 63098880,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:11:02.801836",
+    "active_workers": 11,
+    "cpu_percent": 84.8,
+    "available_memory": 4895612928,
+    "worker_rss_max": 63156224,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:11:13.240934",
+    "active_workers": 11,
+    "cpu_percent": 81.0,
+    "available_memory": 4907941888,
+    "worker_rss_max": 65892352,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:11:23.657524",
+    "active_workers": 11,
+    "cpu_percent": 81.5,
+    "available_memory": 4918915072,
+    "worker_rss_max": 64401408,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:11:34.088310",
+    "active_workers": 11,
+    "cpu_percent": 81.0,
+    "available_memory": 4932595712,
+    "worker_rss_max": 63963136,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:11:44.549694",
+    "active_workers": 11,
+    "cpu_percent": 81.4,
+    "available_memory": 5005606912,
+    "worker_rss_max": 64081920,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:11:54.953441",
+    "active_workers": 11,
+    "cpu_percent": 84.9,
+    "available_memory": 4997378048,
+    "worker_rss_max": 63152128,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:12:05.498347",
+    "active_workers": 11,
+    "cpu_percent": 88.1,
+    "available_memory": 4979912704,
+    "worker_rss_max": 63279104,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:12:15.849672",
+    "active_workers": 11,
+    "cpu_percent": 85.4,
+    "available_memory": 5034364928,
+    "worker_rss_max": 63815680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:12:26.249696",
+    "active_workers": 11,
+    "cpu_percent": 79.8,
+    "available_memory": 5055807488,
+    "worker_rss_max": 65753088,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:12:36.522986",
+    "active_workers": 11,
+    "cpu_percent": 81.1,
+    "available_memory": 5053665280,
+    "worker_rss_max": 66498560,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:12:46.936716",
+    "active_workers": 11,
+    "cpu_percent": 80.7,
+    "available_memory": 5067415552,
+    "worker_rss_max": 66699264,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:12:57.353803",
+    "active_workers": 11,
+    "cpu_percent": 80.3,
+    "available_memory": 5065863168,
+    "worker_rss_max": 66707456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:13:07.686674",
+    "active_workers": 11,
+    "cpu_percent": 81.5,
+    "available_memory": 5064749056,
+    "worker_rss_max": 66707456,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:13:17.999402",
+    "active_workers": 11,
+    "cpu_percent": 80.3,
+    "available_memory": 5053497344,
+    "worker_rss_max": 63983616,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:13:28.326468",
+    "active_workers": 11,
+    "cpu_percent": 81.3,
+    "available_memory": 5054615552,
+    "worker_rss_max": 63983616,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:13:38.805450",
+    "active_workers": 11,
+    "cpu_percent": 84.2,
+    "available_memory": 5017530368,
+    "worker_rss_max": 62464000,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:13:49.105765",
+    "active_workers": 11,
+    "cpu_percent": 81.0,
+    "available_memory": 5015740416,
+    "worker_rss_max": 64507904,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:13:59.438573",
+    "active_workers": 11,
+    "cpu_percent": 81.1,
+    "available_memory": 5042196480,
+    "worker_rss_max": 63885312,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:14:09.730867",
+    "active_workers": 11,
+    "cpu_percent": 81.0,
+    "available_memory": 5033295872,
+    "worker_rss_max": 63881216,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:14:20.016302",
+    "active_workers": 11,
+    "cpu_percent": 79.7,
+    "available_memory": 5042610176,
+    "worker_rss_max": 64069632,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:14:30.405146",
+    "active_workers": 11,
+    "cpu_percent": 79.9,
+    "available_memory": 5042864128,
+    "worker_rss_max": 64069632,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:14:40.796802",
+    "active_workers": 11,
+    "cpu_percent": 81.0,
+    "available_memory": 5045575680,
+    "worker_rss_max": 65097728,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:14:51.190226",
+    "active_workers": 11,
+    "cpu_percent": 80.1,
+    "available_memory": 5045284864,
+    "worker_rss_max": 63967232,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:15:01.494044",
+    "active_workers": 11,
+    "cpu_percent": 80.1,
+    "available_memory": 5042577408,
+    "worker_rss_max": 63848448,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:15:11.770106",
+    "active_workers": 10,
+    "cpu_percent": 76.6,
+    "available_memory": 5101109248,
+    "worker_rss_max": 64028672,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:15:21.991303",
+    "active_workers": 10,
+    "cpu_percent": 74.4,
+    "available_memory": 5102219264,
+    "worker_rss_max": 64237568,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:15:32.340987",
+    "active_workers": 10,
+    "cpu_percent": 76.5,
+    "available_memory": 5105582080,
+    "worker_rss_max": 64131072,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:15:42.621231",
+    "active_workers": 10,
+    "cpu_percent": 74.2,
+    "available_memory": 5099966464,
+    "worker_rss_max": 63901696,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:15:52.968161",
+    "active_workers": 10,
+    "cpu_percent": 78.8,
+    "available_memory": 5086703616,
+    "worker_rss_max": 63426560,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:16:03.319536",
+    "active_workers": 10,
+    "cpu_percent": 81.0,
+    "available_memory": 5076566016,
+    "worker_rss_max": 63422464,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:16:13.633082",
+    "active_workers": 10,
+    "cpu_percent": 75.3,
+    "available_memory": 5072785408,
+    "worker_rss_max": 63549440,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:16:23.975856",
+    "active_workers": 10,
+    "cpu_percent": 77.9,
+    "available_memory": 5098061824,
+    "worker_rss_max": 63549440,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:16:34.217774",
+    "active_workers": 10,
+    "cpu_percent": 74.6,
+    "available_memory": 5098135552,
+    "worker_rss_max": 64208896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:16:44.556501",
+    "active_workers": 10,
+    "cpu_percent": 74.2,
+    "available_memory": 5104156672,
+    "worker_rss_max": 63602688,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:16:55.025130",
+    "active_workers": 10,
+    "cpu_percent": 73.9,
+    "available_memory": 5103976448,
+    "worker_rss_max": 63598592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:17:05.359410",
+    "active_workers": 10,
+    "cpu_percent": 73.4,
+    "available_memory": 5102747648,
+    "worker_rss_max": 62636032,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:17:15.699476",
+    "active_workers": 10,
+    "cpu_percent": 79.1,
+    "available_memory": 5051658240,
+    "worker_rss_max": 62558208,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:17:26.044687",
+    "active_workers": 10,
+    "cpu_percent": 74.9,
+    "available_memory": 5183262720,
+    "worker_rss_max": 62763008,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:17:36.356203",
+    "active_workers": 10,
+    "cpu_percent": 73.1,
+    "available_memory": 5163798528,
+    "worker_rss_max": 64638976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:17:46.800715",
+    "active_workers": 10,
+    "cpu_percent": 74.9,
+    "available_memory": 5171654656,
+    "worker_rss_max": 64634880,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:17:57.272243",
+    "active_workers": 10,
+    "cpu_percent": 74.0,
+    "available_memory": 5180641280,
+    "worker_rss_max": 63057920,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:18:07.647037",
+    "active_workers": 10,
+    "cpu_percent": 73.7,
+    "available_memory": 5170491392,
+    "worker_rss_max": 64442368,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:18:17.984914",
+    "active_workers": 10,
+    "cpu_percent": 74.7,
+    "available_memory": 5174067200,
+    "worker_rss_max": 64864256,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:18:28.341708",
+    "active_workers": 10,
+    "cpu_percent": 74.9,
+    "available_memory": 5171564544,
+    "worker_rss_max": 64651264,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:18:38.737812",
+    "active_workers": 10,
+    "cpu_percent": 74.6,
+    "available_memory": 5171687424,
+    "worker_rss_max": 64892928,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:18:49.149376",
+    "active_workers": 10,
+    "cpu_percent": 73.1,
+    "available_memory": 5174108160,
+    "worker_rss_max": 64872448,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:18:59.506064",
+    "active_workers": 10,
+    "cpu_percent": 74.5,
+    "available_memory": 5176975360,
+    "worker_rss_max": 64905216,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:19:09.863887",
+    "active_workers": 10,
+    "cpu_percent": 74.8,
+    "available_memory": 5179097088,
+    "worker_rss_max": 64905216,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:19:20.183287",
+    "active_workers": 10,
+    "cpu_percent": 74.5,
+    "available_memory": 5173747712,
+    "worker_rss_max": 64933888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:19:30.561185",
+    "active_workers": 10,
+    "cpu_percent": 73.7,
+    "available_memory": 5176856576,
+    "worker_rss_max": 65036288,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:19:40.856903",
+    "active_workers": 10,
+    "cpu_percent": 74.9,
+    "available_memory": 5174284288,
+    "worker_rss_max": 65306624,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:19:51.271978",
+    "active_workers": 10,
+    "cpu_percent": 74.3,
+    "available_memory": 5162684416,
+    "worker_rss_max": 65331200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:20:01.595254",
+    "active_workers": 10,
+    "cpu_percent": 73.7,
+    "available_memory": 5182676992,
+    "worker_rss_max": 65552384,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:20:11.948665",
+    "active_workers": 10,
+    "cpu_percent": 75.0,
+    "available_memory": 5160558592,
+    "worker_rss_max": 65490944,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:20:22.341994",
+    "active_workers": 10,
+    "cpu_percent": 75.0,
+    "available_memory": 5177270272,
+    "worker_rss_max": 65773568,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:20:32.678363",
+    "active_workers": 10,
+    "cpu_percent": 74.3,
+    "available_memory": 5186023424,
+    "worker_rss_max": 65773568,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:20:42.899486",
+    "active_workers": 10,
+    "cpu_percent": 74.1,
+    "available_memory": 5185126400,
+    "worker_rss_max": 64962560,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:20:53.206255",
+    "active_workers": 10,
+    "cpu_percent": 81.1,
+    "available_memory": 5150588928,
+    "worker_rss_max": 64860160,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:21:03.563211",
+    "active_workers": 10,
+    "cpu_percent": 75.0,
+    "available_memory": 5138108416,
+    "worker_rss_max": 64860160,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:21:13.938055",
+    "active_workers": 10,
+    "cpu_percent": 75.9,
+    "available_memory": 5115408384,
+    "worker_rss_max": 64737280,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:21:24.279673",
+    "active_workers": 10,
+    "cpu_percent": 75.0,
+    "available_memory": 5125341184,
+    "worker_rss_max": 64782336,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:21:34.516260",
+    "active_workers": 10,
+    "cpu_percent": 73.8,
+    "available_memory": 5124063232,
+    "worker_rss_max": 64815104,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:21:44.934137",
+    "active_workers": 10,
+    "cpu_percent": 73.6,
+    "available_memory": 5134635008,
+    "worker_rss_max": 65163264,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:21:55.235474",
+    "active_workers": 9,
+    "cpu_percent": 73.6,
+    "available_memory": 5139693568,
+    "worker_rss_max": 64806912,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:22:05.529780",
+    "active_workers": 9,
+    "cpu_percent": 68.5,
+    "available_memory": 5438087168,
+    "worker_rss_max": 63795200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:22:15.920309",
+    "active_workers": 9,
+    "cpu_percent": 73.8,
+    "available_memory": 5419298816,
+    "worker_rss_max": 64884736,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:22:26.206713",
+    "active_workers": 9,
+    "cpu_percent": 70.5,
+    "available_memory": 5432532992,
+    "worker_rss_max": 64884736,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:22:36.502033",
+    "active_workers": 9,
+    "cpu_percent": 69.4,
+    "available_memory": 5455675392,
+    "worker_rss_max": 64884736,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:22:46.839205",
+    "active_workers": 9,
+    "cpu_percent": 68.8,
+    "available_memory": 5460205568,
+    "worker_rss_max": 62771200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:22:57.110323",
+    "active_workers": 8,
+    "cpu_percent": 69.5,
+    "available_memory": 5480472576,
+    "worker_rss_max": 62603264,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:23:07.462627",
+    "active_workers": 8,
+    "cpu_percent": 69.1,
+    "available_memory": 5448732672,
+    "worker_rss_max": 62672896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:23:17.824572",
+    "active_workers": 8,
+    "cpu_percent": 71.6,
+    "available_memory": 5360332800,
+    "worker_rss_max": 62726144,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:23:28.224442",
+    "active_workers": 7,
+    "cpu_percent": 66.6,
+    "available_memory": 5501763584,
+    "worker_rss_max": 63680512,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:23:38.545964",
+    "active_workers": 7,
+    "cpu_percent": 55.1,
+    "available_memory": 5616807936,
+    "worker_rss_max": 62246912,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:23:48.943722",
+    "active_workers": 7,
+    "cpu_percent": 55.3,
+    "available_memory": 5613174784,
+    "worker_rss_max": 62242816,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:23:59.337229",
+    "active_workers": 7,
+    "cpu_percent": 55.9,
+    "available_memory": 5607411712,
+    "worker_rss_max": 65089536,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:24:09.792178",
+    "active_workers": 7,
+    "cpu_percent": 56.1,
+    "available_memory": 5718347776,
+    "worker_rss_max": 62373888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:24:20.240784",
+    "active_workers": 7,
+    "cpu_percent": 56.4,
+    "available_memory": 5683781632,
+    "worker_rss_max": 63942656,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:24:30.516165",
+    "active_workers": 7,
+    "cpu_percent": 54.7,
+    "available_memory": 5678366720,
+    "worker_rss_max": 63942656,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:24:40.877499",
+    "active_workers": 7,
+    "cpu_percent": 54.3,
+    "available_memory": 5685501952,
+    "worker_rss_max": 63946752,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:24:51.232579",
+    "active_workers": 7,
+    "cpu_percent": 55.5,
+    "available_memory": 5685006336,
+    "worker_rss_max": 63959040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:25:01.527366",
+    "active_workers": 7,
+    "cpu_percent": 55.1,
+    "available_memory": 5685788672,
+    "worker_rss_max": 63959040,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:25:11.855515",
+    "active_workers": 7,
+    "cpu_percent": 56.7,
+    "available_memory": 5679988736,
+    "worker_rss_max": 62476288,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:25:22.186735",
+    "active_workers": 7,
+    "cpu_percent": 55.2,
+    "available_memory": 5688143872,
+    "worker_rss_max": 62541824,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:25:32.506080",
+    "active_workers": 7,
+    "cpu_percent": 54.8,
+    "available_memory": 5686185984,
+    "worker_rss_max": 62488576,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:25:42.738076",
+    "active_workers": 7,
+    "cpu_percent": 55.2,
+    "available_memory": 5691850752,
+    "worker_rss_max": 62451712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:25:53.105123",
+    "active_workers": 7,
+    "cpu_percent": 61.5,
+    "available_memory": 5635829760,
+    "worker_rss_max": 62451712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:26:03.497103",
+    "active_workers": 7,
+    "cpu_percent": 64.5,
+    "available_memory": 5628936192,
+    "worker_rss_max": 62451712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:26:13.817881",
+    "active_workers": 7,
+    "cpu_percent": 55.1,
+    "available_memory": 5639032832,
+    "worker_rss_max": 62484480,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:26:24.158893",
+    "active_workers": 7,
+    "cpu_percent": 55.8,
+    "available_memory": 5626093568,
+    "worker_rss_max": 64679936,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:26:34.450594",
+    "active_workers": 7,
+    "cpu_percent": 55.8,
+    "available_memory": 5632172032,
+    "worker_rss_max": 64671744,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:26:44.675893",
+    "active_workers": 7,
+    "cpu_percent": 55.2,
+    "available_memory": 5631066112,
+    "worker_rss_max": 65998848,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:26:55.001592",
+    "active_workers": 7,
+    "cpu_percent": 55.2,
+    "available_memory": 5637189632,
+    "worker_rss_max": 64671744,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:27:05.355923",
+    "active_workers": 7,
+    "cpu_percent": 54.9,
+    "available_memory": 5634617344,
+    "worker_rss_max": 64675840,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:27:15.695565",
+    "active_workers": 7,
+    "cpu_percent": 58.3,
+    "available_memory": 5554991104,
+    "worker_rss_max": 65880064,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:27:26.008537",
+    "active_workers": 7,
+    "cpu_percent": 56.6,
+    "available_memory": 5572063232,
+    "worker_rss_max": 64864256,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:27:36.316520",
+    "active_workers": 7,
+    "cpu_percent": 55.1,
+    "available_memory": 5598146560,
+    "worker_rss_max": 64860160,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:27:46.671859",
+    "active_workers": 7,
+    "cpu_percent": 55.0,
+    "available_memory": 5608083456,
+    "worker_rss_max": 64856064,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:27:57.088964",
+    "active_workers": 7,
+    "cpu_percent": 55.4,
+    "available_memory": 5628731392,
+    "worker_rss_max": 64598016,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:28:07.320297",
+    "active_workers": 7,
+    "cpu_percent": 54.7,
+    "available_memory": 5638193152,
+    "worker_rss_max": 64598016,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:28:17.648143",
+    "active_workers": 7,
+    "cpu_percent": 55.3,
+    "available_memory": 5645897728,
+    "worker_rss_max": 62119936,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:28:27.937218",
+    "active_workers": 7,
+    "cpu_percent": 55.0,
+    "available_memory": 5646409728,
+    "worker_rss_max": 63352832,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:28:38.180302",
+    "active_workers": 7,
+    "cpu_percent": 54.5,
+    "available_memory": 5628567552,
+    "worker_rss_max": 65351680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:28:48.442648",
+    "active_workers": 6,
+    "cpu_percent": 55.1,
+    "available_memory": 5691297792,
+    "worker_rss_max": 65351680,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:28:58.699408",
+    "active_workers": 6,
+    "cpu_percent": 53.5,
+    "available_memory": 5688360960,
+    "worker_rss_max": 63115264,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:29:08.937461",
+    "active_workers": 6,
+    "cpu_percent": 48.4,
+    "available_memory": 5694726144,
+    "worker_rss_max": 64774144,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:29:19.186895",
+    "active_workers": 6,
+    "cpu_percent": 50.7,
+    "available_memory": 5696458752,
+    "worker_rss_max": 65097728,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:29:29.376316",
+    "active_workers": 6,
+    "cpu_percent": 47.7,
+    "available_memory": 5705936896,
+    "worker_rss_max": 64425984,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:29:39.675377",
+    "active_workers": 6,
+    "cpu_percent": 48.4,
+    "available_memory": 5705416704,
+    "worker_rss_max": 65044480,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:29:49.984928",
+    "active_workers": 6,
+    "cpu_percent": 50.3,
+    "available_memory": 5703270400,
+    "worker_rss_max": 65032192,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:30:00.285141",
+    "active_workers": 5,
+    "cpu_percent": 49.2,
+    "available_memory": 5715910656,
+    "worker_rss_max": 63995904,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:30:10.565142",
+    "active_workers": 5,
+    "cpu_percent": 43.6,
+    "available_memory": 5711933440,
+    "worker_rss_max": 65961984,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:30:20.780188",
+    "active_workers": 5,
+    "cpu_percent": 44.2,
+    "available_memory": 5692325888,
+    "worker_rss_max": 65626112,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:30:31.065001",
+    "active_workers": 5,
+    "cpu_percent": 42.5,
+    "available_memory": 5673435136,
+    "worker_rss_max": 65740800,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:30:41.306582",
+    "active_workers": 5,
+    "cpu_percent": 43.4,
+    "available_memory": 5733187584,
+    "worker_rss_max": 60919808,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:30:51.574856",
+    "active_workers": 5,
+    "cpu_percent": 47.2,
+    "available_memory": 5697490944,
+    "worker_rss_max": 61337600,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:31:01.925119",
+    "active_workers": 5,
+    "cpu_percent": 59.0,
+    "available_memory": 5643964416,
+    "worker_rss_max": 62717952,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:31:12.153088",
+    "active_workers": 5,
+    "cpu_percent": 43.7,
+    "available_memory": 5638602752,
+    "worker_rss_max": 63082496,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:31:22.420617",
+    "active_workers": 5,
+    "cpu_percent": 41.6,
+    "available_memory": 5663858688,
+    "worker_rss_max": 61403136,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:31:32.720764",
+    "active_workers": 5,
+    "cpu_percent": 44.2,
+    "available_memory": 5719171072,
+    "worker_rss_max": 60444672,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:31:42.979231",
+    "active_workers": 5,
+    "cpu_percent": 43.2,
+    "available_memory": 5718237184,
+    "worker_rss_max": 62058496,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:31:53.252635",
+    "active_workers": 5,
+    "cpu_percent": 40.6,
+    "available_memory": 5727780864,
+    "worker_rss_max": 61337600,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:32:03.567103",
+    "active_workers": 5,
+    "cpu_percent": 43.9,
+    "available_memory": 5764366336,
+    "worker_rss_max": 60858368,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:32:13.803684",
+    "active_workers": 4,
+    "cpu_percent": 37.2,
+    "available_memory": 5811728384,
+    "worker_rss_max": 60010496,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:32:23.938961",
+    "active_workers": 4,
+    "cpu_percent": 37.3,
+    "available_memory": 5813166080,
+    "worker_rss_max": 60059648,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:32:34.208194",
+    "active_workers": 4,
+    "cpu_percent": 36.0,
+    "available_memory": 5811769344,
+    "worker_rss_max": 62689280,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:32:44.458781",
+    "active_workers": 4,
+    "cpu_percent": 37.0,
+    "available_memory": 5804523520,
+    "worker_rss_max": 62230528,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:32:54.652819",
+    "active_workers": 4,
+    "cpu_percent": 37.0,
+    "available_memory": 5805355008,
+    "worker_rss_max": 61493248,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:33:04.906233",
+    "active_workers": 4,
+    "cpu_percent": 37.2,
+    "available_memory": 5838041088,
+    "worker_rss_max": 62062592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:33:15.045441",
+    "active_workers": 4,
+    "cpu_percent": 36.2,
+    "available_memory": 5838565376,
+    "worker_rss_max": 60059648,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:33:25.359508",
+    "active_workers": 4,
+    "cpu_percent": 36.6,
+    "available_memory": 5835874304,
+    "worker_rss_max": 61403136,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:33:35.577445",
+    "active_workers": 4,
+    "cpu_percent": 37.1,
+    "available_memory": 5839380480,
+    "worker_rss_max": 60166144,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:33:45.877580",
+    "active_workers": 4,
+    "cpu_percent": 36.0,
+    "available_memory": 5835939840,
+    "worker_rss_max": 60162048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:33:56.101144",
+    "active_workers": 4,
+    "cpu_percent": 37.8,
+    "available_memory": 5826580480,
+    "worker_rss_max": 61861888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:34:06.444124",
+    "active_workers": 4,
+    "cpu_percent": 36.0,
+    "available_memory": 5834072064,
+    "worker_rss_max": 60162048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:34:16.637805",
+    "active_workers": 4,
+    "cpu_percent": 37.6,
+    "available_memory": 5831127040,
+    "worker_rss_max": 60162048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:34:26.963722",
+    "active_workers": 4,
+    "cpu_percent": 36.6,
+    "available_memory": 5833510912,
+    "worker_rss_max": 60162048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:34:37.162571",
+    "active_workers": 4,
+    "cpu_percent": 35.7,
+    "available_memory": 5825904640,
+    "worker_rss_max": 60166144,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:34:47.408694",
+    "active_workers": 4,
+    "cpu_percent": 35.8,
+    "available_memory": 5837070336,
+    "worker_rss_max": 61337600,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:34:57.584717",
+    "active_workers": 4,
+    "cpu_percent": 38.0,
+    "available_memory": 5834551296,
+    "worker_rss_max": 62345216,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:35:07.773046",
+    "active_workers": 4,
+    "cpu_percent": 36.9,
+    "available_memory": 5798027264,
+    "worker_rss_max": 60162048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:35:17.974548",
+    "active_workers": 4,
+    "cpu_percent": 36.8,
+    "available_memory": 5799813120,
+    "worker_rss_max": 60162048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:35:28.194982",
+    "active_workers": 4,
+    "cpu_percent": 36.4,
+    "available_memory": 5792960512,
+    "worker_rss_max": 60166144,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:35:38.411756",
+    "active_workers": 4,
+    "cpu_percent": 37.9,
+    "available_memory": 5801906176,
+    "worker_rss_max": 60162048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:35:48.766255",
+    "active_workers": 4,
+    "cpu_percent": 46.7,
+    "available_memory": 5737345024,
+    "worker_rss_max": 62771200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:35:59.139376",
+    "active_workers": 4,
+    "cpu_percent": 48.8,
+    "available_memory": 5669478400,
+    "worker_rss_max": 60162048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:36:09.513073",
+    "active_workers": 4,
+    "cpu_percent": 40.8,
+    "available_memory": 5656354816,
+    "worker_rss_max": 60162048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:36:19.756108",
+    "active_workers": 4,
+    "cpu_percent": 37.4,
+    "available_memory": 5780701184,
+    "worker_rss_max": 60162048,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:36:30.031155",
+    "active_workers": 4,
+    "cpu_percent": 36.7,
+    "available_memory": 5783678976,
+    "worker_rss_max": 60174336,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:36:40.259140",
+    "active_workers": 4,
+    "cpu_percent": 36.3,
+    "available_memory": 5855186944,
+    "worker_rss_max": 59760640,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:36:50.568151",
+    "active_workers": 4,
+    "cpu_percent": 35.4,
+    "available_memory": 5872877568,
+    "worker_rss_max": 60182528,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:37:00.887268",
+    "active_workers": 4,
+    "cpu_percent": 37.4,
+    "available_memory": 5873172480,
+    "worker_rss_max": 59125760,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:37:11.231747",
+    "active_workers": 4,
+    "cpu_percent": 34.3,
+    "available_memory": 5869879296,
+    "worker_rss_max": 59498496,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:37:21.471248",
+    "active_workers": 4,
+    "cpu_percent": 36.0,
+    "available_memory": 5872943104,
+    "worker_rss_max": 59523072,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:37:31.752392",
+    "active_workers": 4,
+    "cpu_percent": 35.9,
+    "available_memory": 5873672192,
+    "worker_rss_max": 59707392,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:37:42.064551",
+    "active_workers": 4,
+    "cpu_percent": 36.9,
+    "available_memory": 5863751680,
+    "worker_rss_max": 60088320,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:37:52.349506",
+    "active_workers": 4,
+    "cpu_percent": 35.0,
+    "available_memory": 5872947200,
+    "worker_rss_max": 59518976,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:38:02.690252",
+    "active_workers": 4,
+    "cpu_percent": 37.1,
+    "available_memory": 5865349120,
+    "worker_rss_max": 59305984,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:38:12.959896",
+    "active_workers": 4,
+    "cpu_percent": 34.2,
+    "available_memory": 5854965760,
+    "worker_rss_max": 60522496,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:38:23.378062",
+    "active_workers": 4,
+    "cpu_percent": 37.9,
+    "available_memory": 5846519808,
+    "worker_rss_max": 60526592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:38:33.670707",
+    "active_workers": 4,
+    "cpu_percent": 34.7,
+    "available_memory": 5848182784,
+    "worker_rss_max": 60526592,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:38:43.956339",
+    "active_workers": 4,
+    "cpu_percent": 37.5,
+    "available_memory": 5851049984,
+    "worker_rss_max": 59846656,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:38:54.201066",
+    "active_workers": 4,
+    "cpu_percent": 36.5,
+    "available_memory": 5800583168,
+    "worker_rss_max": 95301632,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:39:04.423104",
+    "active_workers": 3,
+    "cpu_percent": 30.4,
+    "available_memory": 5894942720,
+    "worker_rss_max": 61292544,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:39:14.595852",
+    "active_workers": 3,
+    "cpu_percent": 29.9,
+    "available_memory": 5874683904,
+    "worker_rss_max": 62238720,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:39:24.823823",
+    "active_workers": 3,
+    "cpu_percent": 31.7,
+    "available_memory": 5854461952,
+    "worker_rss_max": 59830272,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:39:35.068857",
+    "active_workers": 3,
+    "cpu_percent": 29.5,
+    "available_memory": 5879934976,
+    "worker_rss_max": 59875328,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:39:45.310544",
+    "active_workers": 3,
+    "cpu_percent": 30.1,
+    "available_memory": 5885632512,
+    "worker_rss_max": 58318848,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:39:55.552894",
+    "active_workers": 3,
+    "cpu_percent": 30.6,
+    "available_memory": 5882777600,
+    "worker_rss_max": 62410752,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:40:05.771011",
+    "active_workers": 3,
+    "cpu_percent": 29.0,
+    "available_memory": 5888057344,
+    "worker_rss_max": 58814464,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:40:16.051329",
+    "active_workers": 3,
+    "cpu_percent": 33.3,
+    "available_memory": 5742477312,
+    "worker_rss_max": 95875072,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:40:26.279094",
+    "active_workers": 2,
+    "cpu_percent": 24.2,
+    "available_memory": 5825011712,
+    "worker_rss_max": 58683392,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:40:36.585261",
+    "active_workers": 2,
+    "cpu_percent": 24.6,
+    "available_memory": 5812436992,
+    "worker_rss_max": 61456384,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:40:46.766138",
+    "active_workers": 2,
+    "cpu_percent": 26.7,
+    "available_memory": 5794590720,
+    "worker_rss_max": 59437056,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:40:56.983329",
+    "active_workers": 2,
+    "cpu_percent": 30.5,
+    "available_memory": 5761900544,
+    "worker_rss_max": 58998784,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:41:07.253837",
+    "active_workers": 2,
+    "cpu_percent": 26.1,
+    "available_memory": 5916950528,
+    "worker_rss_max": 58482688,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:41:17.407524",
+    "active_workers": 2,
+    "cpu_percent": 23.6,
+    "available_memory": 5907427328,
+    "worker_rss_max": 57552896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:41:27.651210",
+    "active_workers": 2,
+    "cpu_percent": 23.0,
+    "available_memory": 5923344384,
+    "worker_rss_max": 61415424,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:41:37.837475",
+    "active_workers": 2,
+    "cpu_percent": 23.8,
+    "available_memory": 6081384448,
+    "worker_rss_max": 58634240,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:41:48.043571",
+    "active_workers": 2,
+    "cpu_percent": 27.5,
+    "available_memory": 6048137216,
+    "worker_rss_max": 60055552,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:41:58.289877",
+    "active_workers": 2,
+    "cpu_percent": 25.6,
+    "available_memory": 6018768896,
+    "worker_rss_max": 62681088,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:42:08.540314",
+    "active_workers": 2,
+    "cpu_percent": 23.8,
+    "available_memory": 6034731008,
+    "worker_rss_max": 59293696,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:42:18.736644",
+    "active_workers": 2,
+    "cpu_percent": 23.6,
+    "available_memory": 6021750784,
+    "worker_rss_max": 62046208,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:42:29.013313",
+    "active_workers": 2,
+    "cpu_percent": 23.4,
+    "available_memory": 6064517120,
+    "worker_rss_max": 58609664,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:42:39.247337",
+    "active_workers": 2,
+    "cpu_percent": 27.5,
+    "available_memory": 6033584128,
+    "worker_rss_max": 59949056,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:42:49.525584",
+    "active_workers": 2,
+    "cpu_percent": 23.3,
+    "available_memory": 6046052352,
+    "worker_rss_max": 61849600,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:42:59.738110",
+    "active_workers": 2,
+    "cpu_percent": 24.1,
+    "available_memory": 6050611200,
+    "worker_rss_max": 59908096,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:43:10.045114",
+    "active_workers": 1,
+    "cpu_percent": 19.3,
+    "available_memory": 6097481728,
+    "worker_rss_max": 57339904,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:43:20.364327",
+    "active_workers": 1,
+    "cpu_percent": 17.0,
+    "available_memory": 6114430976,
+    "worker_rss_max": 61861888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:43:30.659806",
+    "active_workers": 1,
+    "cpu_percent": 18.4,
+    "available_memory": 6111592448,
+    "worker_rss_max": 61857792,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:43:41.034028",
+    "active_workers": 1,
+    "cpu_percent": 34.6,
+    "available_memory": 5989720064,
+    "worker_rss_max": 61861888,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:43:51.562270",
+    "active_workers": 1,
+    "cpu_percent": 33.3,
+    "available_memory": 5903134720,
+    "worker_rss_max": 62009344,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:44:02.202695",
+    "active_workers": 1,
+    "cpu_percent": 24.1,
+    "available_memory": 5770596352,
+    "worker_rss_max": 62672896,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:44:12.800849",
+    "active_workers": 1,
+    "cpu_percent": 23.3,
+    "available_memory": 5764001792,
+    "worker_rss_max": 58859520,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:44:22.977754",
+    "active_workers": 1,
+    "cpu_percent": 20.9,
+    "available_memory": 5725106176,
+    "worker_rss_max": 57331712,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:44:33.253557",
+    "active_workers": 1,
+    "cpu_percent": 20.3,
+    "available_memory": 5683130368,
+    "worker_rss_max": 59359232,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:44:43.438728",
+    "active_workers": 1,
+    "cpu_percent": 17.9,
+    "available_memory": 5704716288,
+    "worker_rss_max": 59187200,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:44:53.581707",
+    "active_workers": 1,
+    "cpu_percent": 17.1,
+    "available_memory": 5694922752,
+    "worker_rss_max": 60497920,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:45:03.781548",
+    "active_workers": 1,
+    "cpu_percent": 18.0,
+    "available_memory": 5708201984,
+    "worker_rss_max": 59256832,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:45:13.950926",
+    "active_workers": 1,
+    "cpu_percent": 17.6,
+    "available_memory": 5707091968,
+    "worker_rss_max": 62443520,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:45:24.083167",
+    "active_workers": 1,
+    "cpu_percent": 17.7,
+    "available_memory": 5700456448,
+    "worker_rss_max": 60923904,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:45:34.213056",
+    "active_workers": 1,
+    "cpu_percent": 17.0,
+    "available_memory": 5703593984,
+    "worker_rss_max": 59617280,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:45:44.525746",
+    "active_workers": 1,
+    "cpu_percent": 28.8,
+    "available_memory": 5589053440,
+    "worker_rss_max": 62312448,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:45:54.742871",
+    "active_workers": 1,
+    "cpu_percent": 20.8,
+    "available_memory": 5585514496,
+    "worker_rss_max": 59490304,
+    "worker_estimate": 201326592
+  },
+  {
+    "at": "2026-11-01T16:46:04.903953",
+    "active_workers": 1,
+    "cpu_percent": 16.7,
+    "available_memory": 5594808320,
+    "worker_rss_max": 60801024,
+    "worker_estimate": 201326592
+  }
+]

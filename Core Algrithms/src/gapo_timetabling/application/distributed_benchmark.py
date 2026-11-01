@@ -26,6 +26,8 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from ..core.greedy_baseline import GREEDY_BASELINE_NAME
+from ..core.hybrid import HYBRID_MECHANISM
+from ..core.decoder import DIRECT_ENCODING, DEFAULT_ENCODING, PRIORITY_ENCODING, SOFT_PRIORITY_ENCODING
 from ..core.models import OptimizationAlgorithm
 from .experiment import (
     EXPERIMENT_METADATA_SCHEMA_VERSION,
@@ -201,9 +203,11 @@ def _worker_manifest_payload(
     source_state = _git_source_state()
     return {
         "schema_version": WORKER_MANIFEST_SCHEMA_VERSION,
+        "solver_pipeline": DEFAULT_ENCODING,
         "suite_id": suite.suite_id,
         "worker": worker.value,
         "includes_greedy_baseline": worker is OptimizationAlgorithm.GA_PO,
+        "hybrid_mechanism": HYBRID_MECHANISM if worker is OptimizationAlgorithm.GA_PO else None,
         "status": "RUNNING",
         "runtime_comparison_valid": False,
         "runtime_note": (
@@ -252,6 +256,15 @@ def run_worker_suite(
 
     output_root.mkdir(parents=True, exist_ok=True)
     manifest_path = output_root / "worker_manifest.json"
+    if manifest_path.exists():
+        previous = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if worker is OptimizationAlgorithm.GA_PO and previous.get("hybrid_mechanism") != HYBRID_MECHANISM:
+            raise ExperimentContractError("Thư mục worker thuộc cơ chế lai cũ. Dùng output-root mới.")
+        if previous.get("solver_pipeline", DIRECT_ENCODING) != DEFAULT_ENCODING:
+            raise ExperimentContractError(
+                "Thư mục worker thuộc encode/decode cũ. Dùng output-root mới; "
+                "không ghi đè manifest hoặc kết quả lịch sử."
+            )
     manifest = _worker_manifest_payload(suite, worker)
     _write_json(manifest_path, manifest)
 
@@ -343,6 +356,14 @@ def _load_worker_manifests(
         raise ExperimentContractError(
             "Thiếu thư mục kết quả của worker: " + ", ".join(missing)
         )
+    pipelines = {manifest.get("solver_pipeline", DIRECT_ENCODING)
+                 for _, manifest in workers.values()}
+    if len(pipelines) != 1 or not pipelines <= {
+        DIRECT_ENCODING, DEFAULT_ENCODING, PRIORITY_ENCODING, SOFT_PRIORITY_ENCODING
+    }:
+        raise ExperimentContractError(
+            "Các worker dùng encode/decode khác nhau; không trộn DIRECT và PRIORITY."
+        )
     revision_values = [
         manifest.get("environment", {}).get("git_revision")
         for _, manifest in workers.values()
@@ -433,8 +454,12 @@ def merge_case_results(
             if not source.exists():
                 raise ExperimentContractError(f"Thiếu kết quả: {source}")
             result = _copy_result(source, output_directory / relative)
+            if result.get("solver_pipeline", DIRECT_ENCODING) != worker_manifest.get("solver_pipeline", DIRECT_ENCODING):
+                raise ExperimentContractError(f"Pipeline của kết quả khác manifest: {source}")
             if result.get("algorithm") != algorithm.value:
                 raise ExperimentContractError(f"Sai thuật toán trong {source}.")
+            if algorithm is OptimizationAlgorithm.GA_PO and result.get("hybrid_mechanism") != worker_manifest.get("hybrid_mechanism"):
+                raise ExperimentContractError(f"Cơ chế lai của kết quả khác manifest: {source}")
             if str(result.get("snapshot_checksum")) != expected_checksum:
                 raise ExperimentContractError(f"Sai checksum snapshot trong {source}.")
             if result.get("status") == "COMPLETED":
@@ -462,6 +487,8 @@ def merge_case_results(
             raise ExperimentContractError(f"Thiếu Greedy baseline: {source}")
         baseline_result_json = output_directory / relative
         baseline_result = _copy_result(source, baseline_result_json)
+        if baseline_result.get("solver_pipeline", DIRECT_ENCODING) != worker_manifest.get("solver_pipeline", DIRECT_ENCODING):
+            raise ExperimentContractError(f"Pipeline baseline khác manifest: {source}")
         if baseline_result.get("algorithm") != GREEDY_BASELINE_NAME:
             raise ExperimentContractError(f"Sai thuật toán trong {source}.")
         if str(baseline_result.get("snapshot_checksum")) != expected_checksum:
@@ -504,8 +531,10 @@ def merge_case_results(
     )
     metadata = {
         "schema_version": EXPERIMENT_METADATA_SCHEMA_VERSION,
+        "solver_pipeline": next(iter(part_roots.values()))[1].get("solver_pipeline", DIRECT_ENCODING),
         "experiment_id": config.experiment_id,
         "execution_mode": "DISTRIBUTED_BY_ALGORITHM",
+        "hybrid_mechanism": part_roots[OptimizationAlgorithm.GA_PO.value][1].get("hybrid_mechanism"),
         "case_id": case.case_id,
         "base_request_path": str(config.base_request_path),
         "base_request": base_payload,

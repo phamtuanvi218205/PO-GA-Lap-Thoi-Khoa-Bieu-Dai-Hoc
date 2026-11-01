@@ -1,0 +1,2567 @@
+{
+  "status": "COMPLETED",
+  "pid": 16104,
+  "started_at": "2026-11-01T14:12:59.139341",
+  "planned_run_count": 120,
+  "planned_baseline_count": 3,
+  "max_workers": 16,
+  "peak_active_workers": 16,
+  "jobs": {
+    "large/1/initial": {
+      "status": "COMPLETED",
+      "pid": 13176,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "1"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_1_initial.log",
+      "exit_code": 0
+    },
+    "medium/1/initial": {
+      "status": "COMPLETED",
+      "pid": 9516,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "1"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_1_initial.log",
+      "exit_code": 0
+    },
+    "small/1/initial": {
+      "status": "COMPLETED",
+      "pid": 17688,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "1"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_1_initial.log",
+      "exit_code": 0
+    },
+    "large/2/initial": {
+      "status": "COMPLETED",
+      "pid": 23100,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "2"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_2_initial.log",
+      "exit_code": 0
+    },
+    "medium/2/initial": {
+      "status": "COMPLETED",
+      "pid": 1524,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "2"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_2_initial.log",
+      "exit_code": 0
+    },
+    "small/2/initial": {
+      "status": "COMPLETED",
+      "pid": 20708,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "2"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_2_initial.log",
+      "exit_code": 0
+    },
+    "large/3/initial": {
+      "status": "COMPLETED",
+      "pid": 14892,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "3"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_3_initial.log",
+      "exit_code": 0
+    },
+    "small/1/GREEDY_FIRST_FEASIBLE": {
+      "status": "COMPLETED",
+      "pid": 18452,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "1",
+        "--method",
+        "GREEDY_FIRST_FEASIBLE"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_1_GREEDY_FIRST_FEASIBLE.log",
+      "exit_code": 0
+    },
+    "medium/1/GREEDY_FIRST_FEASIBLE": {
+      "status": "COMPLETED",
+      "pid": 23280,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "1",
+        "--method",
+        "GREEDY_FIRST_FEASIBLE"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_1_GREEDY_FIRST_FEASIBLE.log",
+      "exit_code": 0
+    },
+    "large/1/GREEDY_FIRST_FEASIBLE": {
+      "status": "COMPLETED",
+      "pid": 9096,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "1",
+        "--method",
+        "GREEDY_FIRST_FEASIBLE"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_1_GREEDY_FIRST_FEASIBLE.log",
+      "exit_code": 0
+    },
+    "medium/3/initial": {
+      "status": "COMPLETED",
+      "pid": 14236,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "3"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_3_initial.log",
+      "exit_code": 0
+    },
+    "small/3/initial": {
+      "status": "COMPLETED",
+      "pid": 14728,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "3"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_3_initial.log",
+      "exit_code": 0
+    },
+    "small/1/GA": {
+      "status": "COMPLETED",
+      "pid": 22264,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "1",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_1_GA.log",
+      "exit_code": 0
+    },
+    "small/1/PO": {
+      "status": "COMPLETED",
+      "pid": 23016,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "1",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_1_PO.log",
+      "exit_code": 0
+    },
+    "small/1/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 2832,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "1",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_1_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/4/initial": {
+      "status": "COMPLETED",
+      "pid": 11512,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "4"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_4_initial.log",
+      "exit_code": 0
+    },
+    "small/1/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 13960,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "1",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_1_ISLAND80.log",
+      "exit_code": 0
+    },
+    "small/2/GA": {
+      "status": "COMPLETED",
+      "pid": 3060,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "2",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_2_GA.log",
+      "exit_code": 0
+    },
+    "small/2/PO": {
+      "status": "COMPLETED",
+      "pid": 10760,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "2",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_2_PO.log",
+      "exit_code": 0
+    },
+    "small/2/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 13432,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "2",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_2_HYBRID50.log",
+      "exit_code": 0
+    },
+    "small/2/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 17064,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "2",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_2_ISLAND80.log",
+      "exit_code": 0
+    },
+    "medium/1/GA": {
+      "status": "COMPLETED",
+      "pid": 21388,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "1",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_1_GA.log",
+      "exit_code": 0
+    },
+    "medium/4/initial": {
+      "status": "COMPLETED",
+      "pid": 23132,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "4"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_4_initial.log",
+      "exit_code": 0
+    },
+    "medium/1/PO": {
+      "status": "COMPLETED",
+      "pid": 20872,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "1",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_1_PO.log",
+      "exit_code": 0
+    },
+    "small/4/initial": {
+      "status": "COMPLETED",
+      "pid": 5104,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "4"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_4_initial.log",
+      "exit_code": 0
+    },
+    "large/5/initial": {
+      "status": "COMPLETED",
+      "pid": 11220,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "5"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_5_initial.log",
+      "exit_code": 0
+    },
+    "medium/1/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 6124,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "1",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_1_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/1/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 12080,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "1",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_1_ISLAND80.log",
+      "exit_code": 0
+    },
+    "small/3/GA": {
+      "status": "COMPLETED",
+      "pid": 23312,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "3",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_3_GA.log",
+      "exit_code": 0
+    },
+    "small/3/PO": {
+      "status": "COMPLETED",
+      "pid": 6100,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "3",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_3_PO.log",
+      "exit_code": 0
+    },
+    "small/3/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 14520,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "3",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_3_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/5/initial": {
+      "status": "COMPLETED",
+      "pid": 23476,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "5"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_5_initial.log",
+      "exit_code": 0
+    },
+    "small/3/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 7188,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "3",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_3_ISLAND80.log",
+      "exit_code": 0
+    },
+    "medium/2/GA": {
+      "status": "COMPLETED",
+      "pid": 22676,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "2",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_2_GA.log",
+      "exit_code": 0
+    },
+    "medium/2/PO": {
+      "status": "COMPLETED",
+      "pid": 6352,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "2",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_2_PO.log",
+      "exit_code": 0
+    },
+    "small/5/initial": {
+      "status": "COMPLETED",
+      "pid": 20360,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "5"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_5_initial.log",
+      "exit_code": 0
+    },
+    "large/6/initial": {
+      "status": "COMPLETED",
+      "pid": 13116,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "6"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_6_initial.log",
+      "exit_code": 0
+    },
+    "medium/2/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 8156,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "2",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_2_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/2/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 22024,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "2",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_2_ISLAND80.log",
+      "exit_code": 0
+    },
+    "medium/4/GA": {
+      "status": "COMPLETED",
+      "pid": 16256,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "4",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_4_GA.log",
+      "exit_code": 0
+    },
+    "medium/4/PO": {
+      "status": "COMPLETED",
+      "pid": 14156,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "4",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_4_PO.log",
+      "exit_code": 0
+    },
+    "medium/4/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 16220,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "4",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_4_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/4/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 22376,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "4",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_4_ISLAND80.log",
+      "exit_code": 0
+    },
+    "small/4/GA": {
+      "status": "COMPLETED",
+      "pid": 11868,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "4",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_4_GA.log",
+      "exit_code": 0
+    },
+    "small/4/PO": {
+      "status": "COMPLETED",
+      "pid": 23400,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "4",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_4_PO.log",
+      "exit_code": 0
+    },
+    "small/4/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 5552,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "4",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_4_HYBRID50.log",
+      "exit_code": 0
+    },
+    "small/4/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 20048,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "4",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_4_ISLAND80.log",
+      "exit_code": 0
+    },
+    "medium/3/GA": {
+      "status": "COMPLETED",
+      "pid": 22624,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "3",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_3_GA.log",
+      "exit_code": 0
+    },
+    "medium/3/PO": {
+      "status": "COMPLETED",
+      "pid": 21156,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "3",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_3_PO.log",
+      "exit_code": 0
+    },
+    "medium/3/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 14860,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "3",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_3_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/3/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 23364,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "3",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_3_ISLAND80.log",
+      "exit_code": 0
+    },
+    "medium/5/GA": {
+      "status": "COMPLETED",
+      "pid": 7060,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "5",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_5_GA.log",
+      "exit_code": 0
+    },
+    "medium/5/PO": {
+      "status": "COMPLETED",
+      "pid": 14012,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "5",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_5_PO.log",
+      "exit_code": 0
+    },
+    "medium/6/initial": {
+      "status": "COMPLETED",
+      "pid": 11444,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "6"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_6_initial.log",
+      "exit_code": 0
+    },
+    "medium/5/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 12064,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "5",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_5_HYBRID50.log",
+      "exit_code": 0
+    },
+    "small/6/initial": {
+      "status": "COMPLETED",
+      "pid": 17872,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "6"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_6_initial.log",
+      "exit_code": 0
+    },
+    "large/7/initial": {
+      "status": "COMPLETED",
+      "pid": 7244,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "7"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_7_initial.log",
+      "exit_code": 0
+    },
+    "medium/5/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 21184,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "5",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_5_ISLAND80.log",
+      "exit_code": 0
+    },
+    "small/5/GA": {
+      "status": "COMPLETED",
+      "pid": 17144,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "5",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_5_GA.log",
+      "exit_code": 0
+    },
+    "small/5/PO": {
+      "status": "COMPLETED",
+      "pid": 4060,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "5",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_5_PO.log",
+      "exit_code": 0
+    },
+    "small/5/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 5952,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "5",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_5_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/7/initial": {
+      "status": "COMPLETED",
+      "pid": 16220,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "7"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_7_initial.log",
+      "exit_code": 0
+    },
+    "small/7/initial": {
+      "status": "COMPLETED",
+      "pid": 18920,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "7"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_7_initial.log",
+      "exit_code": 0
+    },
+    "large/8/initial": {
+      "status": "COMPLETED",
+      "pid": 21252,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "8"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_8_initial.log",
+      "exit_code": 0
+    },
+    "small/5/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 21692,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "5",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_5_ISLAND80.log",
+      "exit_code": 0
+    },
+    "medium/8/initial": {
+      "status": "COMPLETED",
+      "pid": 4556,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "8"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_8_initial.log",
+      "exit_code": 0
+    },
+    "large/1/GA": {
+      "status": "COMPLETED",
+      "pid": 14568,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "1",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_1_GA.log",
+      "exit_code": 0
+    },
+    "large/1/PO": {
+      "status": "COMPLETED",
+      "pid": 16904,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "1",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_1_PO.log",
+      "exit_code": 0
+    },
+    "large/1/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 19452,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "1",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_1_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/1/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 13428,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "1",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_1_ISLAND80.log",
+      "exit_code": 0
+    },
+    "small/8/initial": {
+      "status": "COMPLETED",
+      "pid": 20476,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "8"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_8_initial.log",
+      "exit_code": 0
+    },
+    "large/9/initial": {
+      "status": "COMPLETED",
+      "pid": 5984,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "9"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_9_initial.log",
+      "exit_code": 0
+    },
+    "medium/9/initial": {
+      "status": "COMPLETED",
+      "pid": 12432,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "9"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_9_initial.log",
+      "exit_code": 0
+    },
+    "medium/6/GA": {
+      "status": "COMPLETED",
+      "pid": 1260,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "6",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_6_GA.log",
+      "exit_code": 0
+    },
+    "small/9/initial": {
+      "status": "COMPLETED",
+      "pid": 4348,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "9"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_9_initial.log",
+      "exit_code": 0
+    },
+    "large/10/initial": {
+      "status": "COMPLETED",
+      "pid": 20100,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "10"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_10_initial.log",
+      "exit_code": 0
+    },
+    "medium/6/PO": {
+      "status": "COMPLETED",
+      "pid": 8968,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "6",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_6_PO.log",
+      "exit_code": 0
+    },
+    "medium/10/initial": {
+      "status": "COMPLETED",
+      "pid": 10372,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "10"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_10_initial.log",
+      "exit_code": 0
+    },
+    "medium/6/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 12436,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "6",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_6_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/6/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 16440,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "6",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_6_ISLAND80.log",
+      "exit_code": 0
+    },
+    "small/10/initial": {
+      "status": "COMPLETED",
+      "pid": 2980,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "10"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_10_initial.log",
+      "exit_code": 0
+    },
+    "small/6/GA": {
+      "status": "COMPLETED",
+      "pid": 444,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "6",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_6_GA.log",
+      "exit_code": 0
+    },
+    "small/6/PO": {
+      "status": "COMPLETED",
+      "pid": 14576,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "6",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_6_PO.log",
+      "exit_code": 0
+    },
+    "small/6/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 7172,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "6",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_6_HYBRID50.log",
+      "exit_code": 0
+    },
+    "small/6/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 23060,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "6",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_6_ISLAND80.log",
+      "exit_code": 0
+    },
+    "large/6/GA": {
+      "status": "COMPLETED",
+      "pid": 23304,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "6",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_6_GA.log",
+      "exit_code": 0
+    },
+    "large/6/PO": {
+      "status": "COMPLETED",
+      "pid": 17440,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "6",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_6_PO.log",
+      "exit_code": 0
+    },
+    "large/6/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 9516,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "6",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_6_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/6/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 15088,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "6",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_6_ISLAND80.log",
+      "exit_code": 0
+    },
+    "large/5/GA": {
+      "status": "COMPLETED",
+      "pid": 5856,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "5",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_5_GA.log",
+      "exit_code": 0
+    },
+    "large/5/PO": {
+      "status": "COMPLETED",
+      "pid": 12156,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "5",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_5_PO.log",
+      "exit_code": 0
+    },
+    "large/5/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 15736,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "5",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_5_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/5/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 12064,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "5",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_5_ISLAND80.log",
+      "exit_code": 0
+    },
+    "small/7/GA": {
+      "status": "COMPLETED",
+      "pid": 8348,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "7",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_7_GA.log",
+      "exit_code": 0
+    },
+    "small/7/PO": {
+      "status": "COMPLETED",
+      "pid": 20060,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "7",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_7_PO.log",
+      "exit_code": 0
+    },
+    "small/7/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 18532,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "7",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_7_HYBRID50.log",
+      "exit_code": 0
+    },
+    "small/7/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 4536,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "7",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_7_ISLAND80.log",
+      "exit_code": 0
+    },
+    "medium/7/GA": {
+      "status": "COMPLETED",
+      "pid": 1128,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "7",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_7_GA.log",
+      "exit_code": 0
+    },
+    "medium/7/PO": {
+      "status": "COMPLETED",
+      "pid": 17940,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "7",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_7_PO.log",
+      "exit_code": 0
+    },
+    "medium/7/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 13404,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "7",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_7_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/7/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 17028,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "7",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_7_ISLAND80.log",
+      "exit_code": 0
+    },
+    "medium/8/GA": {
+      "status": "COMPLETED",
+      "pid": 23032,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "8",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_8_GA.log",
+      "exit_code": 0
+    },
+    "medium/8/PO": {
+      "status": "COMPLETED",
+      "pid": 4556,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "8",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_8_PO.log",
+      "exit_code": 0
+    },
+    "medium/8/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 22112,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "8",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_8_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/8/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 11980,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "8",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_8_ISLAND80.log",
+      "exit_code": 0
+    },
+    "large/3/GA": {
+      "status": "COMPLETED",
+      "pid": 4704,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "3",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_3_GA.log",
+      "exit_code": 0
+    },
+    "large/3/PO": {
+      "status": "COMPLETED",
+      "pid": 20708,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "3",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_3_PO.log",
+      "exit_code": 0
+    },
+    "large/3/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 18376,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "3",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_3_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/3/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 15988,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "3",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_3_ISLAND80.log",
+      "exit_code": 0
+    },
+    "small/8/GA": {
+      "status": "COMPLETED",
+      "pid": 12620,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "8",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_8_GA.log",
+      "exit_code": 0
+    },
+    "small/8/PO": {
+      "status": "COMPLETED",
+      "pid": 17420,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "8",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_8_PO.log",
+      "exit_code": 0
+    },
+    "small/8/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 8592,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "8",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_8_HYBRID50.log",
+      "exit_code": 0
+    },
+    "small/8/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 2612,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "8",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_8_ISLAND80.log",
+      "exit_code": 0
+    },
+    "medium/9/GA": {
+      "status": "COMPLETED",
+      "pid": 9624,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "9",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_9_GA.log",
+      "exit_code": 0
+    },
+    "medium/9/PO": {
+      "status": "COMPLETED",
+      "pid": 4220,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "9",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_9_PO.log",
+      "exit_code": 0
+    },
+    "medium/9/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 18088,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "9",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_9_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/9/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 11532,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "9",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_9_ISLAND80.log",
+      "exit_code": 0
+    },
+    "small/9/GA": {
+      "status": "COMPLETED",
+      "pid": 22692,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "9",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_9_GA.log",
+      "exit_code": 0
+    },
+    "small/9/PO": {
+      "status": "COMPLETED",
+      "pid": 22600,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "9",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_9_PO.log",
+      "exit_code": 0
+    },
+    "small/9/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 16156,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "9",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_9_HYBRID50.log",
+      "exit_code": 0
+    },
+    "small/9/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 12540,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "9",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_9_ISLAND80.log",
+      "exit_code": 0
+    },
+    "large/4/GA": {
+      "status": "COMPLETED",
+      "pid": 9840,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "4",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_4_GA.log",
+      "exit_code": 0
+    },
+    "large/4/PO": {
+      "status": "COMPLETED",
+      "pid": 18720,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "4",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_4_PO.log",
+      "exit_code": 0
+    },
+    "large/4/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 9188,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "4",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_4_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/4/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 11220,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "4",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_4_ISLAND80.log",
+      "exit_code": 0
+    },
+    "medium/10/GA": {
+      "status": "COMPLETED",
+      "pid": 4040,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "10",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_10_GA.log",
+      "exit_code": 0
+    },
+    "medium/10/PO": {
+      "status": "COMPLETED",
+      "pid": 9256,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "10",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_10_PO.log",
+      "exit_code": 0
+    },
+    "medium/10/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 10704,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "10",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_10_HYBRID50.log",
+      "exit_code": 0
+    },
+    "medium/10/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 14312,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "medium",
+        "--seed",
+        "10",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\medium_10_ISLAND80.log",
+      "exit_code": 0
+    },
+    "small/10/GA": {
+      "status": "COMPLETED",
+      "pid": 7204,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "10",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_10_GA.log",
+      "exit_code": 0
+    },
+    "small/10/PO": {
+      "status": "COMPLETED",
+      "pid": 23336,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "10",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_10_PO.log",
+      "exit_code": 0
+    },
+    "small/10/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 22696,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "10",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_10_HYBRID50.log",
+      "exit_code": 0
+    },
+    "small/10/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 22344,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "small",
+        "--seed",
+        "10",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\small_10_ISLAND80.log",
+      "exit_code": 0
+    },
+    "large/2/GA": {
+      "status": "COMPLETED",
+      "pid": 17660,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "2",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_2_GA.log",
+      "exit_code": 0
+    },
+    "large/2/PO": {
+      "status": "COMPLETED",
+      "pid": 12840,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "2",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_2_PO.log",
+      "exit_code": 0
+    },
+    "large/2/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 23164,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "2",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_2_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/2/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 4716,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "2",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_2_ISLAND80.log",
+      "exit_code": 0
+    },
+    "large/8/GA": {
+      "status": "COMPLETED",
+      "pid": 3188,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "8",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_8_GA.log",
+      "exit_code": 0
+    },
+    "large/8/PO": {
+      "status": "COMPLETED",
+      "pid": 17840,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "8",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_8_PO.log",
+      "exit_code": 0
+    },
+    "large/8/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 14248,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "8",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_8_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/8/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 14400,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "8",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_8_ISLAND80.log",
+      "exit_code": 0
+    },
+    "large/10/GA": {
+      "status": "COMPLETED",
+      "pid": 22568,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "10",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_10_GA.log",
+      "exit_code": 0
+    },
+    "large/10/PO": {
+      "status": "COMPLETED",
+      "pid": 17788,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "10",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_10_PO.log",
+      "exit_code": 0
+    },
+    "large/10/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 13432,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "10",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_10_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/10/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 2152,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "10",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_10_ISLAND80.log",
+      "exit_code": 0
+    },
+    "large/7/GA": {
+      "status": "COMPLETED",
+      "pid": 17504,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "7",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_7_GA.log",
+      "exit_code": 0
+    },
+    "large/7/PO": {
+      "status": "COMPLETED",
+      "pid": 14712,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "7",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_7_PO.log",
+      "exit_code": 0
+    },
+    "large/7/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 14832,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "7",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_7_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/7/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 18116,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "7",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_7_ISLAND80.log",
+      "exit_code": 0
+    },
+    "large/9/GA": {
+      "status": "COMPLETED",
+      "pid": 17168,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "9",
+        "--method",
+        "GA"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_9_GA.log",
+      "exit_code": 0
+    },
+    "large/9/PO": {
+      "status": "COMPLETED",
+      "pid": 20740,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "9",
+        "--method",
+        "PO"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_9_PO.log",
+      "exit_code": 0
+    },
+    "large/9/HYBRID50": {
+      "status": "COMPLETED",
+      "pid": 20628,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "9",
+        "--method",
+        "HYBRID50"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_9_HYBRID50.log",
+      "exit_code": 0
+    },
+    "large/9/ISLAND80": {
+      "status": "COMPLETED",
+      "pid": 11876,
+      "command": [
+        "C:\\Program Files\\Python312\\python.exe",
+        "-u",
+        "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\source\\run_case.py",
+        "--case",
+        "large",
+        "--seed",
+        "9",
+        "--method",
+        "ISLAND80"
+      ],
+      "log": "C:\\Users\\acer\\Documents\\KhoaLuan\\Core Algrithms\\test_results\\island_official_stress_20261101\\logs\\large_9_ISLAND80.log",
+      "exit_code": 0
+    }
+  },
+  "hardware": {
+    "logical_cpus": 16,
+    "physical_cpus": 8,
+    "total_memory": 16487870464
+  },
+  "active_workers": 0,
+  "pending_initial": 0,
+  "pending_methods": 0,
+  "completed_run_count": 120,
+  "completed_baseline_count": 3,
+  "completed_cohorts": 30,
+  "available_memory": 5625376768,
+  "worker_rss_estimate": 201326592,
+  "finished_at": "2026-11-01T16:48:07.688241",
+  "elapsed_seconds": 9308.547
+}

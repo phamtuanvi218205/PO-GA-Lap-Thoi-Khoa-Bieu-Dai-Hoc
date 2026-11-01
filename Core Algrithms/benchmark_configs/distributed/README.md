@@ -1,5 +1,9 @@
 # Benchmark phân tán trên ba máy
 
+**Lịch sử:** đây là bộ nhỏ cũ. Bộ nặng D150/D155 đã được đóng gói riêng trong
+`../stress/`; dùng `../stress/timetable_stress_suite.json` cho lần chạy mới
+được duyệt. Request0.5 ở đây không phải ISLAND80, không sửa/ghi đè bằng chứng cũ.
+
 Bộ lệnh này chạy cùng giao thức trên ba mức dữ liệu:
 
 | Mức | Lớp học phần | Số chiều vector | Số buổi |

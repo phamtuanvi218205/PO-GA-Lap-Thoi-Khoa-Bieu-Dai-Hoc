@@ -1,0 +1,134 @@
+[
+  {
+    "case": "small",
+    "method": "GA",
+    "q_general_median": 0.03408668032786885,
+    "q_lecturer_median": 0.300775877222696,
+    "improved": 10,
+    "q_general_improved": 9,
+    "fe": 6300,
+    "decode_failures": 396,
+    "backtracks": 39435
+  },
+  {
+    "case": "small",
+    "method": "PO",
+    "q_general_median": 0.02793928571428571,
+    "q_lecturer_median": 0.31787861892486297,
+    "improved": 10,
+    "q_general_improved": 10,
+    "fe": 4826,
+    "decode_failures": 10245,
+    "backtracks": 106779
+  },
+  {
+    "case": "small",
+    "method": "HYBRID50",
+    "q_general_median": 0.03500232142857143,
+    "q_lecturer_median": 0.32482527242025616,
+    "improved": 9,
+    "q_general_improved": 9,
+    "fe": 5562,
+    "decode_failures": 5227,
+    "backtracks": 58443
+  },
+  {
+    "case": "small",
+    "method": "ISLAND80",
+    "q_general_median": 0.03315267857142857,
+    "q_lecturer_median": 0.31987276672086523,
+    "improved": 10,
+    "q_general_improved": 10,
+    "fe": 6004,
+    "decode_failures": 2387,
+    "backtracks": 64498
+  },
+  {
+    "case": "medium",
+    "method": "GA",
+    "q_general_median": 0.04437649151015167,
+    "q_lecturer_median": 0.3519414692460435,
+    "improved": 10,
+    "q_general_improved": 10,
+    "fe": 6300,
+    "decode_failures": 303,
+    "backtracks": 2180799
+  },
+  {
+    "case": "medium",
+    "method": "PO",
+    "q_general_median": 0.050770316265060234,
+    "q_lecturer_median": 0.3403532303106998,
+    "improved": 10,
+    "q_general_improved": 10,
+    "fe": 4566,
+    "decode_failures": 11254,
+    "backtracks": 6390615
+  },
+  {
+    "case": "medium",
+    "method": "HYBRID50",
+    "q_general_median": 0.04575706444826927,
+    "q_lecturer_median": 0.32922021001287605,
+    "improved": 10,
+    "q_general_improved": 10,
+    "fe": 5450,
+    "decode_failures": 5568,
+    "backtracks": 4679794
+  },
+  {
+    "case": "medium",
+    "method": "ISLAND80",
+    "q_general_median": 0.05097425702811245,
+    "q_lecturer_median": 0.3486633586794001,
+    "improved": 10,
+    "q_general_improved": 10,
+    "fe": 5966,
+    "decode_failures": 2478,
+    "backtracks": 3184603
+  },
+  {
+    "case": "large",
+    "method": "GA",
+    "q_general_median": 0.05878179888785912,
+    "q_lecturer_median": 0.3442885529934767,
+    "improved": 10,
+    "q_general_improved": 10,
+    "fe": 6300,
+    "decode_failures": 1944,
+    "backtracks": 64912633
+  },
+  {
+    "case": "large",
+    "method": "PO",
+    "q_general_median": 0.05997330138608,
+    "q_lecturer_median": 0.3228392857285144,
+    "improved": 10,
+    "q_general_improved": 10,
+    "fe": 3494,
+    "decode_failures": 17627,
+    "backtracks": 143385099
+  },
+  {
+    "case": "large",
+    "method": "HYBRID50",
+    "q_general_median": 0.06309470076296392,
+    "q_lecturer_median": 0.3384905317898488,
+    "improved": 10,
+    "q_general_improved": 10,
+    "fe": 5020,
+    "decode_failures": 8890,
+    "backtracks": 81113962
+  },
+  {
+    "case": "large",
+    "method": "ISLAND80",
+    "q_general_median": 0.05463110611429675,
+    "q_lecturer_median": 0.33870448182082047,
+    "improved": 10,
+    "q_general_improved": 10,
+    "fe": 5747,
+    "decode_failures": 4931,
+    "backtracks": 76796298
+  }
+]

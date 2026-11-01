@@ -106,6 +106,8 @@ class OptimizationRunStartRequest(BaseModel):
             raise ValueError(
                 "max_initialization_attempts phải lớn hơn hoặc bằng population_size."
             )
+        if self.algorithm == "GA_PO" and self.population_size < 8:
+            raise ValueError("GA–PO islands 80/20 cần population_size >= 8 (ít nhất 2 cá thể mỗi đảo).")
         return self
 
 

@@ -215,7 +215,7 @@ class TestSnapshotLoader(unittest.TestCase):
 
         problem, actual_checksum = load_problem_instance_snapshot(payload)
 
-        self.assertEqual(problem.dimension, 2)
+        self.assertEqual(problem.dimension, 3)
         self.assertEqual(problem.assignment_dimension, 1)
         self.assertEqual(problem.class_sessions[0].session_index, 0)
         self.assertEqual(problem.locations[0].location_index, 0)
@@ -301,7 +301,7 @@ class TestSnapshotLoader(unittest.TestCase):
             first.gene_option_mapping["schema_version"],
             MAPPING_SCHEMA_VERSION,
         )
-        self.assertEqual(first.gene_option_mapping["dimension"], 2)
+        self.assertEqual(first.gene_option_mapping["dimension"], 3)
         self.assertEqual(first.gene_option_mapping["assignment_dimension"], 1)
         self.assertEqual(
             first.gene_option_mapping["assignment_genes"][0]["section_code"],

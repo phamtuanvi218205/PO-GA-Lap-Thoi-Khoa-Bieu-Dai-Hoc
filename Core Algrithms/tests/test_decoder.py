@@ -3,7 +3,7 @@ from dataclasses import replace
 from datetime import date
 
 from gapo_timetabling.core.constraints import validate_timetable
-from gapo_timetabling.core.decoder import DecodeStatus, decode_vector
+from gapo_timetabling.core.decoder import DecodeStatus, decode_direct_vector as decode_vector
 from gapo_timetabling.core.encoder import build_option_domains
 from gapo_timetabling.core.models import (
     AvailabilityScopeType,
@@ -15,7 +15,7 @@ from tests.test_constraints import ConstraintFixture
 
 
 class TestDecoder(ConstraintFixture):
-    """Các trường hợp Gate E trên cùng fixture của validator độc lập."""
+    """Tương thích DIRECT lịch sử; priority có bộ kiểm thử riêng."""
 
     def singleton_domains(self) -> tuple[tuple[SessionOption, ...], ...]:
         return tuple((option,) for option in self.valid_options)
@@ -49,7 +49,7 @@ class TestDecoder(ConstraintFixture):
         )
 
         self.assertTrue(result.is_success)
-        self.assertEqual(len(result.selected_options), self.problem.dimension)
+        self.assertEqual(len(result.selected_options), self.problem.session_dimension)
         self.assertTrue(validate_timetable(self.problem, result.selected_options).is_valid)
 
     def test_gene_one_selects_last_option(self) -> None:

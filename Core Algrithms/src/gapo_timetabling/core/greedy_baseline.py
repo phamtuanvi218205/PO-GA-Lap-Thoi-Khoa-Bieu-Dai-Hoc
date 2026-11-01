@@ -3,9 +3,9 @@
 Baseline này không tạo quần thể và không lặp tối ưu. Nó phân công lần lượt
 những lớp khó trước, ưu tiên giảng viên đang có tải thấp và có độ phù hợp môn
 cao, sau đó giao một vector ưu tiên xác định cho decoder. Decoder vẫn chịu
-trách nhiệm ghép mẫu lịch bằng MRV/backtracking để mọi phương pháp dùng chung
-cổng kiểm tra ràng buộc cứng; baseline không dùng fitness để thay đổi quyết
-định đã chọn.
+trách nhiệm kiến tạo mẫu lịch hợp lệ theo priority để mọi phương pháp
+dùng chung decoder hard-only. Baseline không lặp tiến hóa và decoder không
+chấm điểm mềm để chọn vị trí; fitness chỉ đánh giá lịch hoàn chỉnh.
 
 Mục đích của baseline là tạo một mốc ``first feasible`` dễ giải thích. Nó
 không phải đối thủ có cùng ngân sách FE với GA, PO hoặc GA–PO và không được
@@ -127,15 +127,15 @@ def build_greedy_vector(
     nhóm lịch của lớp và không vượt tải tối đa. Khóa chọn là tải hiện tại thấp
     nhất, điểm phù hợp môn cao nhất rồi ``lecturer_index`` nhỏ nhất.
 
-    Các gene lịch bằng 0 để decoder thử mẫu đầu tiên theo thứ–tiết–địa điểm;
-    MRV/backtracking của decoder chỉ đổi mẫu khi cần bảo đảm hard constraints.
+    Các gene lịch bằng 0: tie-break theo ClassSession ID xác định thứ tự xếp.
+    Decoder chọn vị trí theo thứ–tiết–phòng và chỉ quay lui để bảo đảm hard.
     """
 
     if len(option_domains) != problem.session_dimension:
         raise ValueError("Số miền option phải bằng số ClassSession.")
 
-    # Snapshot v1 không có gene phân công. Baseline vẫn dùng thứ tự option đầu
-    # tiên cho phần lịch và giữ nguyên người đã gán trong snapshot.
+    # Snapshot v1 không có gene phân công; khóa lịch bằng nhau dùng ID để
+    # quyết định thứ tự, giữ nguyên người đã gán trong snapshot.
     if not problem.assignment_section_codes:
         return tuple(0.0 for _ in range(problem.dimension))
 
@@ -238,7 +238,7 @@ def build_greedy_vector(
         )
 
     return tuple(assignment_genes) + tuple(
-        0.0 for _ in range(problem.schedule_dimension)
+        0.0 for _ in range(problem.dimension - problem.assignment_dimension)
     )
 
 

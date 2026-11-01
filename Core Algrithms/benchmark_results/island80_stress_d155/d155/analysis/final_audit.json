@@ -1,0 +1,11 @@
+{
+  "results": 120,
+  "checkpoints": 120,
+  "shared_cohorts": 30,
+  "baselines": 3,
+  "hard_violations": 0,
+  "soft_option_scores": 0,
+  "full_fitness_entries_replay": true,
+  "source_verified": true,
+  "mechanism_sha": "60082436cb2c3abfb62c25af296ac9f7068ae531a1c5b82aa2f2bb5bc7e0e555"
+}

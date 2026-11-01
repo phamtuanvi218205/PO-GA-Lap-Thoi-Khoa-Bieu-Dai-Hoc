@@ -3,8 +3,9 @@
 Encoder chỉ kiểm tra những điều kiện bắt buộc có thể xác định cho *một* buổi
 độc lập: giảng viên đủ năng lực, tuần/ngày, khung tiết, loại địa điểm, sức
 chứa, thiết bị và trạng thái ``UNAVAILABLE``. Xung đột giữa nhiều buổi sẽ do
-decoder/validator xử lý; các tiêu chí mềm như mong muốn giảng viên sẽ do
-fitness đánh giá.
+decoder/validator xử lý. PriorityKey quyết định thứ tự khối; PlacementKey
+chọn vị trí trong tập đang khả thi. Decoder không chấm mềm; fitness đánh giá
+chất lượng sau khi đã có lịch hoàn chỉnh.
 
 Ngày nghỉ lễ không còn làm thay đổi miền tối ưu. ``TeachingDate`` vẫn được
 dùng để quy đổi thứ sang ngày thật của từng tuần và kiểm tra availability theo

@@ -223,7 +223,7 @@ class TestHybridRun(ConstraintFixture):
 
         self.assertIsInstance(result, OptimizationResult)
         self.assertEqual(result.algorithm, OptimizationAlgorithm.GA_PO)
-        self.assertEqual(result.final_population, initialization.individuals)
+        self.assertCountEqual(result.final_population, initialization.individuals)
         self.assertEqual(
             result.best_individual,
             best_individual(initialization.individuals),
@@ -277,7 +277,7 @@ class TestHybridRun(ConstraintFixture):
         self.assertGreater(ga_evaluator.call_count, 0)
         self.assertGreater(po_evaluator.call_count, 0)
 
-    def test_parent_union_rejects_valid_but_worse_offspring(self) -> None:
+    def test_ga_rejects_worse_but_po_accepts_worse_and_global_best_is_saved(self) -> None:
         initialization = self.make_initialization(population_size=4)
         initial_best = best_individual(initialization.individuals)
         worse_child = self.with_fitness_score(initial_best, score=10.0)
@@ -325,10 +325,8 @@ class TestHybridRun(ConstraintFixture):
                 self.make_config(initialization, iterations=1),
             )
 
-        self.assertCountEqual(
-            result.final_population,
-            initialization.individuals,
-        )
+        self.assertNotIn(worse_child, result.final_population[:2])
+        self.assertEqual(result.final_population[2:], (worse_child, worse_child))
         self.assertEqual(result.best_individual, initial_best)
 
     def test_failed_offspring_leave_parent_population_available(self) -> None:
@@ -474,7 +472,7 @@ class TestHybridRun(ConstraintFixture):
             ga_ratio=0.1,
         )
 
-        with self.assertRaisesRegex(ValueError, "at least one individual"):
+        with self.assertRaisesRegex(ValueError, "at least two individuals"):
             run_hybrid(
                 self.problem,
                 self.domains,
@@ -521,7 +519,7 @@ class TestHybridCommandLine(unittest.TestCase):
                 exit_code = main([
                     str(snapshot_path),
                     "--population-size",
-                    "2",
+                    "10",
                     "--iterations",
                     "1",
                     "--max-initialization-attempts",
@@ -547,10 +545,8 @@ class TestHybridCommandLine(unittest.TestCase):
         self.assertIn("KẾT QUẢ XẾP THỜI KHÓA BIỂU", output)
         self.assertIn("Số vi phạm bắt buộc       : 0", output)
         self.assertIn("TUẦN 1", output)
-        # Snapshot v2 có thêm gene phân công giảng viên nên cùng seed tạo một
-        # quỹ đạo random-key khác snapshot v1. Kết quả vẫn phải tái lập đúng
-        # ngày hợp lệ mà optimizer v2 đã chọn.
-        self.assertIn("Thứ Tư, ngày 09/09/2026", output)
+        # PlacementKey làm thay đổi quỹ đạo so với biểu diễn priority-only.
+        self.assertIn("Thứ Hai, ngày 07/09/2026", output)
         self.assertIn("Lớp HP", output)
         self.assertIn("Lý thuyết", output)
         self.assertIn("KẾT LUẬN: Đã xếp đủ 1 buổi học", output)

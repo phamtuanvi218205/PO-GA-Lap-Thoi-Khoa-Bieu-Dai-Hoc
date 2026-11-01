@@ -1051,9 +1051,9 @@ class ProblemInstance:
 
     @property
     def dimension(self) -> int:
-        """Tổng số gene phân công và gene mẫu lịch lặp cho cả học kỳ."""
+        """Gene giảng viên + PriorityKey + PlacementKey cho mỗi khối lặp."""
 
-        return self.assignment_dimension + self.schedule_dimension
+        return self.assignment_dimension + 2 * self.schedule_dimension
 
     @property
     def session_dimension(self) -> int:
@@ -1071,7 +1071,8 @@ class ProblemInstance:
         """Khóa các chuỗi buổi lặp, theo thứ tự xác định.
 
         Mỗi khóa gồm ``(teaching_plan_id, stability_group_no)``. Một plan có
-        hai buổi cố định mỗi tuần sẽ có hai khóa và do đó có hai gene lịch.
+        hai buổi cố định mỗi tuần sẽ có hai khối, mỗi khối có hai gene lịch:
+        một PriorityKey và một PlacementKey.
         """
 
         return tuple(sorted({
@@ -1097,7 +1098,7 @@ class ProblemInstance:
 
     @property
     def schedule_dimension(self) -> int:
-        """Số gene lịch lặp, bằng số chuỗi buổi của các plan đã chọn."""
+        """Số khối lặp B; có B PriorityKey và B PlacementKey."""
 
         return len(self.schedule_group_keys)
 
@@ -1135,6 +1136,12 @@ class ProblemInstance:
         """Vị trí bắt đầu của nhóm gene lịch trong vector nghiệm."""
 
         return self.assignment_dimension
+
+    @property
+    def placement_gene_offset(self) -> int:
+        """Vị trí bắt đầu các khóa chọn hạng trong tập mẫu đang khả thi."""
+
+        return self.assignment_dimension + self.schedule_dimension
 
     def eligible_lecturer_indices(self, section_code: str) -> tuple[int, ...]:
         """Trả miền giảng viên có thể dạy mọi phần của một lớp học phần."""

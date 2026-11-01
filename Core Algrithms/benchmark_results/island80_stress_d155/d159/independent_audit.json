@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "independent_saved_file_audit": true,
+  "new_optimizer_runs": 3,
+  "source_sha_unchanged": true,
+  "rows": [
+    {
+      "case": "small",
+      "seed": 1,
+      "quality": [
+        0.014953571428571427,
+        0.34882471187349184
+      ],
+      "fe": 600,
+      "history_points": 21,
+      "decode_failures": 235,
+      "backtracks": 20,
+      "hard_violations": 0,
+      "initial_and_all_fe_exact": true,
+      "result_and_metrics_exact_except_runtime": true
+    },
+    {
+      "case": "medium",
+      "seed": 1,
+      "quality": [
+        0.05215208068227968,
+        0.3520852717475224
+      ],
+      "fe": 599,
+      "history_points": 21,
+      "decode_failures": 250,
+      "backtracks": 433868,
+      "hard_violations": 0,
+      "initial_and_all_fe_exact": true,
+      "result_and_metrics_exact_except_runtime": true
+    },
+    {
+      "case": "large",
+      "seed": 1,
+      "quality": [
+        0.05027526946107784,
+        0.32078006625069505
+      ],
+      "fe": 575,
+      "history_points": 21,
+      "decode_failures": 525,
+      "backtracks": 6717291,
+      "hard_violations": 0,
+      "initial_and_all_fe_exact": true,
+      "result_and_metrics_exact_except_runtime": true
+    }
+  ]
+}

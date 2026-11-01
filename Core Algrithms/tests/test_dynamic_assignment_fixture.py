@@ -5,7 +5,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from gapo_timetabling.core.constraints import validate_timetable
-from gapo_timetabling.core.decoder import DecodeStatus, decode_vector
+from gapo_timetabling.core.decoder import DecodeStatus, decode_direct_vector
 from gapo_timetabling.core.snapshot import prepare_snapshot_for_optimization
 
 
@@ -30,7 +30,7 @@ class TestDynamicAssignmentFixture(unittest.TestCase):
         self.assertEqual(problem.assignment_dimension, 9)
         self.assertEqual(problem.session_dimension, 108)
         self.assertEqual(problem.schedule_dimension, 18)
-        self.assertEqual(problem.dimension, 27)
+        self.assertEqual(problem.dimension, 45)
         self.assertGreaterEqual(len(problem.lecturer_course_capabilities), 19)
         self.assertGreater(sum(map(len, self.domains)), 2_000)
         self.assertTrue(all(len(domain) >= 9 for domain in self.domains))
@@ -68,7 +68,8 @@ class TestDynamicAssignmentFixture(unittest.TestCase):
             assignment_genes.append((local_index + 0.5) / len(eligible))
 
         vector = tuple(assignment_genes) + (0.5,) * problem.schedule_dimension
-        result = decode_vector(problem, self.domains, vector, 20_000)
+        # Chứng chỉ khả thi lịch sử dùng DIRECT; không diễn giải lại như priority.
+        result = decode_direct_vector(problem, self.domains, vector, 20_000)
         self.assertEqual(result.status, DecodeStatus.SUCCESS)
         self.assertEqual(result.selected_lecturer_indices, target_lecturers)
         self.assertTrue(

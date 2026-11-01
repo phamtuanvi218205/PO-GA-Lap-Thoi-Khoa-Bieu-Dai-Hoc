@@ -17,6 +17,8 @@ from pathlib import Path
 
 from ..core.metrics import OptimizationResult
 from ..core.models import ProblemInstance
+from ..core.decoder import DEFAULT_ENCODING
+from ..core.hybrid import HYBRID_MECHANISM
 
 
 WEEKDAY_NAMES = {
@@ -151,7 +153,9 @@ def _write_summary_json(
     best_fitness = result.best_individual.fitness
     payload = {
         "schema_version": "timetable-demo-report.v2",
+        "solver_pipeline": DEFAULT_ENCODING,
         "algorithm": result.algorithm.value,
+        "hybrid_mechanism": HYBRID_MECHANISM if result.algorithm.value == "GA_PO" else None,
         "snapshot_checksum": snapshot_checksum,
         "seed": seed,
         "population_size": len(result.final_population),

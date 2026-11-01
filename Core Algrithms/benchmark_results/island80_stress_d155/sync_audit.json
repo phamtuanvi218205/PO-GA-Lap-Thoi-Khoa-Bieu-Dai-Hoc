@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "verified_members": 811,
+  "accessible_copies": 42,
+  "optimizer_runs": 120,
+  "baselines": 3,
+  "shared_initial_cohorts": 30,
+  "confirmation_runs": 3,
+  "optimizer_runs_during_sync": 0,
+  "original_labels_preserved": true
+}

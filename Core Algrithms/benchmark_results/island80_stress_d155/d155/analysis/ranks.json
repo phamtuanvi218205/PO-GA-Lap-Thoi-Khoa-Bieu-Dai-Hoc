@@ -1,0 +1,1202 @@
+[
+  {
+    "case": "small",
+    "seed": 1,
+    "method": "GA",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 1,
+    "method": "PO",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 1,
+    "method": "HYBRID50",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 1,
+    "method": "ISLAND80",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "small",
+    "seed": 2,
+    "method": "GA",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "small",
+    "seed": 2,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 2,
+    "method": "HYBRID50",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 2,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 3,
+    "method": "GA",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 3,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 3,
+    "method": "HYBRID50",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "small",
+    "seed": 3,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 4,
+    "method": "GA",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 4,
+    "method": "PO",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "small",
+    "seed": 4,
+    "method": "HYBRID50",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 4,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 5,
+    "method": "GA",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 5,
+    "method": "PO",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 5,
+    "method": "HYBRID50",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 5,
+    "method": "ISLAND80",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "small",
+    "seed": 6,
+    "method": "GA",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 6,
+    "method": "PO",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "small",
+    "seed": 6,
+    "method": "HYBRID50",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 6,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 7,
+    "method": "GA",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 7,
+    "method": "PO",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "small",
+    "seed": 7,
+    "method": "HYBRID50",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 7,
+    "method": "ISLAND80",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 8,
+    "method": "GA",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 8,
+    "method": "PO",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "small",
+    "seed": 8,
+    "method": "HYBRID50",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 8,
+    "method": "ISLAND80",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 9,
+    "method": "GA",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 9,
+    "method": "PO",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "small",
+    "seed": 9,
+    "method": "HYBRID50",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 9,
+    "method": "ISLAND80",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 10,
+    "method": "GA",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 10,
+    "method": "PO",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "small",
+    "seed": 10,
+    "method": "HYBRID50",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "small",
+    "seed": 10,
+    "method": "ISLAND80",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 1,
+    "method": "GA",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "medium",
+    "seed": 1,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 1,
+    "method": "HYBRID50",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 1,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 2,
+    "method": "GA",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "medium",
+    "seed": 2,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 2,
+    "method": "HYBRID50",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 2,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 3,
+    "method": "GA",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 3,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 3,
+    "method": "HYBRID50",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 3,
+    "method": "ISLAND80",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "medium",
+    "seed": 4,
+    "method": "GA",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 4,
+    "method": "PO",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "medium",
+    "seed": 4,
+    "method": "HYBRID50",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 4,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 5,
+    "method": "GA",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "medium",
+    "seed": 5,
+    "method": "PO",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 5,
+    "method": "HYBRID50",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 5,
+    "method": "ISLAND80",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 6,
+    "method": "GA",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "medium",
+    "seed": 6,
+    "method": "PO",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 6,
+    "method": "HYBRID50",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 6,
+    "method": "ISLAND80",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 7,
+    "method": "GA",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 7,
+    "method": "PO",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 7,
+    "method": "HYBRID50",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 7,
+    "method": "ISLAND80",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "medium",
+    "seed": 8,
+    "method": "GA",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 8,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 8,
+    "method": "HYBRID50",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "medium",
+    "seed": 8,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 9,
+    "method": "GA",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 9,
+    "method": "PO",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 9,
+    "method": "HYBRID50",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "medium",
+    "seed": 9,
+    "method": "ISLAND80",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 10,
+    "method": "GA",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "medium",
+    "seed": 10,
+    "method": "PO",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 10,
+    "method": "HYBRID50",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "medium",
+    "seed": 10,
+    "method": "ISLAND80",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 1,
+    "method": "GA",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 1,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 1,
+    "method": "HYBRID50",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 1,
+    "method": "ISLAND80",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "large",
+    "seed": 2,
+    "method": "GA",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 2,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 2,
+    "method": "HYBRID50",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "large",
+    "seed": 2,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 3,
+    "method": "GA",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 3,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 3,
+    "method": "HYBRID50",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 3,
+    "method": "ISLAND80",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "large",
+    "seed": 4,
+    "method": "GA",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 4,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 4,
+    "method": "HYBRID50",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 4,
+    "method": "ISLAND80",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "large",
+    "seed": 5,
+    "method": "GA",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "large",
+    "seed": 5,
+    "method": "PO",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 5,
+    "method": "HYBRID50",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 5,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 6,
+    "method": "GA",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 6,
+    "method": "PO",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 6,
+    "method": "HYBRID50",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "large",
+    "seed": 6,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 7,
+    "method": "GA",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 7,
+    "method": "PO",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 7,
+    "method": "HYBRID50",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 7,
+    "method": "ISLAND80",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "large",
+    "seed": 8,
+    "method": "GA",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 8,
+    "method": "PO",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 8,
+    "method": "HYBRID50",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 8,
+    "method": "ISLAND80",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "large",
+    "seed": 9,
+    "method": "GA",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "large",
+    "seed": 9,
+    "method": "PO",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 9,
+    "method": "HYBRID50",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 9,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 10,
+    "method": "GA",
+    "rank": 4.0,
+    "wins": 0,
+    "ties": 0,
+    "losses": 3,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 10,
+    "method": "PO",
+    "rank": 1.0,
+    "wins": 3,
+    "ties": 0,
+    "losses": 0,
+    "best": true
+  },
+  {
+    "case": "large",
+    "seed": 10,
+    "method": "HYBRID50",
+    "rank": 2.0,
+    "wins": 2,
+    "ties": 0,
+    "losses": 1,
+    "best": false
+  },
+  {
+    "case": "large",
+    "seed": 10,
+    "method": "ISLAND80",
+    "rank": 3.0,
+    "wins": 1,
+    "ties": 0,
+    "losses": 2,
+    "best": false
+  }
+]

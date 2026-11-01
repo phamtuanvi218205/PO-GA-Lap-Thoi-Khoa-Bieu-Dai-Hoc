@@ -232,10 +232,10 @@ class TestModels(unittest.TestCase):
             constraint_settings=self.constraints,
         )
 
-    def test_dimension_uses_one_gene_per_recurring_group(self) -> None:
+    def test_dimension_uses_priority_and_placement_per_recurring_group(self) -> None:
         self.assertEqual(self.problem.session_dimension, 3)
         self.assertEqual(self.problem.schedule_dimension, 2)
-        self.assertEqual(self.problem.dimension, 2)
+        self.assertEqual(self.problem.dimension, 4)
         self.assertEqual(
             tuple(session.session_index for session in self.problem.class_sessions),
             (0, 1, 2),
@@ -473,7 +473,7 @@ class TestModels(unittest.TestCase):
 
     def test_lecture_session_with_three_periods_is_allowed(self) -> None:
         self.assertEqual(self.sessions[0].duration_periods, 3)
-        self.assertEqual(self.problem.dimension, 2)
+        self.assertEqual(self.problem.dimension, 4)
 
     def test_lecture_session_with_six_periods_is_allowed(self) -> None:
         six_period_sessions = (

@@ -22,6 +22,7 @@ from gapo_timetabling.core.population import (
     sort_individuals,
 )
 from tests.test_constraints import ConstraintFixture
+from tests.priority_scenarios import make_priority_repair_case
 
 
 class TestPopulation(ConstraintFixture):
@@ -35,38 +36,13 @@ class TestPopulation(ConstraintFixture):
     def make_backtracking_case(self):
         """Tạo nhánh cụt để kiểm tra population có gọi repair đúng lúc."""
 
-        same_lecturer_part = replace(self.parts[2], lecturer_index=0)
-        problem = replace(
-            self.problem,
-            teaching_parts=(
-                self.parts[0],
-                self.parts[1],
-                same_lecturer_part,
-                self.parts[3],
-            ),
-        )
-        domains = (
-            (
-                SessionOption(0, 0, self.tuesday.calendar_date, 1, 3),
-                SessionOption(0, 0, self.tuesday.calendar_date, 4, 6),
-            ),
-            (
-                SessionOption(1, 0, self.tuesday.calendar_date, 4, 6),
-                SessionOption(1, 0, self.tuesday.calendar_date, 7, 9),
-            ),
-            (
-                SessionOption(2, 0, self.tuesday.calendar_date, 4, 6),
-                SessionOption(2, 0, self.tuesday.calendar_date, 7, 9),
-            ),
-            (self.valid_options[3],),
-        )
-        vector = (0.75, 0.25, 0.25, 0.0)
-        return problem, domains, vector
+        problem, domains, priority = make_priority_repair_case(self)
+        return problem, domains, priority + (0.0,) * problem.schedule_dimension
 
     def test_evaluate_candidate_runs_complete_pipeline(self) -> None:
         """Một vector hợp lệ phải đi đến Fitness và trở thành individual."""
 
-        vector = (0.0, 0.0, 0.0, 0.0)
+        vector = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         config = CandidateEvaluationConfig(
             max_decode_nodes=20,
             enable_repair=False,
@@ -105,7 +81,7 @@ class TestPopulation(ConstraintFixture):
         result = evaluate_candidate(
             self.problem,
             self.singleton_domains(),
-            (0.0, 0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
             config,
         )
 
@@ -131,7 +107,7 @@ class TestPopulation(ConstraintFixture):
         self.assertIsNotNone(result.individual)
         self.assertTrue(result.individual.was_repaired)
         self.assertEqual(result.individual.repair_attempts, 2)
-        self.assertEqual(result.individual.vector[0], 0.25)
+        self.assertEqual(result.individual.vector[0], 0.75)
         self.assertEqual(result.fitness_evaluations, 1)
         self.assertTrue(
             validate_timetable(
@@ -150,7 +126,7 @@ class TestPopulation(ConstraintFixture):
         result = evaluate_candidate(
             self.problem,
             tuple(domains),
-            (0.0, 0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
             config,
         )
 
@@ -183,7 +159,7 @@ class TestPopulation(ConstraintFixture):
             result = evaluate_candidate(
                 self.problem,
                 self.singleton_domains(),
-                (0.0, 0.0, 0.0, 0.0),
+                (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
                 config,
             )
 
@@ -414,7 +390,7 @@ class TestPopulation(ConstraintFixture):
         evaluated = evaluate_candidate(
             self.problem,
             self.singleton_domains(),
-            (0.0, 0.0, 0.0, 0.0),
+            (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
             config,
         )
         base = evaluated.individual
@@ -422,7 +398,7 @@ class TestPopulation(ConstraintFixture):
 
         better_general = replace(
             base,
-            vector=(0.9, 0.9, 0.9, 0.9),
+            vector=(0.9, 0.9, 0.9, 0.9, 0.0, 0.0, 0.0, 0.0),
             fitness=replace(
                 base.fitness,
                 general_quality_score=0.0,
@@ -431,7 +407,7 @@ class TestPopulation(ConstraintFixture):
         )
         better_preference = replace(
             base,
-            vector=(0.1, 0.1, 0.1, 0.1),
+            vector=(0.1, 0.1, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0),
             fitness=replace(
                 base.fitness,
                 general_quality_score=0.1,

@@ -13,6 +13,57 @@ src/gapo_timetabling/
 `core` là phần thuật toán thuần, không kết nối database. `application` thay thế
 toàn bộ vai trò của ứng dụng Java cũ và gọi `core` để tối ưu.
 
+## Biểu diễn và giải mã hiện hành
+
+Theo D153 (01/11/2026), biểu diễn chính dùng chung cho GA, PO và GA–PO là
+`RECURRING_PRIORITY_PLACEMENT.v1`, tích hợp từ bản D149 đã chạy pilot D150:
+
+- Gene đầu chọn một giảng viên cho mỗi lớp học phần; LT và TH kế thừa cùng người.
+- Mỗi khối buổi lặp có PriorityKey quyết định **thứ tự xếp**. Sắp tăng dần,
+  bằng khóa thì theo ClassSession ID nhỏ nhất trong khối; không dùng MRV.
+- Khóa PlacementKey riêng chọn hạng `min(floor(key*m), m-1)` trong **m mẫu
+  hiện khả thi**, sau khi sắp thứ → tiết bắt đầu → phòng → index miền. Đây
+  không phải chọn từ miền option tĩnh như biểu diễn cũ. Nếu bị kẹt, quay lui
+  thử hạng gần nhất (k, k+1, k-1, ...), chỉ phục hồi hard feasibility trong
+  ngân sách node. Không chấm mềm; Fitness đánh giá sau khi có lịch đầy đủ.
+- Tổng số chiều là `L + 2B`: L gene giảng viên, B PriorityKey, B PlacementKey.
+  Repair giữ chính sách đã thử: chỉ đổi giảng viên/priority, giữ placement.
+- Mẫu được chọn vẫn cố định thứ–tiết–phòng trong mọi tuần hoạt động. Gene
+  priority không bị viết lại thành chỉ số option; full Validator/Fitness cuối
+  và các công thức GA/PO giữ nguyên. Cơ chế lai được chốt riêng ở D158 bên dưới.
+- Mapping mới là `gene-option-mapping.v5`. Result JSON ghi `solver_pipeline`
+  và `best_solution.vector_encoding` để replay đúng nghĩa vector.
+- Kết quả lịch sử L+B vẫn đọc đúng nhãn DIRECT_OPTION, FEASIBILITY.v1 hoặc
+  SOFT.v1, không tự thêm PlacementKey. Thiếu nhãn là DIRECT_OPTION. Chỉ dùng
+  các nhánh này cho replay; không đổi nhãn hay ghi đè kết quả cũ.
+- Không tiếp tục benchmark mới vào thư mục DIRECT cũ hoặc hợp nhất worker
+  khác pipeline. Dùng thư mục kết quả mới; không xóa hay đổi nhãn kết quả cũ.
+  Run chờ lưu từ pipeline cũ được báo không thể phục hồi và cần tạo run mới.
+
+## Cơ chế lai đã chốt — D158 (01/11/2026)
+
+`GA_PO` hiện chạy hai quần thể độc lập theo ứng viên ISLAND80 D154/D155:
+
+- Mặc định GA 80% / PO 20% (N30 thành 24/6), mỗi quần thể ít nhất hai cá thể.
+- Cả hai tối ưu toàn bộ chromosome; không khóa gene, không dùng PO làm mutation.
+- GA giữ survivor selection cũ trong quần thể GA. PO dùng đủ bốn hành vi;
+  con hợp lệ thay cha dù xấu hơn, có mean/best riêng và archive sáu lịch khác nhau.
+- Trao đổi mỗi hai vòng, không trao đổi ở vòng cuối: mỗi hướng tối đa một lịch
+  mới đối với bên nhận, bảo vệ best; hai nguồn được chụp trước migration.
+- Hai bên dùng chung trần FE gồm khởi tạo. Không thay Fitness, Validator, GA/PO
+  thuần, Decoder hay ngân sách. Không áp dụng survivor ưu tiên phenotype của PHENO80.
+- Result/request-config ghi `hybrid_mechanism=GA_PO_ISLANDS.v1`. Job chờ 50/50
+  cũ không tự phục hồi thành islands; kết quả cũ vẫn đọc được. Tỷ lệ tùy chỉnh
+  khác 80/20 là cấu hình thử nghiệm khác, không được gắn với kết luận D155.
+- Không dùng monkeypatch bộ chọn cha để đếm đóng góp trong code chạy API đồng thời.
+  Unit test đối chiếu toàn bộ kết quả (trừ runtime) với reference D155 đã đóng băng.
+
+Bộ nặng hiện hành nằm ở `benchmark_configs/stress/README.md`, snapshot byte-exact
+D150, D60/90/120. Bộ `benchmark_configs/distributed/` cũ giữ làm lịch sử, không
+ghi đè. D155 vẫn là bằng chứng đo trên bốn phương pháp cũ; không sửa kết quả sau
+tích hợp. ISLAND80 thắng cặp cuối run GA16/14, PO17/13, không phải ưu thế thống kê
+hoặc thắng ở mọi cách đo. Không tự chạy thêm benchmark khi tích hợp.
+
 Luồng chạy chính:
 
 1. đọc dữ liệu rời rạc từ SQL Server;
@@ -197,14 +248,24 @@ POST /api/runs/{run_id}/schedule-revisions
 
 ## Benchmark thời khóa biểu
 
-Cấu hình đã khóa nằm trong `benchmark_configs/`. Benchmark chính gồm một lần
-`GREEDY_FIRST_FEASIBLE` làm mốc tham khảo và 10 seed cho từng phương pháp GA,
-PO, GA–PO. Ba optimizer dùng population 30 và 20 vòng xử lý quần thể
-(`max_fitness_evaluations=630` là giới hạn lý thuyết để suy ra số vòng); FE
-thực tế được báo cáo riêng vì nghiệm lỗi bị loại trước Fitness. Greedy chỉ dựng
-một lịch xác định nên không được đưa vào kiểm định nhiều seed. Xem
-`benchmark_configs/README.md` để build snapshot, chạy pilot ba seed và sau đó
-chạy bộ chính thức mà không đổi tham số.
+**Kịch bản hiện hành:** [benchmark_configs/stress/README.md](benchmark_configs/stress/README.md),
+suite `benchmark_configs/stress/timetable_stress_suite.json`; Small12/Medium18/
+Large24 lớp,232/343/454buổi,D60/90/120. Snapshot đã khóa, không build lại từ DB.
+N30/20vòng/trần630FE gồm30initial,seed1–10,Priority+Placement hard-only,
+GA_PO là ISLAND80. Một lần chạy mới của ba phương pháp là90optimizer+3Greedy.
+
+**Kết quả chính thức được chọn:** [benchmark_results/README.md](benchmark_results/README.md).
+Gói `benchmark_results/island80_stress_d155/` giữ nguyên D155120optimizer+
+3Greedy (có HYBRID50 đối chứng) và D1593run xác nhận production trùng chính xác.
+Đọc báo cáo/ảnh trực tiếp; dữ liệu thô đầy đủ ở ZIP nén không mất dữ liệu, có
+SHA từng file và lệnh kiểm tra độc lập. Không đổi nhãn ISLAND80 thành kết quả
+GA_PO mới, không ghi đè evidence cũ hoặc trộn với bộ nhỏ trước đây.
+
+FE thực tế được báo riêng vì decode/repair thất bại không tính FE. Greedy là
+mốc xác định, không đưa vào kiểm định nhiều seed; không xếp hạng runtime các
+worker song song. Kết quả cuối20vòng và commonFE đều được giữ, không chỉ lấy
+tiêu chí thuận lợi. Các hướng dẫn `benchmark_configs/distributed/` và các
+`distributed_results/` cũ là lịch sử, không phải bộ hiện hành.
 
 Trước khi dùng schema đã tồn tại, chạy migration
 `Script/migrate_2026_10_21_run_progress_control.sql` để thêm progress, timeout

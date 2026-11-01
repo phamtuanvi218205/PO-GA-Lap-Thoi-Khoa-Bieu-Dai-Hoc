@@ -26,8 +26,9 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from ..core.constraints import validate_timetable
+from ..core.decoder import DEFAULT_ENCODING
 from ..core.ga import GAConfig, run_ga
-from ..core.hybrid import HybridConfig, run_hybrid
+from ..core.hybrid import HYBRID_MECHANISM, HybridConfig, run_hybrid, validate_island_sizes
 from ..core.metrics import (
     ConvergencePoint,
     OptimizationMetrics,
@@ -103,7 +104,7 @@ class RunRequest:
     crossover_distribution_index: float = 15.0
     mutation_probability: float | None = None
     mutation_distribution_index: float = 20.0
-    ga_ratio: float = 0.5
+    ga_ratio: float = 0.8
 
 
 def _require_mapping(value: Any, field_name: str) -> Mapping[str, Any]:
@@ -319,19 +320,21 @@ def parse_run_request(
         minimum=0.0000001,
     )
     ga_ratio = _read_float(
-        hybrid_payload.get("ga_ratio", 0.5),
+        hybrid_payload.get("ga_ratio", 0.8),
         "hybrid.ga_ratio",
         minimum=0.0000001,
         maximum=0.9999999,
     )
 
     if algorithm == OptimizationAlgorithm.GA_PO:
-        number_of_ga_agents = int(round(population_size * ga_ratio))
-        if not 1 <= number_of_ga_agents < population_size:
+        try:
+            validate_island_sizes(population_size, ga_ratio)
+        except ValueError as exc:
             raise RunContractError(
                 RunErrorCode.INVALID_REQUEST,
-                "hybrid.ga_ratio phải chia quần thể thành hai nhánh không rỗng.",
-            )
+                "GA–PO cần ít nhất 2 cá thể mỗi quần thể; tăng population_size "
+                "(80/20 cần N >= 8) hoặc cấu hình tỷ lệ phù hợp.",
+            ) from exc
 
     return RunRequest(
         request_id=request_id,
@@ -449,9 +452,11 @@ def build_failure_result(
 
     return {
         "schema_version": RESULT_SCHEMA_VERSION,
+        "solver_pipeline": DEFAULT_ENCODING,
         "request_id": request.request_id if request is not None else None,
         "status": "FAILED",
         "algorithm": request.algorithm.value if request is not None else None,
+        "hybrid_mechanism": HYBRID_MECHANISM if request is not None and request.algorithm == OptimizationAlgorithm.GA_PO else None,
         "snapshot_checksum": snapshot_checksum,
         "error": {
             "code": code.value,
@@ -511,15 +516,18 @@ def build_completed_result_payload(
 
     return {
         "schema_version": RESULT_SCHEMA_VERSION,
+        "solver_pipeline": DEFAULT_ENCODING,
         "request_id": request_id,
         "status": "COMPLETED",
         "algorithm": algorithm_name,
+        "hybrid_mechanism": HYBRID_MECHANISM if algorithm_name == OptimizationAlgorithm.GA_PO.value else None,
         "snapshot_checksum": prepared.snapshot_checksum,
         "error": None,
         "result": {
             "gene_option_mapping": prepared.gene_option_mapping,
             "gene_option_mapping_checksum": prepared.gene_option_mapping_checksum,
             "best_solution": {
+                "vector_encoding": DEFAULT_ENCODING,
                 "vector": list(best_individual.vector),
                 "selected_option_indices": list(
                     best_individual.selected_option_indices

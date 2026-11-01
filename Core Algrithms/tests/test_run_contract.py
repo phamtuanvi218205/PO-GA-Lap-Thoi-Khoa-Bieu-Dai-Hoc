@@ -34,8 +34,8 @@ def make_run_request_payload(
         "request_id": f"test-{algorithm.lower()}",
         "algorithm": algorithm,
         "snapshot": {"path": snapshot_path},
-        "population_size": 2,
-        "max_fitness_evaluations": 4,
+        "population_size": 10,
+        "max_fitness_evaluations": 20,
         "random_seed": 73,
         "max_initialization_attempts": 20,
         "max_offspring_attempts": 2,
@@ -51,7 +51,7 @@ def make_run_request_payload(
             "mutation_probability": None,
             "mutation_distribution_index": 20.0,
         },
-        "hybrid": {"ga_ratio": 0.5},
+        "hybrid": {"ga_ratio": 0.8},
     }
 
 
@@ -83,7 +83,7 @@ class TestRunRequestContract(unittest.TestCase):
 
     def test_fe_after_initialization_must_form_complete_iterations(self) -> None:
         payload = make_run_request_payload("snapshot.json")
-        payload["max_fitness_evaluations"] = 5
+        payload["max_fitness_evaluations"] = 15
 
         with self.assertRaisesRegex(RunContractError, "chia hết"):
             parse_run_request(payload, base_directory=Path.cwd())
@@ -94,7 +94,7 @@ class TestRunRequestContract(unittest.TestCase):
         payload["max_fitness_evaluations"] = 2
         payload["max_initialization_attempts"] = 2
 
-        with self.assertRaisesRegex(RunContractError, "hai nhánh không rỗng"):
+        with self.assertRaisesRegex(RunContractError, "ít nhất 2 cá thể"):
             parse_run_request(payload, base_directory=Path.cwd())
 
     def test_non_finite_operator_parameter_is_rejected(self) -> None:
@@ -140,7 +140,7 @@ class TestRunExecutionContract(unittest.TestCase):
                     )
                     self.assertEqual(
                         result["result"]["metrics"]["fitness_evaluations"],
-                        4,
+                        20,
                     )
                     self.assertEqual(
                         result["result"]["timetable_entries"][0]["class_session_id"],

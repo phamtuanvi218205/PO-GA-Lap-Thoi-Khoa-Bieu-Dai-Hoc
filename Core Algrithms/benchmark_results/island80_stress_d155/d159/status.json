@@ -1,0 +1,16 @@
+{
+  "status": "COMPLETED",
+  "completed": [
+    "small",
+    "medium",
+    "large"
+  ],
+  "failed": [],
+  "running": [],
+  "workers": {
+    "small": 2660,
+    "medium": 4988,
+    "large": 22688
+  },
+  "at": "2026-11-01T20:29:49.329061"
+}
