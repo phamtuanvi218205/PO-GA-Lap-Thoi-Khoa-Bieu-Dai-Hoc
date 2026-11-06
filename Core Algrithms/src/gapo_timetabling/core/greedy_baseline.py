@@ -82,10 +82,11 @@ def _empty_metrics() -> OptimizationMetrics:
 def _section_periods(problem: ProblemInstance) -> dict[str, int]:
     """Tổng khối lượng của mỗi lớp dùng để kiểm giới hạn tải giảng viên."""
 
-    totals = {code: 0 for code in problem.assignment_section_codes}
+    totals = {code: 0 for code in problem.assignment_keys}
     for part in problem.teaching_parts:
-        if part.section_code in totals:
-            totals[part.section_code] += part.total_periods
+        key = problem.assignment_key_for_part(part)
+        if key in totals:
+            totals[key] += part.total_periods
     return totals
 
 
@@ -100,7 +101,7 @@ def _group_sections(problem: ProblemInstance) -> tuple[str, ...]:
         first_session = problem.class_sessions[session_indices[0]]
         plan = plans[first_session.teaching_plan_id]
         sections.append(
-            problem.teaching_parts[plan.teaching_part_index].section_code
+            problem.assignment_key_for_part(problem.teaching_parts[plan.teaching_part_index])
         )
     return tuple(sections)
 
@@ -136,7 +137,7 @@ def build_greedy_vector(
 
     # Snapshot v1 không có gene phân công; khóa lịch bằng nhau dùng ID để
     # quyết định thứ tự, giữ nguyên người đã gán trong snapshot.
-    if not problem.assignment_section_codes:
+    if not problem.assignment_keys:
         return tuple(0.0 for _ in range(problem.dimension))
 
     periods = _section_periods(problem)
@@ -145,16 +146,17 @@ def build_greedy_vector(
         item.lecturer_index: item for item in problem.lecturers
     }
     sections = {
-        item.section_code: item for item in problem.course_sections
+        key: next(item for item in problem.course_sections if item.section_code == problem.parts_for_assignment(key)[0].section_code)
+        for key in problem.assignment_keys
     }
     suitability = _capability_scores(problem)
     loads = {index: 0 for index in lecturers}
     selected: dict[str, int] = {}
 
     ordered_sections = sorted(
-        problem.assignment_section_codes,
+        problem.assignment_keys,
         key=lambda code: (
-            len(problem.eligible_lecturer_indices(code)),
+            len(problem.eligible_assignment_lecturers(code)),
             -periods[code],
             code,
         ),
@@ -172,7 +174,7 @@ def build_greedy_vector(
         )
         feasible_lecturers[section_code] = tuple(
             lecturer_index
-            for lecturer_index in problem.eligible_lecturer_indices(section_code)
+            for lecturer_index in problem.eligible_assignment_lecturers(section_code)
             if all(
                 build_recurring_patterns_for_group(
                     problem,
@@ -230,8 +232,8 @@ def build_greedy_vector(
         )
 
     assignment_genes: list[float] = []
-    for section_code in problem.assignment_section_codes:
-        eligible = problem.eligible_lecturer_indices(section_code)
+    for section_code in problem.assignment_keys:
+        eligible = problem.eligible_assignment_lecturers(section_code)
         selected_position = eligible.index(selected[section_code])
         assignment_genes.append(
             (selected_position + 0.5) / len(eligible)

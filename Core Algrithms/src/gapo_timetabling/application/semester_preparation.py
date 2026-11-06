@@ -380,23 +380,21 @@ class SemesterReadinessService:
                 ))
                 continue
             course_code = str(parts[0]["course_code"])
-            requires_lecture = any(str(item["part_type"]) == "LECTURE" for item in actual_parts)
-            requires_practice = any(str(item["part_type"]) == "PRACTICE" for item in actual_parts)
-            eligible = {
-                str(item["lecturer_code"])
-                for item in capabilities
-                if str(item["course_code"]) == course_code
-                and (not requires_lecture or bool(item["can_teach_lecture"]))
-                and (not requires_practice or bool(item["can_teach_practice"]))
-            }
-            if not eligible:
-                issues.append(SemesterReadinessIssue(
-                    "SECTION_WITHOUT_ELIGIBLE_LECTURER",
-                    ReadinessSeverity.ERROR,
-                    "Lớp học phần",
-                    section_code,
-                    "Không có cùng một giảng viên đủ năng lực dạy mọi phần của lớp.",
-                ))
+            for part in actual_parts:
+                kind = str(part["part_type"])
+                eligible = {
+                    str(item["lecturer_code"])
+                    for item in capabilities
+                    if str(item["course_code"]) == course_code
+                    and (kind != "LECTURE" or bool(item["can_teach_lecture"]))
+                    and (kind != "PRACTICE" or bool(item["can_teach_practice"]))
+                }
+                if not eligible:
+                    issues.append(SemesterReadinessIssue(
+                        "SECTION_WITHOUT_ELIGIBLE_LECTURER",ReadinessSeverity.ERROR,
+                        "Phần giảng dạy",str(part.get("part_code",section_code)),
+                        f"Phần {kind} không có giảng viên đủ năng lực tương ứng.",
+                    ))
 
     def _check_parts(
         self,

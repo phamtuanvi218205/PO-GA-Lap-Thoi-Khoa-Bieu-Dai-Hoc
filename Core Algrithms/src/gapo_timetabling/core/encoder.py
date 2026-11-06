@@ -278,10 +278,11 @@ def build_options_for_session(
     locations = tuple(sorted(locations, key=lambda item: item.location_index))
     options: list[SessionOption] = []
 
-    # Miền option chứa mọi giảng viên đủ khả năng dạy *toàn bộ* lớp học phần.
+    # V3: miền theo năng lực của từng TeachingPart (LT hoặc TH).
+    # Snapshot SECTION lịch sử tiếp tục dùng miền giao các phần như trước.
     # Gene phân công ở đầu vector sẽ chọn một người; decoder sau đó chỉ giữ
     # các option mang đúng lecturer_index đó. Encoder không tự chọn người tốt.
-    eligible_lecturers = problem.eligible_lecturer_indices(teaching_part.section_code)
+    eligible_lecturers = problem.eligible_assignment_lecturers(problem.assignment_key_for_part(teaching_part))
     for lecturer_index in eligible_lecturers:
         for current_date in teaching_dates:
             for block in valid_blocks:
@@ -332,7 +333,7 @@ def build_option_domains(
 
     Số miền bằng ``session_dimension``. Nhóm gene phân công giảng viên không
     cần ``SessionOption`` riêng vì miền của chúng được lấy trực tiếp từ
-    ``eligible_lecturer_indices``.
+    ``eligible_assignment_lecturers`` theo phạm vi phân công của snapshot.
     """
 
     return tuple(
@@ -427,7 +428,7 @@ def build_all_recurring_pattern_domains(
             plans_by_id[first_session.teaching_plan_id].teaching_part_index
         ]
         group_patterns: list[RecurringPattern] = []
-        for lecturer_index in problem.eligible_lecturer_indices(part.section_code):
+        for lecturer_index in problem.eligible_assignment_lecturers(problem.assignment_key_for_part(part)):
             group_patterns.extend(
                 build_recurring_patterns_for_group(
                     problem,

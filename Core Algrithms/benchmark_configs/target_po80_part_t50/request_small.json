@@ -1,0 +1,31 @@
+{
+  "schema_version": "optimization-run-request.v1",
+  "request_id": "part-t50-target-po80-small",
+  "algorithm": "GA_PO",
+  "snapshot": {
+    "path": "data/small.json",
+    "checksum": "d3ace71bc1665dcffd123e937164ae498b05bf5dbc2ce2313ce1a58494145274"
+  },
+  "population_size": 30,
+  "max_fitness_evaluations": 1530,
+  "random_seed": 1,
+  "max_initialization_attempts": 30000,
+  "max_offspring_attempts": 5,
+  "evaluation": {
+    "max_decode_nodes": 20000,
+    "enable_repair": true,
+    "max_repair_attempts": 3,
+    "max_decode_nodes_per_repair_attempt": 20000
+  },
+  "ga": {
+    "tournament_size": 3,
+    "crossover_probability": 0.9,
+    "crossover_distribution_index": 15,
+    "mutation_probability": null,
+    "mutation_distribution_index": 20
+  },
+  "hybrid": {
+    "mechanism": "GA_PO_TARGET_PO80.v1",
+    "ga_ratio": 0.8
+  }
+}

@@ -6,6 +6,8 @@ const state = {
   readyScenarios: [],
   currentJob: null,
   pollTimer: null,
+  runClockTimer: null,
+  pollVersion: 0,
   currentRunId: null,
   scheduleWeek: 1,
 };
@@ -250,6 +252,8 @@ async function resetSemesterForDemo() {
     setResultBox(box, `Đã đặt lại học kỳ. Đã xóa ${formatNumber(total)} dòng dữ liệu phát sinh; dữ liệu nguồn được giữ nguyên.`);
     clearInterval(state.pollTimer);
     state.pollTimer = null;
+    state.pollVersion += 1;
+    stopRunClock();
     state.readyScenarios = [];
     state.currentJob = null;
     state.currentRunId = null;
@@ -371,6 +375,9 @@ async function startOptimization() {
     timeout_seconds: timeoutRaw ? Number(timeoutRaw) : null,
   };
   clearInterval(state.pollTimer);
+  state.pollTimer = null;
+  state.pollVersion += 1;
+  stopRunClock();
   renderRun({ status: "PENDING", job_id: "Đang tạo", fitness_evaluations: 0, max_fitness_evaluations: maxFe, progress_ratio: 0 });
   try {
     const job = await apiJson(`/api/scenarios/${scenarioId}/optimization-jobs`, {
@@ -390,9 +397,14 @@ async function startOptimization() {
 }
 
 async function pollJob(jobId) {
+  const version = state.pollVersion;
+  let fetching = false;
   const update = async () => {
+    if (fetching || version !== state.pollVersion) return;
+    fetching = true;
     try {
       const job = await apiJson(`/api/optimization-jobs/${encodeURIComponent(jobId)}`);
+      if (version !== state.pollVersion) return;
       state.currentJob = job;
       if (job.run_id) state.currentRunId = job.run_id;
       renderRun(job);
@@ -406,14 +418,19 @@ async function pollJob(jobId) {
           toast("Thuật toán đã hoàn thành. Có thể mở thời khóa biểu.");
         }
       }
+      return true;
     } catch (error) {
+      if (version !== state.pollVersion) return;
       clearInterval(state.pollTimer);
       state.pollTimer = null;
       renderRunError(error.message);
+      return false;
+    } finally {
+      fetching = false;
     }
   };
-  await update();
-  if (!state.pollTimer && !terminalStatuses.has(state.currentJob?.status)) {
+  const ok = await update();
+  if (ok !== false && version === state.pollVersion && !state.pollTimer && !terminalStatuses.has(state.currentJob?.status)) {
     state.pollTimer = setInterval(update, 2000);
   }
 }
@@ -447,7 +464,18 @@ function renderRun(job) {
   $("#run-progress").style.width = `${(progress * 100).toFixed(1)}%`;
   $("#run-progress-label").textContent = `${(progress * 100).toFixed(1)}%`;
   $("#run-fe-label").textContent = `${formatNumber(job.fitness_evaluations || 0)} / ${formatNumber(job.max_fitness_evaluations || 0)} FE`;
-  $("#run-iteration").textContent = job.max_iterations ? `${job.completed_iterations || 0} / ${job.max_iterations}` : "—";
+  const completed = Number(job.completed_iterations || 0);
+  const maximum = Number(job.max_iterations || 0);
+  const active = !terminalStatuses.has(job.status) && !["PENDING", "QUEUED"].includes(job.status);
+  $("#run-iteration").textContent = maximum
+    ? (active && completed < maximum ? `Đang vòng ${completed + 1}/${maximum} · đã xong ${completed}` : `Đã xong ${completed}/${maximum}`)
+    : (active ? "Đang khởi tạo quần thể" : "—");
+  $("#run-attempts").textContent = job.candidate_attempts == null ? "—" : `${formatNumber(job.candidate_attempts)} / ${formatNumber(job.decode_failed_count || 0)}`;
+  $("#run-activity").textContent = active
+    ? "Đang tìm kiếm. FE tăng khi chấm được nghiệm hợp lệ; giải mã khó có thể mất lâu giữa hai cập nhật. Q tốt nhất không đổi không có nghĩa thuật toán đã dừng."
+    : "FE là số lần chấm nghiệm hợp lệ, không phải điểm hay thời gian. Nhật ký ghi các vòng đã hoàn tất thực tế.";
+  renderRunRounds(job.iteration_history || []);
+  startRunClock(job, active);
   $("#run-general").textContent = formatScore(job.best_general_quality_score);
   $("#run-lecturer").textContent = formatScore(job.best_lecturer_preference_score);
   const errorBox = $("#run-error");
@@ -462,11 +490,42 @@ function renderRun(job) {
 }
 
 function renderRunError(message) {
+  stopRunClock();
   $("#run-status").textContent = "Không thể bắt đầu";
   const errorBox = $("#run-error");
   errorBox.textContent = message;
   errorBox.classList.remove("is-hidden");
   $("#cancel-run").disabled = true;
+}
+
+function formatRunDuration(seconds) {
+  const total = Math.max(0, Math.floor(Number(seconds) || 0));
+  const s = String(total % 60).padStart(2, "0");
+  const m = String(Math.floor(total / 60) % 60).padStart(2, "0");
+  return total >= 3600 ? `${Math.floor(total / 3600)}:${m}:${s}` : `${m}:${s}`;
+}
+
+function stopRunClock() {
+  if (state.runClockTimer != null) clearInterval(state.runClockTimer);
+  state.runClockTimer = null;
+}
+
+function startRunClock(job, active) {
+  stopRunClock();
+  const base = Math.max(0, Number(job.elapsed_seconds) || 0);
+  const receivedAt = Date.now();
+  const paint = () => { $("#run-elapsed").textContent = formatRunDuration(base + (active ? (Date.now() - receivedAt) / 1000 : 0)); };
+  paint();
+  if (active) state.runClockTimer = setInterval(paint, 1000);
+}
+
+function renderRunRounds(rows) {
+  $("#run-rounds").innerHTML = rows.length ? rows.map(row => `<tr>
+    <td>${Number(row.iteration) === 0 ? "Khởi tạo" : Number(row.iteration)}</td>
+    <td>${formatNumber(row.fitness_evaluations)}</td><td>${formatNumber(row.new_fitness_evaluations)}</td>
+    <td>${formatScore(row.best_general_quality_score)}</td><td>${formatScore(row.best_lecturer_preference_score)}</td>
+    <td>${formatRunDuration(row.duration_seconds)}</td><td>${formatRunDuration(row.elapsed_seconds)}</td></tr>`).join("")
+    : '<tr><td colspan="7">Chưa có nhật ký vòng trong phiên server này.</td></tr>';
 }
 
 function bindScheduleActions() {
@@ -520,9 +579,11 @@ async function loadSchedule() {
     state.currentRunId = runId;
     renderSchedule(payload.items || []);
     updateExportLinks(runId, params);
+    if (window.loadScheduleQuality) window.loadScheduleQuality(runId, $("#schedule-revision").value);
   } catch (error) {
     container.innerHTML = `<div class="empty-state schedule-empty"><div><h3>Không thể hiển thị lịch</h3><p>${escapeHtml(error.message)}</p></div></div>`;
     disableExportLinks();
+    if (window.clearScheduleQuality) window.clearScheduleQuality();
   }
 }
 

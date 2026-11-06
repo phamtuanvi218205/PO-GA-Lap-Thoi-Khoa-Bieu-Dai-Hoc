@@ -1,4 +1,4 @@
-"""Tests for the hybrid GA–PO timetable optimizer."""
+"""Regression tests for the retained legacy ISLAND80 engine and shared config."""
 
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -16,7 +16,7 @@ import gapo_timetabling.core.po as po_module
 from gapo_timetabling.core.constraints import validate_timetable
 from gapo_timetabling.core.encoder import build_option_domains
 from gapo_timetabling.application.demo_cli import main
-from gapo_timetabling.core.hybrid import HybridConfig, run_hybrid
+from gapo_timetabling.core.hybrid import HybridConfig, run_island_hybrid as run_hybrid
 from gapo_timetabling.core.metrics import OptimizationResult
 from gapo_timetabling.core.models import OptimizationAlgorithm
 from gapo_timetabling.core.po import PoOffspringResult

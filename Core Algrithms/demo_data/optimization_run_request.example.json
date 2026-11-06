@@ -6,8 +6,8 @@
     "path": "large_timetable_snapshot.json",
     "checksum": null
   },
-  "population_size": 6,
-  "max_fitness_evaluations": 18,
+  "population_size": 10,
+  "max_fitness_evaluations": 30,
   "random_seed": 42,
   "max_initialization_attempts": 1000,
   "max_offspring_attempts": 3,
@@ -25,6 +25,7 @@
     "mutation_distribution_index": 20.0
   },
   "hybrid": {
-    "ga_ratio": 0.5
+    "mechanism": "GA_PO_TARGET_PO80.v1",
+    "ga_ratio": 0.8
   }
 }

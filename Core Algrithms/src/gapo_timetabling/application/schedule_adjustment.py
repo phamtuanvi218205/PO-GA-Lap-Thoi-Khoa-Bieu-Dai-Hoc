@@ -26,6 +26,7 @@ from ..core.encoder import build_option_domains, build_recurring_patterns_for_gr
 from ..core.fitness import calculate_fitness
 from ..core.models import ProblemInstance, SessionOption
 from ..core.snapshot import load_problem_instance_snapshot
+from .schedule_quality import explain_quality
 
 
 class ScheduleAdjustmentInput(BaseModel):
@@ -58,6 +59,15 @@ class ScheduleAdjustmentInput(BaseModel):
 
 class ScheduleAdjustmentConflictError(ValueError):
     """Phương án điều chỉnh không thuộc miền hoặc vi phạm điều kiện cứng."""
+
+    def __init__(self, message, violations=(), proposed=()):
+        super().__init__(message)
+        self.violations = violations
+        self.proposed = proposed
+
+
+class ScheduleAdjustmentPreviewInput(ScheduleAdjustmentInput):
+    note: str = Field(default="Xem trước", min_length=1, max_length=500)
 
 
 class ScheduleRevisionNotFoundError(LookupError):
@@ -136,7 +146,9 @@ def apply_pattern_change(
             f"{item.code.value}: {item.message}" for item in validation.violations[:8]
         )
         raise ScheduleAdjustmentConflictError(
-            "Không thể lưu vì vi phạm ràng buộc cứng: " + details
+            "Không thể lưu vì vi phạm ràng buộc cứng: " + details,
+            validation.violations,
+            updated,
         )
     return updated
 
@@ -155,6 +167,47 @@ def find_group_session(problem: ProblemInstance, group: int, week_number: int | 
 class ScheduleAdjustmentService:
     def __init__(self, connection: ConnectionProtocol) -> None:
         self.connection = connection
+
+    @staticmethod
+    def _describe(problem, option):
+        session = problem.class_sessions[option.session_index]
+        plan = next(p for p in problem.teaching_plans if p.teaching_plan_id == session.teaching_plan_id)
+        part = next(p for p in problem.teaching_parts if p.teaching_part_index == plan.teaching_part_index)
+        lecturer = problem.lecturers[problem.option_lecturer_index(option)]
+        return dict(class_session_id=session.class_session_id, section_code=part.section_code,
+                    part_code=part.part_code, week_number=session.week_number,
+                    teaching_date=option.teaching_date.isoformat(), start_period=option.start_period,
+                    end_period=option.end_period, lecturer_code=lecturer.lecturer_code,
+                    location_code=problem.locations[option.location_index].location_code)
+
+    def quality(self, run_id: int, revision_id: int | None = None) -> dict:
+        problem, domains, selected = self._load(run_id, revision_id)
+        return dict(run_id=run_id, revision_id=revision_id,
+                    **explain_quality(problem, domains, selected,
+                        mode="RECURRING" if revision_id is None else "OCCURRENCE"))
+
+    def preview(self, run_id: int, request: ScheduleAdjustmentInput) -> dict:
+        # Read only: no INSERT, commit, rollback or optimizer. Invalid source
+        # schedules still raise an error; invalid proposals return explanations.
+        problem, domains, selected = self._load(run_id, request.parent_revision_id)
+        try:
+            updated = apply_pattern_change(problem, domains, selected, request)
+        except ScheduleAdjustmentConflictError as error:
+            return dict(is_valid=False, can_save=False, message=str(error),
+                        violation_count=len(error.violations), violations=[dict(
+                            code=item.code.value, message=item.message,
+                            sessions=[self._describe(problem, (error.proposed or selected)[i]) for i in item.session_indices],
+                        ) for item in error.violations[:20]])
+        before = explain_quality(problem, domains, selected, mode="OCCURRENCE")
+        after = explain_quality(problem, domains, updated, mode="OCCURRENCE")
+        changes = [dict(before=self._describe(problem, a), after=self._describe(problem, b))
+                   for a, b in zip(selected, updated) if a != b]
+        return dict(is_valid=True, can_save=bool(changes), violations=[], violation_count=0,
+                    message="Phương án hợp lệ; chưa lưu dữ liệu." if changes else
+                            "Phương án giống lịch đang xem; không tạo phiên bản mới.",
+                    changed_session_count=len(changes), changes=changes, before=before, after=after,
+                    delta=dict(general_quality_score=after["general_quality_score"] - before["general_quality_score"],
+                               lecturer_preference_score=after["lecturer_preference_score"] - before["lecturer_preference_score"]))
 
     def list_revisions(self, run_id: int) -> tuple[dict, ...]:
         self._get_run(run_id)

@@ -37,6 +37,7 @@ class HardViolationCode(str, Enum):
     INSUFFICIENT_ROOM_CAPACITY = "INSUFFICIENT_ROOM_CAPACITY"
     LECTURER_NOT_QUALIFIED = "LECTURER_NOT_QUALIFIED"
     SECTION_LECTURER_MISMATCH = "SECTION_LECTURER_MISMATCH"
+    PART_LECTURER_MISMATCH = "PART_LECTURER_MISMATCH"
     LECTURER_LOAD_EXCEEDED = "LECTURER_LOAD_EXCEEDED"
     LECTURER_UNAVAILABLE = "LECTURER_UNAVAILABLE"
     ROOM_UNAVAILABLE = "ROOM_UNAVAILABLE"
@@ -283,14 +284,13 @@ def _validate_one_option(
             )
 
     lecturer_index = problem.option_lecturer_index(option)
-    if lecturer_index not in problem.eligible_lecturer_indices(part.section_code):
+    if lecturer_index not in problem.eligible_assignment_lecturers(problem.assignment_key_for_part(part)):
         violations.append(
             HardConstraintViolation(
                 code=HardViolationCode.LECTURER_NOT_QUALIFIED,
                 session_indices=(session.session_index,),
                 message=(
-                    "Giảng viên của option không đủ khả năng dạy toàn bộ "
-                    "các phần thuộc lớp học phần."
+                    "Giảng viên của option không đủ năng lực cho đơn vị phân công tương ứng."
                 ),
             )
         )
@@ -530,14 +530,14 @@ def validate_timetable(
         )
     )
 
-    # Một CourseSection chỉ có một gene phân công. Vì vậy mọi buổi lý thuyết
-    # và thực hành của cùng lớp phải mang cùng lecturer_index sau giải mã.
+    # V3 giữ một người cho từng TeachingPart, không ép LT và TH cùng người.
+    # Snapshot SECTION lịch sử giữ nguyên điều kiện cũ để replay đúng nghĩa.
     lecturers_by_section: dict[str, dict[int, list[int]]] = {}
     load_by_lecturer: dict[int, int] = {}
     for option in structurally_valid_options:
         session, part = session_context[option.session_index]
         lecturer_index = problem.option_lecturer_index(option)
-        lecturers_by_section.setdefault(part.section_code, {}).setdefault(
+        lecturers_by_section.setdefault(problem.assignment_key_for_part(part), {}).setdefault(
             lecturer_index, []
         ).append(session.session_index)
         load_by_lecturer[lecturer_index] = (
@@ -550,10 +550,10 @@ def validate_timetable(
         affected = tuple(sorted(index for indices in grouped.values() for index in indices))
         violations.append(
             HardConstraintViolation(
-                code=HardViolationCode.SECTION_LECTURER_MISMATCH,
+                code=(HardViolationCode.PART_LECTURER_MISMATCH if problem.lecturer_assignment_scope == "TEACHING_PART" else HardViolationCode.SECTION_LECTURER_MISMATCH),
                 session_indices=affected,
                 message=(
-                    f"Các buổi của CourseSection {section_code} không dùng chung "
+                    f"Các buổi của đơn vị phân công {section_code} không dùng chung "
                     "một giảng viên."
                 ),
             )

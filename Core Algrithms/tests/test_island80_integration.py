@@ -54,7 +54,7 @@ def test_exact_frozen_reference_trajectory(seed, dynamic):
         '60082436cb2c3abfb62c25af296ac9f7068ae531a1c5b82aa2f2bb5bc7e0e555')
     problem, domains, initial, config = inputs(seed, dynamic)
     reference, stats = run_islands(problem, domains, initial, config)
-    current = hybrid.run_hybrid(problem, domains, initial, config)
+    current = hybrid.run_island_hybrid(problem, domains, initial, config)
     # Entire final pool, vector, fitness, FE/fail/backtrack and every history point.
     assert stable(current) == stable(reference)
     assert stats['ga_size'] == 8 and stats['po_size'] == 2
@@ -72,7 +72,7 @@ def test_original_four_po_behaviors_full_chromosome_and_migration_timing():
     with patch.object(hybrid, '_create_and_evaluate_po_offspring',
                       wraps=hybrid._create_and_evaluate_po_offspring) as po_step, \
          patch.object(hybrid, '_migrate', wraps=hybrid._migrate) as migration:
-        result = hybrid.run_hybrid(problem, domains, initial, config)
+        result = hybrid.run_island_hybrid(problem, domains, initial, config)
     assert {call.kwargs['behavior'].value for call in po_step.call_args_list} == {1, 2, 3, 4}
     assert po_step.call_count == 40
     assert all(len(call.kwargs['population_mean']) == problem.dimension
@@ -88,7 +88,7 @@ def test_exact_reference_with_official_population_and_generation_budget():
     assert initial.is_success
     config = replace(config, max_fitness_evaluations=630)
     reference, stats = run_islands(problem, domains, initial, config)
-    current = hybrid.run_hybrid(problem, domains, initial, config)
+    current = hybrid.run_island_hybrid(problem, domains, initial, config)
     assert stable(current) == stable(reference)
     assert stats['ga_size'] == 24 and stats['po_size'] == 6
     assert stats['counts']['ga_slots'] == 480 and stats['counts']['po_slots'] == 120
@@ -111,12 +111,12 @@ def test_no_soft_scores_and_no_global_monkeypatch_with_parallel_jobs():
     decoder._PRIORITY_LOCAL.decoder = engine
     try:
         with patch.object(engine, '_score', side_effect=AssertionError('soft score')):
-            expected = stable(hybrid.run_hybrid(*args))
+            expected = stable(hybrid.run_island_hybrid(*args))
         assert engine.stats['soft_option_scores'] == 0
     finally:
         decoder.clear_decode_cache()
     with ThreadPoolExecutor(max_workers=3) as pool:
-        results = list(pool.map(lambda _: stable(hybrid.run_hybrid(*args)), range(3)))
+        results = list(pool.map(lambda _: stable(hybrid.run_island_hybrid(*args)), range(3)))
     assert all(result == expected for result in results)
     assert ga.tournament_select is tournament
 
@@ -127,7 +127,7 @@ def test_cancel_callback_stops_before_next_offspring():
         if progress.metrics.fitness_evaluations > 10:
             raise InterruptedError('cancel')
     with pytest.raises(InterruptedError, match='cancel'):
-        hybrid.run_hybrid(*args, progress_callback=stop)
+        hybrid.run_island_hybrid(*args, progress_callback=stop)
 
 
 def test_default_and_small_population_validation_across_entry_points(tmp_path):

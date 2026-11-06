@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Sequence
 
 from ..core.constraints import validate_timetable
-from ..core.hybrid import HybridConfig, run_hybrid, validate_island_sizes
+from ..core.hybrid import HybridConfig, run_hybrid, validate_target_sizes
 from ..core.metrics import OptimizationResult
 from ..core.models import ProblemInstance
 from ..core.population import (
@@ -54,14 +54,14 @@ def _build_argument_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(
         description=(
-            "Chạy thuật toán lai GA-PO từ snapshot problem-instance.v2 "
+            "Chạy thuật toán lai GA-PO từ snapshot problem-instance.v3 "
             "và in thời khóa biểu tốt nhất."
         )
     )
     parser.add_argument(
         "snapshot",
         type=Path,
-        help="Đường dẫn đến snapshot JSON problem-instance.v2 (v1 vẫn được đọc).",
+        help="Snapshot v3 phân công LT/TH độc lập; v1/v2 được đọc theo phạm vi đã lưu.",
     )
     parser.add_argument(
         "--population-size",
@@ -85,7 +85,7 @@ def _build_argument_parser() -> argparse.ArgumentParser:
         "--ga-ratio",
         type=_ratio,
         default=0.8,
-        help="Tỉ lệ quần thể GA trong cơ chế islands (mặc định: 0.8).",
+        help="Tỉ lệ vị trí GA trong TARGET_PO80 (mặc định: 0.8).",
     )
     parser.add_argument(
         "--max-initialization-attempts",
@@ -260,7 +260,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 3
 
     try:
-        validate_island_sizes(args.population_size, args.ga_ratio)
+        validate_target_sizes(args.population_size, args.ga_ratio)
     except ValueError as error:
         print(str(error), file=sys.stderr)
         return 2

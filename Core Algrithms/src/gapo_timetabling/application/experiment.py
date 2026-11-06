@@ -28,7 +28,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, Mapping, Sequence
 
-from ..core.decoder import DIRECT_ENCODING, DEFAULT_ENCODING, decode_saved_vector
+from ..core.decoder import DIRECT_ENCODING, DEFAULT_ENCODING, decode_saved_vector, encoding_for_problem
 from ..core.hybrid import HYBRID_MECHANISM
 from ..core.greedy_baseline import GREEDY_BASELINE_NAME
 from ..core.models import OptimizationAlgorithm
@@ -1017,11 +1017,15 @@ def run_experiment(
     output_directory.mkdir(parents=True, exist_ok=True)
     runs_directory = output_directory / "runs"
     runs_directory.mkdir(parents=True, exist_ok=True)
+    base_payload = _load_base_request(config.base_request_path)
+    base_request = parse_run_request(base_payload, base_directory=config.base_request_path.parent)
+    expected_pipeline = encoding_for_problem(prepare_snapshot_for_optimization(
+        base_request.snapshot.path, expected_checksum=base_request.snapshot.checksum).problem)
     # Không âm thầm resume hoặc ghi đè kết quả DIRECT bằng pipeline priority.
     # plots-only vẫn replay được các file lịch sử theo nhãn của từng vector.
     for existing_path in runs_directory.rglob("*.json"):
         existing = json.loads(existing_path.read_text(encoding="utf-8"))
-        if existing.get("solver_pipeline") != DEFAULT_ENCODING:
+        if existing.get("solver_pipeline") != expected_pipeline:
             raise ExperimentContractError(
                 f"Kết quả {existing_path} thuộc pipeline cũ/khác. "
                 "Hãy dùng thư mục đầu ra mới; kết quả cũ được giữ nguyên."
@@ -1146,7 +1150,7 @@ def run_experiment(
     finished_at = datetime.now(timezone.utc)
     metadata = {
         "schema_version": EXPERIMENT_METADATA_SCHEMA_VERSION,
-        "solver_pipeline": DEFAULT_ENCODING,
+        "solver_pipeline": expected_pipeline,
         "experiment_id": config.experiment_id,
         "execution_mode": "SEQUENTIAL",
         "hybrid_mechanism": HYBRID_MECHANISM,

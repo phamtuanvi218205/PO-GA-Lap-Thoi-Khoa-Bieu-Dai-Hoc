@@ -1,5 +1,28 @@
 # GA–PO Timetabling — Python runtime
 
+## Bàn giao mới nhất — chỉ chạy ba ablation T50 (06/11/2026)
+
+Code chính hiện dùng TARGET_PO80 và LT/TH độc lập theo TeachingPart. Bộ ba
+thuật toán GA/PO/lai đầy đủ trên mô hình mới,50vòng đã chạy xong. Lần bàn giao
+này **chỉ chạy90lượt ablation**: `TARGET_RAND80`, `NO_FEEDBACK`, `RANDOM_GROUP`.
+Không chạy lại GA, PO, FULL hoặc Greedy. Dùng đúng hướng dẫn:
+
+**[Lệnh cho đồng đội và dữ liệu tham chiếu T50](benchmark_configs/target_po80_part_t50/ABLATION.md)**.
+
+Tại thư mục gốc repo (PowerShell, CMD, Git Bash hoặc Linux):
+
+```text
+python -m pip install -e ".[dev]"
+python "Core Algrithms/tools/run_target_ablation_t50.py" check
+python "Core Algrithms/tools/run_target_ablation_t50.py" run --output-root "Core Algrithms/test_results/ABLATION_T50_team01" --workers 16
+```
+
+`check` không chạy optimizer. Lệnh `run` trên chỉ ba ablation; điều chỉnh số
+worker theo máy. Có lệnh chia từng ablation cho ba máy, merge và resume trong
+hướng dẫn. Gói reference kèm đủ30FULL T50 và30cohort đã lưu, khóaSHA, không
+phụ thuộc thư mục nghiên cứu riêng hoặc database. Các bộ20vòng/SECTION phía
+dưới là lịch sử, không dùng làm đầu vào của lượt ablation mới.
+
 Mã nguồn Python được chia thành hai phần rõ ràng:
 
 ```text
@@ -15,10 +38,12 @@ toàn bộ vai trò của ứng dụng Java cũ và gọi `core` để tối ưu
 
 ## Biểu diễn và giải mã hiện hành
 
-Theo D153 (01/11/2026), biểu diễn chính dùng chung cho GA, PO và GA–PO là
-`RECURRING_PRIORITY_PLACEMENT.v1`, tích hợp từ bản D149 đã chạy pilot D150:
+Từ 05/11/2026, snapshot tạo mới dùng `problem-instance.v3`, phân công theo
+từng phần giảng dạy và biểu diễn `RECURRING_PRIORITY_PLACEMENT_PART.v1`:
 
-- Gene đầu chọn một giảng viên cho mỗi lớp học phần; LT và TH kế thừa cùng người.
+- Mỗi phần giảng dạy có một gene giảng viên, xét năng lực LT hoặc TH tương ứng.
+  LT và TH có thể cùng hoặc khác người. Các buổi của cùng một phần vẫn dùng
+  chung người dạy trong cả kỳ; tải và độ phù hợp được tính theo người dạy thực.
 - Mỗi khối buổi lặp có PriorityKey quyết định **thứ tự xếp**. Sắp tăng dần,
   bằng khóa thì theo ClassSession ID nhỏ nhất trong khối; không dùng MRV.
 - Khóa PlacementKey riêng chọn hạng `min(floor(key*m), m-1)` trong **m mẫu
@@ -26,13 +51,15 @@ Theo D153 (01/11/2026), biểu diễn chính dùng chung cho GA, PO và GA–PO 
   không phải chọn từ miền option tĩnh như biểu diễn cũ. Nếu bị kẹt, quay lui
   thử hạng gần nhất (k, k+1, k-1, ...), chỉ phục hồi hard feasibility trong
   ngân sách node. Không chấm mềm; Fitness đánh giá sau khi có lịch đầy đủ.
-- Tổng số chiều là `L + 2B`: L gene giảng viên, B PriorityKey, B PlacementKey.
+- Tổng số chiều là `P + 2B`: P gene giảng viên theo phần, B PriorityKey, B PlacementKey.
   Repair giữ chính sách đã thử: chỉ đổi giảng viên/priority, giữ placement.
 - Mẫu được chọn vẫn cố định thứ–tiết–phòng trong mọi tuần hoạt động. Gene
   priority không bị viết lại thành chỉ số option; full Validator/Fitness cuối
-  và các công thức GA/PO giữ nguyên. Cơ chế lai được chốt riêng ở D158 bên dưới.
-- Mapping mới là `gene-option-mapping.v5`. Result JSON ghi `solver_pipeline`
+  và các công thức GA/PO giữ nguyên. Cơ chế lai hiện hành được mô tả bên dưới.
+- Mapping mới là `gene-option-mapping.v6`. Result JSON ghi `solver_pipeline`
   và `best_solution.vector_encoding` để replay đúng nghĩa vector.
+- Snapshot v1/v2 giữ phạm vi SECTION và nhãn vector đã lưu, không tự đổi
+  phân công sang từng phần; các kết quả đó không phải benchmark mô hình v3.
 - Kết quả lịch sử L+B vẫn đọc đúng nhãn DIRECT_OPTION, FEASIBILITY.v1 hoặc
   SOFT.v1, không tự thêm PlacementKey. Thiếu nhãn là DIRECT_OPTION. Chỉ dùng
   các nhánh này cho replay; không đổi nhãn hay ghi đè kết quả cũ.
@@ -40,26 +67,46 @@ Theo D153 (01/11/2026), biểu diễn chính dùng chung cho GA, PO và GA–PO 
   khác pipeline. Dùng thư mục kết quả mới; không xóa hay đổi nhãn kết quả cũ.
   Run chờ lưu từ pipeline cũ được báo không thể phục hồi và cần tạo run mới.
 
-## Cơ chế lai đã chốt — D158 (01/11/2026)
+## Cơ chế lai hiện hành — TARGET_PO80 (05/11/2026)
 
-`GA_PO` hiện chạy hai quần thể độc lập theo ứng viên ISLAND80 D154/D155:
+Người dùng đã duyệt áp dụng `TARGET_PO80` cho các lượt `GA_PO` mới:
 
-- Mặc định GA 80% / PO 20% (N30 thành 24/6), mỗi quần thể ít nhất hai cá thể.
-- Cả hai tối ưu toàn bộ chromosome; không khóa gene, không dùng PO làm mutation.
-- GA giữ survivor selection cũ trong quần thể GA. PO dùng đủ bốn hành vi;
-  con hợp lệ thay cha dù xấu hơn, có mean/best riêng và archive sáu lịch khác nhau.
-- Trao đổi mỗi hai vòng, không trao đổi ở vòng cuối: mỗi hướng tối đa một lịch
-  mới đối với bên nhận, bảo vệ best; hai nguồn được chụp trước migration.
-- Hai bên dùng chung trần FE gồm khởi tạo. Không thay Fitness, Validator, GA/PO
-  thuần, Decoder hay ngân sách. Không áp dụng survivor ưu tiên phenotype của PHENO80.
-- Result/request-config ghi `hybrid_mechanism=GA_PO_ISLANDS.v1`. Job chờ 50/50
-  cũ không tự phục hồi thành islands; kết quả cũ vẫn đọc được. Tỷ lệ tùy chỉnh
-  khác 80/20 là cấu hình thử nghiệm khác, không được gắn với kết luận D155.
-- Không dùng monkeypatch bộ chọn cha để đếm đóng góp trong code chạy API đồng thời.
-  Unit test đối chiếu toàn bộ kết quả (trừ runtime) với reference D155 đã đóng băng.
+- Mặc định 80% vị trí GA / 20% bộ nhớ tìm kiếm PO (N30 là24/6). GA dùng
+  tournament, SBX, mutation và survivor selection sẵn có trên toàn chromosome.
+- Sau nhánh GA, lấy6 lịch GA tốt nhất làm anchor. Thành phần phạt có đóng góp
+  lớn nhất chọn tối đa2 đơn vị phân công hoặc2 khối; với v3, đơn vị phân công
+  là TeachingPart. Trường hợp Qg bằng0 dùng thông tin Ql.
+  PO cập nhật các tọa độ trong nhóm bằng đủ bốn công thức gốc. Gene ngoài nhóm
+  giữ nguyên khi đề xuất; Decoder/Repair toàn cục vẫn có thể làm đổi lịch ngoài nhóm.
+- Bộ nhớ6 giữ con hợp lệ dù kém anchor; mean lấy từ bộ nhớ đầu vòng, guide từ
+  GA và bộ nhớ đó. Con tốt hơn anchor được đưa vào cạnh tranh survivor GA.
+  Best toàn cục được bảo toàn riêng. Không còn di trú chu kỳ/archive của ISLAND80.
+- Hai nhánh dùng chung FE, retry, Decoder/Repair/Validator/Fitness. T không còn
+  bị gắn cứng20: lấy từ ngân sách và cỡ quần thể đã cấu hình. Cấu hình N30/T20
+  được kiểm đối chiếu với mã nghiên cứu đóng băng; cấu hình khác cần đánh giá riêng.
+- Result/request-config mang `hybrid_mechanism=GA_PO_TARGET_PO80.v1`; kết quả
+  mới có dấu vết `hybrid_activity`. `injected` đếm con tốt hơn anchor được đề cử
+  cho survivor GA, không đồng nghĩa tất cả đều sống sót. Job PENDING cơ chế cũ
+  bị từ chối phục hồi để tránh đổi nghĩa thí nghiệm; lịch COMPLETED cũ giữ nguyên.
+- Web vẫn dùng giải mã song song có thứ tự, cùng RNG/FE và kết quả như đường
+  tuần tự. Không monkeypatch trong tiến trình API dùng chung.
 
-Bộ nặng hiện hành nằm ở `benchmark_configs/stress/README.md`, snapshot byte-exact
-D150, D60/90/120. Bộ `benchmark_configs/distributed/` cũ giữ làm lịch sử, không
+Nguồn nghiên cứu: `test_results/target_po80_d155_20261105/`; ablation tại
+`test_results/target_ablation_d155_20261105/`. Trên D155 đã dùng phát triển phương
+pháp, bản mới thắng GA24/30, PO24/30, ISLAND80 28/30 cuối20vòng, nhưng thua đối
+chứng thay công thức PO bằng ngẫu nhiên19/30. Hai ablation mới thuận lợi cho
+phản hồi PO→GA và chọn nhóm theo mức phạt; chưa chứng minh công thức PO tốt hơn
+ngẫu nhiên hoặc ưu thế tổng quát. Không đổi số liệu/nhãn kết quả lịch sử.
+
+ISLAND80 được giữ tại `run_island_hybrid` để hồi quy và đối chiếu D155. Gói
+`benchmark_results/island80_stress_d155/` vẫn là bằng chứng của ISLAND80 cũ,
+không phải kết quả TARGET_PO80. Word chưa cập nhật theo quyết định này.
+
+Bộ cấu hình hiện hành V3/T50 là `benchmark_configs/target_po80_part_t50/`;
+ba snapshot D72/108/144 và lệnh ablation đã đóng gói ở đó. Bộ cấu hình
+`benchmark_configs/target_po80_stress/README.md` vẫn dùng snapshot v2
+D150, D60/90/120. Chưa chuyển bộ này sang benchmark LT/TH độc lập; cần snapshot v3
+và quần thể đầu mới trước khi đánh giá mô hình mới. Bộ `benchmark_configs/distributed/` cũ giữ làm lịch sử, không
 ghi đè. D155 vẫn là bằng chứng đo trên bốn phương pháp cũ; không sửa kết quả sau
 tích hợp. ISLAND80 thắng cặp cuối run GA16/14, PO17/13, không phải ưu thế thống kê
 hoặc thắng ở mọi cách đo. Không tự chạy thêm benchmark khi tích hợp.
@@ -69,7 +116,7 @@ Luồng chạy chính:
 1. đọc dữ liệu rời rạc từ SQL Server;
 2. sinh `TeachingPlan` và mở rộng thành `ClassSession`;
 3. tạo, kiểm tra và khóa `PlanningScenario`;
-4. dựng snapshot `problem-instance.v2`;
+4. dựng snapshot `problem-instance.v3`, phân công theo TeachingPart;
 5. encoder sinh miền lựa chọn;
 6. GA, PO hoặc GA–PO tối ưu phân công giảng viên và lịch;
 7. lưu `OptimizationRun` cùng `TimetableEntry` vào database;
@@ -101,6 +148,50 @@ Khai báo `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` và tùy chọn
 tự ưu tiên ODBC Driver 18, sau đó Driver 17 và driver SQL Server có sẵn.
 
 ## Các lệnh chính
+
+### CPU đa tiến trình cho demo
+
+Các lượt chạy qua database/web tự dùng `application/parallel_execution.py` để
+giải mã ứng viên bằng nhiều process. Mặc định `GAPO_EVALUATION_WORKERS=auto`:
+tối đa 8 evaluator, theo CPU và RAM khả dụng, chừa 1 GiB RAM. Bài toán dưới
+100 buổi dùng tuần tự để tránh phí khởi động process. Có thể đặt biến môi trường
+`GAPO_EVALUATION_WORKERS=1` trước khi mở ứng dụng để dùng đường tuần tự; đặt số
+khác để giới hạn evaluator (vẫn bị chặn theo CPU/RAM). `--run-workers` chỉ là số
+lượt tối ưu đồng thời, không phải số lõi cho một lượt.
+
+Optimizer, công thức, seed, thứ tự RNG và FE giữ nguyên: process phụ chỉ
+Decoder/Repair/Validator, coordinator chỉ gọi Fitness cho ứng viên mà thuật toán
+tuần tự thực sự dùng. Có giải mã dự đoán trước có thể bị bỏ; công này không
+tăng FE nhưng vẫn tiêu CPU và được ghi riêng trong metadata `execution` của
+kết quả trả về và log ứng dụng. Metrics optimizer chỉ tính các ứng viên đã dùng,
+không phải tổng công vật lý gồm mọi suy đoán. Không dùng chế độ này để so runtime
+với benchmark tuần tự. Đoạn PO cập nhật best phụ thuộc cá thể trước vẫn tuần tự;
+chỉ những lần thử lại của cùng cá thể được giải mã trước. Không hứa tăng tốc
+tuyến tính theo số lõi. Công cụ benchmark/CLI JSON vẫn dùng đường core cũ.
+
+SQL chỉ chạy ở tiến trình API, không truyền kết nối vào worker. Hủy/timeout dừng
+coordinator và các process tính toán. Không tự restart ứng dụng đang chạy hoặc
+rerun kết quả cũ. Sau khi cập nhật code, kết thúc lượt demo hiện tại rồi khởi động
+lại server và tải lại trang để dùng bản mới.
+
+### Mở demo bằng một lần bấm (Windows)
+
+Bấm đúp `CHAY_UNG_DUNG.cmd` ở thư mục gốc dự án. File tự tìm Python 3.11+
+có các thư viện cần thiết, chạy cùng lệnh `serve-api` hiện hành và mở trình
+duyệt tại `http://127.0.0.1:8000` khi API sẵn sàng. Giữ cửa sổ dòng lệnh
+trong khi dùng, nhấn `Ctrl+C` để dừng server. Đóng tab trình duyệt không dừng server.
+
+Nếu API đã chạy trên cổng 8000, file chỉ mở lại trang; không chạy thêm server.
+Nếu cổng thuộc ứng dụng khác, file báo lỗi và không tự tắt tiến trình đó.
+Launcher dùng cấu hình SQL mặc định/biến môi trường hiện có, không tự cài
+Python/thư viện, không chạy migration, reset dữ liệu hoặc benchmark. Máy vẫn
+cần SQL Server và ODBC driver như khi chạy bằng lệnh. Cơ chế khôi phục job
+của ứng dụng khi khởi động vẫn giữ nguyên; mở ứng dụng có thể tiếp tục xử lý
+các job còn chờ theo cơ chế sẵn có. Launcher không tự nạp file `.env`.
+
+Chỉ kiểm tra môi trường, không chạy server: `CHAY_UNG_DUNG.cmd --check`.
+Giữ file CMD và `Script/start_demo.py` trong cấu trúc dự án; có thể tạo shortcut
+tới file CMD trên Desktop, không chuyển riêng file CMD ra khỏi dự án.
 
 ```powershell
 python -m gapo_timetabling generate-plans 1
@@ -248,20 +339,42 @@ GET  /api/constraint-settings
 PUT  /api/constraint-settings
 GET  /api/runs/{run_id}/schedule-revisions
 GET  /api/runs/{run_id}/adjustment-options
+GET  /api/runs/{run_id}/schedule-quality
+POST /api/runs/{run_id}/adjustment-preview
 POST /api/runs/{run_id}/schedule-revisions
 ```
 
+Trang Thời khóa biểu có mục **Chất lượng thời khóa biểu** chỉ đọc: hai điểm
+tổng, điểm thành phần/trọng số/đóng góp và chi tiết phạt mong muốn theo giảng
+viên. Phạm vi là toàn lịch, toàn học kỳ, không theo bộ lọc tuần/giảng viên.
+Các điểm thành phần là điểm chuẩn hóa, không phải số lỗi hoặc phần trăm hài lòng.
+Lịch gốc chấm theo RECURRING; bản điều chỉnh được chấm lại theo OCCURRENCE.
+
+Điều chỉnh dùng luồng **Xem trước → Xác nhận và lưu phiên bản**. API preview
+chỉ đọc, không tạo revision; trả các buổi đổi, lỗi hard kèm lớp/giảng viên/
+phòng/ngày liên quan và điểm trước–sau. Cả hai lịch trong preview được chấm
+theo OCCURRENCE để so cùng chuẩn, không so với điểm benchmark đã lưu.
+Đổi phương án hoặc phạm vi phải xem trước lại. Lúc lưu vẫn kiểm tra toàn lịch;
+không tin kết quả preview cũ và không tự dời buổi khác. Không đổi thuật toán,
+Fitness, dữ liệu benchmark hay schema SQL.
+
 ## Benchmark thời khóa biểu
 
-**Kịch bản hiện hành:** [benchmark_configs/stress/README.md](benchmark_configs/stress/README.md),
-suite `benchmark_configs/stress/timetable_stress_suite.json`; Small12/Medium18/
+**Kịch bản đã lưu theo snapshot v2:** [benchmark_configs/target_po80_stress/README.md](benchmark_configs/target_po80_stress/README.md),
+suite `benchmark_configs/target_po80_stress/timetable_stress_suite.json`; Small12/Medium18/
 Large24 lớp,232/343/454buổi,D60/90/120. Snapshot đã khóa, không build lại từ DB.
 N30/20vòng/trần630FE gồm30initial,seed1–10,Priority+Placement hard-only,
-GA_PO là ISLAND80. Một lần chạy mới của ba phương pháp là90optimizer+3Greedy.
+GA_PO mới là TARGET_PO80. Một lần chạy mới của ba phương pháp là90optimizer+3Greedy.
+
+Code chính đã hỗ trợ snapshot v3 LT/TH độc lập, nhưng chưa chạy benchmark mô hình này.
+Preflight trên dữ liệu tương ứng cho D72/108/144, số buổi không đổi. Không dùng
+lại vector hoặc quần thể đầu v2 cho benchmark v3. Kiểm tra tích hợp và replay
+tương thích bằng `tools/verify_part_assignment_integration.py`; các vector
+chuyển đổi trong kiểm tra đó chỉ dùng xác minh, không phải kết quả thực nghiệm mới.
 
 **Kết quả chính thức được chọn:** [benchmark_results/README.md](benchmark_results/README.md).
 Gói `benchmark_results/island80_stress_d155/` giữ nguyên D155120optimizer+
-3Greedy (có HYBRID50 đối chứng) và D1593run xác nhận production trùng chính xác.
+3Greedy (có HYBRID50 đối chứng) và D1593run xác nhận bản ISLAND80 khi đó trùng chính xác.
 Đọc báo cáo/ảnh trực tiếp; dữ liệu thô đầy đủ ở ZIP nén không mất dữ liệu, có
 SHA từng file và lệnh kiểm tra độc lập. Không đổi nhãn ISLAND80 thành kết quả
 GA_PO mới, không ghi đè evidence cũ hoặc trộn với bộ nhỏ trước đây.
@@ -277,3 +390,23 @@ Trước khi dùng schema đã tồn tại, chạy migration
 và trạng thái `TIMED_OUT`, sau đó chạy
 `Script/migrate_2026_10_22_durable_optimization_jobs.sql` để thêm cấu hình khôi
 phục cùng thời điểm vào hàng đợi.
+
+## Benchmark CEC 2022 lịch sử — cơ chế ISLAND80
+
+Phần số học CEC lưu cơ chế ISLAND80 lịch sử, khác TARGET_PO80 hiện hành;
+không dùng cơ chế trộn50/50 của runner lịch sử. Các toán tử/chọn lọc và
+archive/migration được import từ core; chỉ thay cổng đánh giá bằng hàm CEC.
+Vector cập nhật trên [0,1]^20 rồi chuyển x=-100+200u khi chấm. CEC không dùng
+Encoder/Decoder; tính mới khi trao đổi nghiệm là khác vector chính xác.
+
+Từ gốc repository:
+
+```powershell
+python "Core Algrithms/benchmark/launch_production_cec.py" --output "Core Algrithms/benchmark/results/cec2022_island80_moi" --workers 14
+```
+
+Lệnh đóng băng source và chạy mới1.080lượt:12hàm×30seed×3phương pháp,
+N30/D20/300.000FE mỗi lượt gồm khởi tạo. Không đọc DB hoặc chạy lại benchmark
+lịch. Các bước audit và tạo ảnh chỉ đọc kết quả đã lưu; xem
+[benchmark/README.md](benchmark/README.md) và
+[giao thức](benchmark/PRODUCTION_CEC_PROTOCOL.md).

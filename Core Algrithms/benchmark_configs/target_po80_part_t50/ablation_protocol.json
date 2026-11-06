@@ -1,0 +1,30 @@
+{
+  "schema_version": "target-po80-part-t50-ablation.v1",
+  "population_size": 30,
+  "iterations": 50,
+  "fitness_cap": 1530,
+  "seeds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  "scales": ["small", "medium", "large"],
+  "variants": ["TARGET_RAND80", "NO_FEEDBACK", "RANDOM_GROUP"],
+  "planned_new_ablation_runs": 90,
+  "reused_full_results": 30,
+  "rerun_main_algorithms": 0,
+  "run_greedy": false,
+  "shared_initial_cohorts": 30,
+  "warm_start_from_final_solution": false,
+  "single_factor_changes": {
+    "TARGET_RAND80": "Replace only masked PO formula values by uniform random keys; retain objective targeting, memory, feedback and all budgets.",
+    "NO_FEEDBACK": "Remove incoming PO proposals only from GA survivor selection; retain GA-to-PO anchors, PO memory and shared global best.",
+    "RANDOM_GROUP": "Uniformly select group identities with matched group type and chromosome footprint; retain original PO formulas and feedback. Dominant objective still determines group type/size."
+  },
+  "comparison": {
+    "direction": "FULL versus each ablation",
+    "endpoints": ["final_50_generations", "exact_pairwise_common_successful_FE"],
+    "quality_order": ["Q_general", "Q_lecturer"],
+    "tolerance": 1e-12,
+    "sign_test": "two-sided exact; Holm3 only after all three controls are assembled",
+    "exploratory": true,
+    "runtime_ranking_valid": false,
+    "retain_all_seeds_and_unfavorable_results": true
+  }
+}
