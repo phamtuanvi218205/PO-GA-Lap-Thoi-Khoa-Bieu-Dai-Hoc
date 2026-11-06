@@ -123,6 +123,7 @@ class ProblemInstanceSnapshotBuilder:
 
         payload: dict[str, Any] = {
             "schema_version": SNAPSHOT_SCHEMA_VERSION,
+            "lecturer_assignment_scope": "TEACHING_PART",
             "term": {
                 "term_code": term_code,
                 "term_name": str(scenario["term_name"]),
@@ -283,19 +284,16 @@ class ProblemInstanceSnapshotBuilder:
             by_section.setdefault(str(item["section_code"]), []).append(item)
         for section_code, parts in by_section.items():
             course_code = str(parts[0]["course_code"])
-            requires_lecture = any(str(part["part_type"]) == "LECTURE" for part in parts)
-            requires_practice = any(str(part["part_type"]) == "PRACTICE" for part in parts)
-            has_candidate = any(
-                str(capability["course_code"]) == course_code
-                and (not requires_lecture or bool(capability["can_teach_lecture"]))
-                and (not requires_practice or bool(capability["can_teach_practice"]))
-                for capability in capabilities
-            )
-            if not has_candidate:
-                raise RuntimeError(
-                    f"CourseSection {section_code} không có giảng viên đủ khả năng "
-                    "dạy mọi phần học."
+            for part in parts:
+                kind = str(part["part_type"])
+                has_candidate = any(
+                    str(capability["course_code"]) == course_code
+                    and (kind != "LECTURE" or bool(capability["can_teach_lecture"]))
+                    and (kind != "PRACTICE" or bool(capability["can_teach_practice"]))
+                    for capability in capabilities
                 )
+                if not has_candidate:
+                    raise RuntimeError(f"CourseSection {section_code}: phần {kind} không có giảng viên đủ năng lực.")
 
     def _simple_rows(self, sql: str, *parameters: object) -> list[dict[str, Any]]:
         return [

@@ -20,7 +20,7 @@ import json
 from pathlib import Path
 from typing import Any, Mapping
 
-from .decoder import DEFAULT_ENCODING, explain_empty_domain, explain_empty_recurring_group
+from .decoder import DEFAULT_ENCODING, encoding_for_problem, explain_empty_domain, explain_empty_recurring_group
 from .encoder import build_all_recurring_pattern_domains, build_option_domains
 from .models import (
     AcademicTerm,
@@ -60,7 +60,8 @@ from .models import (
 )
 
 
-SNAPSHOT_SCHEMA_VERSION = "problem-instance.v2"
+SNAPSHOT_SCHEMA_VERSION = "problem-instance.v3"
+SECTION_SNAPSHOT_SCHEMA_VERSION = "problem-instance.v2"
 LEGACY_SNAPSHOT_SCHEMA_VERSION = "problem-instance.v1"
 MAPPING_SCHEMA_VERSION = "gene-option-mapping.v5"
 
@@ -217,20 +218,23 @@ def load_problem_instance_snapshot(
 
     payload = _load_json_object(source)
     schema_version = _required(payload, "schema_version")
-    if schema_version not in {SNAPSHOT_SCHEMA_VERSION, LEGACY_SNAPSHOT_SCHEMA_VERSION}:
+    if schema_version not in {SNAPSHOT_SCHEMA_VERSION, SECTION_SNAPSHOT_SCHEMA_VERSION, LEGACY_SNAPSHOT_SCHEMA_VERSION}:
         raise SnapshotContractError(
             "Không hỗ trợ snapshot schema version "
-            f"'{schema_version}'; cần '{SNAPSHOT_SCHEMA_VERSION}' hoặc "
+            f"'{schema_version}'; cần '{SNAPSHOT_SCHEMA_VERSION}', '{SECTION_SNAPSHOT_SCHEMA_VERSION}' hoặc "
             f"'{LEGACY_SNAPSHOT_SCHEMA_VERSION}'."
         )
     if (
-        schema_version == SNAPSHOT_SCHEMA_VERSION
+        schema_version in {SNAPSHOT_SCHEMA_VERSION, SECTION_SNAPSHOT_SCHEMA_VERSION}
         and "lecturer_course_capabilities" not in payload
     ):
         raise SnapshotContractError(
-            "Snapshot problem-instance.v2 thiếu lecturer_course_capabilities."
+            f"Snapshot {schema_version} thiếu lecturer_course_capabilities."
         )
 
+    scope = "TEACHING_PART" if schema_version == SNAPSHOT_SCHEMA_VERSION else "SECTION"
+    if payload.get("lecturer_assignment_scope", scope) != scope:
+        raise SnapshotContractError("Assignment scope does not match snapshot version.")
     actual_checksum = checksum_json(payload)
     if expected_checksum is not None and actual_checksum != expected_checksum.lower():
         raise SnapshotContractError(
@@ -275,6 +279,7 @@ def load_problem_instance_snapshot(
             raise SnapshotContractError(f"Loại địa điểm không hỗ trợ: {location_type}.")
 
     problem = ProblemInstance(
+        lecturer_assignment_scope=scope,
         term=AcademicTerm(
             term_code=str(_required(term_data, "term_code")),
             term_name=str(_required(term_data, "term_name")),
@@ -487,14 +492,15 @@ def build_gene_option_mapping(
         for location in problem.locations
     }
     assignment_genes = []
-    for gene_index, section_code in enumerate(problem.assignment_section_codes):
+    for gene_index, section_code in enumerate(problem.assignment_keys):
         assignment_genes.append(
             {
                 "gene_index": gene_index,
                 "gene_type": "LECTURER_ASSIGNMENT",
-                "section_code": section_code,
+                "section_code": problem.parts_for_assignment(section_code)[0].section_code,
+                **({"part_code": section_code} if problem.lecturer_assignment_scope == "TEACHING_PART" else {}),
                 "lecturer_indices": list(
-                    problem.eligible_lecturer_indices(section_code)
+                    problem.eligible_assignment_lecturers(section_code)
                 ),
             }
         )
@@ -553,7 +559,8 @@ def build_gene_option_mapping(
         )
 
     return {
-        "schema_version": MAPPING_SCHEMA_VERSION,
+        "schema_version": ("gene-option-mapping.v6" if problem.lecturer_assignment_scope == "TEACHING_PART" else MAPPING_SCHEMA_VERSION),
+        **({"lecturer_assignment_scope": "TEACHING_PART"} if problem.lecturer_assignment_scope == "TEACHING_PART" else {}),
         "snapshot_checksum": snapshot_checksum,
         "dimension": problem.dimension,
         "assignment_dimension": problem.assignment_dimension,
@@ -561,9 +568,9 @@ def build_gene_option_mapping(
         "schedule_dimension": problem.schedule_dimension,
         "placement_dimension": problem.schedule_dimension,
         "placement_gene_offset": problem.placement_gene_offset,
-        "vector_encoding": DEFAULT_ENCODING,
+        "vector_encoding": encoding_for_problem(problem),
         "encoding_rule": (
-            "Mỗi gene phân công chọn một lecturer_index cho CourseSection; "
+            ("Mỗi gene phân công chọn một lecturer_index cho TeachingPart; " if problem.lecturer_assignment_scope == "TEACHING_PART" else "Mỗi gene phân công chọn một lecturer_index cho CourseSection; ") +
             "gene lịch được sắp tăng dần để quyết định thứ tự xếp khối lặp, "
             "bằng khóa thì sắp theo ClassSession ID nhỏ nhất của khối. "
             "PlacementKey chọn min(floor(key*m),m-1) trong m mẫu hiện khả thi "

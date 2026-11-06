@@ -144,7 +144,7 @@ def test_snapshot_failure_is_persisted_after_pending_run_was_created() -> None:
 
 def test_recovered_run_reuses_persisted_snapshot(monkeypatch) -> None:
     persisted_json = canonical_json({
-        "schema_version": "problem-instance.v2",
+        "schema_version": "problem-instance.v3",
         "marker": "persisted-snapshot",
     })
     connection = RecordingConnection(persisted_json)
@@ -155,6 +155,7 @@ def test_recovered_run_reuses_persisted_snapshot(monkeypatch) -> None:
     def prepare(payload, *, expected_checksum):
         observed_payloads.append((payload, expected_checksum))
         return SimpleNamespace(
+            problem=SimpleNamespace(lecturer_assignment_scope="TEACHING_PART"),
             gene_option_mapping_json=canonical_json({"status": "READY"}),
             no_option_issues=(),
         )

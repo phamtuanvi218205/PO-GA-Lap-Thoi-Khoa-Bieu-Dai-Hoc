@@ -12,6 +12,7 @@ from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 import logging
 import os
+from time import monotonic
 from threading import Event, Lock, Thread
 from typing import Callable
 from uuid import uuid4
@@ -35,6 +36,17 @@ class OptimizationJobNotFoundError(KeyError):
 
 
 @dataclass(frozen=True, slots=True)
+class OptimizationIterationSnapshot:
+    iteration: int
+    fitness_evaluations: int
+    new_fitness_evaluations: int
+    elapsed_seconds: float
+    duration_seconds: float
+    best_general_quality_score: float | None
+    best_lecturer_preference_score: float | None
+
+
+@dataclass(frozen=True, slots=True)
 class OptimizationJobSnapshot:
     job_id: str
     scenario_id: int
@@ -51,12 +63,17 @@ class OptimizationJobSnapshot:
     updated_at: datetime
     error_code: str | None = None
     error_message: str | None = None
+    elapsed_seconds: float = 0.0
+    candidate_attempts: int | None = None
+    decode_failed_count: int | None = None
+    iteration_history: tuple[OptimizationIterationSnapshot, ...] = ()
 
 
 @dataclass(slots=True)
 class _ManagedJob:
     snapshot: OptimizationJobSnapshot
     control: RunExecutionControl
+    started_monotonic: float | None = None
 
 
 class OptimizationRunManager:
@@ -145,6 +162,8 @@ class OptimizationRunManager:
         with self._lock:
             job = self._jobs.get(job_id)
             if job is not None:
+                if job.started_monotonic is not None and job.snapshot.status not in TERMINAL_JOB_STATUSES:
+                    return replace(job.snapshot,elapsed_seconds=max(0.,monotonic()-job.started_monotonic))
                 return job.snapshot
         run_id = _run_id_from_job_id(job_id)
         persisted = self._read_persisted_snapshot(run_id)
@@ -334,6 +353,21 @@ class OptimizationRunManager:
             job = self._jobs.get(job_id)
             if job is None:
                 return
+            now=monotonic()
+            if job.started_monotonic is None and progress.status=='RUNNING':
+                job.started_monotonic=now
+            elapsed=max(0.,now-job.started_monotonic) if job.started_monotonic is not None else 0.
+            history=job.snapshot.iteration_history
+            # Core reports iteration g-1 during offspring and g only at round end.
+            # max_iterations==0 is initialization, not a completed optimizer round.
+            if progress.max_iterations>0 and (not history or progress.iteration>history[-1].iteration):
+                previous=history[-1] if history else None
+                history=history+(OptimizationIterationSnapshot(
+                    iteration=progress.iteration,fitness_evaluations=progress.fitness_evaluations,
+                    new_fitness_evaluations=progress.fitness_evaluations-(previous.fitness_evaluations if previous else 0),
+                    elapsed_seconds=elapsed,duration_seconds=elapsed-(previous.elapsed_seconds if previous else 0.),
+                    best_general_quality_score=progress.best_general_quality_score,
+                    best_lecturer_preference_score=progress.best_lecturer_preference_score),)
             job.snapshot = replace(
                 job.snapshot,
                 status=progress.status,
@@ -348,6 +382,10 @@ class OptimizationRunManager:
                     progress.best_lecturer_preference_score
                 ),
                 updated_at=progress.updated_at,
+                elapsed_seconds=elapsed,
+                candidate_attempts=progress.candidate_attempts,
+                decode_failed_count=progress.decode_failed_count,
+                iteration_history=history,
             )
 
     def _run_job(
@@ -511,6 +549,7 @@ class OptimizationRunManager:
                 updated_at=datetime.now(timezone.utc),
                 error_code=error_code,
                 error_message=error_message,
+                elapsed_seconds=(max(0.,monotonic()-job.started_monotonic) if job.started_monotonic is not None else job.snapshot.elapsed_seconds),
             )
 
 
@@ -591,4 +630,5 @@ def _snapshot_from_run_row(row: dict[str, object]) -> OptimizationJobSnapshot:
         updated_at=updated_at,
         error_code=error_code,
         error_message=error_message,
+        elapsed_seconds=(max(0.,(_utc_datetime(row.get('finished_at'),now)-_utc_datetime(row.get('started_at'),now)).total_seconds()) if row.get('started_at') else 0.),
     )

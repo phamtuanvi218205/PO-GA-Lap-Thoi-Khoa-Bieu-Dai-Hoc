@@ -158,9 +158,9 @@ def _candidate_vectors(
     )
     lecturer_by_section: dict[str, int] = {}
     for assignment_index, section_code in enumerate(
-        problem.assignment_section_codes
+        problem.assignment_keys
     ):
-        eligible = problem.eligible_lecturer_indices(section_code)
+        eligible = problem.eligible_assignment_lecturers(section_code)
         lecturer_by_section[section_code] = eligible[
             preferred_option_index(vector[assignment_index], len(eligible))
         ]
@@ -169,7 +169,7 @@ def _candidate_vectors(
         for part in problem.teaching_parts:
             if part.lecturer_index is None:
                 raise ValueError("Snapshot v1 thiếu lecturer_index.")
-            lecturer_by_section[part.section_code] = part.lecturer_index
+            lecturer_by_section[problem.assignment_key_for_part(part)] = part.lecturer_index
 
     plans_by_id = {
         plan.teaching_plan_id: plan for plan in problem.teaching_plans
@@ -183,8 +183,8 @@ def _candidate_vectors(
     )
     for gene_index in gene_order:
         if gene_index < problem.assignment_dimension:
-            section_code = problem.assignment_section_codes[gene_index]
-            option_count = len(problem.eligible_lecturer_indices(section_code))
+            section_code = problem.assignment_keys[gene_index]
+            option_count = len(problem.eligible_assignment_lecturers(section_code))
             changed_session_index = None
         else:
             group_index = gene_index - problem.schedule_gene_offset
@@ -193,7 +193,7 @@ def _candidate_vectors(
             part = parts_by_index[
                 plans_by_id[session.teaching_plan_id].teaching_part_index
             ]
-            selected_lecturer = lecturer_by_section[part.section_code]
+            selected_lecturer = lecturer_by_section[problem.assignment_key_for_part(part)]
             option_count = len(
                 build_recurring_patterns_for_group(
                     problem,

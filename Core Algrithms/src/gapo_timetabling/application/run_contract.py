@@ -26,9 +26,9 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from ..core.constraints import validate_timetable
-from ..core.decoder import DEFAULT_ENCODING
+from ..core.decoder import DEFAULT_ENCODING, encoding_for_problem
 from ..core.ga import GAConfig, run_ga
-from ..core.hybrid import HYBRID_MECHANISM, HybridConfig, run_hybrid, validate_island_sizes
+from ..core.hybrid import HYBRID_MECHANISM, HybridConfig, run_hybrid, validate_target_sizes
 from ..core.metrics import (
     ConvergencePoint,
     OptimizationMetrics,
@@ -291,6 +291,9 @@ def parse_run_request(
 
     ga_payload = _require_mapping(payload.get("ga", {}), "ga")
     hybrid_payload = _require_mapping(payload.get("hybrid", {}), "hybrid")
+    if algorithm == OptimizationAlgorithm.GA_PO and hybrid_payload.get("mechanism", HYBRID_MECHANISM) != HYBRID_MECHANISM:
+        raise RunContractError(RunErrorCode.INVALID_REQUEST,
+                               "Cơ chế lai của request không phải TARGET_PO80; không tự diễn giải lại request cũ.")
     tournament_size = _read_integer(
         ga_payload.get("tournament_size", 3),
         "ga.tournament_size",
@@ -328,12 +331,12 @@ def parse_run_request(
 
     if algorithm == OptimizationAlgorithm.GA_PO:
         try:
-            validate_island_sizes(population_size, ga_ratio)
+            validate_target_sizes(population_size, ga_ratio)
         except ValueError as exc:
             raise RunContractError(
                 RunErrorCode.INVALID_REQUEST,
-                "GA–PO cần ít nhất 2 cá thể mỗi quần thể; tăng population_size "
-                "(80/20 cần N >= 8) hoặc cấu hình tỷ lệ phù hợp.",
+                "GA–PO cần ít nhất 2 cá thể mỗi nhóm, số GA không ít hơn PO; "
+                "80/20 cần N >= 8 hoặc cấu hình tỷ lệ phù hợp.",
             ) from exc
 
     return RunRequest(
@@ -447,12 +450,13 @@ def build_failure_result(
     *,
     details: Any = None,
     snapshot_checksum: str | None = None,
+    solver_pipeline: str = DEFAULT_ENCODING,
 ) -> dict[str, Any]:
     """Tạo một kết quả lỗi có cùng envelope cho mọi giai đoạn thất bại."""
 
     return {
         "schema_version": RESULT_SCHEMA_VERSION,
-        "solver_pipeline": DEFAULT_ENCODING,
+        "solver_pipeline": solver_pipeline,
         "request_id": request.request_id if request is not None else None,
         "status": "FAILED",
         "algorithm": request.algorithm.value if request is not None else None,
@@ -475,6 +479,7 @@ def build_completed_result_payload(
     best_individual: TimetableIndividual,
     metrics: OptimizationMetrics,
     convergence_history: tuple[ConvergencePoint, ...],
+    hybrid_activity: dict | None = None,
 ) -> dict[str, Any]:
     """Chuẩn hóa một lịch hợp lệ thành envelope kết quả máy đọc được.
 
@@ -513,10 +518,11 @@ def build_completed_result_payload(
             "end_period": option.end_period,
         })
     timetable_entries.sort(key=lambda item: item["class_session_id"])
+    problem = prepared.problem
 
     return {
         "schema_version": RESULT_SCHEMA_VERSION,
-        "solver_pipeline": DEFAULT_ENCODING,
+        "solver_pipeline": encoding_for_problem(problem),
         "request_id": request_id,
         "status": "COMPLETED",
         "algorithm": algorithm_name,
@@ -527,7 +533,7 @@ def build_completed_result_payload(
             "gene_option_mapping": prepared.gene_option_mapping,
             "gene_option_mapping_checksum": prepared.gene_option_mapping_checksum,
             "best_solution": {
-                "vector_encoding": DEFAULT_ENCODING,
+                "vector_encoding": encoding_for_problem(problem),
                 "vector": list(best_individual.vector),
                 "selected_option_indices": list(
                     best_individual.selected_option_indices
@@ -545,6 +551,7 @@ def build_completed_result_payload(
                 ),
             },
             "metrics": _json_value(asdict(metrics)),
+            "hybrid_activity": _json_value(hybrid_activity),
             "convergence_history": [
                 _json_value(asdict(point))
                 for point in convergence_history
@@ -588,6 +595,7 @@ def execute_prepared_run_request(
             "Có ClassSession không có SessionOption hợp lệ.",
             details=[asdict(issue) for issue in prepared.no_option_issues],
             snapshot_checksum=prepared.snapshot_checksum,
+            solver_pipeline=encoding_for_problem(prepared.problem),
         )
 
     def report_initialization(
@@ -646,6 +654,7 @@ def execute_prepared_run_request(
                 "validation_failed_count": initialization.validation_failed_count,
             },
             snapshot_checksum=prepared.snapshot_checksum,
+            solver_pipeline=encoding_for_problem(prepared.problem),
         )
 
     try:
@@ -664,6 +673,7 @@ def execute_prepared_run_request(
             RunErrorCode.OPTIMIZER_ERROR,
             str(error),
             snapshot_checksum=prepared.snapshot_checksum,
+            solver_pipeline=encoding_for_problem(prepared.problem),
         )
 
     validation = validate_timetable(
@@ -677,6 +687,7 @@ def execute_prepared_run_request(
             "Nghiệm tốt nhất còn vi phạm điều kiện bắt buộc.",
             details=[asdict(violation) for violation in validation.violations],
             snapshot_checksum=prepared.snapshot_checksum,
+            solver_pipeline=encoding_for_problem(prepared.problem),
         )
 
     return build_completed_result_payload(
@@ -686,6 +697,7 @@ def execute_prepared_run_request(
         best_individual=optimization_result.best_individual,
         metrics=optimization_result.metrics,
         convergence_history=optimization_result.convergence_history,
+        hybrid_activity=optimization_result.hybrid_activity,
     )
 
 

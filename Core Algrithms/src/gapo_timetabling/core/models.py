@@ -754,6 +754,7 @@ class ProblemInstance:
     campus_travel_times: tuple[CampusTravelTime, ...]
     constraint_settings: tuple[ConstraintSetting, ...]
     lecturer_course_capabilities: tuple[LecturerCourseCapability, ...] = ()
+    lecturer_assignment_scope: str = "SECTION"
 
     def __post_init__(self) -> None:
         """Chạy toàn bộ kiểm tra tính toàn vẹn của snapshot theo thứ tự."""
@@ -768,14 +769,14 @@ class ProblemInstance:
     def _validate_teaching_assignments(self) -> None:
         """Kiểm tra quan hệ lớp học phần, phần giảng dạy và giảng viên.
 
-        Snapshot v2 khai báo năng lực theo môn và để optimizer chọn một giảng
-        viên chung cho toàn bộ phần học của mỗi lớp học phần. Snapshot v1 chưa
-        có capability vẫn được hỗ trợ bằng cách xem phân công cũ là miền chỉ
-        có đúng một ứng viên. Cách tương thích này không làm thay đổi kết quả
-        cũ nhưng cho phép mô hình mới tối ưu đồng thời người dạy và thời khóa
-        biểu.
+        V3 phân công theo từng TeachingPart, LT/TH có thể cùng hoặc khác người.
+        SECTION chỉ dành cho snapshot v1/v2 lịch sử, không đổi nghĩa kết quả cũ.
         """
 
+        if self.lecturer_assignment_scope not in {"SECTION", "TEACHING_PART"}:
+            raise ValueError("lecturer_assignment_scope must be SECTION or TEACHING_PART")
+        if len({part.part_code for part in self.teaching_parts}) != len(self.teaching_parts):
+            raise ValueError("TeachingPart part_code phải duy nhất trong snapshot.")
         valid_section_codes = {
             section.section_code
             for section in self.course_sections
@@ -811,7 +812,7 @@ class ProblemInstance:
                     part.section_code,
                     part.lecturer_index,
                 )
-                if assigned_lecturer != part.lecturer_index:
+                if self.lecturer_assignment_scope == "SECTION" and assigned_lecturer != part.lecturer_index:
                     raise ValueError(
                         "Mọi TeachingPart thuộc CourseSection phải dùng chung một giảng viên."
                     )
@@ -827,14 +828,11 @@ class ProblemInstance:
                 raise ValueError("Capability giảng viên–môn học bị trùng.")
             seen_capabilities.add(key)
 
-        for section_code in self.assignment_section_codes:
-            if section_code not in section_by_code:
-                raise ValueError(f"CourseSection {section_code} không tồn tại.")
-            if not self.eligible_lecturer_indices(section_code):
-                raise ValueError(
-                    f"CourseSection {section_code} không có giảng viên đủ khả năng "
-                    "dạy toàn bộ các phần học."
-                )
+        for assignment_key in self.assignment_keys:
+            if not self.eligible_assignment_lecturers(assignment_key):
+                if self.lecturer_assignment_scope == "SECTION":
+                    raise ValueError(f"CourseSection {assignment_key} không có giảng viên đủ khả năng dạy toàn bộ các phần học.")
+                raise ValueError(f"TeachingPart {assignment_key} không có giảng viên đủ năng lực tương ứng.")
 
     def _validate_calendar(self) -> None:
         """Kiểm tra quan hệ giữa học kỳ, tuần học và ngày giảng dạy."""
@@ -1127,9 +1125,28 @@ class ProblemInstance:
 
     @property
     def assignment_dimension(self) -> int:
-        """Số gene đầu vector dùng để chọn một giảng viên cho mỗi lớp."""
+        """V3: số phần giảng dạy; v2 lịch sử: số lớp có phân công động."""
 
-        return len(self.assignment_section_codes)
+        return len(self.assignment_keys)
+
+    @property
+    def assignment_keys(self) -> tuple[str, ...]:
+        """V3: one lecturer gene per TeachingPart; old snapshots retain SECTION."""
+        if not self.lecturer_course_capabilities:
+            return ()
+        if self.lecturer_assignment_scope == "TEACHING_PART":
+            return tuple(part.part_code for part in self.teaching_parts)
+        return self.assignment_section_codes
+
+    def assignment_key_for_part(self, part: TeachingPart) -> str:
+        return part.part_code if self.lecturer_assignment_scope == "TEACHING_PART" else part.section_code
+
+    def parts_for_assignment(self, key: str) -> tuple[TeachingPart, ...]:
+        return tuple(part for part in self.teaching_parts if self.assignment_key_for_part(part) == key)
+
+    def eligible_assignment_lecturers(self, key: str) -> tuple[int, ...]:
+        parts = self.parts_for_assignment(key)
+        return self._eligible_for_parts(parts)
 
     @property
     def schedule_gene_offset(self) -> int:
@@ -1149,6 +1166,9 @@ class ProblemInstance:
         parts = tuple(
             part for part in self.teaching_parts if part.section_code == section_code
         )
+        return self._eligible_for_parts(parts)
+
+    def _eligible_for_parts(self, parts: tuple[TeachingPart, ...]) -> tuple[int, ...]:
         if not parts:
             return ()
 
@@ -1157,7 +1177,7 @@ class ProblemInstance:
             return tuple(sorted(index for index in legacy_indices if index is not None))
 
         section = next(
-            item for item in self.course_sections if item.section_code == section_code
+            item for item in self.course_sections if item.section_code == parts[0].section_code
         )
         required_types = {part.part_type for part in parts}
         eligible: list[int] = []

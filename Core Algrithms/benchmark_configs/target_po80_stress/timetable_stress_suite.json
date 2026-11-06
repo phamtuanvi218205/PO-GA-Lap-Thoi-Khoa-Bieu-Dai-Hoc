@@ -1,0 +1,27 @@
+{
+  "schema_version": "distributed-benchmark-suite.v1",
+  "suite_id": "stress-d150-priority-placement-target-po80-30pop-20gen-10seed",
+  "cases": [
+    {
+      "case_id": "small",
+      "label": "Small",
+      "experiment_config_path": "experiment_small.json",
+      "dimension": 60,
+      "class_session_count": 232
+    },
+    {
+      "case_id": "medium",
+      "label": "Medium",
+      "experiment_config_path": "experiment_medium.json",
+      "dimension": 90,
+      "class_session_count": 343
+    },
+    {
+      "case_id": "large",
+      "label": "Large",
+      "experiment_config_path": "experiment_large.json",
+      "dimension": 120,
+      "class_session_count": 454
+    }
+  ]
+}

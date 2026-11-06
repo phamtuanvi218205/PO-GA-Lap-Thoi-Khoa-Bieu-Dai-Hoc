@@ -47,6 +47,8 @@ class RunProgressSnapshot:
     best_general_quality_score: float | None
     best_lecturer_preference_score: float | None
     updated_at: datetime
+    candidate_attempts: int = 0
+    decode_failed_count: int = 0
 
 
 class RunExecutionControl:
@@ -131,6 +133,8 @@ class RunExecutionControl:
                     progress.best_lecturer_preference_score
                 ),
                 updated_at=datetime.now(timezone.utc),
+                candidate_attempts=progress.metrics.candidate_attempts,
+                decode_failed_count=progress.metrics.decode_failed_count,
             )
             snapshot = self._snapshot
         self._notify(snapshot)
@@ -168,4 +172,6 @@ def _replace_snapshot(
         best_general_quality_score=current.best_general_quality_score,
         best_lecturer_preference_score=current.best_lecturer_preference_score,
         updated_at=datetime.now(timezone.utc),
+        candidate_attempts=current.candidate_attempts,
+        decode_failed_count=current.decode_failed_count,
     )

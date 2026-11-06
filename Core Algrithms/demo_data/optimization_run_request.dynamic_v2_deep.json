@@ -25,6 +25,7 @@
     "mutation_distribution_index": 20.0
   },
   "hybrid": {
-    "ga_ratio": 0.5
+    "mechanism": "GA_PO_TARGET_PO80.v1",
+    "ga_ratio": 0.8
   }
 }

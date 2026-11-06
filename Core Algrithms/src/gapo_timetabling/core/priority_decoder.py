@@ -201,7 +201,7 @@ class PriorityDecoder:
         active = []
         valid = []
         for g,part in enumerate(context.parts):
-            teacher = by_section[part.section_code]
+            teacher = by_section[problem.assignment_key_for_part(part)]
             teachers.append(teacher)
             patterns,indices=self._domain(problem,option_domains,context,g,teacher)
             if not indices:
@@ -296,7 +296,7 @@ class PriorityDecoder:
         assert failure is None
         result=list(individual.vector[:problem.assignment_dimension])
         for g,sessions in enumerate(problem.schedule_groups):
-            part=original._part_for_group(problem,g); patterns=build_recurring_patterns_for_group(problem,domains,g,by_section[part.section_code])
+            part=original._part_for_group(problem,g); patterns=build_recurring_patterns_for_group(problem,domains,g,by_section[problem.assignment_key_for_part(part)])
             target=tuple(individual.selected_options[s] for s in sessions)
             index=next(i for i,p in enumerate(patterns) if p.session_options==target)
             result.append((index+.5)/len(patterns))

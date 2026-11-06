@@ -72,6 +72,7 @@ from .schedule_adjustment import (
     ScheduleAdjustmentInput,
     ScheduleAdjustmentConflictError,
     ScheduleRevisionNotFoundError,
+    ScheduleAdjustmentPreviewInput,
 )
 
 WEB_DIRECTORY = Path(__file__).with_name("web")
@@ -107,7 +108,7 @@ class OptimizationRunStartRequest(BaseModel):
                 "max_initialization_attempts phải lớn hơn hoặc bằng population_size."
             )
         if self.algorithm == "GA_PO" and self.population_size < 8:
-            raise ValueError("GA–PO islands 80/20 cần population_size >= 8 (ít nhất 2 cá thể mỗi đảo).")
+            raise ValueError("GA–PO TARGET_PO80 cần population_size >= 8 (ít nhất 2 cá thể mỗi nhóm).")
         return self
 
 
@@ -553,6 +554,32 @@ def create_app(
                 run_id, part_code, stability_group_no, revision_id,
                 scope=scope, week_number=week_number,
             )
+        except ScheduleRevisionNotFoundError as error:
+            raise HTTPException(status_code=404, detail=str(error)) from error
+        except (ScheduleAdjustmentConflictError, *_QUERY_ERRORS) as error:
+            raise HTTPException(status_code=409, detail=str(error)) from error
+
+    @app.get("/api/runs/{run_id}/schedule-quality")
+    def schedule_quality(
+        run_id: int = ApiPath(ge=1),
+        revision_id: int | None = Query(default=None, ge=1),
+        connection: ConnectionProtocol = Depends(connection_dependency),
+    ) -> dict:
+        try:
+            return ScheduleAdjustmentService(connection).quality(run_id, revision_id)
+        except ScheduleRevisionNotFoundError as error:
+            raise HTTPException(status_code=404, detail=str(error)) from error
+        except (ScheduleAdjustmentConflictError, *_QUERY_ERRORS) as error:
+            raise HTTPException(status_code=409, detail=str(error)) from error
+
+    @app.post("/api/runs/{run_id}/adjustment-preview")
+    def preview_schedule_adjustment(
+        request: ScheduleAdjustmentPreviewInput,
+        run_id: int = ApiPath(ge=1),
+        connection: ConnectionProtocol = Depends(connection_dependency),
+    ) -> dict:
+        try:
+            return ScheduleAdjustmentService(connection).preview(run_id, request)
         except ScheduleRevisionNotFoundError as error:
             raise HTTPException(status_code=404, detail=str(error)) from error
         except (ScheduleAdjustmentConflictError, *_QUERY_ERRORS) as error:

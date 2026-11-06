@@ -343,6 +343,7 @@ class OptimizationResult:
     final_population: tuple[TimetableIndividual, ...]
     convergence_history: tuple[ConvergencePoint, ...]
     metrics: OptimizationMetrics
+    hybrid_activity: dict | None = None
 
     def __post_init__(self) -> None:
         """Kiểm tra tính nhất quán của kết quả tối ưu."""

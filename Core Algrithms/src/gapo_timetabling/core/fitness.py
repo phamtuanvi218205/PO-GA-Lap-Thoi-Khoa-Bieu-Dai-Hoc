@@ -513,8 +513,8 @@ def _calculate_workload_balance_component(
 
     active_lecturers = sorted({
         lecturer_index
-        for section_code in problem.assignment_section_codes
-        for lecturer_index in problem.eligible_lecturer_indices(section_code)
+        for section_code in problem.assignment_keys
+        for lecturer_index in problem.eligible_assignment_lecturers(section_code)
     })
     if len(active_lecturers) < 2:
         return 0.0
@@ -789,15 +789,16 @@ def _calculate_lecturer_preference_from_validated_input(
     seen_sections: set[str] = set()
     for session_index, selected_option in selected_by_session.items():
         session, part = session_context[session_index]
-        if part.section_code in seen_sections:
+        assignment_key = problem.assignment_key_for_part(part)
+        if assignment_key in seen_sections:
             continue
-        seen_sections.add(part.section_code)
+        seen_sections.add(assignment_key)
         section = sections_by_code[part.section_code]
         lecturer_index = problem.option_lecturer_index(selected_option)
         section_periods = sum(
             candidate.total_periods
             for candidate in problem.teaching_parts
-            if candidate.section_code == part.section_code
+            if problem.assignment_key_for_part(candidate) == assignment_key
         )
         # Snapshot v1 không có capability; phân công cũ được xem là phù hợp
         # hoàn toàn để kết quả lịch cũ không bị thay đổi.

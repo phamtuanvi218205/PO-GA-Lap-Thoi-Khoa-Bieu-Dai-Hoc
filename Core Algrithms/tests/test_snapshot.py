@@ -16,6 +16,7 @@ if str(SRC_ROOT) not in sys.path:
 from gapo_timetabling.core.snapshot import (  # noqa: E402
     MAPPING_SCHEMA_VERSION,
     SNAPSHOT_SCHEMA_VERSION,
+    SECTION_SNAPSHOT_SCHEMA_VERSION,
     SnapshotContractError,
     SnapshotPreparationStatus,
     canonical_json,
@@ -29,7 +30,7 @@ def make_snapshot_payload() -> dict:
     """Tạo fixture nhỏ nhưng đi qua đủ scenario → session → option."""
 
     return {
-        "schema_version": SNAPSHOT_SCHEMA_VERSION,
+        "schema_version": SECTION_SNAPSHOT_SCHEMA_VERSION,
         "term": {
             "term_code": "2026_HK1",
             "term_name": "Học kỳ 1 năm học 2026-2027",

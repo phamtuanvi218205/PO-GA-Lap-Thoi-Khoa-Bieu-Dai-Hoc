@@ -58,7 +58,7 @@ class PlacementDecoder(PriorityDecoder):
             return failure
         teachers = []; active = []; valid = []
         for g, part in enumerate(context.parts):
-            teacher = by_section[part.section_code]
+            teacher = by_section[problem.assignment_key_for_part(part)]
             teachers.append(teacher)
             patterns, indices = self._domain(problem, domains, context, g, teacher)
             if not indices:

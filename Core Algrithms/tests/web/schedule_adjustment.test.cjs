@@ -35,6 +35,7 @@ function harness() {
   });
   const web = path.resolve(__dirname, "../../src/gapo_timetabling/application/web");
   vm.runInContext(readFileSync(path.join(web, "app.js"), "utf8"), context);
+  vm.runInContext(readFileSync(path.join(web, "schedule_quality.js"), "utf8"), context);
   vm.runInContext(readFileSync(path.join(web, "schedule_adjustment.js"), "utf8"), context);
   vm.runInContext("state.currentRunId=7; state.scheduleWeek=2;", context);
   context.loadSchedule = async () => {};
@@ -43,6 +44,7 @@ function harness() {
   const requests = [];
   context.apiJson = async (url, options) => {
     requests.push({ url, options });
+    if(url.endsWith("adjustment-preview")) return previewResult();
     if (options?.method === "POST") return { revision_id: 9 };
     if (url.endsWith("schedule-revisions")) return { items: [
       { revision_id: 8, note: "Cũ", general_quality_score: 0, lecturer_preference_score: 0 },
@@ -60,6 +62,13 @@ function harness() {
   return { context, query, requests, item };
 }
 
+function previewResult(canSave=true) {
+  const quality={general_quality_score:0.1, lecturer_preference_score:0.2,
+    general_components:[], lecturer_components:[]};
+  return {is_valid:canSave, can_save:canSave, message:canSave?"Hợp lệ":"Trùng phòng",
+    changed_session_count:1, before:quality, after:quality, changes:[], violations:[]};
+}
+
 test("mở thẻ mặc định chỉ buổi đang xem, ghi đúng tuần và revision nguồn", async () => {
   const h = harness();
   await h.context.openScheduleAdjustment(h.item);
@@ -68,10 +77,13 @@ test("mở thẻ mặc định chỉ buổi đang xem, ghi đúng tuần và rev
   assert.equal(params.get("week_number"), "2");
   assert.equal(params.get("revision_id"), "8");
   assert.match(h.query("#adjustment-option").innerHTML, /26\/08\/2026/);
+  assert.equal(h.query("#save-adjustment").disabled, true);
+  assert.equal(h.query("#preview-adjustment").disabled, false);
+  await h.context.previewScheduleAdjustment();
   assert.equal(h.query("#save-adjustment").disabled, false);
   h.query("#adjustment-note").value = "Đổi riêng tuần 2";
   await h.context.saveScheduleAdjustment({ preventDefault() {} });
-  const payload = JSON.parse(h.requests.find(item => item.options?.method === "POST").options.body);
+  const payload = JSON.parse(h.requests.find(item => item.url.endsWith("schedule-revisions") && item.options?.method === "POST").options.body);
   assert.equal(payload.scope, "SINGLE_SESSION");
   assert.equal(payload.week_number, 2);
   assert.equal(payload.parent_revision_id, 8);
@@ -88,8 +100,9 @@ test("đổi toàn bộ tuần tải miền chung và không gửi tuần riêng
   assert.equal(params.get("scope"), "ALL_WEEKS");
   assert.equal(params.has("week_number"), false);
   h.query("#adjustment-note").value = "Đổi toàn nhóm";
+  await h.context.previewScheduleAdjustment();
   await h.context.saveScheduleAdjustment({ preventDefault() {} });
-  const payload = JSON.parse(h.requests.find(item => item.options?.method === "POST").options.body);
+  const payload = JSON.parse(h.requests.find(item => item.url.endsWith("schedule-revisions") && item.options?.method === "POST").options.body);
   assert.equal(payload.scope, "ALL_WEEKS");
   assert.equal(payload.week_number, null);
 });
@@ -120,4 +133,75 @@ test("không cho lưu khi miền rỗng hoặc API tải miền lỗi", async ()
   await h.context.loadAdjustmentOptions();
   assert.equal(h.query("#save-adjustment").disabled, true);
   assert.match(h.query("#adjustment-result").textContent, /Nguồn không hợp lệ/);
+});
+
+test("không thể lưu nếu chưa xem trước; xem trước không tạo revision", async () => {
+  const h=harness();
+  await h.context.openScheduleAdjustment(h.item);
+  h.query("#adjustment-note").value="Lý do";
+  await h.context.saveScheduleAdjustment({preventDefault(){}});
+  assert.equal(h.requests.filter(r=>r.url.endsWith("schedule-revisions")).length,0);
+  await h.context.previewScheduleAdjustment();
+  assert.equal(h.requests.filter(r=>r.url.endsWith("adjustment-preview")).length,1);
+  assert.equal(h.requests.filter(r=>r.url.endsWith("schedule-revisions")).length,0);
+});
+
+test("phương án xung đột không mở nút lưu", async () => {
+  const h=harness();
+  await h.context.openScheduleAdjustment(h.item);
+  h.context.apiJson=async ()=>previewResult(false);
+  await h.context.previewScheduleAdjustment();
+  assert.equal(h.query("#save-adjustment").disabled,true);
+  assert.match(h.query("#adjustment-preview").innerHTML,/Trùng phòng/);
+});
+
+test("đổi lựa chọn vô hiệu xem trước và chặn phản hồi cũ", async () => {
+  const h=harness();
+  await h.context.openScheduleAdjustment(h.item);
+  let resolve;
+  h.context.apiJson=()=>new Promise(r=>resolve=r);
+  const pending=h.context.previewScheduleAdjustment();
+  h.context.invalidateAdjustmentPreview();
+  resolve(previewResult()); await pending;
+  assert.equal(h.query("#save-adjustment").disabled,true);
+  assert.equal(h.query("#preview-adjustment").disabled,false);
+});
+
+test("sửa phương án sau xem trước hoặc chuyển run không được lưu nhầm", async () => {
+  const h=harness();
+  await h.context.openScheduleAdjustment(h.item);
+  await h.context.previewScheduleAdjustment();
+  h.query("#adjustment-note").value="Lý do";
+  h.query("#adjustment-scope").value="ALL_WEEKS";
+  await h.context.saveScheduleAdjustment({preventDefault(){}});
+  assert.equal(h.requests.filter(r=>r.url.endsWith("schedule-revisions")).length,0);
+  h.query("#adjustment-scope").value="SINGLE_SESSION";
+  vm.runInContext("state.currentRunId=999",h.context);
+  await h.context.saveScheduleAdjustment({preventDefault(){}});
+  assert.equal(h.requests.filter(r=>r.url.endsWith("schedule-revisions")).length,0);
+});
+
+test("giải thích chất lượng escape dữ liệu và ghi rõ toàn kỳ, khác chế độ điểm", () => {
+  const h=harness();
+  const html=h.context.renderScheduleQuality({session_count:8, general_quality_score:0,
+    lecturer_preference_score:0, preference_domain_mode:"OCCURRENCE", general_components:[],
+    lecturer_components:[], lecturer_details:[{lecturer_code:"<script>",lecturer_name:"A",
+      evaluated_session_count:2,missed_preferred_penalty:0,discouraged_overlap_penalty:0}]});
+  assert.match(html,/toàn bộ lịch, toàn học kỳ/);
+  assert.match(html,/Không so trực tiếp/);
+  assert.doesNotMatch(html,/<script>/);
+  assert.match(html,/&lt;script>/);
+});
+
+test("phản hồi chất lượng cũ không ghi đè lịch mới", async () => {
+  const h=harness();
+  const waiting=[];
+  h.context.apiJson=()=>new Promise(resolve=>waiting.push(resolve));
+  const first=h.context.loadScheduleQuality(7,"");
+  const second=h.context.loadScheduleQuality(8,"");
+  const payload={session_count:80,general_quality_score:0,lecturer_preference_score:0,
+    preference_domain_mode:"RECURRING",general_components:[],lecturer_components:[],lecturer_details:[]};
+  waiting[1](payload); await second;
+  waiting[0]({...payload,session_count:7}); await first;
+  assert.match(h.query("#schedule-quality").innerHTML,/80 buổi/);
 });

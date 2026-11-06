@@ -1,8 +1,4 @@
-"""GA–PO islands: independent populations, full chromosomes, periodic migration.
-
-Default ISLAND80 matches D154/D155: 24 GA / 6 PO for N30; archive6;
-migration every two generations except the last. No PHENO80 selection.
-"""
+"""GA–PO entry point: TARGET_PO80, with the legacy ISLAND80 engine retained."""
 
 from __future__ import annotations
 
@@ -51,8 +47,9 @@ class HybridConfig:
     """Cấu hình cho một lần chạy thuật toán lai GA–PO.
 
     ``max_fitness_evaluations`` bao gồm cả khởi tạo. ``ga_ratio`` mặc định 0.8
-    quyết định kích thước hai quần thể độc lập, mỗi bên ít nhất hai cá thể.
-    Chỉ cấu hình 80/20 được đo trong D155; tỷ lệ tùy chỉnh là thử nghiệm khác.
+    quyết định số vị trí GA và bộ nhớ PO, mỗi bên ít nhất hai cá thể.
+    TARGET_PO80 cần số vị trí PO không lớn hơn số cá thể GA để chọn anchor.
+    Chỉ cấu hình 80/20 được đo trong nghiên cứu; tỷ lệ khác cần đánh giá riêng.
 
     Các tham số toán tử GA có cùng ý nghĩa và giá trị mặc định với
     :class:`gapo_timetabling.core.ga.GAConfig`. Hai nhánh dùng chung giới hạn giải
@@ -236,7 +233,8 @@ def _try_create_ga_offspring(
 
 
 
-HYBRID_MECHANISM = "GA_PO_ISLANDS.v1"
+ISLAND_HYBRID_MECHANISM = "GA_PO_ISLANDS.v1"
+HYBRID_MECHANISM = "GA_PO_TARGET_PO80.v1"
 DEFAULT_GA_RATIO = 0.8
 PO_ARCHIVE_SIZE = 6
 MIGRATION_INTERVAL = 2
@@ -251,6 +249,14 @@ def validate_island_sizes(population_size: int, ga_ratio: float) -> int:
     n_ga = round(population_size * ga_ratio)
     if min(n_ga, population_size - n_ga) < 2:
         raise ValueError("Each island needs at least two individuals.")
+    return n_ga
+
+
+def validate_target_sizes(population_size: int, ga_ratio: float) -> int:
+    """Validate target memory size against the available GA anchors."""
+    n_ga = validate_island_sizes(population_size, ga_ratio)
+    if population_size - n_ga > n_ga:
+        raise ValueError('TARGET_PO80 needs at least as many GA individuals as PO slots.')
     return n_ga
 
 
@@ -282,14 +288,14 @@ def _migrate(source, destination):
     return tuple(updated), migrant
 
 
-def run_hybrid(
+def run_island_hybrid(
     problem: ProblemInstance,
     option_domains: tuple[tuple[SessionOption, ...], ...],
     initialization: PopulationInitializationResult,
     config: HybridConfig,
     *, progress_callback: OptimizationProgressCallback | None = None,
 ) -> OptimizationResult:
-    """Run D155 ISLAND80 (default), preserving its operator and RNG order.
+    """Run legacy D155 ISLAND80, preserving its operator and RNG order.
 
     Other explicit ratios are configurable experiments, not measured ISLAND80.
     No global monkeypatching: concurrent API jobs remain isolated. Progress
@@ -387,3 +393,16 @@ def run_hybrid(
         final_population=ga_pool + po_pool, convergence_history=tuple(history),
         metrics=replace(metrics, runtime_seconds=perf_counter() - started_at),
     )
+
+
+def run_hybrid(
+    problem: ProblemInstance,
+    option_domains: tuple[tuple[SessionOption, ...], ...],
+    initialization: PopulationInitializationResult,
+    config: HybridConfig,
+    *, progress_callback: OptimizationProgressCallback | None = None,
+) -> OptimizationResult:
+    """Run the approved full TARGET_PO80 method for all new GA_PO jobs."""
+    from .target_hybrid import run_target_hybrid
+    return run_target_hybrid(problem, option_domains, initialization, config,
+                             progress_callback=progress_callback)

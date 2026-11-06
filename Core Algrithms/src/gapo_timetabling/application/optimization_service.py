@@ -13,13 +13,13 @@ from typing import Any
 from .database import ConnectionProtocol, fetch_one_dict
 from ..core.models import OptimizationAlgorithm
 from ..core.population import CandidateEvaluationConfig
-from ..core.decoder import DEFAULT_ENCODING
-from ..core.hybrid import HYBRID_MECHANISM, validate_island_sizes
+from ..core.decoder import PART_PLACEMENT_ENCODING, encoding_for_problem
+from ..core.hybrid import HYBRID_MECHANISM, validate_target_sizes
 from .run_contract import (
     RunRequest,
     SnapshotReference,
-    execute_prepared_run_request,
 )
+from .parallel_execution import execute_web_run_request as execute_prepared_run_request
 from ..core.snapshot import canonical_json, prepare_snapshot_for_optimization
 from .snapshot_builder import ProblemInstanceSnapshotBuilder
 from .run_control import OptimizationRunInterrupted, RunExecutionControl
@@ -97,7 +97,7 @@ class OptimizationRunConfig:
         ):
             raise ValueError("timeout_seconds phải là số nguyên dương hoặc None.")
         if self.algorithm == OptimizationAlgorithm.GA_PO:
-            validate_island_sizes(self.population_size, self.ga_ratio)
+            validate_target_sizes(self.population_size, self.ga_ratio)
 
 
 @dataclass(frozen=True, slots=True)
@@ -114,7 +114,7 @@ def _optimization_config_payload(config: OptimizationRunConfig) -> dict[str, Any
 
     return {
         "schema_version": "optimization-run-config.v1",
-        "solver_pipeline": DEFAULT_ENCODING,
+        "solver_pipeline": PART_PLACEMENT_ENCODING,
         "hybrid_mechanism": HYBRID_MECHANISM if config.algorithm == OptimizationAlgorithm.GA_PO else None,
         "algorithm": config.algorithm.value,
         "population_size": config.population_size,
@@ -140,13 +140,13 @@ def optimization_config_from_json(raw_json: str) -> OptimizationRunConfig:
     payload = json.loads(raw_json)
     if payload.get("schema_version") != "optimization-run-config.v1":
         raise ValueError("Phiên bản request_config_json không được hỗ trợ.")
-    if payload.get("solver_pipeline") != DEFAULT_ENCODING:
+    if payload.get("solver_pipeline") != PART_PLACEMENT_ENCODING:
         raise ValueError(
-            "Run chờ thuộc encode/decode cũ. Hãy tạo run mới; không phục hồi "
+            "Run chờ thuộc encode/decode hoặc phân công LT/TH cũ. Hãy tạo run mới; không phục hồi "
             "cấu hình cũ bằng Priority + Placement để tránh thay đổi thí nghiệm."
         )
     if payload.get("algorithm") == OptimizationAlgorithm.GA_PO.value and payload.get("hybrid_mechanism") != HYBRID_MECHANISM:
-        raise ValueError("Run chờ thuộc cơ chế lai cũ. Hãy tạo run mới, không tự đổi 50/50 sang islands.")
+        raise ValueError("Run chờ thuộc cơ chế lai cũ. Hãy tạo run mới; không tự đổi sang TARGET_PO80.")
     evaluation_payload = payload.get("evaluation_config")
     if not isinstance(evaluation_payload, dict):
         raise ValueError("request_config_json thiếu evaluation_config hợp lệ.")
@@ -353,12 +353,17 @@ class OptimizationRunService:
                 snapshot_payload,
                 expected_checksum=snapshot_checksum,
             )
+            if prepared.problem.lecturer_assignment_scope != "TEACHING_PART":
+                raise ValueError(
+                    "Run ứng dụng mới yêu cầu snapshot phân công theo TeachingPart; "
+                    "không tự đổi phạm vi snapshot đã lưu."
+                )
             if prepared.gene_option_mapping_json is not None:
                 mapping_json = prepared.gene_option_mapping_json
             else:
                 mapping_json = canonical_json({
-                    "schema_version": "gene-option-mapping.v5",
-                    "vector_encoding": DEFAULT_ENCODING,
+                    "schema_version": "gene-option-mapping.v6",
+                    "vector_encoding": encoding_for_problem(prepared.problem),
                     "status": "NO_OPTION",
                     "issues": [
                         {
@@ -448,6 +453,7 @@ class OptimizationRunService:
                 request,
                 prepared,
                 progress_callback=report_progress,
+                check_interruption=(execution_control.check_interruption if execution_control else None),
             )
             if result["status"] == "COMPLETED":
                 self._persist_completed_result(actual_run_id, result)

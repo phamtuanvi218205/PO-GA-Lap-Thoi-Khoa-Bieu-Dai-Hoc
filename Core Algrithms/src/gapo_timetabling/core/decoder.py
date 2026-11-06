@@ -1,6 +1,7 @@
 """Giải mã vector random-key thành phân công và lịch cố định theo học kỳ.
 
-Nhóm gene đầu chọn giảng viên cho mỗi ``CourseSection``. Các gene lịch là
+Nhóm gene đầu chọn giảng viên theo đơn vị phân công snapshot (V3: TeachingPart).
+Các gene lịch là
 PriorityKey cho thứ tự xếp và PlacementKey cho hạng vị trí đang khả thi.
 Bộ giải mã có quay lui giới hạn chỉ để tìm
 lịch hợp lệ. Điểm mềm được tính sau khi hoàn tất lịch, không dùng để chọn mẫu.
@@ -59,9 +60,14 @@ def preferred_option_index(gene: float, option_count: int) -> int:
 PRIORITY_ENCODING = "RECURRING_PRIORITY_FEASIBILITY.v1"
 SOFT_PRIORITY_ENCODING = "RECURRING_PRIORITY_SOFT.v1"
 PLACEMENT_ENCODING = "RECURRING_PRIORITY_PLACEMENT.v1"
+PART_PLACEMENT_ENCODING = "RECURRING_PRIORITY_PLACEMENT_PART.v1"
 DEFAULT_ENCODING = PLACEMENT_ENCODING
 DIRECT_ENCODING = "DIRECT_OPTION"
 _PRIORITY_LOCAL = local()
+
+
+def encoding_for_problem(problem: ProblemInstance) -> str:
+    return PART_PLACEMENT_ENCODING if problem.lecturer_assignment_scope == "TEACHING_PART" else PLACEMENT_ENCODING
 
 
 class _HistoricalProblem(ProblemInstance):
@@ -130,7 +136,11 @@ def decode_saved_vector(
 ) -> DecodeResult:
     """Replay theo nhãn lưu kèm; dữ liệu cũ thiếu nhãn là DIRECT_OPTION."""
 
-    if encoding == PLACEMENT_ENCODING:
+    if problem.lecturer_assignment_scope == "TEACHING_PART" and encoding != PART_PLACEMENT_ENCODING:
+        raise ValueError("Saved vector assignment scope does not match snapshot.")
+    if encoding in {PLACEMENT_ENCODING, PART_PLACEMENT_ENCODING}:
+        if encoding != encoding_for_problem(problem):
+            raise ValueError("Saved vector assignment scope does not match snapshot.")
         return decode_vector(problem, option_domains, vector, max_decode_nodes)
     if encoding == PRIORITY_ENCODING:
         from .priority_decoder import PriorityDecoder
@@ -259,12 +269,12 @@ def _select_lecturers(
 
     selected: list[int] = []
     lecturer_by_section: dict[str, int] = {}
-    for assignment_index, section_code in enumerate(problem.assignment_section_codes):
-        eligible = problem.eligible_lecturer_indices(section_code)
+    for assignment_index, section_code in enumerate(problem.assignment_keys):
+        eligible = problem.eligible_assignment_lecturers(section_code)
         if not eligible:
             return {}, (), DecodeResult(
                 DecodeStatus.NO_OPTION, (), (), (), 0, 0, None,
-                f"CourseSection {section_code} không có giảng viên đủ năng lực.",
+                f"Đơn vị phân công {section_code} không có giảng viên đủ năng lực.",
             )
         lecturer_index = eligible[
             preferred_option_index(vector[assignment_index], len(eligible))
@@ -276,7 +286,7 @@ def _select_lecturers(
         for part in problem.teaching_parts:
             if part.lecturer_index is None:
                 raise ValueError("Snapshot v1 thiếu lecturer_index.")
-            lecturer_by_section[part.section_code] = part.lecturer_index
+            lecturer_by_section[problem.assignment_key_for_part(part)] = part.lecturer_index
     return lecturer_by_section, tuple(selected), None
 
 
@@ -290,7 +300,7 @@ def _load_failure(
     lecturers = {item.lecturer_index: item for item in problem.lecturers}
     loads: dict[int, int] = {}
     for part in problem.teaching_parts:
-        lecturer_index = lecturer_by_section[part.section_code]
+        lecturer_index = lecturer_by_section[problem.assignment_key_for_part(part)]
         loads[lecturer_index] = loads.get(lecturer_index, 0) + part.total_periods
     for lecturer_index, assigned_periods in loads.items():
         maximum = lecturers[lecturer_index].max_teaching_periods
@@ -352,7 +362,7 @@ def decode_direct_vector(
     active_domains: list[tuple[RecurringPattern, ...]] = []
     for group_index in range(problem.schedule_dimension):
         part = _part_for_group(problem, group_index)
-        chosen_lecturer = lecturer_by_section[part.section_code]
+        chosen_lecturer = lecturer_by_section[problem.assignment_key_for_part(part)]
         patterns = build_recurring_patterns_for_group(
             problem, option_domains, group_index, chosen_lecturer
         )

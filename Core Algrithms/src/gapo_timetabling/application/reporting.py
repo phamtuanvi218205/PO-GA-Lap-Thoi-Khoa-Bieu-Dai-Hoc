@@ -17,7 +17,7 @@ from pathlib import Path
 
 from ..core.metrics import OptimizationResult
 from ..core.models import ProblemInstance
-from ..core.decoder import DEFAULT_ENCODING
+from ..core.decoder import DEFAULT_ENCODING, encoding_for_problem
 from ..core.hybrid import HYBRID_MECHANISM
 
 
@@ -147,13 +147,14 @@ def _write_summary_json(
     snapshot_checksum: str,
     seed: int,
     row_count: int,
+    solver_pipeline: str = DEFAULT_ENCODING,
 ) -> None:
     """Lưu cấu hình nhận diện run, metrics và breakdown của nghiệm tốt nhất."""
 
     best_fitness = result.best_individual.fitness
     payload = {
         "schema_version": "timetable-demo-report.v2",
-        "solver_pipeline": DEFAULT_ENCODING,
+        "solver_pipeline": solver_pipeline,
         "algorithm": result.algorithm.value,
         "hybrid_mechanism": HYBRID_MECHANISM if result.algorithm.value == "GA_PO" else None,
         "snapshot_checksum": snapshot_checksum,
@@ -676,6 +677,7 @@ def export_timetable_report(
         snapshot_checksum,
         seed,
         len(rows),
+        encoding_for_problem(problem),
     )
     _write_convergence_csv(paths.convergence_csv, result)
     _write_timetable_csv(paths.timetable_csv, rows)

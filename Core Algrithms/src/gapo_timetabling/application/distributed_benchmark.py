@@ -27,7 +27,9 @@ from typing import Any, Mapping, Sequence
 
 from ..core.greedy_baseline import GREEDY_BASELINE_NAME
 from ..core.hybrid import HYBRID_MECHANISM
-from ..core.decoder import DIRECT_ENCODING, DEFAULT_ENCODING, PRIORITY_ENCODING, SOFT_PRIORITY_ENCODING
+from ..core.decoder import DIRECT_ENCODING, DEFAULT_ENCODING, PRIORITY_ENCODING, SOFT_PRIORITY_ENCODING, PART_PLACEMENT_ENCODING, encoding_for_problem
+from ..core.snapshot import prepare_snapshot_for_optimization
+from .run_contract import parse_run_request
 from ..core.models import OptimizationAlgorithm
 from .experiment import (
     EXPERIMENT_METADATA_SCHEMA_VERSION,
@@ -187,8 +189,11 @@ def _worker_manifest_payload(
     worker: OptimizationAlgorithm,
 ) -> dict[str, Any]:
     cases: list[dict[str, Any]] = []
+    pipelines = set()
     for case in suite.cases:
         config = load_experiment_config(case.experiment_config_path)
+        request = parse_run_request(_load_base_request(config.base_request_path), base_directory=config.base_request_path.parent)
+        pipelines.add(encoding_for_problem(prepare_snapshot_for_optimization(request.snapshot.path, expected_checksum=request.snapshot.checksum).problem))
         cases.append({
             "case_id": case.case_id,
             "experiment_id": config.experiment_id,
@@ -200,10 +205,12 @@ def _worker_manifest_payload(
             )["checksum"],
             "status": "PENDING",
         })
+    if len(pipelines) > 1:
+        raise ExperimentContractError("Không trộn phạm vi phân công TeachingPart và CourseSection trong một suite.")
     source_state = _git_source_state()
     return {
         "schema_version": WORKER_MANIFEST_SCHEMA_VERSION,
-        "solver_pipeline": DEFAULT_ENCODING,
+        "solver_pipeline": next(iter(pipelines), DEFAULT_ENCODING),
         "suite_id": suite.suite_id,
         "worker": worker.value,
         "includes_greedy_baseline": worker is OptimizationAlgorithm.GA_PO,
@@ -260,7 +267,7 @@ def run_worker_suite(
         previous = json.loads(manifest_path.read_text(encoding="utf-8"))
         if worker is OptimizationAlgorithm.GA_PO and previous.get("hybrid_mechanism") != HYBRID_MECHANISM:
             raise ExperimentContractError("Thư mục worker thuộc cơ chế lai cũ. Dùng output-root mới.")
-        if previous.get("solver_pipeline", DIRECT_ENCODING) != DEFAULT_ENCODING:
+        if previous.get("solver_pipeline", DIRECT_ENCODING) != _worker_manifest_payload(suite, worker)["solver_pipeline"]:
             raise ExperimentContractError(
                 "Thư mục worker thuộc encode/decode cũ. Dùng output-root mới; "
                 "không ghi đè manifest hoặc kết quả lịch sử."
@@ -359,7 +366,7 @@ def _load_worker_manifests(
     pipelines = {manifest.get("solver_pipeline", DIRECT_ENCODING)
                  for _, manifest in workers.values()}
     if len(pipelines) != 1 or not pipelines <= {
-        DIRECT_ENCODING, DEFAULT_ENCODING, PRIORITY_ENCODING, SOFT_PRIORITY_ENCODING
+        DIRECT_ENCODING, DEFAULT_ENCODING, PRIORITY_ENCODING, SOFT_PRIORITY_ENCODING, PART_PLACEMENT_ENCODING
     }:
         raise ExperimentContractError(
             "Các worker dùng encode/decode khác nhau; không trộn DIRECT và PRIORITY."

@@ -493,6 +493,14 @@ dialog label { display: grid; gap: 6px; margin-bottom: 12px; }
 .revision-picker { display: grid; gap: 6px; min-width: 280px; max-width: 650px; }
 .session-card { cursor: pointer; }
 .session-card:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+.quality-panel { margin: 16px 0; padding: 16px; border: 1px solid var(--line); background: #fff; }
+.quality-panel summary { cursor: pointer; font-weight: 600; }
+.quality-panel p, #adjustment-preview p { line-height: 1.6; }
+.quality-scroll { overflow: auto; max-height: 360px; margin: 12px 0; }
+.quality-table { width: 100%; min-width: 600px; border-collapse: collapse; font-size: .9rem; }
+.quality-table th, .quality-table td { padding: 10px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.quality-table thead th { background: #f2f5f4; }
+#adjustment-preview { margin: 12px 0; }
 
 @media (max-width: 980px) {
   .site-header { gap: 20px; padding: 0 20px; }
@@ -516,3 +524,8 @@ dialog label { display: grid; gap: 6px; margin-bottom: 12px; }
   .scenario-card { grid-template-columns: 1fr; }
   .schedule-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 }
+.run-card { min-width: 0; }
+.run-rounds-scroll { overflow: auto; max-width: 100%; max-height: 300px; margin: 12px 0; }
+.run-rounds-scroll table { min-width: 760px; width: 100%; border-collapse: collapse; font-size: .85rem; }
+.run-rounds-scroll th, .run-rounds-scroll td { padding: 8px; border: 1px solid var(--line); text-align: left; }
+.run-rounds-scroll thead th { position: sticky; top: 0; z-index: 1; background: #f2f5f5; }
