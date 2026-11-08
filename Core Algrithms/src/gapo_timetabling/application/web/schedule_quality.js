@@ -13,14 +13,12 @@ function qualityTable(items) {
 }
 function renderScheduleQuality(payload) {
   const people = payload.lecturer_details || [];
-  return `<p>Chất lượng của <strong>toàn bộ lịch, toàn học kỳ</strong>, không chỉ các buổi đang lọc. Đủ ${payload.session_count} buổi; 0 vi phạm cứng.</p>
-    <p>Điểm nhỏ hơn là tốt hơn. Đây là điểm phạt đã chuẩn hóa, không phải số lỗi hay phần trăm hài lòng. Các giá trị hiển thị được làm tròn.</p>
-    <p>Thuật toán ưu tiên chất lượng chung; chỉ xét tầng mong muốn và phù hợp giảng viên khi chất lượng chung bằng nhau.</p>
+  return `<p>Toàn học kỳ: ${payload.session_count} buổi · 0 vi phạm cứng</p>
     <h3>Chất lượng chung: ${qualityNumber(payload.general_quality_score)}</h3>${qualityTable(payload.general_components)}
     <h3>Mong muốn và phù hợp giảng viên: ${qualityNumber(payload.lecturer_preference_score)}</h3>${qualityTable(payload.lecturer_components)}
-    <p class="section-note">Mong muốn được đối chiếu trong ${payload.preference_domain_mode === "RECURRING" ? "miền mẫu lặp toàn kỳ của lịch gốc" : "miền từng buổi của bản điều chỉnh"}. Không so trực tiếp điểm mong muốn giữa hai chế độ. Trọng số 0 nghĩa là tiêu chí không tham gia điểm tổng.</p>
-    <details><summary>Chi tiết mong muốn theo giảng viên</summary><p>Phần phạt bên dưới chưa chuẩn hóa; không cộng trực tiếp thành điểm tổng. Chỉ gồm những giảng viên có cơ hội cải thiện mong muốn trong miền lựa chọn.</p>
-    <div class="quality-scroll"><table class="quality-table"><thead><tr><th>Giảng viên</th><th>Buổi có cơ hội cải thiện</th><th>Bỏ lỡ khung mong muốn</th><th>Khung hạn chế có thể tránh</th></tr></thead><tbody>${people.map(p=>`<tr><th scope="row">${escapeHtml(p.lecturer_code)} — ${escapeHtml(p.lecturer_name)}</th><td>${p.evaluated_session_count}</td><td>${qualityNumber(p.missed_preferred_penalty)}</td><td>${qualityNumber(p.discouraged_overlap_penalty)}</td></tr>`).join("") || '<tr><td colspan="4">Không có cơ hội cải thiện mong muốn thời gian trong miền đang xét.</td></tr>'}</tbody></table></div></details>`;
+    <p class="section-note">Chế độ đánh giá: ${payload.preference_domain_mode === "RECURRING" ? "mẫu lịch lặp" : "từng buổi học"}</p>
+    <details><summary>Chi tiết mong muốn theo giảng viên</summary>
+    <div class="quality-scroll"><table class="quality-table"><thead><tr><th>Giảng viên</th><th>Buổi có cơ hội cải thiện</th><th>Phạt bỏ lỡ mong muốn (chưa chuẩn hóa)</th><th>Phạt khung hạn chế (chưa chuẩn hóa)</th></tr></thead><tbody>${people.map(p=>`<tr><th scope="row">${escapeHtml(p.lecturer_code)} — ${escapeHtml(p.lecturer_name)}</th><td>${p.evaluated_session_count}</td><td>${qualityNumber(p.missed_preferred_penalty)}</td><td>${qualityNumber(p.discouraged_overlap_penalty)}</td></tr>`).join("") || '<tr><td colspan="4">Không có dữ liệu mong muốn cần đánh giá.</td></tr>'}</tbody></table></div></details>`;
 }
 async function loadScheduleQuality(runId, revision) {
   const request = ++qualityRequest;

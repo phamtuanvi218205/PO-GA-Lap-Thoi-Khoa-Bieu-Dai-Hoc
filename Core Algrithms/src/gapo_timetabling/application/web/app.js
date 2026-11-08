@@ -222,26 +222,26 @@ function parseManualJson() {
 }
 
 function bindPreparationActions() {
-  $("#reset-semester").addEventListener("click", resetSemesterForDemo);
+  $("#reset-semester").addEventListener("click", clearSemesterSchedulingData);
   $("#check-readiness").addEventListener("click", checkReadiness);
   $("#prepare-semester").addEventListener("click", prepareSemester);
 }
 
-async function resetSemesterForDemo() {
+async function clearSemesterSchedulingData() {
   if (!requireTerm()) return;
   const term = state.terms.find((item) => item.term_code === state.selectedTerm);
   const label = term ? `${term.term_name} (${term.term_code})` : state.selectedTerm;
   const confirmed = window.confirm(
-    `Đặt lại ${label}?\n\n` +
-    "Các scenario, run, kết quả thời khóa biểu, plan và session đã sinh sẽ bị xóa. " +
-    "Dữ liệu nguồn như môn, lớp, giảng viên, phòng và lịch bận vẫn được giữ."
+    `Xóa dữ liệu xếp lịch của ${label}?\n\n` +
+    "Toàn bộ bài toán đã chuẩn bị, kế hoạch, buổi học, lần chạy, thời khóa biểu và phiên bản điều chỉnh của học kỳ này sẽ bị xóa.\n\n" +
+    "Học kỳ và dữ liệu đầu vào như môn, lớp, giảng viên, phòng, thiết bị và lịch bận được giữ nguyên. Thao tác này không thể hoàn tác."
   );
   if (!confirmed) return;
 
   const button = $("#reset-semester");
   const box = $("#reset-result");
   button.disabled = true;
-  setResultBox(box, "Đang đặt lại dữ liệu đã sinh…");
+  setResultBox(box, "Đang xóa dữ liệu xếp lịch…");
   try {
     const payload = await apiJson(
       `/api/input-data/terms/${encodeURIComponent(state.selectedTerm)}/scheduling-data`,
@@ -249,7 +249,7 @@ async function resetSemesterForDemo() {
     );
     const deleted = payload.deleted_counts || {};
     const total = Object.values(deleted).reduce((sum, value) => sum + Number(value || 0), 0);
-    setResultBox(box, `Đã đặt lại học kỳ. Đã xóa ${formatNumber(total)} dòng dữ liệu phát sinh; dữ liệu nguồn được giữ nguyên.`);
+    setResultBox(box, `Đã xóa ${formatNumber(total)} dòng dữ liệu xếp lịch của ${label}. Dữ liệu đầu vào được giữ nguyên.`);
     clearInterval(state.pollTimer);
     state.pollTimer = null;
     state.pollVersion += 1;
@@ -260,8 +260,8 @@ async function resetSemesterForDemo() {
     state.scheduleWeek = 1;
     updateScenarioSelect();
     $("#readiness-card").className = "readiness-card empty-state";
-    $("#readiness-card").innerHTML = "<h3>Học kỳ đã được đặt lại. Hãy kiểm tra dữ liệu hoặc tạo bài toán mới.</h3>";
-    toast("Đã đặt lại học kỳ để chạy demo lại.");
+    $("#readiness-card").innerHTML = "<h3>Chưa có bài toán đã chuẩn bị</h3>";
+    toast("Đã xóa dữ liệu xếp lịch của học kỳ đang chọn.");
   } catch (error) {
     setResultBox(box, error.message, true);
   } finally {
@@ -471,9 +471,6 @@ function renderRun(job) {
     ? (active && completed < maximum ? `Đang vòng ${completed + 1}/${maximum} · đã xong ${completed}` : `Đã xong ${completed}/${maximum}`)
     : (active ? "Đang khởi tạo quần thể" : "—");
   $("#run-attempts").textContent = job.candidate_attempts == null ? "—" : `${formatNumber(job.candidate_attempts)} / ${formatNumber(job.decode_failed_count || 0)}`;
-  $("#run-activity").textContent = active
-    ? "Đang tìm kiếm. FE tăng khi chấm được nghiệm hợp lệ; giải mã khó có thể mất lâu giữa hai cập nhật. Q tốt nhất không đổi không có nghĩa thuật toán đã dừng."
-    : "FE là số lần chấm nghiệm hợp lệ, không phải điểm hay thời gian. Nhật ký ghi các vòng đã hoàn tất thực tế.";
   renderRunRounds(job.iteration_history || []);
   startRunClock(job, active);
   $("#run-general").textContent = formatScore(job.best_general_quality_score);

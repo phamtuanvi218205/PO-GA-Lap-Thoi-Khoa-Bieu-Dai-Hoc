@@ -130,7 +130,7 @@ def bundle(destination):
     destination = destination.resolve()
     destination.parent.mkdir(parents=True,exist_ok=True)
     # Explicit allowlist: no Word, private context, credentials, DB, old studies or results.
-    files = [CORE.parent/'pyproject.toml', Path(__file__),
+    files = [CORE.parent/'requirements.txt', Path(__file__),
         CORE/'tools/run_target_ablation_t50.py',CORE/'tools/check_part_t50_benchmark.py',
         *TEMPLATES.glob('*'), SHARED/'evidence.py', SHARED/'variants.py', SHARED/'controller.py',
         *(CORE/'src/gapo_timetabling').rglob('*.py'), *CONFIG.rglob('*')]

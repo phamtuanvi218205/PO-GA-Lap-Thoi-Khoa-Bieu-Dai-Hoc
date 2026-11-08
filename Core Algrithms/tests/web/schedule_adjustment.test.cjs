@@ -181,14 +181,14 @@ test("sửa phương án sau xem trước hoặc chuyển run không được l�
   assert.equal(h.requests.filter(r=>r.url.endsWith("schedule-revisions")).length,0);
 });
 
-test("giải thích chất lượng escape dữ liệu và ghi rõ toàn kỳ, khác chế độ điểm", () => {
+test("chất lượng escape dữ liệu và giữ nhãn toàn kỳ, chế độ điểm", () => {
   const h=harness();
   const html=h.context.renderScheduleQuality({session_count:8, general_quality_score:0,
     lecturer_preference_score:0, preference_domain_mode:"OCCURRENCE", general_components:[],
     lecturer_components:[], lecturer_details:[{lecturer_code:"<script>",lecturer_name:"A",
       evaluated_session_count:2,missed_preferred_penalty:0,discouraged_overlap_penalty:0}]});
-  assert.match(html,/toàn bộ lịch, toàn học kỳ/);
-  assert.match(html,/Không so trực tiếp/);
+  assert.match(html,/Toàn học kỳ: 8 buổi/);
+  assert.match(html,/Chế độ đánh giá: từng buổi học/);
   assert.doesNotMatch(html,/<script>/);
   assert.match(html,/&lt;script>/);
 });

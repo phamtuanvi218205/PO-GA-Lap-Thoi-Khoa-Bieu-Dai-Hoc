@@ -12,7 +12,7 @@ Không chạy lại GA, PO, FULL hoặc Greedy. Dùng đúng hướng dẫn:
 Tại thư mục gốc repo (PowerShell, CMD, Git Bash hoặc Linux):
 
 ```text
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements.txt
 python "Core Algrithms/tools/run_target_ablation_t50.py" check
 python "Core Algrithms/tools/run_target_ablation_t50.py" run --output-root "Core Algrithms/test_results/ABLATION_T50_team01" --workers 16
 ```
@@ -140,12 +140,40 @@ Luồng chạy chính:
 ## Cài đặt
 
 ```powershell
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements.txt
 ```
 
-Khai báo `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` và tùy chọn
-`DB_ODBC_DRIVER` theo file `.env.example`. Nếu không khai báo driver, runtime
-tự ưu tiên ODBC Driver 18, sau đó Driver 17 và driver SQL Server có sẵn.
+Sao chép `.env.example` thành `.env` ở thư mục gốc dự án rồi sửa `DB_URL`,
+`DB_USERNAME`, `DB_PASSWORD` và tùy chọn `DB_ODBC_DRIVER` theo máy triển khai.
+Các lệnh ứng dụng và web đọc bốn khóa kết nối này từ cùng file `.env`, kể cả
+khi thư mục làm việc của terminal khác thư mục dự án. Thứ tự ưu tiên là biến
+môi trường đã khai báo → `.env` → mặc định cục bộ. Mật khẩu được đọc nguyên
+giá trị, không thay thế cú pháp `${...}`; có thể đặt trong nháy đơn khi chứa `#`.
+Không đưa `.env` chứa mật khẩu lên Git. Nếu không khai báo driver, runtime tự
+ưu tiên ODBC Driver 18, sau đó Driver 17 và driver SQL Server có sẵn. Khởi động
+lại web sau khi đổi kết nối; không đổi database giữa lúc đang có lượt chạy.
+Các tùy chọn `GAPO_*` vẫn được khai báo bằng biến môi trường của tiến trình.
+
+### Tạo database một lần trước khi mở web
+
+Mở `Script/KHOI_TAO_DATABASE.sql` bằng SSMS, kết nối SQL Server rồi chạy toàn
+bộ file. Tên database mặc định là `KhoaLuanDemo`; nếu đổi tên, thay tất cả
+`KhoaLuanDemo` trong script và đặt cùng tên đó ở `databaseName` trong `.env`.
+Script tạo database nếu chưa tồn tại và chỉ tạo bảng khi database hoàn toàn
+trống. Nếu đã có bảng, script dừng, không reset hoặc xóa dữ liệu.
+
+Script có đủ 34 bảng ứng dụng, khóa ngoại, ràng buộc và 13 chỉ mục bổ sung.
+Dữ liệu nền gồm 16 tiết học, 4 quy tắc thời lượng LT/TH, 9 khối tiết được phép
+và 13 cấu hình ràng buộc (7 cứng, 6 mềm, gồm trọng số và ngưỡng mặc định).
+Không kèm học kỳ, lớp, môn, giảng viên, phòng hoặc lịch demo. Nhập các dữ liệu
+này bằng Excel hoặc nhập tay trên web sau khi khởi tạo.
+
+SQL Server và ODBC Driver cần cài sẵn. Tài khoản chạy script cần quyền tạo
+database/bảng; có thể nhờ quản trị viên thực hiện. Các bảng và dữ liệu nền
+được tạo trong một transaction; nếu lỗi thì rollback phần khởi tạo bảng.
+Không dùng database hệ thống và không chạy `Script/script.sql` để cài đặt:
+file đó là script reset dành cho phát triển và có lệnh xóa bảng.
+Web và công cụ benchmark không tự tạo database hoặc bảng.
 
 ## Các lệnh chính
 
@@ -183,17 +211,21 @@ trong khi dùng, nhấn `Ctrl+C` để dừng server. Đóng tab trình duyệt 
 
 Nếu API đã chạy trên cổng 8000, file chỉ mở lại trang; không chạy thêm server.
 Nếu cổng thuộc ứng dụng khác, file báo lỗi và không tự tắt tiến trình đó.
-Launcher dùng cấu hình SQL mặc định/biến môi trường hiện có, không tự cài
-Python/thư viện, không chạy migration, reset dữ liệu hoặc benchmark. Máy vẫn
+Launcher dùng cấu hình SQL của ứng dụng, không tự cài Python/thư viện,
+không tự tạo database/bảng, chạy migration, reset dữ liệu hoặc benchmark. Máy vẫn
 cần SQL Server và ODBC driver như khi chạy bằng lệnh. Cơ chế khôi phục job
 của ứng dụng khi khởi động vẫn giữ nguyên; mở ứng dụng có thể tiếp tục xử lý
-các job còn chờ theo cơ chế sẵn có. Launcher không tự nạp file `.env`.
+các job còn chờ theo cơ chế sẵn có. Tầng kết nối tự đọc file `.env` tại gốc dự án.
 
 Chỉ kiểm tra môi trường, không chạy server: `CHAY_UNG_DUNG.cmd --check`.
 Giữ file CMD và `Script/start_demo.py` trong cấu trúc dự án; có thể tạo shortcut
 tới file CMD trên Desktop, không chuyển riêng file CMD ra khỏi dự án.
 
+Các lệnh thủ công dưới đây chạy tại thư mục gốc dự án. Trong PowerShell,
+đặt đường dẫn source cho phiên terminal trước khi gọi module:
+
 ```powershell
+$env:PYTHONPATH = (Resolve-Path "Core Algrithms/src").Path
 python -m gapo_timetabling generate-plans 1
 python -m gapo_timetabling create-scenarios 2026_HK1 --scope FULL_TERM
 python -m gapo_timetabling build-snapshot 1 --output snapshot.json
@@ -202,6 +234,10 @@ python -m gapo_timetabling export-schedule 1 --output timetable.csv
 python -m gapo_timetabling export-schedule-xlsx 1 --output timetable.xlsx
 python -m gapo_timetabling serve-api --host 127.0.0.1 --port 8000
 ```
+
+Với Git Bash/Linux/macOS, dùng `export PYTHONPATH="$PWD/Core Algrithms/src"`
+trước các lệnh `python -m gapo_timetabling`. Khi bấm `CHAY_UNG_DUNG.cmd`,
+launcher tự thêm đường dẫn source nên không cần khai báo bước này.
 
 Hai lệnh xuất lịch có thể nhận thêm `--lecturer-code`, `--section-code`,
 `--term-code` và `--week-number`. Tệp CSV có BOM nên có thể mở trực tiếp bằng

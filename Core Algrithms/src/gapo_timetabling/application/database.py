@@ -10,8 +10,25 @@ from __future__ import annotations
 from contextlib import contextmanager
 from dataclasses import dataclass
 import os
+from pathlib import Path
 import re
 from typing import Any, Iterator, Mapping, Protocol, Sequence
+
+from dotenv import dotenv_values
+
+
+# Resolve from source, not the terminal's current directory or an unrelated .env.
+PROJECT_ENV_FILE = Path(__file__).resolve().parents[4] / ".env"
+
+
+def _database_settings() -> dict[str, str | None]:
+    """Read local DB settings without changing process environment or expanding passwords."""
+
+    values = dict(dotenv_values(PROJECT_ENV_FILE, encoding="utf-8-sig", interpolate=False))
+    for name in ("DB_URL", "DB_USERNAME", "DB_PASSWORD", "DB_ODBC_DRIVER"):
+        if name in os.environ:
+            values[name] = os.environ[name]
+    return values
 
 
 # Cấu hình mặc định chỉ phục vụ môi trường phát triển cục bộ của đồ án. Biến
@@ -91,20 +108,26 @@ class SqlServerConfig:
 
     @classmethod
     def from_environment(cls) -> "SqlServerConfig":
-        """Đọc cấu hình từ biến môi trường, không ghi thông tin bí mật ra log."""
+        """Ưu tiên biến môi trường, sau đó .env ở gốc dự án và mặc định cục bộ."""
 
-        jdbc_url = os.getenv("DB_URL", DEFAULT_LOCAL_DB_URL).strip()
-        username = os.getenv("DB_USERNAME", DEFAULT_LOCAL_DB_USERNAME).strip()
-        password = os.getenv("DB_PASSWORD", DEFAULT_LOCAL_DB_PASSWORD)
+        settings = _database_settings()
+        jdbc_url = (settings.get("DB_URL", DEFAULT_LOCAL_DB_URL) or "").strip()
+        username = (settings.get("DB_USERNAME", DEFAULT_LOCAL_DB_USERNAME) or "").strip()
+        password = settings.get("DB_PASSWORD", DEFAULT_LOCAL_DB_PASSWORD)
         if not jdbc_url or not username or not password:
             raise DatabaseConfigurationError(
                 "Cần khai báo DB_URL, DB_USERNAME và DB_PASSWORD trước khi truy cập SQL Server."
             )
-        return cls.from_jdbc_url(jdbc_url, username=username, password=password)
+        return cls.from_jdbc_url(
+            jdbc_url,
+            username=username,
+            password=password,
+            driver=(settings.get("DB_ODBC_DRIVER") or "").strip() or None,
+        )
 
     @classmethod
     def from_jdbc_url(
-        cls, jdbc_url: str, *, username: str, password: str
+        cls, jdbc_url: str, *, username: str, password: str, driver: str | None = None
     ) -> "SqlServerConfig":
         """Chuyển JDBC URL cũ sang cấu hình độc lập dùng cho Python."""
 
@@ -146,7 +169,7 @@ class SqlServerConfig:
             database=database,
             username=username,
             password=password,
-            driver=os.getenv("DB_ODBC_DRIVER") or _detect_sql_server_driver(),
+            driver=driver or os.getenv("DB_ODBC_DRIVER") or _detect_sql_server_driver(),
             encrypt=as_bool("encrypt", True),
             trust_server_certificate=as_bool("trustServerCertificate", True),
         )

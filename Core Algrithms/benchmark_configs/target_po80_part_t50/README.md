@@ -41,7 +41,7 @@ chia việc. Python3.11 trở lên. Những lệnh dưới đây dùng được 
 CMD, Git Bash và Linux sau khi môi trường Python đã được chọn đúng:
 
 ```text
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements.txt
 python "Core Algrithms/tools/check_part_t50_benchmark.py"
 ```
 
@@ -55,7 +55,8 @@ python "Core Algrithms/tools/check_part_t50_benchmark.py" --initial small:1
 
 Nếu `python` không có trên Git Bash nhưng Windows đã cài Python, dùng `py -3.11`
 thay cho `python`. Không dùng cú pháp `$env:PYTHONPATH` trong Git Bash. Sau khi
-cài editable bằng lệnh trên, không cần đặt PYTHONPATH thủ công.
+cài thư viện bằng lệnh trên, các script kiểm tra/chạy benchmark tự thêm đường
+dẫn source; không cần đặt PYTHONPATH thủ công cho các script này.
 
 ## 2. Chia ba phương pháp cho ba máy
 

@@ -1,4 +1,39 @@
-# Benchmark GA, PO V2 và GA–PO trên CEC 2022
+# Benchmark GA PO và ISLAND80 trên CEC 2022
+
+## Phiên bản đồng bộ với ứng dụng
+
+Điểm chạy hiện tại là `launch_production_cec.py`; launcher đóng băng source rồi
+gọi controller `run_production_cec.py`. Ba phương pháp GA, PO và
+ISLAND80 import toán tử từ `gapo_timetabling.core`; ISLAND80 giữ hai quần thể
+24/6, archive PO6 và migration mỗi hai vòng. Chi tiết trong
+`PRODUCTION_CEC_PROTOCOL.md`; adapter được đối chiếu toàn bộ quỹ đạo với vòng
+lặp code chính trong `tests/test_production_algorithms.py`.
+
+Chạy từ gốc repository, không cần sửa PYTHONPATH:
+
+```powershell
+python "Core Algrithms/benchmark/launch_production_cec.py" --output "Core Algrithms/benchmark/results/cec2022_island80_moi" --workers 14
+```
+
+Cấu hình đầy đủ gồm 12 hàm, D20, N30, 30 seed và 300.000 FE mỗi lượt:
+1.080 lượt mới. Tọa độ tìm kiếm thuộc [0,1] như code chính; cổng đánh giá
+chuyển x=-100+200u. CEC không có lịch; archive/migration phân biệt bằng vector
+chính xác. Không chạy Encoder/Decoder hoặc đọc DB. Không nhập lại kết quả của
+cơ chế lai khác. Lưu từng JSON run và trace nén, config/SHA, status và audit;
+thư mục đã tồn tại chỉ được tiếp tục khi có `--resume` rõ ràng và cùng cấu hình.
+
+Sau khi controller báo COMPLETED, kiểm tra độc lập và tạo báo cáo/ảnh từ kết
+quả đã lưu (không chạy optimizer thêm):
+
+```powershell
+python "Core Algrithms/benchmark/audit_production_cec.py" "Core Algrithms/benchmark/results/cec2022_island80_moi"
+python "Core Algrithms/benchmark/report_production_cec.py" "Core Algrithms/benchmark/results/cec2022_island80_moi"
+```
+
+## Phiên bản tái lập kết quả 50/50 trước đây
+
+Các hướng dẫn `run_benchmark.py`, hai profile và các tham số 50/50 bên dưới
+chỉ dành cho tái lập bộ kết quả cũ. Chúng không phải cấu hình ISLAND80 hiện tại.
 
 Thư mục này chỉ đánh giá ba thuật toán trên bộ 12 hàm benchmark CEC 2022
 chính thức trước khi đưa chúng vào bài toán xếp lịch. Benchmark không đọc cơ sở

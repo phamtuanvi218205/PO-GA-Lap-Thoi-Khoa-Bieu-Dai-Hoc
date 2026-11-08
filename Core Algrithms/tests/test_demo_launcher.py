@@ -35,6 +35,20 @@ def test_old_python_is_rejected():
             launcher.check_environment()
 
 
+def test_missing_dotenv_dependency_is_reported():
+    with patch.object(launcher.importlib.util, "find_spec", side_effect=lambda name: None if name == "dotenv" else object()):
+        with pytest.raises(RuntimeError, match="dotenv"):
+            launcher.check_environment()
+
+
+def test_run_server_uses_existing_application_entry_point():
+    from gapo_timetabling.application import app_cli
+
+    with patch.object(app_cli, "main", return_value=0) as main:
+        assert launcher.run_server() == 0
+        main.assert_called_once_with(["serve-api", "--host", "127.0.0.1", "--port", "8000"])
+
+
 @pytest.fixture
 def safe_main():
     with patch.object(launcher, "check_environment"), \

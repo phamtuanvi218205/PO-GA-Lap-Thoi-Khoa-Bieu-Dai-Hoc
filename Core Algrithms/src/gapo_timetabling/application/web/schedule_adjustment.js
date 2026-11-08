@@ -26,8 +26,8 @@ async function refreshScheduleRevisions(runId) {
   if ([...select.options].some(option=>option.value===selected)) select.value=selected;
   scheduleAdjustment.runId=runId;
   const current=payload.items.find(item=>String(item.revision_id)===select.value);
-  const scoreNote=current?.preference_domain_mode==="OCCURRENCE" ? " Điểm mong muốn được tính theo miền từng buổi, không dùng so sánh benchmark." : "";
-  $("#revision-description").textContent=current ? `Bản điều chỉnh ${current.revision_id}; Q_general=${current.general_quality_score.toFixed(6)}, Q_lecturer=${current.lecturer_preference_score.toFixed(6)}.${scoreNote} Kết quả thuật toán gốc không bị thay đổi.` : "Kết quả thuật toán gốc. Chọn buổi học để sửa riêng buổi đó hoặc toàn bộ các tuần hoạt động.";
+  $("#revision-description").textContent=current ? `Bản điều chỉnh ${current.revision_id} · Q_general: ${current.general_quality_score.toFixed(6)} · Q_lecturer: ${current.lecturer_preference_score.toFixed(6)}` : "";
+  $("#revision-description").classList.toggle("is-hidden", !current);
 }
 async function openScheduleAdjustment(item) {
   if (!item) return;
@@ -55,13 +55,13 @@ async function loadAdjustmentOptions() {
   scheduleAdjustment.options=[];
   $("#adjustment-option").innerHTML="";
   $("#adjustment-result").classList.add("is-hidden");
-  $("#adjustment-scope-description").textContent=scope==="SINGLE_SESSION" ? `Chỉ đổi buổi của tuần ${scheduleAdjustment.week} trong cùng tuần; các tuần khác giữ nguyên.` : "Đổi cùng thứ–tiết–phòng ở mọi tuần hoạt động của nhóm này, kể cả các buổi đã có ngoại lệ.";
+  $("#adjustment-scope-description").textContent=scope==="SINGLE_SESSION" ? `Tuần ${scheduleAdjustment.week}` : "Toàn bộ tuần hoạt động, gồm các buổi đã điều chỉnh riêng";
   $("#save-adjustment").disabled=true;
   $("#preview-adjustment").disabled=true;
   try {
     const payload=await apiJson(`/api/runs/${state.currentRunId}/adjustment-options?${params}`);
     if(requestId!==scheduleAdjustment.optionRequest) return;
-    if(scope==="ALL_WEEKS") $("#adjustment-scope-description").textContent=`Đổi toàn bộ tuần ${formatWeeks(payload.active_week_numbers)}, kể cả buổi đã có ngoại lệ.`;
+    if(scope==="ALL_WEEKS") $("#adjustment-scope-description").textContent=`Tuần ${formatWeeks(payload.active_week_numbers)} · gồm các buổi đã điều chỉnh riêng`;
     scheduleAdjustment.options=payload.items;
     const days=["","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ nhật"];
     $("#adjustment-option").innerHTML=payload.items.map((option,index)=>`<option value="${index}" ${option.iso_weekday===item.iso_weekday&&option.start_period===item.start_period&&option.location_id===item.location_id?"selected":""}>${days[option.iso_weekday]}${option.teaching_date?` ${option.teaching_date.split("-").reverse().join("/")}`:""} · Tiết ${option.start_period}–${option.end_period} · ${escapeHtml(option.location_code)}</option>`).join("");
@@ -98,8 +98,7 @@ function renderAdjustmentPreview(result) {
     if(result.violation_count > 20) html += `<p>Hiển thị 20/${result.violation_count} vi phạm.</p>`;
     return html;
   }
-  html += `<p>${result.changed_session_count} buổi thay đổi; 0 vi phạm cứng. Các buổi khác giữ nguyên.</p>
-    <p>So trước–sau cùng miền từng buổi (OCCURRENCE), kể cả khi nguồn là lịch gốc. Đây không phải so sánh với điểm benchmark. Chênh lệch = sau − trước; số âm là giảm điểm phạt.</p>`;
+  html += `<p>${result.changed_session_count} buổi thay đổi · 0 vi phạm cứng · Chế độ đánh giá: từng buổi học</p>`;
   const rows=[...["general_quality_score", "lecturer_preference_score"].map((code, i)=>({label:i===0?"Chất lượng chung":"Mong muốn và phù hợp giảng viên", before:result.before[code], after:result.after[code]})),
     ...result.before.general_components.map((row,i)=>({label:`Đóng góp: ${row.label}`, before:row.contribution, after:result.after.general_components[i].contribution})),
     ...result.before.lecturer_components.map((row,i)=>({label:`Đóng góp: ${row.label}`, before:row.contribution, after:result.after.lecturer_components[i].contribution}))];
@@ -113,7 +112,7 @@ async function previewScheduleAdjustment() {
   invalidateAdjustmentPreview();
   const serial=scheduleAdjustment.previewRequest;
   const key=adjustmentKey(request);
-  $("#adjustment-preview").textContent="Đang kiểm tra toàn bộ lịch; chưa lưu dữ liệu…";
+  $("#adjustment-preview").textContent="Đang kiểm tra phương án…";
   $("#preview-adjustment").disabled=true;
   try {
     const result=await apiJson(`/api/runs/${scheduleAdjustment.editRunId}/adjustment-preview`,{method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({...request,note:request.note.trim() || "Xem trước"})});

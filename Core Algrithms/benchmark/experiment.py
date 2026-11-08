@@ -305,7 +305,7 @@ def write_csv(
 
 
 def summarize_results(
-    raw_rows: list[dict[str, object]], output_directory: Path
+    raw_rows: list[dict[str, object]], output_directory: Path, *, algorithms=None
 ) -> list[dict[str, object]]:
     """Tổng hợp sai số và runtime qua các seed cho từng function/algorithm."""
 
@@ -313,7 +313,7 @@ def summarize_results(
     functions = sorted(
         {str(row["function"]) for row in raw_rows}, key=function_sort_key
     )
-    algorithms = list(ALGORITHMS.keys())
+    algorithms = list(ALGORITHMS.keys()) if algorithms is None else list(algorithms)
 
     for function_name in functions:
         for algorithm_name in algorithms:
@@ -350,7 +350,7 @@ def summarize_results(
 
 
 def calculate_ranks_and_tests(
-    raw_rows: list[dict[str, object]], output_directory: Path
+    raw_rows: list[dict[str, object]], output_directory: Path, *, algorithms=None
 ) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
     """Xếp hạng theo median và thực hiện các kiểm định thống kê không tham số.
 
@@ -362,7 +362,7 @@ def calculate_ranks_and_tests(
     functions = sorted(
         {str(row["function"]) for row in raw_rows}, key=function_sort_key
     )
-    algorithms = list(ALGORITHMS.keys())
+    algorithms = list(ALGORITHMS.keys()) if algorithms is None else list(algorithms)
     rank_rows: list[dict[str, object]] = []
     median_matrix: list[list[float]] = []
 
@@ -415,7 +415,7 @@ def calculate_ranks_and_tests(
         statistical_rows.append(
             {
                 "test": "Friedman on per-function median errors",
-                "comparison": "GA vs PO V2 vs GA-PO",
+                "comparison": " vs ".join(algorithms),
                 "statistic": float(friedman.statistic),
                 "p_value": float(friedman.pvalue),
                 "holm_adjusted_p": "",
