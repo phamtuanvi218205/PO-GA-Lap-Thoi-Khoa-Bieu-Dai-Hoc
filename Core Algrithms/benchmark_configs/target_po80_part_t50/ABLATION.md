@@ -38,7 +38,7 @@ Checkout cùng commit của nhánh `codex/complete-demo-benchmark-results` trên
 mọi máy. Mở terminal tại thư mục gốc repository rồi chạy:
 
 ```text
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements.txt
 python "Core Algrithms/tools/run_target_ablation_t50.py" check
 ```
 

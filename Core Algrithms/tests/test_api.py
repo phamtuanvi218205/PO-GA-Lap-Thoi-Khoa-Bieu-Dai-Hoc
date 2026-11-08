@@ -259,7 +259,9 @@ def test_demo_has_four_pages_without_constraint_tab_or_settings_requests() -> No
     assert forms.status_code == 200
     assert "/api/constraint-settings" not in forms.text
     assert "/api/input-data/form-schema" in forms.text
-    assert "Không cần nhập điểm chất lượng mục tiêu" in page.text
+    assert "Không cần nhập điểm chất lượng mục tiêu" not in page.text
+    assert 'id="run-activity"' not in page.text
+    assert "Xóa dữ liệu xếp lịch" in page.text
     assert not connections  # Đọc trang/tệp tĩnh không mở kết nối SQL.
 
 

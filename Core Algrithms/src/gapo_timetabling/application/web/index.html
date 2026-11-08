@@ -41,7 +41,6 @@
       <div class="two-column-layout">
         <section class="plain-section">
           <h3>Nhập từ Excel</h3>
-          <p class="section-note">Chọn file .xlsx có dung lượng tối đa 10 MB.</p>
           <label class="upload-zone" for="excel-file" id="upload-zone">
             <input id="excel-file" type="file" accept=".xlsx">
             <strong>Chọn hoặc kéo file Excel vào đây</strong>
@@ -82,7 +81,7 @@
           <strong id="prepare-term">Chưa chọn học kỳ</strong>
         </div>
         <div class="button-row no-margin">
-          <button class="danger-button" id="reset-semester">Đặt lại để demo</button>
+          <button class="danger-button" id="reset-semester">Xóa dữ liệu xếp lịch</button>
           <button class="secondary-button" id="check-readiness">Kiểm tra dữ liệu</button>
           <button class="primary-button" id="prepare-semester">Tạo bài toán</button>
         </div>
@@ -131,8 +130,6 @@
               <input id="timeout-seconds" type="number" min="1" placeholder="Không giới hạn">
             </label>
           </div>
-          <p class="section-note">Không cần nhập điểm chất lượng mục tiêu. Thuật toán tìm lịch tốt nhất trong ngân sách chạy, không chờ đến khi điểm bằng 0.</p>
-          <p class="section-note">Demo tự phân bổ tiến trình CPU để giải mã ứng viên khi dữ liệu lớn. Số FE, seed và quy tắc chọn nghiệm không đổi; cập nhật PO có phụ thuộc nên vẫn giữ đúng thứ tự.</p>
           <button class="primary-button full-width" id="start-run">Chạy thuật toán</button>
         </section>
 
@@ -153,10 +150,8 @@
             <div><dt>Q_general tốt nhất</dt><dd id="run-general">—</dd></div>
             <div><dt>Q_lecturer tốt nhất</dt><dd id="run-lecturer">—</dd></div>
           </dl>
-          <p class="section-note" id="run-activity">FE là số lần chấm nghiệm hợp lệ, không phải điểm hay thời gian. Điểm Q tốt nhất có thể giữ nguyên dù thuật toán vẫn đang tìm.</p>
           <details id="run-rounds-panel">
             <summary>Nhật ký từng vòng</summary>
-            <p class="section-note">Ghi sau khi kết thúc khởi tạo và mỗi vòng thực sự hoàn tất. Q là nghiệm tốt nhất đã tìm được đến mốc đó. Nhật ký giữ trong phiên server, không dựng lại từ FE sau khi server khởi động lại.</p>
             <div class="run-rounds-scroll">
               <table class="data-table"><thead><tr><th>Vòng đã xong</th><th>FE tích lũy</th><th>FE thêm</th><th>Qg tốt nhất</th><th>Ql tốt nhất</th><th>Thời gian vòng</th><th>Tổng thời gian</th></tr></thead>
               <tbody id="run-rounds"><tr><td colspan="7">Chưa có vòng hoàn tất.</td></tr></tbody></table>
@@ -206,7 +201,7 @@
         </label>
         <button class="secondary-button" id="reload-revisions">Tải phiên bản</button>
       </div>
-      <p class="section-note" id="revision-description">Chọn buổi học để sửa riêng buổi đó hoặc toàn bộ các tuần hoạt động.</p>
+      <p class="section-note is-hidden" id="revision-description"></p>
       <details class="quality-panel" id="schedule-quality-panel">
         <summary>Chất lượng thời khóa biểu</summary>
         <div id="schedule-quality" aria-live="polite">Chọn một lịch đã hoàn thành để xem chất lượng.</div>
@@ -245,7 +240,6 @@
       <h3 id="adjustment-title">Điều chỉnh buổi học</h3>
       <label>Phạm vi điều chỉnh<select id="adjustment-scope"><option value="SINGLE_SESSION">Chỉ buổi này</option><option value="ALL_WEEKS">Toàn bộ các tuần hoạt động</option></select></label>
       <p class="section-note" id="adjustment-scope-description"></p>
-      <p class="section-note">Giữ nguyên giảng viên và số tiết. Xem trước để kiểm tra toàn bộ lịch; chỉ lưu khi bạn xác nhận. Lúc lưu hệ thống vẫn kiểm tra lại.</p>
       <label>Phương án mới<select id="adjustment-option" required></select></label>
       <label>Lý do điều chỉnh<input id="adjustment-note" maxlength="500" required></label>
       <div class="result-box is-hidden" id="adjustment-result"></div>
@@ -255,9 +249,9 @@
   </dialog>
 
   <div class="toast-region" id="toast-region" aria-live="polite"></div>
-  <script src="/ui-assets/app.js?v=20261105-rounds" defer></script>
+  <script src="/ui-assets/app.js?v=20261106-clean-ui" defer></script>
   <script src="/ui-assets/data_forms.js?v=20261028" defer></script>
-  <script src="/ui-assets/schedule_quality.js?v=20261105-quality" defer></script>
-  <script src="/ui-assets/schedule_adjustment.js?v=20261105-quality" defer></script>
+  <script src="/ui-assets/schedule_quality.js?v=20261106-clean-ui" defer></script>
+  <script src="/ui-assets/schedule_adjustment.js?v=20261106-clean-ui" defer></script>
 </body>
 </html>

@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "Core Algrithms" / "src"
 HOST, PORT = "127.0.0.1", 8000
 URL = f"http://{HOST}:{PORT}"
-DEPENDENCIES = ("fastapi", "uvicorn", "numpy", "openpyxl", "pyodbc", "multipart")
+DEPENDENCIES = ("fastapi", "uvicorn", "numpy", "openpyxl", "pyodbc", "multipart", "dotenv")
 
 
 def check_environment() -> None:
@@ -105,7 +105,8 @@ def main(argv: list[str] | None = None) -> int:
         )
     print(f"Dang mo ung dung: {URL}\n"
           "Giu cua so nay trong khi su dung. Nhan Ctrl+C de dung server.\n"
-          "Dung cau hinh SQL hien co; can SQL Server san sang.\n"
+          "Doc ket noi tu .env; can SQL Server san sang.\n"
+          "Database/bang can duoc tao truoc bang Script/KHOI_TAO_DATABASE.sql.\n"
           "Server giu nguyen co che khoi phuc job dang cho cua du an.", flush=True)
     stop = threading.Event()
     browser = threading.Thread(target=wait_then_open, args=(stop,), daemon=True)

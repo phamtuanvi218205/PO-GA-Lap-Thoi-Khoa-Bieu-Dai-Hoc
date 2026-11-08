@@ -22,7 +22,7 @@ if defined GAPO_LAUNCHER_READY goto finish
 echo.
 echo Khong tim thay Python 3.11+ co du thu vien cua du an.
 echo Cai moi truong theo README, roi bam lai file nay.
-echo Lenh cai dat mot lan, tai thu muc du an: python -m pip install -e ".[dev]"
+echo Lenh cai dat mot lan, tai thu muc du an: python -m pip install -r requirements.txt
 goto finish
 
 :try_python
